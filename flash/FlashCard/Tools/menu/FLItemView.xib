@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iN0-l3-epB" customClass="FLItemView" customModule="flash" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="54" height="93"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mwU-bU-3LJ">
+                    <rect key="frame" x="0.0" y="0.0" width="54" height="54"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ip8-G6-BUx">
+                            <rect key="frame" x="0.0" y="0.0" width="54" height="54"/>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="Ip8-G6-BUx" firstAttribute="top" secondItem="mwU-bU-3LJ" secondAttribute="top" id="5UP-MH-RMx"/>
+                        <constraint firstAttribute="width" secondItem="mwU-bU-3LJ" secondAttribute="height" multiplier="1:1" id="DeE-2u-Eaz"/>
+                        <constraint firstAttribute="bottom" secondItem="Ip8-G6-BUx" secondAttribute="bottom" id="PaR-d7-ahp"/>
+                        <constraint firstAttribute="trailing" secondItem="Ip8-G6-BUx" secondAttribute="trailing" id="gIQ-lF-EYf"/>
+                        <constraint firstItem="Ip8-G6-BUx" firstAttribute="leading" secondItem="mwU-bU-3LJ" secondAttribute="leading" id="uqm-db-ghi"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTd-vG-JPG">
+                    <rect key="frame" x="14" y="58" width="26.5" height="12"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="mwU-bU-3LJ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="1AV-km-KAX"/>
+                <constraint firstAttribute="trailing" secondItem="mwU-bU-3LJ" secondAttribute="trailing" id="4ZE-39-C3N"/>
+                <constraint firstItem="XTd-vG-JPG" firstAttribute="top" secondItem="mwU-bU-3LJ" secondAttribute="bottom" constant="4" id="MHs-Oo-aIn"/>
+                <constraint firstItem="XTd-vG-JPG" firstAttribute="centerX" secondItem="mwU-bU-3LJ" secondAttribute="centerX" id="Wv0-Ru-lnA"/>
+                <constraint firstItem="mwU-bU-3LJ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gFJ-MI-XJo"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="button" destination="Ip8-G6-BUx" id="Fz6-le-wxf"/>
+                <outlet property="titleLabel" destination="XTd-vG-JPG" id="riT-UH-Svk"/>
+            </connections>
+            <point key="canvasLocation" x="53.623188405797109" y="52.566964285714285"/>
+        </view>
+    </objects>
+</document>

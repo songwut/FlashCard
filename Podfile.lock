@@ -1,0 +1,30 @@
+PODS:
+  - CocoaLumberjack (3.7.2):
+    - CocoaLumberjack/Core (= 3.7.2)
+  - CocoaLumberjack/Core (3.7.2)
+  - CollectionViewPagingLayout (1.0.2)
+  - iCarousel (1.8.3)
+  - SVGKit (3.0.0):
+    - CocoaLumberjack (~> 3.0)
+
+DEPENDENCIES:
+  - CollectionViewPagingLayout
+  - iCarousel
+  - SVGKit
+
+SPEC REPOS:
+  trunk:
+    - CocoaLumberjack
+    - CollectionViewPagingLayout
+    - iCarousel
+    - SVGKit
+
+SPEC CHECKSUMS:
+  CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
+  CollectionViewPagingLayout: 418c8f5fc92cb35673f961196d5e0509ab853667
+  iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
+  SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
+
+PODFILE CHECKSUM: 12fdc248586aeb11d8641f799fcd8e26ea56686d
+
+COCOAPODS: 1.10.1

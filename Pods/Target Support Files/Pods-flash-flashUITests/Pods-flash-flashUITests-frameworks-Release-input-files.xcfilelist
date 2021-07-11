@@ -1,0 +1,5 @@
+${PODS_ROOT}/Target Support Files/Pods-flash-flashUITests/Pods-flash-flashUITests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework
+${BUILT_PRODUCTS_DIR}/CollectionViewPagingLayout/CollectionViewPagingLayout.framework
+${BUILT_PRODUCTS_DIR}/SVGKit/SVGKit.framework
+${BUILT_PRODUCTS_DIR}/iCarousel/iCarousel.framework

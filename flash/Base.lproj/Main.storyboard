@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="kPb-aa-Oyr">
+    <device id="retina6_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="ViewController" customModule="flash" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M7X-M6-ccQ">
+                                <rect key="frame" x="0.0" y="88" width="428" height="804"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Vb-Qd-kfA">
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="200"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gj1-Dh-DKf">
+                                                <rect key="frame" x="0.0" y="0.0" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="rZx-5c-XYz"/>
+                                                </constraints>
+                                                <state key="normal" title="Stage UI"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qdn-nQ-1rx">
+                                                <rect key="frame" x="0.0" y="50" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="GBb-jW-mKC"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH6-xe-kb2">
+                                                <rect key="frame" x="0.0" y="100" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="XCD-AG-Hk7"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9s-hA-vSV">
+                                                <rect key="frame" x="0.0" y="150" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="kgS-IN-4FC"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="7Vb-Qd-kfA" firstAttribute="leading" secondItem="M7X-M6-ccQ" secondAttribute="leading" id="E0x-V6-eHT"/>
+                                    <constraint firstAttribute="trailing" secondItem="7Vb-Qd-kfA" secondAttribute="trailing" id="Fun-Tq-6mQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="7Vb-Qd-kfA" secondAttribute="bottom" id="Y8J-HM-ceW"/>
+                                    <constraint firstItem="7Vb-Qd-kfA" firstAttribute="top" secondItem="M7X-M6-ccQ" secondAttribute="top" id="e4M-Am-TCn"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="M7X-M6-ccQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="SMM-5h-e4g"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="M7X-M6-ccQ" secondAttribute="bottom" id="YGS-DO-pCv"/>
+                            <constraint firstAttribute="trailing" secondItem="M7X-M6-ccQ" secondAttribute="trailing" id="eg9-V5-vSe"/>
+                            <constraint firstItem="7Vb-Qd-kfA" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="vi0-gm-emy"/>
+                            <constraint firstItem="M7X-M6-ccQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="zmR-Mt-Vn9"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="mZy-2j-bZT"/>
+                    <connections>
+                        <outlet property="stageButton" destination="Gj1-Dh-DKf" id="4vz-ZX-eus"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-493" y="-351"/>
+        </scene>
+        <!--Test Video View Controller-->
+        <scene sceneID="Z0u-vb-Aql">
+            <objects>
+                <viewController id="us8-rU-qyN" customClass="TestVideoViewController" customModule="flash" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fgG-mP-OYz">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="1MY-bJ-UvG"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="scR-OS-Dmh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1103" y="113"/>
+        </scene>
+        <!--AnimateVC-->
+        <scene sceneID="xFx-Si-vpk">
+            <objects>
+                <viewController storyboardIdentifier="FLAnimateVC" id="2v4-4y-4RQ" customClass="FLAnimateVC" customModule="flash" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="huK-ww-MZA">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QIt-lr-gvA" customClass="iCarousel">
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="826"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="4yK-GB-PW7"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="QIt-lr-gvA" secondAttribute="bottom" constant="100" id="5aB-gW-U5r"/>
+                            <constraint firstItem="QIt-lr-gvA" firstAttribute="leading" secondItem="4yK-GB-PW7" secondAttribute="leading" id="Cil-aQ-1ig"/>
+                            <constraint firstAttribute="trailing" secondItem="QIt-lr-gvA" secondAttribute="trailing" id="N2J-b1-d4E"/>
+                            <constraint firstItem="QIt-lr-gvA" firstAttribute="top" secondItem="huK-ww-MZA" secondAttribute="top" id="ecm-R5-14o"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="carousel" destination="QIt-lr-gvA" id="Wk1-Dh-1GT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qnd-qt-LYl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1122.8971962616822" y="-542.33261339092871"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Zki-CC-sD0">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kPb-aa-Oyr" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yWs-Co-AeI">
+                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="XUa-SO-ZOF"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s8x-6r-0ly" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1253.2710280373831" y="-350.53995680345577"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
