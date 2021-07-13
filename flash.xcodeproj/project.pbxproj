@@ -140,6 +140,60 @@
 		69D53B4F2693031B0020E024 /* StatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B4E2693031A0020E024 /* StatViewController.swift */; };
 		69D53B502693031B0020E024 /* StatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B4E2693031A0020E024 /* StatViewController.swift */; };
 		69D53B512693031B0020E024 /* StatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B4E2693031A0020E024 /* StatViewController.swift */; };
+		69EC51CD269C690D00A23790 /* DB Heavent Bd It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51BF269C690C00A23790 /* DB Heavent Bd It v3.2.1.ttf */; };
+		69EC51CE269C690D00A23790 /* DB Heavent Bd It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51BF269C690C00A23790 /* DB Heavent Bd It v3.2.1.ttf */; };
+		69EC51CF269C690D00A23790 /* DB Heavent Bd It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51BF269C690C00A23790 /* DB Heavent Bd It v3.2.1.ttf */; };
+		69EC51D0269C690D00A23790 /* DB Heavent Li v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C0269C690C00A23790 /* DB Heavent Li v3.2.1.ttf */; };
+		69EC51D1269C690D00A23790 /* DB Heavent Li v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C0269C690C00A23790 /* DB Heavent Li v3.2.1.ttf */; };
+		69EC51D2269C690D00A23790 /* DB Heavent Li v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C0269C690C00A23790 /* DB Heavent Li v3.2.1.ttf */; };
+		69EC51D3269C690D00A23790 /* DB Heavent Med It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C1269C690C00A23790 /* DB Heavent Med It v3.2.1.ttf */; };
+		69EC51D4269C690D00A23790 /* DB Heavent Med It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C1269C690C00A23790 /* DB Heavent Med It v3.2.1.ttf */; };
+		69EC51D5269C690D00A23790 /* DB Heavent Med It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C1269C690C00A23790 /* DB Heavent Med It v3.2.1.ttf */; };
+		69EC51D6269C690D00A23790 /* DB Heavent Blk v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C2269C690C00A23790 /* DB Heavent Blk v3.2.1.ttf */; };
+		69EC51D7269C690D00A23790 /* DB Heavent Blk v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C2269C690C00A23790 /* DB Heavent Blk v3.2.1.ttf */; };
+		69EC51D8269C690D00A23790 /* DB Heavent Blk v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C2269C690C00A23790 /* DB Heavent Blk v3.2.1.ttf */; };
+		69EC51D9269C690D00A23790 /* DB Heavent Li It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C3269C690C00A23790 /* DB Heavent Li It v3.2.1.ttf */; };
+		69EC51DA269C690D00A23790 /* DB Heavent Li It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C3269C690C00A23790 /* DB Heavent Li It v3.2.1.ttf */; };
+		69EC51DB269C690D00A23790 /* DB Heavent Li It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C3269C690C00A23790 /* DB Heavent Li It v3.2.1.ttf */; };
+		69EC51DC269C690D00A23790 /* DB Heavent Thin It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C4269C690C00A23790 /* DB Heavent Thin It v3.2.1.ttf */; };
+		69EC51DD269C690D00A23790 /* DB Heavent Thin It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C4269C690C00A23790 /* DB Heavent Thin It v3.2.1.ttf */; };
+		69EC51DE269C690D00A23790 /* DB Heavent Thin It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C4269C690C00A23790 /* DB Heavent Thin It v3.2.1.ttf */; };
+		69EC51DF269C690D00A23790 /* DB Heavent UlLi v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C5269C690C00A23790 /* DB Heavent UlLi v3.2.1.ttf */; };
+		69EC51E0269C690D00A23790 /* DB Heavent UlLi v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C5269C690C00A23790 /* DB Heavent UlLi v3.2.1.ttf */; };
+		69EC51E1269C690D00A23790 /* DB Heavent UlLi v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C5269C690C00A23790 /* DB Heavent UlLi v3.2.1.ttf */; };
+		69EC51E2269C690D00A23790 /* DB Heavent Med v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C6269C690C00A23790 /* DB Heavent Med v3.2.1.ttf */; };
+		69EC51E3269C690D00A23790 /* DB Heavent Med v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C6269C690C00A23790 /* DB Heavent Med v3.2.1.ttf */; };
+		69EC51E4269C690D00A23790 /* DB Heavent Med v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C6269C690C00A23790 /* DB Heavent Med v3.2.1.ttf */; };
+		69EC51E5269C690D00A23790 /* DB Heavent It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C7269C690C00A23790 /* DB Heavent It v3.2.1.ttf */; };
+		69EC51E6269C690D00A23790 /* DB Heavent It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C7269C690C00A23790 /* DB Heavent It v3.2.1.ttf */; };
+		69EC51E7269C690D00A23790 /* DB Heavent It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C7269C690C00A23790 /* DB Heavent It v3.2.1.ttf */; };
+		69EC51E8269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C8269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf */; };
+		69EC51E9269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C8269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf */; };
+		69EC51EA269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C8269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf */; };
+		69EC51EB269C690D00A23790 /* DB Heavent v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C9269C690D00A23790 /* DB Heavent v3.2.1.ttf */; };
+		69EC51EC269C690D00A23790 /* DB Heavent v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C9269C690D00A23790 /* DB Heavent v3.2.1.ttf */; };
+		69EC51ED269C690D00A23790 /* DB Heavent v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51C9269C690D00A23790 /* DB Heavent v3.2.1.ttf */; };
+		69EC51EE269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CA269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf */; };
+		69EC51EF269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CA269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf */; };
+		69EC51F0269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CA269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf */; };
+		69EC51F1269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CB269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf */; };
+		69EC51F2269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CB269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf */; };
+		69EC51F3269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CB269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf */; };
+		69EC51F4269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CC269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf */; };
+		69EC51F5269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CC269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf */; };
+		69EC51F6269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69EC51CC269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf */; };
+		69EC5205269D90AA00A23790 /* FLSliderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69EC5204269D90AA00A23790 /* FLSliderView.xib */; };
+		69EC5206269D90AA00A23790 /* FLSliderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69EC5204269D90AA00A23790 /* FLSliderView.xib */; };
+		69EC5207269D90AA00A23790 /* FLSliderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69EC5204269D90AA00A23790 /* FLSliderView.xib */; };
+		69EC520C269D90B900A23790 /* FLSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EC520B269D90B900A23790 /* FLSliderView.swift */; };
+		69EC520D269D90B900A23790 /* FLSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EC520B269D90B900A23790 /* FLSliderView.swift */; };
+		69EC520E269D90B900A23790 /* FLSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EC520B269D90B900A23790 /* FLSliderView.swift */; };
+		69EC5216269D9D6D00A23790 /* FLTextStyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EC5215269D9D6D00A23790 /* FLTextStyleView.swift */; };
+		69EC5217269D9D6D00A23790 /* FLTextStyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EC5215269D9D6D00A23790 /* FLTextStyleView.swift */; };
+		69EC5218269D9D6D00A23790 /* FLTextStyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EC5215269D9D6D00A23790 /* FLTextStyleView.swift */; };
+		69EC521D269D9D7E00A23790 /* FLTextStyleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69EC521C269D9D7E00A23790 /* FLTextStyleView.xib */; };
+		69EC521E269D9D7E00A23790 /* FLTextStyleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69EC521C269D9D7E00A23790 /* FLTextStyleView.xib */; };
+		69EC521F269D9D7E00A23790 /* FLTextStyleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69EC521C269D9D7E00A23790 /* FLTextStyleView.xib */; };
 		B24F57C5F6AFBD68DA6FCE37 /* Pods_flash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA56B03BAD88EB213393BDAD /* Pods_flash.framework */; };
 		B6B16DC408C24203A12F0490 /* Pods_flash_flashUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1AE8F438AAAC52904750B58 /* Pods_flash_flashUITests.framework */; };
 /* End PBXBuildFile section */
@@ -223,6 +277,24 @@
 		69C0A23B266E1EA7001C6F32 /* Arrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Arrow.swift; sourceTree = "<group>"; };
 		69D53B442692F7090020E024 /* FlashStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashStyle.swift; sourceTree = "<group>"; };
 		69D53B4E2693031A0020E024 /* StatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatViewController.swift; sourceTree = "<group>"; };
+		69EC51BF269C690C00A23790 /* DB Heavent Bd It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Bd It v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C0269C690C00A23790 /* DB Heavent Li v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Li v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C1269C690C00A23790 /* DB Heavent Med It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Med It v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C2269C690C00A23790 /* DB Heavent Blk v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Blk v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C3269C690C00A23790 /* DB Heavent Li It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Li It v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C4269C690C00A23790 /* DB Heavent Thin It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Thin It v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C5269C690C00A23790 /* DB Heavent UlLi v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent UlLi v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C6269C690C00A23790 /* DB Heavent Med v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Med v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C7269C690C00A23790 /* DB Heavent It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent It v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C8269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Blk It v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51C9269C690D00A23790 /* DB Heavent v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51CA269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Thin v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51CB269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent Bd v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC51CC269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB Heavent UlLi It v3.2.1.ttf"; sourceTree = "<group>"; };
+		69EC5204269D90AA00A23790 /* FLSliderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLSliderView.xib; sourceTree = "<group>"; };
+		69EC520B269D90B900A23790 /* FLSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLSliderView.swift; sourceTree = "<group>"; };
+		69EC5215269D9D6D00A23790 /* FLTextStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLTextStyleView.swift; sourceTree = "<group>"; };
+		69EC521C269D9D7E00A23790 /* FLTextStyleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLTextStyleView.xib; sourceTree = "<group>"; };
 		7C3F5EEBDA401D4F31833C02 /* Pods-flash-flashUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-flash-flashUITests.debug.xcconfig"; path = "Target Support Files/Pods-flash-flashUITests/Pods-flash-flashUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B1AE8F438AAAC52904750B58 /* Pods_flash_flashUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_flash_flashUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46769B7405708D876F1243F /* Pods-flashTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-flashTests.debug.xcconfig"; path = "Target Support Files/Pods-flashTests/Pods-flashTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -316,6 +388,7 @@
 				697D19E126945ED50082783E /* HalfModalPresentationController */,
 				695928762690748600AEEAEA /* Design System */,
 				695005F3267A8ADF009BBEC4 /* FECreator.swift */,
+				69EC51BE269C690C00A23790 /* Fonts */,
 				69720535268E299F002E3149 /* FlashCard */,
 				695005AC267A65B3009BBEC4 /* String.swift */,
 				695005A5267A5756009BBEC4 /* TestVideoViewController.swift */,
@@ -364,6 +437,7 @@
 				6984904A2695DD3700B5FEF6 /* FLToolHelper.swift */,
 				697D19FB2694685B0082783E /* FLToolViewController.swift */,
 				698490542695E13D00B5FEF6 /* FLToolViewModel.swift */,
+				69EC5229269DADED00A23790 /* text */,
 				69901293269743BE0059ACE4 /* color */,
 				6990129A269743EC0059ACE4 /* menu */,
 			);
@@ -422,6 +496,8 @@
 		6984901B2695A64A00B5FEF6 /* Stage */ = {
 			isa = PBXGroup;
 			children = (
+				69EC5204269D90AA00A23790 /* FLSliderView.xib */,
+				69EC520B269D90B900A23790 /* FLSliderView.swift */,
 				6972052E268E298F002E3149 /* FLStageViewController.swift */,
 				6984901C2695A66A00B5FEF6 /* FLStageViewModel.swift */,
 			);
@@ -448,6 +524,36 @@
 				69720524268E1B55002E3149 /* FLMenuBarView.xib */,
 			);
 			path = menu;
+			sourceTree = "<group>";
+		};
+		69EC51BE269C690C00A23790 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				69EC51BF269C690C00A23790 /* DB Heavent Bd It v3.2.1.ttf */,
+				69EC51C0269C690C00A23790 /* DB Heavent Li v3.2.1.ttf */,
+				69EC51C1269C690C00A23790 /* DB Heavent Med It v3.2.1.ttf */,
+				69EC51C2269C690C00A23790 /* DB Heavent Blk v3.2.1.ttf */,
+				69EC51C3269C690C00A23790 /* DB Heavent Li It v3.2.1.ttf */,
+				69EC51C4269C690C00A23790 /* DB Heavent Thin It v3.2.1.ttf */,
+				69EC51C5269C690C00A23790 /* DB Heavent UlLi v3.2.1.ttf */,
+				69EC51C6269C690C00A23790 /* DB Heavent Med v3.2.1.ttf */,
+				69EC51C7269C690C00A23790 /* DB Heavent It v3.2.1.ttf */,
+				69EC51C8269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf */,
+				69EC51C9269C690D00A23790 /* DB Heavent v3.2.1.ttf */,
+				69EC51CA269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf */,
+				69EC51CB269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf */,
+				69EC51CC269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		69EC5229269DADED00A23790 /* text */ = {
+			isa = PBXGroup;
+			children = (
+				69EC5215269D9D6D00A23790 /* FLTextStyleView.swift */,
+				69EC521C269D9D7E00A23790 /* FLTextStyleView.xib */,
+			);
+			path = text;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -558,17 +664,33 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69EC51D0269C690D00A23790 /* DB Heavent Li v3.2.1.ttf in Resources */,
 				69720525268E1B55002E3149 /* FLMenuBarView.xib in Resources */,
+				69EC51E5269C690D00A23790 /* DB Heavent It v3.2.1.ttf in Resources */,
+				69EC51F1269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf in Resources */,
+				69EC51D9269C690D00A23790 /* DB Heavent Li It v3.2.1.ttf in Resources */,
+				69EC51EB269C690D00A23790 /* DB Heavent v3.2.1.ttf in Resources */,
+				69EC51D3269C690D00A23790 /* DB Heavent Med It v3.2.1.ttf in Resources */,
+				69EC5205269D90AA00A23790 /* FLSliderView.xib in Resources */,
+				69EC51D6269C690D00A23790 /* DB Heavent Blk v3.2.1.ttf in Resources */,
+				69EC51E2269C690D00A23790 /* DB Heavent Med v3.2.1.ttf in Resources */,
 				6984903D2695BEF700B5FEF6 /* FLAssets.xcassets in Resources */,
+				69EC51EE269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf in Resources */,
 				695899B62669F07B0012B032 /* LaunchScreen.storyboard in Resources */,
+				69EC521D269D9D7E00A23790 /* FLTextStyleView.xib in Resources */,
+				69EC51CD269C690D00A23790 /* DB Heavent Bd It v3.2.1.ttf in Resources */,
 				695899B32669F07A0012B032 /* Assets.xcassets in Resources */,
 				696D034E268F9EBD002B3500 /* FLPageCollectionViewCell.xib in Resources */,
 				69720537268E29D4002E3149 /* FlashCard.storyboard in Resources */,
 				698490632695E93D00B5FEF6 /* FLColorView.xib in Resources */,
 				695899AE2669F0710012B032 /* Main.storyboard in Resources */,
+				69EC51F4269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf in Resources */,
 				69848FFA2695A10D00B5FEF6 /* flash-card-color.json in Resources */,
 				69720514268E0EA8002E3149 /* FLItemView.xib in Resources */,
+				69EC51DC269C690D00A23790 /* DB Heavent Thin It v3.2.1.ttf in Resources */,
+				69EC51E8269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf in Resources */,
 				698490782695F27900B5FEF6 /* FLColorCell.xib in Resources */,
+				69EC51DF269C690D00A23790 /* DB Heavent UlLi v3.2.1.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -576,13 +698,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69EC51F2269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf in Resources */,
+				69EC51CE269C690D00A23790 /* DB Heavent Bd It v3.2.1.ttf in Resources */,
 				69720538268E29D4002E3149 /* FlashCard.storyboard in Resources */,
+				69EC51E6269C690D00A23790 /* DB Heavent It v3.2.1.ttf in Resources */,
 				698490792695F27900B5FEF6 /* FLColorCell.xib in Resources */,
+				69EC51D7269C690D00A23790 /* DB Heavent Blk v3.2.1.ttf in Resources */,
+				69EC51E3269C690D00A23790 /* DB Heavent Med v3.2.1.ttf in Resources */,
+				69EC51DA269C690D00A23790 /* DB Heavent Li It v3.2.1.ttf in Resources */,
+				69EC51E0269C690D00A23790 /* DB Heavent UlLi v3.2.1.ttf in Resources */,
+				69EC51EC269C690D00A23790 /* DB Heavent v3.2.1.ttf in Resources */,
 				69720526268E1B55002E3149 /* FLMenuBarView.xib in Resources */,
 				69848FFB2695A10D00B5FEF6 /* flash-card-color.json in Resources */,
+				69EC51D4269C690D00A23790 /* DB Heavent Med It v3.2.1.ttf in Resources */,
+				69EC51DD269C690D00A23790 /* DB Heavent Thin It v3.2.1.ttf in Resources */,
 				69720515268E0EA8002E3149 /* FLItemView.xib in Resources */,
+				69EC51EF269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf in Resources */,
 				6984903E2695BEF700B5FEF6 /* FLAssets.xcassets in Resources */,
 				696D034F268F9EBD002B3500 /* FLPageCollectionViewCell.xib in Resources */,
+				69EC5206269D90AA00A23790 /* FLSliderView.xib in Resources */,
+				69EC51E9269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf in Resources */,
+				69EC51F5269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf in Resources */,
+				69EC51D1269C690D00A23790 /* DB Heavent Li v3.2.1.ttf in Resources */,
+				69EC521E269D9D7E00A23790 /* FLTextStyleView.xib in Resources */,
 				698490642695E93D00B5FEF6 /* FLColorView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -591,13 +729,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69EC51F3269C690D00A23790 /* DB Heavent Bd v3.2.1.ttf in Resources */,
+				69EC51CF269C690D00A23790 /* DB Heavent Bd It v3.2.1.ttf in Resources */,
 				69720539268E29D4002E3149 /* FlashCard.storyboard in Resources */,
+				69EC51E7269C690D00A23790 /* DB Heavent It v3.2.1.ttf in Resources */,
 				6984907A2695F27900B5FEF6 /* FLColorCell.xib in Resources */,
+				69EC51D8269C690D00A23790 /* DB Heavent Blk v3.2.1.ttf in Resources */,
+				69EC51E4269C690D00A23790 /* DB Heavent Med v3.2.1.ttf in Resources */,
+				69EC51DB269C690D00A23790 /* DB Heavent Li It v3.2.1.ttf in Resources */,
+				69EC51E1269C690D00A23790 /* DB Heavent UlLi v3.2.1.ttf in Resources */,
+				69EC51ED269C690D00A23790 /* DB Heavent v3.2.1.ttf in Resources */,
 				69720527268E1B55002E3149 /* FLMenuBarView.xib in Resources */,
 				69848FFC2695A10D00B5FEF6 /* flash-card-color.json in Resources */,
+				69EC51D5269C690D00A23790 /* DB Heavent Med It v3.2.1.ttf in Resources */,
+				69EC51DE269C690D00A23790 /* DB Heavent Thin It v3.2.1.ttf in Resources */,
 				69720516268E0EA8002E3149 /* FLItemView.xib in Resources */,
+				69EC51F0269C690D00A23790 /* DB Heavent Thin v3.2.1.ttf in Resources */,
 				6984903F2695BEF700B5FEF6 /* FLAssets.xcassets in Resources */,
 				696D0350268F9EBD002B3500 /* FLPageCollectionViewCell.xib in Resources */,
+				69EC5207269D90AA00A23790 /* FLSliderView.xib in Resources */,
+				69EC51EA269C690D00A23790 /* DB Heavent Blk It v3.2.1.ttf in Resources */,
+				69EC51F6269C690D00A23790 /* DB Heavent UlLi It v3.2.1.ttf in Resources */,
+				69EC51D2269C690D00A23790 /* DB Heavent Li v3.2.1.ttf in Resources */,
+				69EC521F269D9D7E00A23790 /* FLTextStyleView.xib in Resources */,
 				698490652695E93D00B5FEF6 /* FLColorView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -722,11 +876,13 @@
 				695899AB2669F0710012B032 /* ViewController.swift in Sources */,
 				695899A72669F0710012B032 /* AppDelegate.swift in Sources */,
 				695005AD267A65B3009BBEC4 /* String.swift in Sources */,
+				69EC5216269D9D6D00A23790 /* FLTextStyleView.swift in Sources */,
 				6984904B2695DD3700B5FEF6 /* FLToolHelper.swift in Sources */,
 				695899DD2669F35E0012B032 /* AVAssetTrim.swift in Sources */,
 				69C0A23C266E1EA7001C6F32 /* Arrow.swift in Sources */,
 				6984905C2695E92100B5FEF6 /* FLColorView.swift in Sources */,
 				697D19F526945ED60082783E /* HalfModalPresentationController.swift in Sources */,
+				69EC520C269D90B900A23790 /* FLSliderView.swift in Sources */,
 				6972052F268E298F002E3149 /* FLStageViewController.swift in Sources */,
 				697D19EC26945ED60082783E /* HalfModalInteractiveTransition.swift in Sources */,
 				696D034B268F9EBD002B3500 /* FLPageCollectionViewCell.swift in Sources */,
@@ -762,6 +918,7 @@
 				695899C12669F07B0012B032 /* flashTests.swift in Sources */,
 				697D19F626945ED60082783E /* HalfModalPresentationController.swift in Sources */,
 				698490452695C8C100B5FEF6 /* UIView.swift in Sources */,
+				69EC520D269D90B900A23790 /* FLSliderView.swift in Sources */,
 				6984904C2695DD3700B5FEF6 /* FLToolHelper.swift in Sources */,
 				696D0321268F6E4B002B3500 /* FLAnimateVC.swift in Sources */,
 				6984901E2695A66A00B5FEF6 /* FLStageViewModel.swift in Sources */,
@@ -777,6 +934,7 @@
 				697D19FD2694685B0082783E /* FLToolViewController.swift in Sources */,
 				69D53B502693031B0020E024 /* StatViewController.swift in Sources */,
 				699012882696FA180059ACE4 /* SlideSheetPresentationController.swift in Sources */,
+				69EC5217269D9D6D00A23790 /* FLTextStyleView.swift in Sources */,
 				695005FC267A8B33009BBEC4 /* Models.swift in Sources */,
 				69C0A23D266E1EA7001C6F32 /* Arrow.swift in Sources */,
 				695899EE266A819F0012B032 /* Gif-CALayer.swift in Sources */,
@@ -803,6 +961,7 @@
 				695899CC2669F07B0012B032 /* flashUITests.swift in Sources */,
 				697D19F726945ED60082783E /* HalfModalPresentationController.swift in Sources */,
 				698490462695C8C100B5FEF6 /* UIView.swift in Sources */,
+				69EC520E269D90B900A23790 /* FLSliderView.swift in Sources */,
 				6984904D2695DD3700B5FEF6 /* FLToolHelper.swift in Sources */,
 				696D0322268F6E4B002B3500 /* FLAnimateVC.swift in Sources */,
 				6984901F2695A66A00B5FEF6 /* FLStageViewModel.swift in Sources */,
@@ -818,6 +977,7 @@
 				697D19FE2694685B0082783E /* FLToolViewController.swift in Sources */,
 				69D53B512693031B0020E024 /* StatViewController.swift in Sources */,
 				699012892696FA180059ACE4 /* SlideSheetPresentationController.swift in Sources */,
+				69EC5218269D9D6D00A23790 /* FLTextStyleView.swift in Sources */,
 				695005FD267A8B33009BBEC4 /* Models.swift in Sources */,
 				69C0A23E266E1EA7001C6F32 /* Arrow.swift in Sources */,
 				695899EF266A819F0012B032 /* Gif-CALayer.swift in Sources */,

@@ -42,6 +42,12 @@ enum FLTool: String {
     }
 }
 
+enum FLTextMenu: String {
+    case keyboard = "keyboard"
+    case style = "style"
+    case color = "color"
+}
+
 struct FlashStyle {
     static let isIpad = UIDevice.isIpad()
     static let stageColor:UIColor = .gray
@@ -50,6 +56,7 @@ struct FlashStyle {
     static let deletePageWidth:CGFloat = UIDevice.isIpad() ? 72 : 32
     static let addPageWidth:CGFloat = UIDevice.isIpad() ? 70 : 32
     
+    static let baseStageWidth:CGFloat = 325
     static let baseWidth:CGFloat = 375
     static let baseHeight:CGFloat = 600
     
@@ -64,6 +71,10 @@ struct FlashStyle {
     
     static let toolList: [FLTool] = [.background, .media, .text, .graphic, .quiz]
     
+    struct stage {
+        static let cellSpacing: CGFloat = UIDevice.isIpad() ? 56 : 16
+    }
+    
     //color picker
     struct color {
         static let column: CGFloat = UIDevice.isIpad() ? 10 : 7
@@ -71,6 +82,11 @@ struct FlashStyle {
         static let marginHor: CGFloat = UIDevice.isIpad() ? 38 : 180
         static let marginVer: CGFloat = UIDevice.isIpad() ? 38 : 0
         
+    }
+    
+    struct text {
+        static let placeholder = "Please\nInput Text\nHere"
+        static let textWidthFromFont36:CGFloat = 114
     }
     
 }

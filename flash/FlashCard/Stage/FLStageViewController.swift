@@ -15,6 +15,7 @@ final class FLStageViewController: UIViewController {
     @IBOutlet private weak var contentPageView: UIView!
     @IBOutlet private weak var toolStackView: UIStackView!
     @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var layout: UICollectionViewFlowLayout!
     @IBOutlet private weak var contentToolHeight: NSLayoutConstraint!
     
     @IBOutlet private weak var menuView: UIView!
@@ -24,14 +25,13 @@ final class FLStageViewController: UIViewController {
     @IBOutlet private weak var listButton: UIButton!
     
     private var stageView: UIView!
-    private var stageLeftView: UIView!
-    private var stageRightView: UIView!
-    private var scrollView: UIScrollView!
+    private var stageViewList = [FLStageView]()
+    private var stageCell: UICollectionViewCell!
+    private var stageScrollView: UIScrollView!
+    private var stageStackView: UIStackView!
     private var flCreator: FLCreator!
     private var didScrollCollectionViewToMiddle = false
-    
-    var pageList = [String]()
-    var pageIndex = 0
+    private var isCreatePage = true
     
     lazy var deletePageButton: UIButton = {
         let b = UIButton(type: .custom)
@@ -66,8 +66,8 @@ final class FLStageViewController: UIViewController {
         self.contentPageView.backgroundColor = UIColor("F5F5F5")
         self.menuView.backgroundColor = UIColor("F5F5F5")
         self.viewModel.prepareModel()
-        
-        configureViews()
+        self.configureCollectionView()
+        self.collectionView.updateLayout()
         
         self.view.backgroundColor = FlashStyle.screenColor
         self.contentToolHeight.constant = FlashStyle.contentToolHeight
@@ -86,42 +86,67 @@ final class FLStageViewController: UIViewController {
         self.previewButton.tintColor = .text50()
         self.listButton.tintColor = .text50()
         
-        self.scrollView = UIScrollView()
-        self.scrollView.backgroundColor = .clear
-        self.contentPageView.addSubview(self.scrollView)
-        
         self.stageView = UIView()
         self.stageView.cornerRadius = 16
         self.stageView.backgroundColor = .white
         self.contentPageView.addSubview(self.stageView)
         
-        self.stageLeftView = UIView()
-        self.stageLeftView.cornerRadius = 16
-        self.stageLeftView.backgroundColor = .white
-        self.contentPageView.addSubview(self.stageLeftView)
+        self.stageScrollView = UIScrollView()
+        self.stageView.backgroundColor = .white
+        self.contentPageView.addSubview(self.stageScrollView)
         
-        self.stageRightView = UIView()
-        self.stageRightView.cornerRadius = 16
-        self.stageRightView.backgroundColor = .white
-        self.contentPageView.addSubview(self.stageRightView)
+        self.stageStackView = UIStackView()
+        self.stageStackView.alignment = .fill
+        self.stageStackView.axis = .horizontal
+        self.stageStackView.distribution = .equalSpacing
+        self.stageStackView.spacing =  FlashStyle.stage.cellSpacing
+        self.stageScrollView.addSubview(self.stageStackView)
         
         self.contentPageView.addSubview(self.deletePageButton)
         self.contentPageView.addSubview(self.addLeftPageButton)
         self.contentPageView.addSubview(self.addRightPageButton)
         
-        
         self.flCreator = FLCreator(stage: self.stageView)
-        
-        self.stageView.addGestureRecognizer(TapGesture(target: self, action: #selector(self.stageTaped(_:))))
-        
         self.manageStageFrame()
         
         self.addButton.addTarget(self, action: #selector(self.addButtonPressed(_:)), for: .touchUpInside)
+        self.addLeftPageButton.addTarget(self, action: #selector(self.appLeftPressed(_:)), for: .touchUpInside)
+        self.addRightPageButton.addTarget(self, action: #selector(self.addRightPressed(_:)), for: .touchUpInside)
         
-        if self.pageList.count == 0 {
-            self.pageList.append("page1")
-            self.pageIndex = 0
-        }
+        self.collectionView.reloadData()
+    }
+    
+    @objc func appLeftPressed(_ sender: UIButton) {
+        let index = self.viewModel.pageIndex
+        let newIndex = index - 1
+        let page = FlashPage()
+        self.viewModel.pageList.insert(page, at: newIndex)
+        
+        let indexPath = IndexPath(row: newIndex, section: 0)
+        self.collectionView.insertItems(at: [indexPath])
+        
+        self.gotoPage(index: newIndex)
+    }
+    
+    @objc func addRightPressed(_ sender: UIButton) {
+        let index = self.viewModel.pageIndex
+        let newIndex = index + 1
+        let page = FlashPage()
+        self.viewModel.pageList.insert(page, at: newIndex)
+        
+        let indexPath = IndexPath(row: newIndex, section: 0)
+        self.collectionView.insertItems(at: [indexPath])
+        
+        self.gotoPage(index: newIndex)
+    }
+    
+    func gotoPage(index: Int) {
+        let indexPath = IndexPath(row: index, section: 0)
+        self.layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        self.viewModel.pageIndex = index
+        self.manageAddLR()
+        let max = self.viewModel.pageList.count
+        self.pageCountLabel.text = "\(index + 1)/\(max)"
     }
     
     func createAddButton() -> UIButton {
@@ -140,7 +165,9 @@ final class FLStageViewController: UIViewController {
     
     @objc func stageTaped(_ sender: TapGesture) {
         self.flCreator.selectedView?.isSelected = false
+        self.flCreator.selectedView?.isCreateNew = false
         self.view.endEditing(true)
+        self.toolVC.closePressed(nil)
     }
     
     func manageStageFrame() {
@@ -149,9 +176,6 @@ final class FLStageViewController: UIViewController {
             print("self.contentPageView:\(self.contentPageView.frame)")
             
             let areaFrame = self.contentPageView.frame
-            
-            let scrollFrame = CGRect(x: 0, y: 0, width: areaFrame.width, height: areaFrame.height)
-            self.scrollView.frame = scrollFrame
             
             let stageWidth = areaFrame.width * FlashStyle.pageCardWidthRatio
             let stageHidth = stageWidth * FlashStyle.pageCardRatio
@@ -174,7 +198,9 @@ final class FLStageViewController: UIViewController {
                 stageFrame = updateFrame
             }
             
+            //FL#TEXT_SIZE
             self.stageView.frame = stageFrame
+            self.flCreator.stageRatio = stageFrame.width / FlashStyle.baseStageWidth
             
             self.deletePageButton.center = CGPoint(x: self.stageView.center.x, y: self.stageView.frame.origin.y)
             
@@ -182,36 +208,106 @@ final class FLStageViewController: UIViewController {
             
             self.addRightPageButton.center = CGPoint(x: self.stageView.frame.origin.x + self.stageView.frame.width, y: self.stageView.center.y)
             
+            self.manageAddLR()
             
-            if self.pageIndex == 0 {
-                let subW = stageFrame.width * 0.8
-                let subH = subW * FlashStyle.pageCardRatio
-                let rightViewX = self.stageView.center.x + (stageFrame.width / 2)  + 16
-                let rightViewY = (stageFrame.height - subH) / 2
-                self.stageRightView.frame = CGRect(x: rightViewX, y: rightViewY, width: subW, height: subH)
-                self.stageRightView.backgroundColor = .black
-                
-            } else {
-                let subW = stageFrame.width * 0.8
-                let subH = subW * FlashStyle.pageCardRatio
-                let leftViewX = stageFrame.origin.x - (subW + 16)
-                let leftViewY = (stageFrame.height - subH) / 2
-                self.stageLeftView.frame = CGRect(x: leftViewX, y: leftViewY, width: subW, height: subH)
-                self.stageLeftView.backgroundColor = .black
+            let edge = stageFrame.origin.x
+            self.sectionEdge = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
+            self.layout.sectionInset = self.sectionEdge
+            self.cellSize = stageFrame.size
+            self.layout.itemSize = self.cellSize
+            self.layout.minimumInteritemSpacing = 0
+            self.layout.minimumLineSpacing = FlashStyle.stage.cellSpacing
+            
+            
+            self.stageScrollView.frame = CGRect(x: 0, y: 0, width: areaFrame.width, height: areaFrame.height)
+            
+            let stY = (areaFrame.height - stageFrame.height) / 2
+            self.stageStackView.frame = CGRect(x: self.sectionEdge.left, y: stY, width: areaFrame.width, height: stageFrame.height)
+            
+            
+            self.collectionView.backgroundColor = .black
+            self.collectionView.reloadData()
+            self.stageView.isHidden = true
+            self.collectionView.isHidden = true
+            
+            if self.isCreatePage {
+                self.manageMultitleStage()
             }
             
+            
         }
+    }
+    
+    func manageMultitleStage() {
+        let size = self.stageView.frame
+        for page in self.viewModel.pageList {
+            let f = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            let stage = FLStageView(frame: f)
+            stage.page = page
+            stage.backgroundColor = .orange
+            stage.heightAnchor.constraint(equalToConstant: size.height).isActive = true
+            stage.widthAnchor.constraint(equalToConstant: size.width).isActive = true
+            self.stageViewList.append(stage)
+            self.stageStackView.addArrangedSubview(stage)
+        }
+        //let pageCount = self.viewModel.pageList
+        //let stWidth =
+        //let scrollWidth = self.sectionEdge.left + (size.width * pageCount) + self.sectionEdge.right
+        //
+        self.stageStackView.translatesAutoresizingMaskIntoConstraints = false
+        self.stageStackView.layoutIfNeeded()
+        print("width: ", self.stageStackView.bounds.width)
+        let allEdge = self.sectionEdge.left + self.sectionEdge.right
+        let scrollWidth = self.stageStackView.bounds.width + allEdge
+        self.stageScrollView.contentSize = CGSize(width: scrollWidth, height: self.stageScrollView.frame.height)
         
+        let stY = self.stageStackView.frame.origin.y
+        self.stageStackView.frame = CGRect(x: self.sectionEdge.left, y: stY, width: scrollWidth, height: size.height)
+        
+        self.stageScrollView.delegate = self
+        self.stageStackView.backgroundColor = .gray
+        self.stageScrollView.backgroundColor = .black
+        self.isCreatePage = false
+    }
+    
+    var sectionEdge = UIEdgeInsets.zero
+    var cellSize = CGSize.zero
+    
+    func manageAddLR() {
+        if self.viewModel.pageIndex == 0 {
+            self.addLeftPageButton.isHidden = true
+            self.addRightPageButton.isHidden = false
+            
+        } else if self.viewModel.pageIndex == (self.viewModel.pageList.count - 1) {
+            self.addLeftPageButton.isHidden = false
+            self.addRightPageButton.isHidden = true
+            
+        } else {
+            self.addLeftPageButton.isHidden = false
+            self.addRightPageButton.isHidden = false
+        }
     }
     
     @objc func addButtonPressed(_ sender: UIButton) {
         self.openToolBar(tool: .menu)
     }
     
-    var halfModalDelegate: HalfModalTransitioningDelegate!
-    var toolBarVC: FLToolViewController!
+    private func indexOfMajorCell() -> Int {
+        let itemWidth = self.cellSize.width
+        let proportionalOffset = self.stageScrollView.contentOffset.x / itemWidth
+        let index = Int(round(proportionalOffset))
+        let safeIndex = max(0, min(self.viewModel.pageList.count - 1, index))
+        return safeIndex
+    }
     
-    func openToolBar(tool: FLTool) {
+    var halfModalDelegate: HalfModalTransitioningDelegate!
+    
+    func openToolBar(tool: FLTool, iView: InteractView? = nil) {
+        if let toolVC = self.toolVC {
+            toolVC.setup(FLToolViewSetup(tool: tool, iView: iView))
+            toolVC.view.isHidden = false
+            return
+        }
         
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
 //        if let vc = s.instantiateViewController(identifier: "FLToolViewController") as? FLToolViewController {
@@ -242,31 +338,55 @@ final class FLStageViewController: UIViewController {
             
             self.toolVC.didSelectedColor = DidAction(handler: { (sender) in
                 guard let hex = sender as? String else { return }
-                self.stageView.backgroundColor = UIColor(hex)
+                let stageView = self.getStageView(at: self.viewModel.pageIndex)
+                stageView.backgroundColor = UIColor(hex)
             })
             self.toolVC.didCreateText = DidAction(handler: { (sender) in
+                
                 let element = TextElement()
-                self.createTextView(element)
+                element.width = 0
+                element.x = 50
+                element.y = 50
+                element.text = FlashStyle.text.placeholder
+                let row = self.indexOfMajorCell()
+                self.createElement(element, row: row)
+                
+            })
+            
+            self.toolVC.didClose = DidAction(handler: { (sender) in
+                self.view.endEditing(true)
             })
             
             self.toolStackView.addArrangedSubview(self.toolVC.view)
             self.addChild(self.toolVC)
             self.toolVC.didMove(toParent: self)
             
-            
-            self.toolVC.setup(FLToolViewSetup(tool: .menu))
+            self.toolVC.setup(FLToolViewSetup(tool: .menu, iView: iView))
         }
     }
     
-    func createTextView(_ element: TextElement) {
+    func getStageView(at row: Int) -> UIView {
+        let stageView = self.stageViewList[row]
+        return stageView
+    }
+    
+    func createElement(_ element: FlashElement, row: Int) {
+        if let eText = element as? TextElement {
+            self.createTextView(eText, row: row)
+            
+        } else if let eImage = element as? ImageElement {
+            //TODO: add image to stage
+        }
+    }
+    
+    func createTextView(_ element: TextElement, row: Int) {
         self.flCreator.selectedView?.isSelected = false
+        self.flCreator.selectedView?.isCreateNew = false
         
-        element.width = 80
-        element.x = 50
-        element.y = 50
-        element.fill = nil
-        element.text = "Please Input Text Here"
-        let textElement = self.flCreator.createText(element, in: self.stageView)
+        let stageView = self.getStageView(at: row)
+        self.viewModel.save(element: element, at: row)
+        
+        let textElement = self.flCreator.createText(element, in: stageView)
         self.flCreator.selectedView = textElement
         
         textElement.enableZoom()
@@ -274,12 +394,12 @@ final class FLStageViewController: UIViewController {
         
         textElement.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
         textElement.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
-        
+        textElement.isCreateNew = true
         //Auto select all test
-        textElement.textView?.delegate = self
         textElement.textView?.selectAll(self)
         textElement.textView?.becomeFirstResponder()
         textElement.isSelected = true
+        textElement.textView?.delegate = self
     }
     
     /*
@@ -332,7 +452,9 @@ final class FLStageViewController: UIViewController {
     @objc func move(_ gesture: UIPanGestureRecognizer) {
         let location = gesture.location(in: self.stageView)
         guard let draggedView = gesture.view as? InteractView else { return }
-        draggedView.textView?.resignFirstResponder()
+        if let textView = draggedView.textView {
+            textView.selectedTextRange = nil
+        }
         draggedView.isSelected = true
         draggedView.center = location
         
@@ -372,13 +494,13 @@ final class FLStageViewController: UIViewController {
             view.transform = CGAffineTransform(rotationAngle: newRotation)
             
             let degrees = self.getDegreesRotation(view)
-            //print("changed degrees: \(degrees)")
+            print("changed degrees: \(degrees)")
             
         } else if gesture.state == .ended {
             
             // Save the last rotation
             let degrees = self.getDegreesRotation(view)
-            //print("ended degrees: \(degrees)")
+            print("ended degrees: \(degrees)")
             view.rotation = Float(degrees)
         }
     }
@@ -400,50 +522,19 @@ final class FLStageViewController: UIViewController {
         print("viewDidLayoutSubviews")
     }
     
-    private func configureViews() {
-        view.backgroundColor = .white
-        view.clipsToBounds = true
-        self.configureCollectionView()
-        
-        //.numberOfPages = 8
-        self.updateSelectedLayout()
-        self.reloadDataAndLayouts()
-        self.collectionView.reloadData()
-    }
-    
-    private func updateSelectedLayout() {
-        
-        reloadAndInvalidateShapes()
-    }
-    
-    func reloadAndInvalidateShapes() {
-        collectionView?.reloadData()
-        invalidateCollectionViewLayout()
-    }
-    
     private func configureCollectionView() {
-        collectionView.registerClass(FLPageCollectionViewCell.self)
-        
-        collectionView.isPagingEnabled = true
-        collectionView.dataSource = self
-        let layout = CollectionViewPagingLayout()
-        collectionView.collectionViewLayout = layout
-        layout.delegate = self
+        collectionView.register(UINib(nibName: "FLPageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "FLPageCollectionViewCell")
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.clipsToBounds = false
         collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = false
+        
+        //let layout = CollectionViewPagingLayout()
+        //collectionView.collectionViewLayout = layout
+        //layout.delegate = self
+        collectionView.alwaysBounceHorizontal = true
+        collectionView.dataSource = self
         collectionView.delegate = self
-    }
-
-    private func reloadDataAndLayouts() {
-        collectionView?.reloadData()
-        invalidateCollectionViewLayout()
-    }
-    
-    private func invalidateCollectionViewLayout() {
-        collectionView?.performBatchUpdates({ [weak self] in
-            self?.collectionView?.collectionViewLayout.invalidateLayout()
-        })
     }
     
     //Screen Rotation
@@ -505,6 +596,7 @@ extension FLStageViewController: UITextViewDelegate {
         if let iView = textView.superview as? InteractView {
             iView.isSelected = true
             self.flCreator.selectedView = iView
+            self.openToolBar(tool: .text, iView: iView)
         }
         //self.flCreator.selectedView?.isSelected = false
     }
@@ -516,6 +608,18 @@ extension FLStageViewController: UITextViewDelegate {
         }
     }
     
+    func textViewDidChange(_ textView: UITextView) {
+        if let iView = textView.superview as? InteractView {
+            let f = textView.frame
+            let viewH = textView.systemLayoutSizeFitting(CGSize(width: f.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
+            textView.frame = CGRect(x: 0, y: 0, width: f.width, height: viewH)
+            print("viewH:\(viewH)")
+            let selfFrame = iView.frame
+            iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: selfFrame.width, height: viewH * self.flCreator.stageRatio)
+        }
+        
+    }
+    
 }
 
 extension FLStageViewController: CollectionViewPagingLayoutDelegate {
@@ -524,7 +628,7 @@ extension FLStageViewController: CollectionViewPagingLayoutDelegate {
     }
 }
 
-extension FLStageViewController: UICollectionViewDataSource {
+extension FLStageViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.viewModel.pageList.count
@@ -532,8 +636,16 @@ extension FLStageViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let cell = collectionView.dequeueReusableCellClass(for: indexPath) as FLPageCollectionViewCell
-        cell.backgroundColor = .gray
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FLPageCollectionViewCell", for: indexPath) as! FLPageCollectionViewCell
+        let page = self.viewModel.pageList[indexPath.row]
+        for v in cell.stageView.subviews {
+            v.removeFromSuperview()
+        }
+        for e in page.componentList {
+            self.createElement(e, row: indexPath.row)
+        }
+        print("cell.frame index: \(indexPath.row)")
+        print("cell.frame: \(cell.frame)")
         return cell
     }
     
@@ -542,16 +654,62 @@ extension FLStageViewController: UICollectionViewDataSource {
 
 extension FLStageViewController: UICollectionViewDelegate {
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.viewModel.pageIndex = self.indexOfMajorCell()
         
     }
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        // Stop scrollView sliding:
+        targetContentOffset.pointee = scrollView.contentOffset
+        
+        // calculate where scrollView should snap to:
+        let indexOfMajorCell = self.indexOfMajorCell()
+        
+        // calculate conditions:
+        let swipeVelocityThreshold: CGFloat = 0.5 // after some trail and error
+        let hasEnoughVelocityToSlideToTheNextCell = self.viewModel.pageIndex + 1 < self.viewModel.pageList.count && velocity.x > swipeVelocityThreshold
+        let hasEnoughVelocityToSlideToThePreviousCell = self.viewModel.pageIndex - 1 >= 0 && velocity.x < -swipeVelocityThreshold
+        let majorCellIsTheCellBeforeDragging = indexOfMajorCell == self.viewModel.pageIndex
+        let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
+        
+        if didUseSwipeToSkipCell {
+            let lineSpacing = self.layout.minimumLineSpacing
+            let snapToIndex = self.viewModel.pageIndex + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
+            let toValue = (self.layout.itemSize.width + lineSpacing) * CGFloat(snapToIndex)
+            
+            // Damping equal 1 => no oscillations => decay animation:
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
+                scrollView.contentOffset = CGPoint(x: toValue, y: 0)
+                scrollView.layoutIfNeeded()
+            }, completion: nil)
+            
+        } else {
+            // This is a much better way to scroll to a cell:
+            let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
+            self.layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("scrollViewDidEndDragging")
+        let max = self.viewModel.pageList.count
+        let index = self.indexOfMajorCell()
+        self.viewModel.pageIndex = index
+        self.pageCountLabel.text = "\(index + 1)/\(max)"
+        
+        let stage = self.getStageView(at: index)
+        stage.addGestureRecognizer(TapGesture(target: self, action: #selector(self.stageTaped(_:))))
+        self.manageAddLR()
+    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print("scrollViewDidEndDecelerating")
         
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        
+        print("scrollViewDidEndScrollingAnimation")
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

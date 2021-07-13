@@ -9,7 +9,7 @@ import UIKit
 
 final class FLItemView: UIView {
     
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var button: FLButton!
     @IBOutlet weak var titleLabel: UILabel!
     
     var didPressTool: DidAction?
@@ -18,6 +18,7 @@ final class FLItemView: UIView {
         didSet {
             self.updateUI()
             let icon = UIImage(named: self.tool.iconName())
+            self.button.tool = self.tool
             self.button.setImage(icon, for: .normal)
             self.titleLabel.text = self.tool.name()
             self.button.addTarget(self, action: #selector(self.toolPressed(_:)), for: .touchUpInside)

@@ -8,7 +8,10 @@
 import UIKit
 import CollectionViewPagingLayout
 
-class FLPageCollectionViewCell: UICollectionViewCell, ScaleTransformView {
+class FLPageCollectionViewCell: UICollectionViewCell {
+    
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var stageView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()

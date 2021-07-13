@@ -31,34 +31,49 @@ extension UIImageView {
 struct FLCreator {
     
     var selectedView: InteractView?
+    var stageView: UIView!
     
-    var screenRatio:CGFloat = 1
+    var stageRatio:CGFloat = 1//use for scale TextElement
     
     init(stage: UIView) {
-        self.screenRatio = self.calRatio(ref: stage.frame.width)
-    }
-    
-    func calRatio(ref:CGFloat) -> CGFloat {
-        //screen ratio
-        return ref / FlashStyle.baseWidth
+        self.stageView = stage
     }
     
     func createText(_ element:TextElement ,in stage: UIView) -> InteractView {
         let viewX = (stage.frame.width * element.x / 100)
         let viewY = ((stage.frame.height * element.y) / 100)
-        let viewW = ((stage.frame.width * element.width) / 100)
-        //let viewH = ((stage.frame.height * element.height) / 100)
+        var  viewW = ((stage.frame.width * element.width) / 100)
+        
         let fontSize:CGFloat = element.fontSize// ((stage.frame.width * element.fontSize) / 100)
         
+        let font:UIFont = .systemFont(ofSize: fontSize, weight: .regular)
+        
+        if element.width == 0 {
+            viewW = FlashStyle.text.textWidthFromFont36 * self.stageRatio //size.width
+        }
+        
+        let atb: [NSAttributedString.Key:Any] = [
+            .font: font,
+            .foregroundColor: UIColor(element.textColor),
+            .paragraphStyle: {
+                let paragraph = NSMutableParagraphStyle()
+                paragraph.lineSpacing = 0
+                return paragraph
+            }()
+        ]
+        let attributedText = NSAttributedString(string: element.text, attributes: atb)
+        
+        //let viewH = ((stage.frame.height * element.height) / 100)
+        
         let textView = FLTextView()
-        textView.text = element.text
-        //label.textAlignment = //No
-        textView.textAlignment = .center
-        textView.font = .systemFont(ofSize: fontSize, weight: .regular)
+        //textView.text = element.text
+        textView.attributedText = attributedText
+        textView.textAlignment = element.flAlignment.alignment()
+        textView.font = font
         textView.isEditable = true
         textView.isScrollEnabled = false
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        //case no height
+        //height from autolayout
         let viewH = textView.systemLayoutSizeFitting(CGSize(width: viewW, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
         textView.frame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
         textView.textColor = UIColor(element.textColor)
@@ -68,13 +83,17 @@ struct FLCreator {
             textView.backgroundColor = .clear
         }
         
-        let center = CGPoint(x: viewX, y: viewX)
-        let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
+        let scale = (element.scale + Float(self.stageRatio)) - 1.0
+        
+        let center = CGPoint(x: viewX, y: viewY)
+        let frame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
         let iView = InteractView()
         iView.frame = frame
         iView.center = center
         iView.textView = textView
         iView.view = textView
+        iView.scale = (scale == 1.0) ? 1.0 : scale
+        iView.update(scale: scale)
         iView.update(rotation: element.rotation)
         stage.addSubview(iView)
         return iView

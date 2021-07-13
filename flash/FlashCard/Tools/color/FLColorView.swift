@@ -26,6 +26,7 @@ final class FLColorView: UIView {
         self.collectionView.isScrollEnabled = false
         let spaceing = FlashStyle.color.spaceing
         let column = FlashStyle.color.column
+        let marginVer = FlashStyle.color.marginVer
         let row:CGFloat = CGFloat(colorList.count) / column
         
         let allSpaceing = spaceing * (column - 1)
@@ -39,6 +40,7 @@ final class FLColorView: UIView {
         self.layout.itemSize = self.cellSize
         self.layout.minimumInteritemSpacing = CGFloat(spaceing)
         self.layout.minimumLineSpacing = CGFloat(spaceing)
+        self.layout.sectionInset = UIEdgeInsets(top: marginVer, left: 0, bottom: marginVer, right: 0)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.reloadData()

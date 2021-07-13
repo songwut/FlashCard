@@ -15,7 +15,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mwU-bU-3LJ">
                     <rect key="frame" x="0.0" y="0.0" width="54" height="54"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ip8-G6-BUx">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ip8-G6-BUx" customClass="FLButton" customModule="flash" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="54" height="54"/>
                         </button>
                     </subviews>
@@ -47,7 +47,7 @@
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="button" destination="Ip8-G6-BUx" id="Fz6-le-wxf"/>
+                <outlet property="button" destination="Ip8-G6-BUx" id="GbG-54-4wQ"/>
                 <outlet property="titleLabel" destination="XTd-vG-JPG" id="riT-UH-Svk"/>
             </connections>
             <point key="canvasLocation" x="53.623188405797109" y="52.566964285714285"/>

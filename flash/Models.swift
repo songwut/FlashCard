@@ -19,22 +19,38 @@ open class DidAction {
 }
 
 class FLButton: UIButton {
-    
+    var tool: FLTool = .text
 }
 
 class InteractView: UIView {
     
+    var isCreateNew = true
     var isProcessing = false
     var imageView:UIImageView?
+    
     var rotation: Float = 0 {
         didSet {
             print("update rotation: \(self.rotation)")
         }
     }
+    
+    func update(rotation:Float?) {
+        if let r = rotation {
+            self.rotation = r
+            let rAngle = CGFloat(r)
+            self.transform = CGAffineTransform(rotationAngle: rAngle)
+        }
+    }
+    
     var scale: Float = 0 {
         didSet {
-            print("update rotation: \(self.scale)")
+            print("update scale: \(self.scale)")
         }
+    }
+    
+    func update(scale: Float) {
+        self.scale = scale
+        self.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
     }
     
     var isSelected: Bool = false {
@@ -44,24 +60,12 @@ class InteractView: UIView {
         }
     }
     
-    var textView: UITextView? {
-        didSet {
-            self.textView?.delegate = self
-        }
-    }
+    var textView: UITextView?
     
     var svgImage: SVGKImage?
     
     func updateVector(_ svgImage:SVGKImage?) {
         self.imageView?.image = svgImage?.uiImage
-    }
-    
-    func update(rotation:Float?) {
-        if let r = rotation {
-            self.rotation = r
-            let rAngle = CGFloat(r)
-            self.transform = CGAffineTransform(rotationAngle: rAngle)
-        }
     }
     
     var view: UIView? {
@@ -89,22 +93,6 @@ class InteractView: UIView {
             self.isUserInteractionEnabled = true
             print("Add all the behavior here")
         }
-}
-
-extension InteractView: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        let isSelected = !self.isSelected
-        self.isSelected = isSelected
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let f = textView.frame
-        let viewH = textView.systemLayoutSizeFitting(CGSize(width: f.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
-        textView.frame = CGRect(x: 0, y: 0, width: f.width, height: viewH)
-        
-        let selfFrame = self.frame
-        self.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: selfFrame.width, height: viewH)
-    }
 }
 
 extension InteractView {
@@ -151,6 +139,45 @@ extension InteractView {
     }
 }
 
+class FLStageView: UIView {
+    var page: FlashPage? {
+        didSet {
+            print("FLStageView frame: \(self.frame)")
+        }
+    }
+}
+
+class FlashPage {
+    var id = 0
+    var image = ""//cover
+    var bgColor = "FFFFFF"
+    var componentList = [FlashElement]()
+    
+}
+
+enum FLTextAlignment:String {
+    case left = "left"
+    case center = "center"
+    case right = "right"
+    case justified = "justified"
+    case natural = "natural"
+    
+    func alignment() -> NSTextAlignment {
+        switch self {
+        case .left:
+            return .left
+        case .center:
+            return .center
+        case .right:
+            return .right
+        case .justified:
+            return .justified
+        default:
+            return .center
+        }
+    }
+}
+
 class FlashElement {
     var rotation:Float?
     var scale:Float = 1.0//default
@@ -158,13 +185,14 @@ class FlashElement {
 }
 
 class TextElement: FlashElement {
-    var text = "font with orange color and Italic 🧚"
-    var textColor = "#005733"
-    var fill:String? = "#FF5733"
+    var text = ""
+    var textColor = "#000000"
+    var fill:String?
     var x:CGFloat = 50
     var y:CGFloat = 50
     var fontSize:CGFloat = 36
-    var width:CGFloat = 80
+    var width:CGFloat = 0
+    var flAlignment = FLTextAlignment.center
     
     override init() {
         super.init()
