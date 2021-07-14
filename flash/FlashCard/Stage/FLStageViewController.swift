@@ -25,10 +25,9 @@ final class FLStageViewController: UIViewController {
     @IBOutlet private weak var listButton: UIButton!
     
     private var stageView: UIView!
+    private var sliderView: FLSliderView!
     private var stageViewList = [FLStageView]()
     private var stageCell: UICollectionViewCell!
-    private var stageScrollView: UIScrollView!
-    private var stageStackView: UIStackView!
     private var flCreator: FLCreator!
     private var didScrollCollectionViewToMiddle = false
     private var isCreatePage = true
@@ -95,16 +94,9 @@ final class FLStageViewController: UIViewController {
         self.stageView.backgroundColor = .white
         self.contentPageView.addSubview(self.stageView)
         
-        self.stageScrollView = UIScrollView()
-        self.stageView.backgroundColor = .white
-        self.contentPageView.addSubview(self.stageScrollView)
-        
-        self.stageStackView = UIStackView()
-        self.stageStackView.alignment = .fill
-        self.stageStackView.axis = .horizontal
-        self.stageStackView.distribution = .equalSpacing
-        self.stageStackView.spacing =  FlashStyle.stage.cellSpacing
-        self.stageScrollView.addSubview(self.stageStackView)
+        self.sliderView = FLSliderView.instanciateFromNib()
+        self.sliderView.backgroundColor = .white
+        self.contentPageView.addSubview(self.sliderView)
         
         self.contentPageView.addSubview(self.deletePageButton)
         self.contentPageView.addSubview(self.addLeftPageButton)
@@ -130,6 +122,13 @@ final class FLStageViewController: UIViewController {
         let indexPath = IndexPath(row: newIndex, section: 0)
         self.collectionView.insertItems(at: [indexPath])
         
+        guard let stackView = self.sliderView.contentStackView else {return}
+        let frame = self.stageView.frame
+        let stage = self.createStageView(frame.size)
+        stage.page = page
+        stackView.insertArrangedSubview(stage, at: newIndex)
+        self.stageViewList.insert(stage, at: newIndex)
+        
         self.gotoPage(index: newIndex)
     }
     
@@ -141,6 +140,13 @@ final class FLStageViewController: UIViewController {
         
         let indexPath = IndexPath(row: newIndex, section: 0)
         self.collectionView.insertItems(at: [indexPath])
+        
+        guard let stackView = self.sliderView.contentStackView else {return}
+        let frame = self.stageView.frame
+        let stage = self.createStageView(frame.size)
+        stage.page = page
+        stackView.insertArrangedSubview(stage, at: newIndex)
+        self.stageViewList.insert(stage, at: newIndex)
         
         self.gotoPage(index: newIndex)
     }
@@ -223,11 +229,10 @@ final class FLStageViewController: UIViewController {
             self.layout.minimumInteritemSpacing = 0
             self.layout.minimumLineSpacing = FlashStyle.stage.cellSpacing
             
-            
-            self.stageScrollView.frame = CGRect(x: 0, y: 0, width: areaFrame.width, height: areaFrame.height)
-            
-            let stY = (areaFrame.height - stageFrame.height) / 2
-            self.stageStackView.frame = CGRect(x: self.sectionEdge.left, y: stY, width: areaFrame.width, height: stageFrame.height)
+            self.sliderView.frame = CGRect(x: 0, y: 0, width: areaFrame.width, height: areaFrame.height)
+            self.sliderView.stackHeight.constant = stageFrame.height
+            self.sliderView.leftWidth.constant = self.sectionEdge.left
+            self.sliderView.rightWidth.constant = self.sectionEdge.right
             
             
             self.collectionView.backgroundColor = .black
@@ -243,35 +248,27 @@ final class FLStageViewController: UIViewController {
         }
     }
     
+    func createStageView(_ size: CGSize) -> FLStageView {
+        let f = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        let stage = FLStageView(frame: f)
+        stage.backgroundColor = .orange
+        stage.heightAnchor.constraint(equalToConstant: size.height).isActive = true
+        stage.widthAnchor.constraint(equalToConstant: size.width).isActive = true
+        return stage
+    }
+    
     func manageMultitleStage() {
-        let size = self.stageView.frame
+        guard let stackView = self.sliderView.contentStackView else {return}
+        stackView.removeAllArranged()
+        let frame = self.stageView.frame
         for page in self.viewModel.pageList {
-            let f = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-            let stage = FLStageView(frame: f)
+            let stage = self.createStageView(frame.size)
             stage.page = page
-            stage.backgroundColor = .orange
-            stage.heightAnchor.constraint(equalToConstant: size.height).isActive = true
-            stage.widthAnchor.constraint(equalToConstant: size.width).isActive = true
             self.stageViewList.append(stage)
-            self.stageStackView.addArrangedSubview(stage)
+            stackView.addArrangedSubview(stage)
         }
-        //let pageCount = self.viewModel.pageList
-        //let stWidth =
-        //let scrollWidth = self.sectionEdge.left + (size.width * pageCount) + self.sectionEdge.right
-        //
-        self.stageStackView.translatesAutoresizingMaskIntoConstraints = false
-        self.stageStackView.layoutIfNeeded()
-        print("width: ", self.stageStackView.bounds.width)
-        let allEdge = self.sectionEdge.left + self.sectionEdge.right
-        let scrollWidth = self.stageStackView.bounds.width + allEdge
-        self.stageScrollView.contentSize = CGSize(width: scrollWidth, height: self.stageScrollView.frame.height)
-        
-        let stY = self.stageStackView.frame.origin.y
-        self.stageStackView.frame = CGRect(x: self.sectionEdge.left, y: stY, width: scrollWidth, height: size.height)
-        
-        self.stageScrollView.delegate = self
-        self.stageStackView.backgroundColor = .gray
-        self.stageScrollView.backgroundColor = .black
+        stackView.layoutIfNeeded()
+        self.sliderView.scrollView.delegate = self
         self.isCreatePage = false
     }
     
@@ -299,7 +296,7 @@ final class FLStageViewController: UIViewController {
     
     private func indexOfMajorCell() -> Int {
         let itemWidth = self.cellSize.width
-        let proportionalOffset = self.stageScrollView.contentOffset.x / itemWidth
+        let proportionalOffset = self.sliderView.scrollView.contentOffset.x / itemWidth
         let index = Int(round(proportionalOffset))
         let safeIndex = max(0, min(self.viewModel.pageList.count - 1, index))
         return safeIndex
@@ -384,6 +381,7 @@ final class FLStageViewController: UIViewController {
     }
     
     func getStageView(at row: Int) -> UIView {
+        //let stageView = self.sliderView.contentStackView.arrangedSubviews[row]
         let stageView = self.stageViewList[row]
         return stageView
     }

@@ -17,34 +17,34 @@
                     <rect key="frame" x="0.0" y="0.0" width="615" height="600"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="P0S-Aw-fHy">
-                            <rect key="frame" x="0.0" y="0.0" width="992" height="512"/>
+                            <rect key="frame" x="0.0" y="156" width="992" height="200"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ljM-LG-NQC">
-                                    <rect key="frame" x="0.0" y="0.0" width="30" height="512"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="30" height="200"/>
                                     <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="30" id="0oH-0l-Bl7"/>
                                     </constraints>
                                 </view>
                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="6oj-Sc-dI3">
-                                    <rect key="frame" x="30" y="0.0" width="932" height="512"/>
+                                    <rect key="frame" x="30" y="0.0" width="932" height="200"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C6B-ND-Whn">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="512"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="200"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="300" id="OeQ-Uc-vmR"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kiL-YL-jug">
-                                            <rect key="frame" x="316" y="0.0" width="300" height="512"/>
+                                            <rect key="frame" x="316" y="0.0" width="300" height="200"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="300" id="2oA-QV-zfv"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EMH-HK-QVM">
-                                            <rect key="frame" x="632" y="0.0" width="300" height="512"/>
+                                            <rect key="frame" x="632" y="0.0" width="300" height="200"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="300" id="AbF-QW-UuH"/>
@@ -53,7 +53,7 @@
                                     </subviews>
                                 </stackView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIw-V7-lSY">
-                                    <rect key="frame" x="962" y="0.0" width="30" height="512"/>
+                                    <rect key="frame" x="962" y="0.0" width="30" height="200"/>
                                     <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="30" id="H4o-75-ieA"/>
@@ -61,14 +61,14 @@
                                 </view>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="height" constant="600" id="EXP-Qg-qzU"/>
+                                <constraint firstAttribute="height" constant="200" id="ALs-6H-fCn"/>
                             </constraints>
                         </stackView>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="P0S-Aw-fHy" secondAttribute="trailing" id="AQT-mt-rgV"/>
-                        <constraint firstAttribute="bottom" secondItem="P0S-Aw-fHy" secondAttribute="bottom" id="HF7-n2-fAj"/>
-                        <constraint firstItem="P0S-Aw-fHy" firstAttribute="top" secondItem="IIv-oJ-W4g" secondAttribute="top" id="Hsm-z2-Tik"/>
+                        <constraint firstAttribute="bottom" secondItem="P0S-Aw-fHy" secondAttribute="bottom" priority="600" id="HF7-n2-fAj"/>
+                        <constraint firstItem="P0S-Aw-fHy" firstAttribute="top" secondItem="IIv-oJ-W4g" secondAttribute="top" priority="600" id="Hsm-z2-Tik"/>
                         <constraint firstItem="P0S-Aw-fHy" firstAttribute="leading" secondItem="IIv-oJ-W4g" secondAttribute="leading" id="nQ5-J0-dOx"/>
                     </constraints>
                 </scrollView>
@@ -91,7 +91,7 @@
                 <outlet property="rightView" destination="yIw-V7-lSY" id="wP9-DD-vef"/>
                 <outlet property="rightWidth" destination="H4o-75-ieA" id="VB7-d1-6jR"/>
                 <outlet property="scrollView" destination="IIv-oJ-W4g" id="OHe-90-GK9"/>
-                <outlet property="stackHeight" destination="EXP-Qg-qzU" id="zfD-Fg-gQM"/>
+                <outlet property="stackHeight" destination="ALs-6H-fCn" id="alz-z6-U9d"/>
                 <outlet property="stackView" destination="P0S-Aw-fHy" id="UMt-Km-JSI"/>
             </connections>
             <point key="canvasLocation" x="187.68115942028987" y="-46.205357142857139"/>
