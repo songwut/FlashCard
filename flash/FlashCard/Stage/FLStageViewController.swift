@@ -60,6 +60,10 @@ final class FLStageViewController: UIViewController {
         return UIDevice.isIpad() ? .all : .portrait
     }
     
+    deinit {
+        print("stage removed")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.updateLayout()
@@ -113,6 +117,7 @@ final class FLStageViewController: UIViewController {
         self.addLeftPageButton.addTarget(self, action: #selector(self.appLeftPressed(_:)), for: .touchUpInside)
         self.addRightPageButton.addTarget(self, action: #selector(self.addRightPressed(_:)), for: .touchUpInside)
         
+        self.prepareToolVC()
         self.collectionView.reloadData()
     }
     
@@ -302,13 +307,7 @@ final class FLStageViewController: UIViewController {
     
     var halfModalDelegate: HalfModalTransitioningDelegate!
     
-    func openToolBar(tool: FLTool, iView: InteractView? = nil) {
-        if let toolVC = self.toolVC {
-            toolVC.setup(FLToolViewSetup(tool: tool, iView: iView))
-            toolVC.view.isHidden = false
-            return
-        }
-        
+    func prepareToolVC() {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
 //        if let vc = s.instantiateViewController(identifier: "FLToolViewController") as? FLToolViewController {
 //            // toolHelper = FLToolHelper(vc: self, toolBar: vc)
@@ -336,33 +335,52 @@ final class FLStageViewController: UIViewController {
         if let vc = s.instantiateViewController(identifier: "FLToolViewController") as? FLToolViewController {
             self.toolVC = vc
             
-            self.toolVC.didSelectedColor = DidAction(handler: { (sender) in
+            self.toolVC.didSelectedColor = DidAction(handler: { [weak self] (sender) in
+                guard let self = self else { return }
                 guard let hex = sender as? String else { return }
                 let stageView = self.getStageView(at: self.viewModel.pageIndex)
                 stageView.backgroundColor = UIColor(hex)
             })
-            self.toolVC.didCreateText = DidAction(handler: { (sender) in
-                
-                let element = TextElement()
-                element.width = 0
-                element.x = 50
-                element.y = 50
-                element.text = FlashStyle.text.placeholder
-                let row = self.indexOfMajorCell()
-                self.createElement(element, row: row)
-                
+            self.toolVC.didChangeTextColor = DidAction(handler: { [weak self] (sender) in
+                guard let self = self else { return }
+                guard let hex = sender as? String else { return }
+                self.flCreator.selectedView?.textView?.textColor = UIColor(hex)
+            })
+            
+            
+            self.toolVC.didCreateText = DidAction(handler: { [weak self] (sender) in
+                guard let self = self else { return }
+                self.createNewText()
             })
             
             self.toolVC.didClose = DidAction(handler: { (sender) in
                 self.view.endEditing(true)
             })
-            
+            self.toolVC.view.isHidden = true
             self.toolStackView.addArrangedSubview(self.toolVC.view)
             self.addChild(self.toolVC)
             self.toolVC.didMove(toParent: self)
             
-            self.toolVC.setup(FLToolViewSetup(tool: .menu, iView: iView))
+            self.toolVC.setup(FLToolViewSetup(tool: .menu))
         }
+    }
+    
+    func openToolBar(tool: FLTool, iView: InteractView? = nil) {
+        if let toolVC = self.toolVC {
+            toolVC.setup(FLToolViewSetup(tool: tool, iView: iView))
+            toolVC.view.isHidden = false
+            
+        }
+    }
+    
+    func createNewText() {
+        let element = TextElement()
+        element.width = 0
+        element.x = 50
+        element.y = 50
+        element.text = FlashStyle.text.placeholder
+        let row = self.indexOfMajorCell()
+        self.createElement(element, row: row)
     }
     
     func getStageView(at row: Int) -> UIView {
@@ -387,6 +405,7 @@ final class FLStageViewController: UIViewController {
         self.viewModel.save(element: element, at: row)
         
         let textElement = self.flCreator.createText(element, in: stageView)
+        
         self.flCreator.selectedView = textElement
         
         textElement.enableZoom()
@@ -396,10 +415,13 @@ final class FLStageViewController: UIViewController {
         textElement.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
         textElement.isCreateNew = true
         //Auto select all test
-        textElement.textView?.selectAll(self)
+        //textElement.textView?.selectAll(self)
         textElement.textView?.becomeFirstResponder()
         textElement.isSelected = true
         textElement.textView?.delegate = self
+        
+        self.openToolBar(tool: .text, iView: textElement)
+        self.toolVC.open(.text, isCreating: true)
     }
     
     /*
@@ -596,9 +618,11 @@ extension FLStageViewController: UITextViewDelegate {
         if let iView = textView.superview as? InteractView {
             iView.isSelected = true
             self.flCreator.selectedView = iView
-            self.openToolBar(tool: .text, iView: iView)
+            if iView.isCreateNew {
+                self.openToolBar(tool: .text, iView: iView)
+                self.toolVC.open(.text)
+            }
         }
-        //self.flCreator.selectedView?.isSelected = false
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {

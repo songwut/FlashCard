@@ -13,6 +13,13 @@ class FLTextStyleView: UIView {
     @IBOutlet weak var styleStackView: UIStackView!
     @IBOutlet weak var alignmentStackView: UIStackView!
     
+    var didChangeTextStyle: DidAction?
+    var didChangeTextAlignment: DidAction?
+    
+    func setup() {
+        
+    }
+    
     override func awakeFromNib() {
         self.layoutStackView.axis = UIDevice.isIpad() ? .horizontal : .vertical
         

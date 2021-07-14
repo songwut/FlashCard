@@ -12,6 +12,7 @@ class FLToolViewController: UIViewController {
     var didClose: DidAction?
     var didCreateText: DidAction?
     var didSelectedColor: DidAction?
+    var didChangeTextColor: DidAction?
     var didChangeTextStyle: DidAction?
     var didChangeTextAlignment: DidAction?
     
@@ -23,6 +24,7 @@ class FLToolViewController: UIViewController {
     @IBOutlet weak var colorStackView: UIStackView!
     @IBOutlet weak var textStackView: UIStackView!
     @IBOutlet weak var textToolStackView: UIStackView!
+    @IBOutlet weak var keyboardView: UIView!
     
     @IBOutlet weak var keyboardHeight: NSLayoutConstraint!
     
@@ -33,7 +35,7 @@ class FLToolViewController: UIViewController {
     private var addBarView = FLMenuBarView.instanciateFromNib()
     private var colorToolView = FLColorView.instanciateFromNib()
     private var textStyleView = FLTextStyleView.instanciateFromNib()
-    private var keyboardView = UIView()
+    private var textColorView = FLColorView.instanciateFromNib()
     
     private var viewModel = FLToolViewModel()
     var textMenu: FLTextMenu = .keyboard
@@ -49,15 +51,16 @@ class FLToolViewController: UIViewController {
         self.viewModel.tool = setup.tool
         self.viewModel.iView = setup.iView
         
-        if self.isToolReady {
-            self.open(setup.tool)
-        }
+//        if self.isToolReady {
+//            self.open(setup.tool)
+//        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.updateLayout()
         self.view.roundCorners([.topLeft, .topRight], radius: 16)
+        self.titleLabel.textColor = .black
         self.closeButton.tintColor = .black
         self.createMenuTool(FlashStyle.toolList)
         
@@ -75,37 +78,45 @@ class FLToolViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(_ notification: NSNotification) {
-        
+        //self.keyboardView.isHidden = true
     }
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
-        if let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            
-            if self.keyboardFrame == nil {
-                print("keyboardSize.height:\(keyboardFrame.height)")
-                self.keyboardHeight.constant = keyboardFrame.height - self.safeAreaBottomHeight
-                self.keyboardFrame = keyboardFrame
+        if self.keyboardFrame == nil {
+            if let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                
+                if self.keyboardFrame == nil {
+                    print("keyboardSize.height:\(keyboardFrame.height)")
+                    self.keyboardHeight.constant = keyboardFrame.height - self.safeAreaBottomHeight
+                    self.keyboardFrame = keyboardFrame
+                }
             }
         }
+        
     }
     
     @objc func keyboardPressed(_ button: UIButton) {
         //TODO: show keyboard and height
-        self.textMenu = .keyboard
-        self.open(.text)
+        if self.textMenu != .keyboard {
+            self.textMenu = .keyboard
+            self.open(.text)
+        }
     }
     
     @objc func stylePressed(_ button: UIButton) {
         //TODO: show text style
-        self.textMenu = .style
-        self.open(.text)
+        if self.textMenu != .style {
+            self.textMenu = .style
+            self.open(.text)
+        }
     }
     
     @objc func colorPressed(_ button: UIButton) {
         //TODO: show color picker
-        self.textMenu = .color
-        self.open(.text)
-        
+        if self.textMenu != .color {
+            self.textMenu = .color
+            self.open(.text)
+        }
     }
     
     func createMenuTool(_ tools: [FLTool]) {
@@ -126,40 +137,62 @@ class FLToolViewController: UIViewController {
             //toolView.didPressTool = didPressTool
             toolView.button.addTarget(self, action: #selector(self.toolPressed(_:)), for: .touchUpInside)
             toolView.widthAnchor.constraint(equalToConstant: itemWidth).isActive = true
-            self.addBarView.stackView.spacing = spacing
             self.addBarView.stackView.addArrangedSubview(toolView)
         }
+        self.addBarView.stackView.spacing = spacing
+        let h = self.addBarView.barHeight.constant
+        self.addBarView.heightAnchor.constraint(equalToConstant: h).isActive = true
         self.toolStackView.addArrangedSubview(self.addBarView)
         self.toolStackView.isHidden = false
         
-        self.createColorTool()
+        self.updateViewLayout(self.addBarView)
+        
+        self.viewModel.colorList { (colorList) in
+            self.createColorTool(colorList)
+            self.createTextTool(colorList)
+        }
     }
     
     @objc func toolPressed(_ sender: UIButton) {
         guard let btn = sender as? FLButton else { return }
-        self.open(btn.tool)
+        if btn.tool == .text {
+            //create text need to auto select, manage keyboard
+            self.didCreateText?.handler(nil)
+        } else {
+            //open tool menu
+            self.open(btn.tool)
+        }
     }
     
-    func createColorTool() {
+    func createColorTool(_ colorList: [String]) {
+        self.colorToolView.setup(colorList: colorList)
         self.colorToolView.didSelectedColor = self.didSelectedColor
-        
         self.colorStackView.removeAllArranged()
         self.colorStackView.addArrangedSubview(self.colorToolView)
-        self.viewModel.colorList { (colorList) in
-            self.colorToolView.setup(colorList: colorList)
-        }
         self.colorStackView.isHidden = true
+        self.updateViewLayout(self.colorStackView)
     }
     
-    func createTextTool() {
+    func createTextTool(_ colorList: [String]) {
+        self.textColorView.setup(colorList: colorList)
+        self.textColorView.didSelectedColor = self.didChangeTextColor
+        self.textStackView.addArrangedSubview(self.textColorView)
+        self.textColorView.isHidden = true
+        self.updateViewLayout(self.textColorView)
+        
         //self.textStyleView.didChangeTextAlignment = self.didChangeTextAlignment
         //self.textStyleView.didChangeTextStyle = self.didChangeTextStyle
         self.textStyleView.styleStackView.removeAllArranged()
         self.textStackView.addArrangedSubview(self.textStyleView)
         self.textStackView.isHidden = true
-        
+        self.updateViewLayout(self.textStyleView)
     }
     
+    func updateViewLayout(_ view: UIView) {
+        view.updateLayout()
+        let h = view.frame.height
+        view.heightAnchor.constraint(equalToConstant: h).isActive = true
+    }
     
     
     func updateToNewHeight(_ height: CGFloat) -> Void {
@@ -170,7 +203,7 @@ class FLToolViewController: UIViewController {
         }
     }
     
-    func open(_ tool: FLTool) {
+    func open(_ tool: FLTool, isCreating: Bool = false) {
         let iView = self.viewModel.iView
         self.viewModel.tool = tool
         self.titleLabel.text = tool.title()
@@ -190,13 +223,8 @@ class FLToolViewController: UIViewController {
             //show text editor
             self.toolStackView.isHidden = true
             self.textStackView.isHidden = false
-            self.manageText(self.textMenu)
-            if iView == nil {
-                self.didCreateText?.handler(tool)
-            } else {
-                print("Select:\(iView?.frame)")
-                //TODO: case selected
-            }
+            self.colorStackView.isHidden = true
+            self.manageText(self.textMenu, isCreating: isCreating)
             break
         case .graphic:
             //show graphic, sticker
@@ -210,27 +238,60 @@ class FLToolViewController: UIViewController {
         }
     }
     
-    func manageText(_ textMenu: FLTextMenu) {
+    func manageText(_ textMenu: FLTextMenu, isCreating: Bool) {
         
         switch textMenu {
         case .keyboard:
+            if !isCreating {
+                self.resetTextView(isActive: true)
+            }
+            self.keyboardView.isHidden = false
             self.textStyleView.isHidden = true
-            self.colorStackView.isHidden = true
+            self.textColorView.isHidden = true
+            
             break
         case .style:
+            self.resetTextView()
+            self.keyboardView.isHidden = true
             self.textStyleView.isHidden = false
-            self.colorStackView.isHidden = true
+            self.textColorView.isHidden = true
             break
         case .color:
+            self.resetTextView()
+            self.keyboardView.isHidden = true
             self.textStyleView.isHidden = true
-            self.colorStackView.isHidden = false
+            self.textColorView.isHidden = false
             break
         }
         
     }
     
+    func resetTextView(isActive: Bool = false) {
+        //resignFirstResponder > textViewDidEndEditing
+        //make isSelected = false
+        //need to set iView still selecting
+        if let textView = self.viewModel.iView?.textView {
+            self.viewModel.iView?.isCreateNew = false
+            if isActive, !textView.isFirstResponder {
+                if let text = textView.text {
+                    let range = NSRange(textView.text)
+                    let start = textView.beginningOfDocument
+                    let end = textView.endOfDocument
+                    //textView.selectedTextRange = textView.textRange(from: start, to: end)!
+                    textView.becomeFirstResponder()
+                }
+                //
+            } else {
+                //textView.selectedTextRange = nil
+                textView.resignFirstResponder()
+            }
+            
+            self.viewModel.iView?.isSelected = true
+        }
+    }
+    
     @IBAction func closePressed(_ sender: UIButton?) {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil)//if use present
         self.didClose?.handler(nil)
         
         //reset to tool UI
@@ -239,6 +300,7 @@ class FLToolViewController: UIViewController {
         
         switch tool {
         case .background:
+            self.textStackView.isHidden = true
             self.colorStackView.isHidden = true
             self.viewModel.tool = .menu
             break
@@ -246,6 +308,9 @@ class FLToolViewController: UIViewController {
             break
         case .text:
             self.textStackView.isHidden = true
+            self.textColorView.isHidden = true
+            self.keyboardView.isHidden = true
+            self.textMenu = .keyboard//reset default
             self.viewModel.tool = .menu
             break
         case .graphic:

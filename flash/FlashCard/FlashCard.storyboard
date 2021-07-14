@@ -334,6 +334,7 @@
                         <outlet property="colorStackView" destination="gKy-FB-4at" id="ad8-8W-68q"/>
                         <outlet property="keyboardButton" destination="p27-RB-Qkt" id="JUz-l1-g2O"/>
                         <outlet property="keyboardHeight" destination="lrh-3x-p2c" id="pbm-r8-FxY"/>
+                        <outlet property="keyboardView" destination="cWM-bw-TeU" id="rxJ-5V-dZk"/>
                         <outlet property="styleButton" destination="CWW-qk-eJn" id="2YL-OH-2o1"/>
                         <outlet property="textStackView" destination="lDU-Ds-Bq0" id="dBy-Hr-KCR"/>
                         <outlet property="textToolStackView" destination="6ZZ-NE-ien" id="5SX-sU-8P1"/>

@@ -10,6 +10,7 @@ import UIKit
 class FLMenuBarView: UIView {
     
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var barHeight: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
