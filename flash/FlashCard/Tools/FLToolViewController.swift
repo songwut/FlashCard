@@ -16,6 +16,8 @@ class FLToolViewController: UIViewController {
     var didChangeTextStyle: DidAction?
     var didChangeTextAlignment: DidAction?
     
+    var didMediaPressed: DidAction?
+    
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
@@ -158,6 +160,7 @@ class FLToolViewController: UIViewController {
         if btn.tool == .text {
             //create text need to auto select, manage keyboard
             self.didCreateText?.handler(nil)
+            
         } else {
             //open tool menu
             self.open(btn.tool)
@@ -180,9 +183,8 @@ class FLToolViewController: UIViewController {
         self.textColorView.isHidden = true
         self.updateViewLayout(self.textColorView)
         
-        //self.textStyleView.didChangeTextAlignment = self.didChangeTextAlignment
-        //self.textStyleView.didChangeTextStyle = self.didChangeTextStyle
-        self.textStyleView.styleStackView.removeAllArranged()
+        self.textStyleView.didChangeTextAlignment = self.didChangeTextAlignment
+        self.textStyleView.didChangeTextStyle = self.didChangeTextStyle
         self.textStackView.addArrangedSubview(self.textStyleView)
         self.textStackView.isHidden = true
         self.updateViewLayout(self.textStyleView)
@@ -218,6 +220,7 @@ class FLToolViewController: UIViewController {
             break
         case .media:
             //dismiss and open image/video picker native
+            self.didMediaPressed?.handler(tool)
             break
         case .text:
             //show text editor
@@ -243,7 +246,7 @@ class FLToolViewController: UIViewController {
         switch textMenu {
         case .keyboard:
             if !isCreating {
-                self.resetTextView(isActive: true)
+                self.resetTextView(menu: textMenu, isActive: true)
             }
             self.keyboardView.isHidden = false
             self.textStyleView.isHidden = true
@@ -251,13 +254,13 @@ class FLToolViewController: UIViewController {
             
             break
         case .style:
-            self.resetTextView()
+            self.resetTextView(menu: textMenu)
             self.keyboardView.isHidden = true
             self.textStyleView.isHidden = false
             self.textColorView.isHidden = true
             break
         case .color:
-            self.resetTextView()
+            self.resetTextView(menu: textMenu)
             self.keyboardView.isHidden = true
             self.textStyleView.isHidden = true
             self.textColorView.isHidden = false
@@ -266,24 +269,39 @@ class FLToolViewController: UIViewController {
         
     }
     
-    func resetTextView(isActive: Bool = false) {
+    func resetTextView(menu: FLTextMenu, isActive: Bool = false) {
         //resignFirstResponder > textViewDidEndEditing
         //make isSelected = false
         //need to set iView still selecting
         if let textView = self.viewModel.iView?.textView {
             self.viewModel.iView?.isCreateNew = false
             if isActive, !textView.isFirstResponder {
-                if let text = textView.text {
-                    let range = NSRange(textView.text)
+                // back to keyboard
+                if let text = textView.text, menu == .keyboard {
+                    //let range = NSRange(textView.text)
                     let start = textView.beginningOfDocument
                     let end = textView.endOfDocument
-                    //textView.selectedTextRange = textView.textRange(from: start, to: end)!
+                    textView.selectedTextRange = textView.textRange(from: start, to: end)!
                     textView.becomeFirstResponder()
+                    print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
                 }
                 //
+            } else if isActive {
+                print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
+                //ignore resignFirstResponder
             } else {
                 //textView.selectedTextRange = nil
-                textView.resignFirstResponder()
+                if textView.isFirstResponder {
+                    //case still editing and goto style, color
+                    //dismiss keyboard
+                    textView.resignFirstResponder()
+                    print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
+                    
+                } else {
+                    
+                    print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
+                }
+                
             }
             
             self.viewModel.iView?.isSelected = true
@@ -292,11 +310,13 @@ class FLToolViewController: UIViewController {
     
     @IBAction func closePressed(_ sender: UIButton?) {
         self.dismiss(animated: true, completion: nil)//if use present
-        self.didClose?.handler(nil)
+        
         
         //reset to tool UI
         self.toolStackView.isHidden = false
         let tool = self.viewModel.tool
+        
+        self.didClose?.handler(tool)
         
         switch tool {
         case .background:

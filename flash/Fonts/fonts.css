@@ -1,0 +1,32 @@
+
+@font-face { font-family: 'IBMPlexSansThai-Text'; src: local('IBMPlexSansThai-Text'),url('IBMPlexSansThai-Text.ttf') format('truetype'); }
+@font-face { font-family: 'IBMPlexSansThai-Medium'; src: local('IBMPlexSansThai-Medium'),url('IBMPlexSansThai-Medium.ttf') format('truetype'); }
+@font-face{ font-family: 'IBMPlexSansThai-Bold'; src: local('IBMPlexSansThai-Bold'),url('IBMPlexSansThai-Bold.ttf') format('truetype'); }
+@font-face{ font-family: 'Kanit-Italic'; src: local('Kanit-Italic'),url('Kanit-Italic.ttf') format('truetype'); }
+
+img { max-width:100%!important;height:auto!important;}
+table {width:100%;}
+
+h1
+{
+    font-family: 'IBMPlexSansThai-Text';
+    font-size: 20px;
+    font-weight: normal;
+}
+
+h2
+{
+    font-family: 'IBMPlexSansThai-Medium';
+    font-size: 16px;
+    font-weight: normal;
+}
+
+h3
+{
+    font-family: 'IBMPlexSansThai-Bold';
+    font-size: 14px;
+    font-weight: normal;
+}
+
+
+

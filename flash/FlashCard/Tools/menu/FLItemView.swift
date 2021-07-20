@@ -14,6 +14,41 @@ final class FLItemView: UIView {
     
     var didPressTool: DidAction?
     
+    var didPressAlignment: DidAction?
+    
+    var textStyle: FLTextStyle?{
+        didSet {
+            guard let textStyle = self.textStyle else { return }
+            self.updateUI()
+            self.titleLabel.text = textStyle.rawValue
+            let icon = UIImage(named: textStyle.iconName())
+            self.button.textStyle = textStyle
+            self.button.setImage(icon, for: .normal)
+            self.button.borderWidth = 1
+            self.button.borderColor = .clear
+            self.button.backgroundColor = .clear
+            self.button.tintColor = .text75()
+        }
+        
+    }
+    
+    
+    var alignment: FLTextAlignment! = .center {
+        didSet {
+            self.updateUI()
+            let icon = UIImage(named: self.alignment.iconName())
+            self.button.alignment = self.alignment
+            self.button.setImage(icon, for: .normal)
+            self.button.borderWidth = 1
+            self.button.borderColor = UIColor("7D7D7D")
+            self.button.backgroundColor = .clear
+            self.button.tintColor = .text50()
+            self.titleLabel.isHidden = true
+        }
+    }
+    
+    
+    
     var tool: FLTool! = .none {
         didSet {
             self.updateUI()

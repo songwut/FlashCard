@@ -24,6 +24,15 @@
 	<true/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>We need the access to the photo library to create and store snapshots of user interface</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>DB HeaventRoundedv3.2.1.ttf</string>
+		<string>DB HeaventRounded Bd v3.2.1.ttf</string>
+		<string>DB HeaventRounded Med v3.2.1.ttf</string>
+		<string>DB HeaventRounded It v3.2.1.ttf</string>
+		<string>DB HeaventRounded Med It v3.2.1.ttf</string>
+		<string>DB HeaventRounded Bd It v3.2.1.ttf</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -20,13 +20,20 @@ open class DidAction {
 
 class FLButton: UIButton {
     var tool: FLTool = .text
+    var alignment: FLTextAlignment = .center
+    var textStyle: FLTextStyle?
 }
 
 class InteractView: UIView {
     
+    var styles = [FLTextStyle]()
+    var alignment: FLTextAlignment?
+    var textColor: String?
+    
     var isCreateNew = true
     var isProcessing = false
     var imageView:UIImageView?
+    var element:TextElement?
     
     var rotation: Float = 0 {
         didSet {
@@ -55,8 +62,8 @@ class InteractView: UIView {
     
     var isSelected: Bool = false {
         didSet {
-            self.layer.borderWidth = self.isSelected ? 1 : 0
-            self.layer.borderColor = UIColor.black.cgColor
+            //self.layer.borderWidth = self.isSelected ? 1 : 0
+            //.layer.borderColor = UIColor.black.cgColor
         }
     }
     
@@ -155,7 +162,29 @@ class FlashPage {
     
 }
 
-enum FLTextAlignment:String {
+enum FLTextStyle: String {
+    case regular = "regular"
+    case bold = "bold"
+    case italic = "italic"
+    case underline = "underline"
+    
+    func iconName() -> String {
+        switch self {
+        case .bold:
+            return "ic_text_bold"
+        case .italic:
+            return "ic_text_Italic"
+        case .underline:
+            return "ic_text_underline"
+        default:
+            return ""
+        }
+    }
+    
+    //UIFont.w
+}
+
+enum FLTextAlignment: String {
     case left = "left"
     case center = "center"
     case right = "right"
@@ -176,6 +205,21 @@ enum FLTextAlignment:String {
             return .center
         }
     }
+    
+    func iconName() -> String {
+        switch self {
+        case .left:
+            return "ic_text_left"
+        case .center:
+            return "ic_text_center"
+        case .right:
+            return "ic_text_right"
+        case .justified:
+            return "ic_text_justified"
+        default:
+            return ""
+        }
+    }
 }
 
 class FlashElement {
@@ -185,6 +229,7 @@ class FlashElement {
 }
 
 class TextElement: FlashElement {
+    
     var text = ""
     var textColor = "#000000"
     var fill:String?
@@ -193,6 +238,8 @@ class TextElement: FlashElement {
     var fontSize:CGFloat = 36
     var width:CGFloat = 0
     var flAlignment = FLTextAlignment.center
+    
+    var widthPT:CGFloat?
     
     override init() {
         super.init()

@@ -42,15 +42,16 @@ struct FLCreator {
     func createText(_ element:TextElement ,in stage: UIView) -> InteractView {
         let viewX = (stage.frame.width * element.x / 100)
         let viewY = ((stage.frame.height * element.y) / 100)
-        var  viewW = ((stage.frame.width * element.width) / 100)
+        var viewW = ((stage.frame.width * element.width) / 100)
+        var viewH = ((stage.frame.height * element.width) / 100)
+        
+        let iView = InteractView()
         
         let fontSize:CGFloat = element.fontSize// ((stage.frame.width * element.fontSize) / 100)
         
         let font:UIFont = .systemFont(ofSize: fontSize, weight: .regular)
         
-        if element.width == 0 {
-            viewW = FlashStyle.text.textWidthFromFont36 * self.stageRatio //size.width
-        }
+        let scale = (element.scale + Float(self.stageRatio)) - 1.0
         
         let atb: [NSAttributedString.Key:Any] = [
             .font: font,
@@ -66,15 +67,30 @@ struct FLCreator {
         //let viewH = ((stage.frame.height * element.height) / 100)
         
         let textView = FLTextView()
-        //textView.text = element.text
-        textView.attributedText = attributedText
+        textView.text = element.text
+        //textView.attributedText = attributedText
         textView.textAlignment = element.flAlignment.alignment()
         textView.font = font
         textView.isEditable = true
         textView.isScrollEnabled = false
-        textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        //height from autolayout
-        let viewH = textView.systemLayoutSizeFitting(CGSize(width: viewW, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
+        //default UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        textView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        
+        
+        if element.width == 0, element.width == 0 {//case create new
+            let textViewFrame = textView.frameFromContent()
+            //let fixWidth:CGFloat = 40//plus for digit missing
+            //viewW = (FlashStyle.text.textWidthFromFont36 * CGFloat(scale)) + fixWidth
+            viewW = textViewFrame.width
+            viewH = textViewFrame.height
+        }
+        
+        
+        let selfFrame = iView.frame
+        iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: viewW, height: viewH)
+        
+        //textView.translatesAutoresizingMaskIntoConstraints = false
+        iView.view = textView
         textView.frame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
         textView.textColor = UIColor(element.textColor)
         if let fill = element.fill {
@@ -83,15 +99,13 @@ struct FLCreator {
             textView.backgroundColor = .clear
         }
         
-        let scale = (element.scale + Float(self.stageRatio)) - 1.0
-        
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
-        let iView = InteractView()
+        
         iView.frame = frame
         iView.center = center
         iView.textView = textView
-        iView.view = textView
+        iView.element = element
         iView.scale = (scale == 1.0) ? 1.0 : scale
         iView.update(scale: scale)
         iView.update(rotation: element.rotation)

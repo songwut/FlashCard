@@ -12,7 +12,7 @@ extension UIViewController {
     var safeAreaTopHeight: CGFloat {
         if #available(iOS 13.0, *) {
             let window = UIApplication.shared.windows[0]
-            let topPadding = window.safeAreaInsets.bottom
+            let topPadding = window.safeAreaInsets.top
             return topPadding
         } else {
             let window = UIApplication.shared.keyWindow
@@ -32,8 +32,6 @@ extension UIViewController {
             return topPadding
         }
     }
-    
-    
 }
 
 extension UIView {
