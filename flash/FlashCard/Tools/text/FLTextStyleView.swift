@@ -44,31 +44,31 @@ class FLTextStyleView: UIView {
         
         self.boldLabel.text = FLTextStyle.bold.rawValue
         self.boldButton.textStyle = .bold
-        self.boldButton.tintColor = .text75()
+        self.boldButton.tintColor = ColorHelper.text75()
         
         self.italicLabel.text = FLTextStyle.italic.rawValue
         self.italicButton.textStyle = .italic
-        self.italicButton.tintColor = .text75()
+        self.italicButton.tintColor = ColorHelper.text75()
         
         self.underlineLabel.text = FLTextStyle.underline.rawValue
         self.underlineButton.textStyle = .underline
-        self.underlineButton.tintColor = .text75()
+        self.underlineButton.tintColor = ColorHelper.text75()
         
         self.leftButton.alignment = .left
         self.leftButton.borderColor = UIColor("7D7D7D")
-        self.leftButton.tintColor = .text50()
+        self.leftButton.tintColor = ColorHelper.text50()
         
-        self.centerButton.alignment = .left
+        self.centerButton.alignment = .center
         self.centerButton.borderColor = UIColor("7D7D7D")
-        self.centerButton.tintColor = .text50()
+        self.centerButton.tintColor = ColorHelper.text50()
         
-        self.righrButton.alignment = .left
+        self.righrButton.alignment = .right
         self.righrButton.borderColor = UIColor("7D7D7D")
-        self.righrButton.tintColor = .text50()
+        self.righrButton.tintColor = ColorHelper.text50()
         
-        self.justifiedButton.alignment = .left
+        self.justifiedButton.alignment = .justified
         self.justifiedButton.borderColor = UIColor("7D7D7D")
-        self.justifiedButton.tintColor = .text50()
+        self.justifiedButton.tintColor = ColorHelper.text50()
         
     }
     

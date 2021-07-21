@@ -41,8 +41,8 @@ final class FLStageViewController: UIViewController {
         b.setImage(UIImage(named: "ic_v2_delete"), for: .normal)
         let w = FlashStyle.deletePageWidth
         b.bounds = CGRect(x: 0, y: 0, width: w, height: w)
-        b.backgroundColor = .elementBackground()
-        b.tintColor = .light()
+        b.backgroundColor = ColorHelper.elementBackground()
+        b.tintColor = ColorHelper.light()
         b.cornerRadius = w / 2
         return b
     }()
@@ -81,17 +81,17 @@ final class FLStageViewController: UIViewController {
         
         self.addButton.updateLayout()
         self.addButton.cornerRadius = self.addButton.bounds.width / 2
-        self.addButton.backgroundColor = .primary()
-        self.addButton.tintColor = .light()
+        self.addButton.backgroundColor = ColorHelper.primary()
+        self.addButton.tintColor = ColorHelper.light()
         let edge = self.addButton.bounds.height * FlashStyle.iconEedge
         let iconPading = UIEdgeInsets(top: edge, left: edge, bottom: edge, right: edge)
         self.addButton.imageEdgeInsets = iconPading
         self.previewButton.imageEdgeInsets = iconPading
         self.listButton.imageEdgeInsets = iconPading
         
-        self.pageCountLabel.textColor = .text50()
-        self.previewButton.tintColor = .text50()
-        self.listButton.tintColor = .text50()
+        self.pageCountLabel.textColor = ColorHelper.text50()
+        self.previewButton.tintColor = ColorHelper.text50()
+        self.listButton.tintColor = ColorHelper.text50()
         
         self.stageView = UIView()
         self.stageView.cornerRadius = 16
@@ -239,7 +239,7 @@ final class FLStageViewController: UIViewController {
             self.sliderView.rightWidth.constant = self.sectionEdge.right
             
             let controlframe = CGRect(x: 0, y: 0, width: 100, height: 100)
-            self.controlView.manageControlView(controlframe, isHidden: true)
+            self.controlView.updateFrame(controlframe)
             self.sliderView.scrollView.addSubview(self.controlView)
             
             
@@ -408,66 +408,74 @@ final class FLStageViewController: UIViewController {
         self.createElement(element, row: row)
     }
     
+    func createNewImage(_ image: UIImage) {
+        let element = ImageElement()
+        element.x = 50
+        element.y = 50
+        element.image = image
+        element.rawSize = image.size
+        let row = self.indexOfMajorCell()
+        self.createElement(element, row: row)
+    }
+    
     func updateTextAlignment(_ alignment: FLTextAlignment) {
         guard let iView = self.flCreator.selectedView else { return}
-        iView.textView?.textAlignment = alignment.alignment()
-        iView.alignment = alignment
-        self.updateTextStyle()
+        iView.element?.flAlignment = alignment
+        
+        self.manageTextAtb()
     }
     
     func updateTextStyle(_ style: FLTextStyle = .regular) {
         guard let iView = self.flCreator.selectedView else { return}
+        guard let element = iView.element else { return }
         //update style in iView
-        if let index = iView.styles.firstIndex(of: style) {
-            iView.styles.remove(at: index)
+        if let index = element.flTextStyle.firstIndex(of: style) {
+            element.flTextStyle.remove(at: index)
         } else {
             if style != .regular {
-                iView.styles.append(style)
+                element.flTextStyle.append(style)
             }
         }
-        let styleList = iView.styles
-        let text = self.flCreator.selectedView?.textView?.text ?? ""
-        //let font = self.flCreator.selectedView?.textView?.font
-        let element = self.flCreator.selectedView?.element
-        let fontSize = element?.fontSize ?? 36
-        var weight: UIFont.Weight = .regular
-        if styleList.contains(.bold) {
-            weight = .bold
-        }
-        var font = UIFont.systemFont(ofSize: fontSize, weight: weight)
-        if styleList.contains(.italic) {
-            font = UIFont.italicSystemFont(ofSize: fontSize, weight: weight)
-        }
-        //atb[NSAttributedString.Key.underlineStyle] = NSUnderlineStyle.single.rawValue
+        //update flTextStyle to element
+        let styleList = element.flTextStyle
+        element.flTextStyle = styleList
         
-        let textColor = self.flCreator.selectedView?.textView?.textColor
-        //NSMutableAttributedString(string: self, attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue])
+        self.manageTextAtb()
+    }
+    
+    func manageTextAtb() {
+        guard let iView = self.flCreator.selectedView else { return}
+        guard let textView = iView.textView else { return }
+        guard let element = iView.element else { return }
+        let textColor = textView.textColor ?? .black
+        let text = textView.text ?? ""
+        
+        let font = self.flCreator.manageFont(element: element)
+        let alignment = element.flAlignment.alignment()
+        
+        let textViewWidth = textView.frame.size.width
+        let tabStart = NSTextTab(textAlignment: alignment, location: 0.0, options: [:])
+        let tabStop = NSTextTab(textAlignment: alignment, location: textViewWidth, options: [:])
+        let paragraph = NSMutableParagraphStyle()
+        //paragraph.lineSpacing = 0
+        paragraph.alignment = alignment
+        //paragraph.tabStops = [tabStart, tabStop]
+        paragraph.lineBreakMode = .byClipping
+        paragraph.baseWritingDirection = .leftToRight
+        
         var atb: [NSAttributedString.Key:Any] = [
             .font: font,
-            .foregroundColor: textColor,
-            .paragraphStyle: {
-                let paragraph = NSMutableParagraphStyle()
-                paragraph.lineSpacing = 0
-                if let alignment = iView.alignment {
-                    paragraph.lineSpacing = 0
-                    paragraph.alignment = alignment.alignment()
-                }
-                return paragraph
-            }()
+            .foregroundColor: textColor
         ]
-        if styleList.contains(.underline) {
+        if element.flTextStyle.contains(.underline) {
             atb[NSAttributedString.Key.underlineStyle] = NSUnderlineStyle.single.rawValue
         }
-        
-        let atbString =  NSMutableAttributedString(string: text , attributes: atb)
-        if let alignment = iView.alignment {
-            let paragraph = NSMutableParagraphStyle()
-            paragraph.lineSpacing = 0
-            paragraph.alignment = alignment.alignment()
-            atbString.addAttribute(.paragraphStyle, value: paragraph, range: NSRange(location: 0, length: text.count - 1))
-            //alignment not work
+        if text.count >= 1 {
+            let atbString =  NSMutableAttributedString(string: text , attributes: atb)
+            atbString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraph, range: NSRange(location: 0, length: atbString.length))
+            self.flCreator.selectedView?.textView?.attributedText = atbString
+            textView.textAlignment = element.flAlignment.alignment()
         }
-        self.flCreator.selectedView?.textView?.attributedText = atbString
     }
     
     
@@ -483,9 +491,47 @@ final class FLStageViewController: UIViewController {
             self.createTextView(eText, row: row)
             
         } else if let eImage = element as? ImageElement {
-            //TODO: add image to stage
-            
+            self.createImageView(eImage, row: row)
         }
+        //TODO: add video, shape to stage
+    }
+    
+    func createImageView(_ element: FlashElement, row: Int) {
+        self.flCreator.selectedView?.isSelected = false
+        self.flCreator.selectedView?.isCreateNew = false
+        
+        self.viewModel.save(element: element, at: row)
+        
+        let stageView = self.getStageView(at: row)
+        guard let iView = self.flCreator.createImage(element, in: stageView) else { return}
+        
+        self.flCreator.selectedView = iView
+        
+        iView.prepareGesture()
+//        iView.enableZoom()
+//        iView.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
+//
+//        iView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
+//        iView.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
+        iView.isCreateNew = true
+        //Auto select all test
+        //textElement.textView?.selectAll(self)
+        iView.textView?.becomeFirstResponder()
+        iView.isSelected = true
+        iView.textView?.delegate = self
+        
+        if let tool = element.tool {
+            self.openToolBar(tool: tool, iView: iView)
+            self.toolVC.open(tool, isCreating: true)
+        }
+        
+        let size = iView.frame
+        print("controlView width: \(size.width) ,controlView height: \(size.height)")
+        self.controlView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        iView.update(controlView: self.controlView)
+        
+        self.controlView.leftWidthButton.isHidden = true
+        self.controlView.rightWidthButton.isHidden = true
     }
     
     func createTextView(_ element: TextElement, row: Int) {
@@ -514,21 +560,17 @@ final class FLStageViewController: UIViewController {
         self.openToolBar(tool: .text, iView: textElement)
         self.toolVC.open(.text, isCreating: true)
         
-        //let rect = textElement.convert(textElement.frame, to: self.sliderView.scrollView)
-        //print("controlView X: \(rect.origin.x) ,controlView Y: \(rect.origin.y)")
         let size = textElement.frame
         print("controlView width: \(size.width) ,controlView height: \(size.height)")
-        self.controlView.frame = CGRect(x: 0, y: 0, width: size.width + FlashStyle.text.marginIView, height: size.height + FlashStyle.text.marginIView)
-        self.controlView.isHidden = false
-        stageView.insertSubview(self.controlView, belowSubview: textElement)
-        self.controlView.center = textElement.center
+        self.controlView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        textElement.update(controlView: self.controlView)
         
-        //self.controlView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.moveControl(_:))))
         self.controlView.leftWidthButton.tag = FLTag.left.rawValue
         self.controlView.rightWidthButton.tag = FLTag.right.rawValue
         self.controlView.leftWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
         self.controlView.rightWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
     }
+    
     private var startPosition: CGPoint!
     private var originalWidth: CGFloat = 0
     @objc func moveControl(_ gesture: UIPanGestureRecognizer) {
@@ -594,7 +636,7 @@ final class FLStageViewController: UIViewController {
             
             iView.frame = iViewFrameUpdate
             //self.controlView.updateFrame(iViewFrameUpdate, center: iView.center)
-            self.controlView.updateFrame(iView.frame, center: iView.center)
+            self.controlView.updateFrame(iView.frame)
             print("out iView:\(iView.frame)")
             if !self.isScaleWidth {//for textview fix layout
                 self.isScaleWidth = true
@@ -633,7 +675,7 @@ final class FLStageViewController: UIViewController {
         print("viewH:\(viewH)")
         let selfFrame = iView.frame
         iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: selfFrame.width, height: viewH * self.flCreator.stageRatio)
-        self.controlView.updateFrame(iView.frame, center: iView.center)
+        self.controlView.updateFrame(iView.frame)
         
         //let newSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
         //textView.frame = CGRect(origin: textView.frame.origin, size: newSize)
@@ -684,7 +726,11 @@ final class FLStageViewController: UIViewController {
         iView.isSelected = true
         self.flCreator.selectedView = iView
         
-        self.controlView.updateFrame(iView.frame, center: iView.center)
+        let isHiddenExpandWidthUI = iView.textView == nil
+        self.controlView.leftWidthButton.isHidden = isHiddenExpandWidthUI
+        self.controlView.rightWidthButton.isHidden = isHiddenExpandWidthUI
+        
+        self.controlView.updateFrame(iView.frame)
     }
     
     @objc func move(_ gesture: UIPanGestureRecognizer) {
@@ -694,26 +740,24 @@ final class FLStageViewController: UIViewController {
             textView.selectedTextRange = nil
         }
         iView.isSelected = true
-        iView.center = location
         
         let translation = gesture.translation(in: self.stageView)
-        iView.center = CGPoint(x: iView.center.x + translation.x, y: iView.center.y + translation.y)
+        //for center
+        //iView.center = location
+        //iView.center = CGPoint(x: iView.center.x + translation.x, y: iView.center.y + translation.y)
+        print("move")
+        print("x : \(translation.x)")
+        print("y : \(translation.y)")
+        iView.transform = iView.transform.translatedBy(x: translation.x, y: translation.y)
         gesture.setTranslation(CGPoint.zero, in: self.stageView)
-        self.controlView.updateFrame(iView.frame, center: iView.center)
+        self.controlView.updateFrame(iView.frame)
         
-        /*
-        if gesture.state == .ended {
-            if draggedView.frame.midX >= self.stageView.layer.frame.width / 2 {
-                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-                    draggedView.center.x = self.stageView.layer.frame.width - 40
-                }, completion: nil)
-            }else{
-                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-                    draggedView.center.x = 40
-                }, completion: nil)
-            }
+        if gesture.state == .began {
+            
+        } else if gesture.state == .ended {
+            
         }
-        */
+        
     }
     
     @objc func rotated(_ gesture: UIRotationGestureRecognizer) {
@@ -729,19 +773,23 @@ final class FLStageViewController: UIViewController {
             originalRotation = gesture.rotation
             
         } else if gesture.state == .changed {
-            
+            let scale = CGAffineTransform(scaleX: view.currentScale.x, y: view.currentScale.y)
             let newRotation = gesture.rotation + originalRotation
-            view.transform = CGAffineTransform(rotationAngle: newRotation)
+            view.transform = scale.rotated(by: newRotation)
+            
+            
+            //let newRotation = gesture.rotation + originalRotation
+            //view.transform = CGAffineTransform(rotationAngle: newRotation)
             
             let degrees = self.getDegreesRotation(view)
             print("changed degrees: \(degrees)")
             
         } else if gesture.state == .ended {
-            
             // Save the last rotation
             let degrees = self.getDegreesRotation(view)
             print("ended degrees: \(degrees)")
             view.rotation = Float(degrees)
+            gesture.rotation = 0
         }
     }
     
@@ -816,7 +864,8 @@ final class FLStageViewController: UIViewController {
 //            sheet.prefersGrabberVisible = true
 //        }
         
-        present(picker, animated: true, completion: nil)
+        //present(picker, animated: true, completion: nil)
+        self.createNewImage(UIImage(named: "monstera")!)
     }
     
     func stageScreenShot(_ stage: UIView) -> UIImage? {
@@ -882,7 +931,9 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
             print("formatted result: \(string)")
             let alert = UIAlertController(title: "imageSize", message: "formatted result: \(string)\n \(mb)", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "ok", style: .default, handler: nil))
-            self.present(alert, animated: true)
+            //self.present(alert, animated: true)
+            
+            self.createNewImage(img)
             
         } else if let movieUrl = info[.mediaURL] as? URL {
             print("movieUrl: \(movieUrl)")
@@ -908,7 +959,7 @@ extension FLStageViewController: UITextViewDelegate {
         if let iView = textView.superview as? InteractView {
             iView.isSelected = true
             self.flCreator.selectedView = iView
-            self.controlView.updateFrame(iView.frame, center: iView.center)
+            self.controlView.updateFrame(iView.frame)
             
             self.openToolBar(tool: .text, iView: iView)
             self.toolVC.open(.text)
@@ -932,9 +983,8 @@ extension FLStageViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         if let iView = textView.superview as? InteractView {
             self.updateTextviewHeight(iView)
-            self.controlView.updateFrame(iView.frame, center: iView.center)
+            self.controlView.updateFrame(iView.frame)
         }
-        
     }
     
 }

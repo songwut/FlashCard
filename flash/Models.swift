@@ -24,128 +24,6 @@ class FLButton: UIButton {
     var textStyle: FLTextStyle?
 }
 
-class InteractView: UIView {
-    
-    var styles = [FLTextStyle]()
-    var alignment: FLTextAlignment?
-    var textColor: String?
-    
-    var isCreateNew = true
-    var isProcessing = false
-    var imageView:UIImageView?
-    var element:TextElement?
-    
-    var rotation: Float = 0 {
-        didSet {
-            print("update rotation: \(self.rotation)")
-        }
-    }
-    
-    func update(rotation:Float?) {
-        if let r = rotation {
-            self.rotation = r
-            let rAngle = CGFloat(r)
-            self.transform = CGAffineTransform(rotationAngle: rAngle)
-        }
-    }
-    
-    var scale: Float = 0 {
-        didSet {
-            print("update scale: \(self.scale)")
-        }
-    }
-    
-    func update(scale: Float) {
-        self.scale = scale
-        self.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
-    }
-    
-    var isSelected: Bool = false {
-        didSet {
-            //self.layer.borderWidth = self.isSelected ? 1 : 0
-            //.layer.borderColor = UIColor.black.cgColor
-        }
-    }
-    
-    var textView: UITextView?
-    
-    var svgImage: SVGKImage?
-    
-    func updateVector(_ svgImage:SVGKImage?) {
-        self.imageView?.image = svgImage?.uiImage
-    }
-    
-    var view: UIView? {
-        didSet {
-            guard let view = self.view else { return }
-            self.addSubview(view)
-        }
-    }
-    
-    override init(frame: CGRect) {
-            super.init(frame: frame)
-            addBehavior()
-        }
-
-        convenience init() {
-            self.init(frame: CGRect.zero)
-            
-        }
-
-        required init(coder aDecoder: NSCoder) {
-            fatalError("This class does not support NSCoding")
-        }
-
-        func addBehavior() {
-            self.isUserInteractionEnabled = true
-            print("Add all the behavior here")
-        }
-}
-
-extension InteractView {
-    
-    func enableZoom() {
-      let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(startZooming(_:)))
-      isUserInteractionEnabled = true
-      addGestureRecognizer(pinchGesture)
-    }
-    
-    @objc private func startZooming(_ gesture: UIPinchGestureRecognizer) {
-        print("x:\(gesture.scale)")
-        print("y:\(gesture.scale)")
-        guard let view = gesture.view as? InteractView else { return }
-        view.scale = Float(gesture.scale)
-        let scale = view.transform.scaledBy(x: gesture.scale, y: gesture.scale)
-        if scale.a > 1, scale.d > 1 {
-            view.transform = scale
-            gesture.scale = 1
-            if !self.isProcessing {
-                self.isProcessing = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if let svgImage = view.svgImage {
-                        if let imageView = view.imageView {
-                            view.updateVector(svgImage)
-                            self.isProcessing = false
-                        }
-                    }
-                }
-            }
-            
-            
-        }
-        
-        if gesture.state == .began {
-            
-        } else if gesture.state == .recognized {
-            //gesture.scale = 1
-        } else if gesture.state == .ended {
-            
-            
-        }
-    
-    }
-}
-
 class FLStageView: UIView {
     var page: FlashPage? {
         didSet {
@@ -223,9 +101,10 @@ enum FLTextAlignment: String {
 }
 
 class FlashElement {
-    var rotation:Float?
-    var scale:Float = 1.0//default
-    
+    var rotation: Float?
+    var scale: Float = 1.0//default
+    var tool: FLTool?
+    var rawSize: CGSize?
 }
 
 class TextElement: FlashElement {
@@ -238,17 +117,19 @@ class TextElement: FlashElement {
     var fontSize:CGFloat = 36
     var width:CGFloat = 0
     var flAlignment = FLTextAlignment.center
+    var flTextStyle:[FLTextStyle] = [FLTextStyle]()//["bold", "italic", "underline"]
     
     var widthPT:CGFloat?
     
     override init() {
         super.init()
+        self.tool = .text
         //self.rotation = 1.69
     }
 }
 
 class ImageElement: FlashElement {
-    var src = ""
+    var src: String?
     var textColor = "#005733"
     var fill:String?
     var x:CGFloat = 60
@@ -256,9 +137,10 @@ class ImageElement: FlashElement {
     var width:CGFloat = 30
     var height:CGFloat = 20
     
+    var image: UIImage?
+    
     override init() {
         super.init()
-        self.rotation = 45
     }
 }
 

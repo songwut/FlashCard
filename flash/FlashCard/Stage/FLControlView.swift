@@ -25,16 +25,12 @@ class FLControlView: UIView {
         print("FLControlView \(self.frame)")
     }
     
-    func updateFrame(_ frame: CGRect, center: CGPoint) {
+    func updateFrame(_ frame: CGRect) {
         let size = frame.size
-        let margin = FlashStyle.text.marginIView
-        self.frame = CGRect(x: frame.origin.x - (margin / 2), y: frame.origin.y - (margin / 2), width: size.width + margin, height: size.height + margin)
-        //self.center = center
-    }
-    
-    func manageControlView(_ frame: CGRect, isHidden: Bool) {
-        self.frame = frame
-        self.isHidden = isHidden
+        self.frame = CGRect(origin: .zero, size: size)
+        self.isHidden = false
+        //let margin: CGFloat = FlashStyle.text.marginIView
+        //self.frame = CGRect(x: frame.origin.x - (margin / 2), y: frame.origin.y - (margin / 2), width: size.width + margin, height: size.height + margin)
     }
 
     override func awakeFromNib() {

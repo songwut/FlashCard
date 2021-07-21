@@ -39,6 +39,15 @@ struct FLCreator {
         self.stageView = stage
     }
     
+    func manageFont(element:TextElement) -> UIFont {
+        var font = FontHelper.getFontSystem(element.fontSize, font: .text)
+        let isItalic = element.flTextStyle.contains(.italic)
+        if element.flTextStyle.contains(.bold) {
+            font = FontHelper.getFontSystem(element.fontSize, font: .bold, isItalic: isItalic)
+        }
+        return font
+    }
+    
     func createText(_ element:TextElement ,in stage: UIView) -> InteractView {
         let viewX = (stage.frame.width * element.x / 100)
         let viewY = ((stage.frame.height * element.y) / 100)
@@ -47,51 +56,54 @@ struct FLCreator {
         
         let iView = InteractView()
         
-        let fontSize:CGFloat = element.fontSize// ((stage.frame.width * element.fontSize) / 100)
-        
-        let font:UIFont = .systemFont(ofSize: fontSize, weight: .regular)
+        let font:UIFont = self.manageFont(element: element)
         
         let scale = (element.scale + Float(self.stageRatio)) - 1.0
         
-        let atb: [NSAttributedString.Key:Any] = [
+        let textView = FLTextView()
+        textView.text = element.text
+        textView.textAlignment = element.flAlignment.alignment()
+        textView.textColor = UIColor(element.textColor)
+        textView.font = font
+        textView.isEditable = true
+        textView.isScrollEnabled = false
+        textView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        
+        var atb: [NSAttributedString.Key:Any] = [
             .font: font,
-            .foregroundColor: UIColor(element.textColor),
+            .foregroundColor: textView.textColor ?? .black,
             .paragraphStyle: {
                 let paragraph = NSMutableParagraphStyle()
                 paragraph.lineSpacing = 0
                 return paragraph
             }()
         ]
-        let attributedText = NSAttributedString(string: element.text, attributes: atb)
+        if element.flTextStyle.contains(.underline) {
+            atb[NSAttributedString.Key.underlineStyle] = NSUnderlineStyle.single.rawValue
+        }
         
-        //let viewH = ((stage.frame.height * element.height) / 100)
-        
-        let textView = FLTextView()
-        textView.text = element.text
-        //textView.attributedText = attributedText
+        let atbString =  NSMutableAttributedString(string: textView.text , attributes: atb)
+        textView.attributedText = atbString
         textView.textAlignment = element.flAlignment.alignment()
-        textView.font = font
-        textView.isEditable = true
-        textView.isScrollEnabled = false
-        //default UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        textView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
+        let margin = FlashStyle.text.marginIView
+        let marginXY = margin / 2
         
         if element.width == 0, element.width == 0 {//case create new
             let textViewFrame = textView.frameFromContent()
             //let fixWidth:CGFloat = 40//plus for digit missing
             //viewW = (FlashStyle.text.textWidthFromFont36 * CGFloat(scale)) + fixWidth
-            viewW = textViewFrame.width
-            viewH = textViewFrame.height
+            viewW = textViewFrame.width + margin
+            viewH = textViewFrame.height + margin
         }
         
         
         let selfFrame = iView.frame
-        iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: viewW, height: viewH)
+        iView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: viewW, height: viewW))
         
         //textView.translatesAutoresizingMaskIntoConstraints = false
         iView.view = textView
-        textView.frame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
+        textView.frame = CGRect(x: marginXY, y: marginXY, width: viewW - margin, height: viewH - margin)
         textView.textColor = UIColor(element.textColor)
         if let fill = element.fill {
             textView.backgroundColor = UIColor(fill)
@@ -113,48 +125,39 @@ struct FLCreator {
         return iView
     }
     
-    func createVector(_ element:VectorElement ,in stage: UIView) -> InteractView {
+    func createImage(_ e: FlashElement ,in stage: UIView) -> InteractView? {
+        guard let element = e as? ImageElement else { return nil }
         let viewX = (stage.frame.width * element.x / 100)
         let viewY = ((stage.frame.height * element.y) / 100)
         let viewW = ((stage.frame.width * element.width) / 100)
         let viewH = ((stage.frame.height * element.height) / 100)
-        let imageviewFrame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
         
-        let svg = URL(string: "https://openclipart.org/download/181651/manhammock.svg")!
-        let data = try? Data(contentsOf: svg)
-        let receivedimage: SVGKImage = SVGKImage(data: data)
+        
+        
+        var size = CGSize(width: viewW, height: viewH)
+        if let rawSize = e.rawSize {
+            let ratio = rawSize.height / rawSize.width
+            let w = stage.frame.width * 0.8//80% of stage
+            let h = w * ratio//height by ratio
+            size = CGSize(width: w, height: h)
+        }
+        
+        let margin = FlashStyle.text.marginIView
+        let marginXY = margin / 2
+        let imageviewFrame = CGRect(x: marginXY, y: marginXY, width: size.width - margin, height: size.height - margin)
+        
         let imageview = UIImageView()
         imageview.frame = imageviewFrame
-        imageview.image = receivedimage.uiImage
-        imageview.backgroundColor = UIColor(element.fill)
+        
+        if let image = element.image {
+            imageview.image = image
+            
+        } else if let imgSrc = element.src {
+            imageview.imageFromUrl(imgSrc)
+        }
         
         let center = CGPoint(x: viewX, y: viewY)
-        let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
-        let iView = InteractView()
-        iView.frame = frame
-        iView.center = center
-        iView.view = imageview
-        iView.svgImage = receivedimage
-        iView.imageView = imageview
-        iView.update(rotation: element.rotation)
-        stage.addSubview(iView)
-        return iView
-    }
-    
-    func createImage(_ element: ImageElement ,in stage: UIView) -> InteractView {
-        let viewX = (stage.frame.width * element.x / 100)
-        let viewY = ((stage.frame.height * element.y) / 100)
-        let viewW = ((stage.frame.width * element.width) / 100)
-        let viewH = ((stage.frame.height * element.height) / 100)
-        let imageviewFrame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
-        
-        let image = UIImage(named: "monstera")
-        let imageview = UIImageView()
-        imageview.frame = imageviewFrame
-        imageview.image = image
-        
-        let center = CGPoint(x: viewX, y: viewY)
-        let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
+        let frame = CGRect(origin: CGPoint.zero, size: size)
         let iView = InteractView()
         iView.frame = frame
         iView.center = center
@@ -205,6 +208,33 @@ struct FLCreator {
         return iView
     }
     
+    func createVector(_ element:VectorElement ,in stage: UIView) -> InteractView {
+        let viewX = (stage.frame.width * element.x / 100)
+        let viewY = ((stage.frame.height * element.y) / 100)
+        let viewW = ((stage.frame.width * element.width) / 100)
+        let viewH = ((stage.frame.height * element.height) / 100)
+        let imageviewFrame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
+        
+        let svg = URL(string: "https://openclipart.org/download/181651/manhammock.svg")!
+        let data = try? Data(contentsOf: svg)
+        let receivedimage: SVGKImage = SVGKImage(data: data)
+        let imageview = UIImageView()
+        imageview.frame = imageviewFrame
+        imageview.image = receivedimage.uiImage
+        imageview.backgroundColor = UIColor(element.fill)
+        
+        let center = CGPoint(x: viewX, y: viewY)
+        let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
+        let iView = InteractView()
+        iView.frame = frame
+        iView.center = center
+        iView.view = imageview
+        iView.svgImage = receivedimage
+        iView.imageView = imageview
+        iView.update(rotation: element.rotation)
+        stage.addSubview(iView)
+        return iView
+    }
     
     func createArrow(_ element: ArrowElement ,in stage: UIView) -> InteractView {
         let viewX = (stage.frame.width * element.x / 100)

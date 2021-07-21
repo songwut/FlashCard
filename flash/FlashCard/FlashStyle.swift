@@ -63,7 +63,7 @@ struct FlashStyle {
     static let pageCardWidthRatio: CGFloat = UIDevice.isIpad() ?  575 / 1024 : 325.0 / 375
     static let pageCardRatio: CGFloat = 485 / 325
     
-    static let bottonToolColor: UIColor = .primary()
+    static let bottonToolColor: UIColor = ColorHelper.primary()
     static let iconEedge: CGFloat = 0.3//
     static let bottonToolWidth: CGFloat = UIDevice.isIpad() ? 70 : 54
     static let toolMargin: CGFloat = 18 / 54
@@ -87,7 +87,7 @@ struct FlashStyle {
     struct text {
         static let placeholder = "Please\nInput Text\nHere"
         static let textWidthFromFont36:CGFloat = 120
-        static let marginIView: CGFloat = 40
+        static let marginIView: CGFloat = 40//left+right,top+botton
     }
     
 }

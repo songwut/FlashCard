@@ -16,23 +16,20 @@ enum AppFont: Int {
     case medium = 4
     case bold = 5
     
-    func fontName() -> String {
-        var fontName: String!
+    func fontName(_ isItalic: Bool = false) -> String {
+        var fontName = fontConicleText
         switch self {
         //design system
-        case .text: fontName = fontConicleText
-        case .medium: fontName = fontConicleMedium
-        case .bold: fontName = fontConicleBold
+        case .text: fontName = isItalic ? fontConicleTextIt : fontConicleText
+        case .medium: fontName = isItalic ? fontConicleMediumIt : fontConicleMedium
+        case .bold: fontName = isItalic ? fontConicleBoldIt : fontConicleBold
             
-        case .regular: fontName = fontConicleText
+        case .regular: fontName = isItalic ? fontConicleTextIt : fontConicleText
         case .italic: fontName = fontConicleTextIt
         case .lightItalic: fontName = fontConicleTextIt
         }
-        
-        assert(fontName != nil)
         return fontName
     }
-    
 }
 
 enum SizeName: CGFloat {
@@ -79,10 +76,15 @@ enum StyleName: CGFloat {
 
 struct FontHelper {
     //design system
-    static func getFontSystem(_ size: StyleName, font: AppFont) -> UIFont {
-        return UIFont(name: font.fontName(), size: size.rawValue)!
+    static func getFontSystem(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> UIFont {
+        return UIFont(name: font.fontName(isItalic), size: rawSize)!
     }
     
+    static func getFontSystem(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> UIFont {
+        return UIFont(name: font.fontName(isItalic), size: size.rawValue)!
+    }
+    
+    //before use design system
     static func getFont(_ font: AppFont, size: SizeName) -> UIFont {
         return UIFont(name: font.fontName(), size: size.rawValue)!
     }
