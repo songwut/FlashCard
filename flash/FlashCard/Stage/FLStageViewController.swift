@@ -453,15 +453,9 @@ final class FLStageViewController: UIViewController {
         let font = self.flCreator.manageFont(element: element)
         let alignment = element.flAlignment.alignment()
         
-        let textViewWidth = textView.frame.size.width
-        let tabStart = NSTextTab(textAlignment: alignment, location: 0.0, options: [:])
-        let tabStop = NSTextTab(textAlignment: alignment, location: textViewWidth, options: [:])
         let paragraph = NSMutableParagraphStyle()
-        //paragraph.lineSpacing = 0
+        paragraph.lineSpacing = 0
         paragraph.alignment = alignment
-        //paragraph.tabStops = [tabStart, tabStop]
-        paragraph.lineBreakMode = .byClipping
-        paragraph.baseWritingDirection = .leftToRight
         
         var atb: [NSAttributedString.Key:Any] = [
             .font: font,
@@ -474,7 +468,7 @@ final class FLStageViewController: UIViewController {
             let atbString =  NSMutableAttributedString(string: text , attributes: atb)
             atbString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraph, range: NSRange(location: 0, length: atbString.length))
             self.flCreator.selectedView?.textView?.attributedText = atbString
-            textView.textAlignment = element.flAlignment.alignment()
+            //textView.textAlignment = element.flAlignment.alignment()
         }
     }
     

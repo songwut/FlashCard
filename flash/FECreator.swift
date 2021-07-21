@@ -40,8 +40,8 @@ struct FLCreator {
     }
     
     func manageFont(element:TextElement) -> UIFont {
-        var font = FontHelper.getFontSystem(element.fontSize, font: .text)
         let isItalic = element.flTextStyle.contains(.italic)
+        var font = FontHelper.getFontSystem(element.fontSize, font: .text, isItalic: isItalic)
         if element.flTextStyle.contains(.bold) {
             font = FontHelper.getFontSystem(element.fontSize, font: .bold, isItalic: isItalic)
         }
