@@ -8,6 +8,15 @@
 import UIKit
 import SVGKit
 
+enum FLType: String {
+    case unknow = ""
+    case text = "text"
+    case image = "image"
+    case video = "video"
+    case shape = "shape"
+    case sticker = "sticker"
+}
+
 class InteractView: UIView {
     
     var textColor: String?
@@ -15,7 +24,7 @@ class InteractView: UIView {
     var isCreateNew = true
     var imageView:UIImageView?
     var element:TextElement?
-    var type: Any?
+    var type: FLType = .unknow
     var gesture: SnapGesture?
     
     var controlBgView: UIView!
@@ -43,6 +52,9 @@ class InteractView: UIView {
         let size = self.controlBgView.frame.size
         controlView.frame = CGRect(origin: .zero, size: size)
         controlView.isHidden = false
+        let isText = self.type == .text
+        controlView.leftWidthButton.isHidden = !isText
+        controlView.rightWidthButton.isHidden = !isText
     }
     
     func update(rotation:Float?) {
@@ -61,7 +73,7 @@ class InteractView: UIView {
     
     func update(scale: Float) {
         self.scale = scale
-        //self.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
+        self.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
     }
     
     var isSelected: Bool = false {

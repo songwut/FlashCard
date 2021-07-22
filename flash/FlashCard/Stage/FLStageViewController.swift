@@ -240,8 +240,11 @@ final class FLStageViewController: UIViewController {
             
             let controlframe = CGRect(x: 0, y: 0, width: 100, height: 100)
             self.controlView.updateFrame(controlframe)
-            self.sliderView.scrollView.addSubview(self.controlView)
-            
+            self.controlView.leftWidthButton.tag = FLTag.left.rawValue
+            self.controlView.rightWidthButton.tag = FLTag.right.rawValue
+            self.controlView.leftWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
+            self.controlView.rightWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
+            self.controlView.isHidden = true
             
             self.collectionView.backgroundColor = .black
             self.collectionView.reloadData()
@@ -278,6 +281,7 @@ final class FLStageViewController: UIViewController {
         }
         stackView.layoutIfNeeded()
         self.sliderView.scrollView.delegate = self
+        self.sliderView.scrollView.isScrollEnabled = false//TODO: detech active
         self.isCreatePage = false
     }
     
@@ -418,6 +422,16 @@ final class FLStageViewController: UIViewController {
         self.createElement(element, row: row)
     }
     
+    func createNewVideo(_ url: URL, size: CGSize) {
+        let element = VideoElement()
+        element.x = 50
+        element.y = 50
+        element.deviceUrl = url
+        element.rawSize = size
+        let row = self.indexOfMajorCell()
+        self.createElement(element, row: row)
+    }
+    
     func updateTextAlignment(_ alignment: FLTextAlignment) {
         guard let iView = self.flCreator.selectedView else { return}
         iView.element?.flAlignment = alignment
@@ -484,13 +498,16 @@ final class FLStageViewController: UIViewController {
         if let eText = element as? TextElement {
             self.createTextView(eText, row: row)
             
-        } else if let eImage = element as? ImageElement {
-            self.createImageView(eImage, row: row)
+        } else if let _ = element as? ImageElement {
+            self.createIView(element, row: row)
+            
+        }  else if let _ = element as? VideoElement {
+            self.createIView(element, row: row)
         }
         //TODO: add video, shape to stage
     }
     
-    func createImageView(_ element: FlashElement, row: Int) {
+    func createIView(_ element: FlashElement, row: Int) {
         self.flCreator.selectedView?.isSelected = false
         self.flCreator.selectedView?.isCreateNew = false
         
@@ -523,9 +540,6 @@ final class FLStageViewController: UIViewController {
         print("controlView width: \(size.width) ,controlView height: \(size.height)")
         self.controlView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         iView.update(controlView: self.controlView)
-        
-        self.controlView.leftWidthButton.isHidden = true
-        self.controlView.rightWidthButton.isHidden = true
     }
     
     func createTextView(_ element: TextElement, row: Int) {
@@ -559,10 +573,6 @@ final class FLStageViewController: UIViewController {
         self.controlView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         textElement.update(controlView: self.controlView)
         
-        self.controlView.leftWidthButton.tag = FLTag.left.rawValue
-        self.controlView.rightWidthButton.tag = FLTag.right.rawValue
-        self.controlView.leftWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
-        self.controlView.rightWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
     }
     
     private var startPosition: CGPoint!
@@ -720,10 +730,6 @@ final class FLStageViewController: UIViewController {
         iView.isSelected = true
         self.flCreator.selectedView = iView
         
-        let isHiddenExpandWidthUI = iView.textView == nil
-        self.controlView.leftWidthButton.isHidden = isHiddenExpandWidthUI
-        self.controlView.rightWidthButton.isHidden = isHiddenExpandWidthUI
-        
         self.controlView.updateFrame(iView.frame)
     }
     
@@ -858,8 +864,7 @@ final class FLStageViewController: UIViewController {
 //            sheet.prefersGrabberVisible = true
 //        }
         
-        //present(picker, animated: true, completion: nil)
-        self.createNewImage(UIImage(named: "monstera")!)
+        present(picker, animated: true, completion: nil)
     }
     
     func stageScreenShot(_ stage: UIView) -> UIImage? {
@@ -899,6 +904,18 @@ final class FLStageViewController: UIViewController {
     }
     
     
+    func countImageElement() -> Int {
+        let index = self.indexOfMajorCell()
+        let stage = self.getStageView(at: index)
+        let iViewImageList = stage.subviews.filter { (view) -> Bool in
+            if let iView = view as? InteractView {
+                return iView.type == .image
+            } else {
+                return false
+            }
+        }
+        return iViewImageList.count
+    }
 
 }
 
@@ -922,19 +939,31 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
             bcf.countStyle = .file
             let string = bcf.string(fromByteCount: Int64(data.count))
             let mb = Units(bytes:Int64(data.count)).megabytes
-            print("formatted result: \(string)")
-            let alert = UIAlertController(title: "imageSize", message: "formatted result: \(string)\n \(mb)", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "ok", style: .default, handler: nil))
-            //self.present(alert, animated: true)
-            
-            self.createNewImage(img)
+            print("formatted result: \(string)\n \(mb)")
+            let countImageElement = self.countImageElement()
+            if countImageElement >= 20 {
+                //TODO 20 image perpage
+                PopupManager.showWarning("You can upload 20 images per page !", at: self)
+            } else if mb >= 9.0 {
+                PopupManager.showWarning("Your image is too powerful\n(Maximum size is 4 MB)\nPlease upload again", at: self)
+            } else {
+                self.createNewImage(img)
+            }
             
         } else if let movieUrl = info[.mediaURL] as? URL {
             print("movieUrl: \(movieUrl)")
             //TODO: check only 1 video per page
+            let asset = AVURLAsset(url: movieUrl)
+            let seconds = asset.duration.seconds
+            print(seconds)
+            if seconds > 60 {
+                PopupManager.showWarning("Your video is too powerful\n(Maximum length is 60 seconds)\nPlease upload again", at: self)
+            } else {
+                guard let track = asset.tracks(withMediaType: .video).first else { return }
+                let size = track.naturalSize.applying(track.preferredTransform)
+                self.createNewVideo(movieUrl, size: size)
+            }
         }
-        print("formatted result")
-        
 //        MediaManager.trimVideo(movieUrl) { [weak self] (destinationURL) in
 //            //self?.play(destinationURL)
 //            //TODO: create element image, video

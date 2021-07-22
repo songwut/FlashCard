@@ -62,6 +62,19 @@ class ViewController: UIViewController {
     }
     
     
+    @IBAction func popupImageLimitPressed(_ sender: UIButton) {
+        PopupManager.showWarning("You can upload 20 images per page !", at: self)
+    }
+    
+    @IBAction func popupImageSizePressed(_ sender: UIButton) {
+        PopupManager.showWarning("Your image is too powerful\n(Maximum size is 4 MB)\nPlease upload again", at: self)
+    }
+    
+    @IBAction func popupVideoLimitPressed(_ sender: UIButton) {
+        PopupManager.showWarning("Your video is too powerful\n(Maximum length is 60 seconds)\nPlease upload again", at: self)
+    }
+    
+    
     
 }
 

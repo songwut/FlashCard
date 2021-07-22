@@ -7,34 +7,81 @@
 
 import UIKit
 
-extension UIViewController {
-    
-    var safeAreaTopHeight: CGFloat {
-        if #available(iOS 13.0, *) {
-            let window = UIApplication.shared.windows[0]
-            let topPadding = window.safeAreaInsets.top
-            return topPadding
-        } else {
-            let window = UIApplication.shared.keyWindow
-            let topPadding = window?.safeAreaInsets.top ?? 0
-            return topPadding
-        }
-    }
-    
-    var safeAreaBottomHeight: CGFloat {
-        if #available(iOS 13.0, *) {
-            let window = UIApplication.shared.windows[0]
-            let topPadding = window.safeAreaInsets.bottom
-            return topPadding
-        } else {
-            let window = UIApplication.shared.keyWindow
-            let topPadding = window?.safeAreaInsets.bottom ?? 0
-            return topPadding
-        }
-    }
-}
-
 extension UIView {
+    @IBInspectable var cornerRadius: CGFloat {
+        get {
+            return layer.cornerRadius
+        }
+        set {
+            layer.cornerRadius = newValue
+            layer.masksToBounds = newValue > 0
+        }
+    }
+    
+    @IBInspectable var borderWidth: CGFloat {
+        get {
+            return layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+    
+    @IBInspectable var borderColor: UIColor? {
+        get {
+            if let cgColor = layer.borderColor {
+                return UIColor(cgColor: cgColor)
+            } else { return .none }
+        }
+        set {
+            layer.borderColor = newValue?.cgColor
+        }
+    }
+    
+    @IBInspectable var shadowColor: UIColor {
+        get {
+            return UIColor(cgColor: layer.shadowColor ?? UIColor.black.cgColor)
+        }
+        set {
+            layer.shadowColor = newValue.cgColor
+        }
+    }
+    
+    @IBInspectable var shadowOpacity: Float {
+        get {
+            return layer.shadowOpacity
+        }
+        set {
+            layer.shadowOpacity = newValue
+        }
+    }
+    
+    @IBInspectable var shadowOffset: CGSize {
+        get {
+            return layer.shadowOffset
+        }
+        set {
+            layer.shadowOffset = newValue
+        }
+    }
+    
+    @IBInspectable var shadowRadius: CGFloat {
+        get {
+            return layer.shadowRadius
+        }
+        set {
+            layer.shadowRadius = newValue
+        }
+    }
+    
+    func setWidthConstraint(_ width: CGFloat) {
+        self.widthAnchor.constraint(equalToConstant: width).isActive = true
+    }
+    
+    func setHeightConstraint(_ height: CGFloat) {
+        self.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+    
     func addDash(_ lineWidth:CGFloat = 1, color:UIColor = .black) {
 
         let shapeLayer:CAShapeLayer = CAShapeLayer()
@@ -63,5 +110,34 @@ extension UIView {
         let mask = CAShapeLayer()
         mask.path = path.cgPath
         layer.mask = mask
+    }
+    
+    func popIn(fromScale: CGFloat = 0.5,
+                                  duration: TimeInterval = 0.5,
+                                  delay: TimeInterval = 0,
+                                  completion: ((Bool) -> Void)? = nil) -> UIView {
+      isHidden = false
+      alpha = 0
+      transform = CGAffineTransform(scaleX: fromScale, y: fromScale)
+      UIView.animate(
+        withDuration: duration, delay: delay, usingSpringWithDamping: 0.55, initialSpringVelocity: 3,
+        options: .curveEaseOut, animations: {
+          self.transform = .identity
+          self.alpha = 1
+        }, completion: completion)
+      return self
+    }
+    
+    func updateLayout() {
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
+    }
+    
+    func setShadow(radius:CGFloat, opacity:Float,color:UIColor = UIColor.black, offset:CGSize = CGSize.zero) {
+        self.layer.shadowColor = color.cgColor
+        self.layer.shadowOpacity = opacity
+        self.layer.shadowOffset = offset
+        self.layer.shadowRadius = radius
+        self.layer.masksToBounds = false
     }
 }

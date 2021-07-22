@@ -168,19 +168,19 @@ class FLToolViewController: UIViewController {
     }
     
     func createColorTool(_ colorList: [String]) {
-        self.colorToolView.setup(colorList: colorList)
         self.colorToolView.didSelectedColor = self.didSelectedColor
         self.colorStackView.removeAllArranged()
         self.colorStackView.addArrangedSubview(self.colorToolView)
         self.colorStackView.isHidden = true
-        self.updateViewLayout(self.colorStackView)
+        self.colorToolView.setup(colorList: colorList)
+        self.updateViewLayout(self.colorToolView)
     }
     
     func createTextTool(_ colorList: [String]) {
-        self.textColorView.setup(colorList: colorList)
         self.textColorView.didSelectedColor = self.didChangeTextColor
         self.textStackView.addArrangedSubview(self.textColorView)
         self.textColorView.isHidden = true
+        self.textColorView.setup(colorList: colorList)
         self.updateViewLayout(self.textColorView)
         
         self.textStyleView.didChangeTextAlignment = self.didChangeTextAlignment

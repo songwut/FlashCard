@@ -18,6 +18,7 @@ final class FLColorView: UIView {
     private var cellSize: CGSize = .zero
     
     var didSelectedColor: DidAction?
+    var height = CGFloat.zero
     
     func setup(colorList:[String]) {
         self.colorList = colorList
@@ -33,8 +34,12 @@ final class FLColorView: UIView {
         let allWidth = self.collectionView.frame.width - CGFloat(allSpaceing)
         let itemW = CGFloat(allWidth) / CGFloat(column) - 1
         
-        let collectionH = (row * itemW) + (row * spaceing)
-        self.contentHeight.constant = collectionH
+        let realRow = ceil(row)
+        let spaceV = (realRow - 1) * spaceing
+        let contentV = realRow * itemW
+        let allHeight = (marginVer * 2) + spaceV + contentV
+        self.height = allHeight
+        self.contentHeight.constant = allHeight
             
         self.cellSize = CGSize(width: itemW, height: itemW)
         self.layout.itemSize = self.cellSize

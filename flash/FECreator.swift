@@ -55,7 +55,7 @@ struct FLCreator {
         var viewH = ((stage.frame.height * element.width) / 100)
         
         let iView = InteractView()
-        
+        iView.type = .text
         let font:UIFont = self.manageFont(element: element)
         
         let scale = (element.scale + Float(self.stageRatio)) - 1.0
@@ -132,8 +132,6 @@ struct FLCreator {
         let viewW = ((stage.frame.width * element.width) / 100)
         let viewH = ((stage.frame.height * element.height) / 100)
         
-        
-        
         var size = CGSize(width: viewW, height: viewH)
         if let rawSize = e.rawSize {
             let ratio = rawSize.height / rawSize.width
@@ -159,6 +157,7 @@ struct FLCreator {
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(origin: CGPoint.zero, size: size)
         let iView = InteractView()
+        iView.type = .image
         iView.frame = frame
         iView.center = center
         iView.view = imageview

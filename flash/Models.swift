@@ -167,6 +167,7 @@ class VideoElement: FlashElement {
     var y:CGFloat = 80
     var width:CGFloat = 80
     var height:CGFloat = 30
+    var deviceUrl: URL?
     
     override init() {
         

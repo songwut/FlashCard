@@ -35,21 +35,30 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="GBb-jW-mKC"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
+                                                <state key="normal" title="Image Limit 20"/>
+                                                <connections>
+                                                    <action selector="popupImageLimitPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ib8-Sh-iFN"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH6-xe-kb2">
                                                 <rect key="frame" x="0.0" y="100" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="XCD-AG-Hk7"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
+                                                <state key="normal" title="Image Size 4 MB"/>
+                                                <connections>
+                                                    <action selector="popupImageSizePressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xsd-1L-gLK"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9s-hA-vSV">
                                                 <rect key="frame" x="0.0" y="150" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="kgS-IN-4FC"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
+                                                <state key="normal" title="Video Limit 1"/>
+                                                <connections>
+                                                    <action selector="popupVideoLimitPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1OD-gG-YYV"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>

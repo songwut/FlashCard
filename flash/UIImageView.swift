@@ -8,6 +8,14 @@
 import UIKit
 
 extension UIImageView {
+    
+    func setTintWith(color: UIColor) {
+        if let _ = self.image {
+            self.image? = (self.image?.withRenderingMode(.alwaysTemplate))!
+            self.tintColor = color
+        }
+    }
+    
     public func imageFromUrl(_ urlString: String) {
         if let url = URL(string: urlString) {
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
@@ -19,4 +27,5 @@ extension UIImageView {
             task.resume()
         }
     }
+    
 }
