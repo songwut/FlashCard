@@ -7,16 +7,6 @@
 
 import UIKit
 
-extension String {
-    func localized() -> String {
-        if isLocalizeOnline {
-            return Localized.shared.string(forKey: self) // localize with API
-        } else {
-            return Localized.localized(text: self) // localize in local
-        }
-    }
-}
-
 extension UICollectionView {
     
     // MARK: Public functions
