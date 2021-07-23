@@ -133,9 +133,7 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
         iView.isSelected = true
         //self.flCreator.selectedView = iView
         //self.controlView?.updateFrame(iView.frame)
-        self.controlView?.transform = iView.transform
-        self.controlView?.bounds = iView.bounds
-        self.controlView?.center = iView.center
+        self.controlView?.updateRelateView(iView)
     }
 
     // location will jump when finger number change
@@ -165,9 +163,7 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             // perform change
             let point = recognizer.location(in: view)
             view.transform = view.transform.translatedBy(x: point.x - lastPanPoint.x, y: point.y - lastPanPoint.y)
-            self.controlView?.transform = view.transform
-            self.controlView?.bounds = view.bounds
-            self.controlView?.center = view.center
+            self.controlView?.updateRelateView(view)
             lastPanPoint = recognizer.location(in: view)
         }
     }
@@ -200,9 +196,7 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             // Translate
             let point = recognizer.location(in: view)
             view.transform = view.transform.translatedBy(x: point.x - lastPinchPoint.x, y: point.y - lastPinchPoint.y)
-            self.controlView?.transform = view.transform
-            self.controlView?.bounds = view.bounds
-            self.controlView?.center = view.center
+            self.controlView?.updateRelateView(view)
             lastPinchPoint = recognizer.location(in: view)
         }
     }
@@ -213,9 +207,7 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             guard let view = self.weakTransformView else { return }
 
             view.transform = view.transform.rotated(by: recognizer.rotation)
-            self.controlView?.transform = view.transform
-            self.controlView?.bounds = view.bounds
-            self.controlView?.center = view.center
+            self.controlView?.updateRelateView(view)
             recognizer.rotation = 0
         }
     }

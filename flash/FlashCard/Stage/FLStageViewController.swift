@@ -35,6 +35,18 @@ final class FLStageViewController: UIViewController {
     private var isCreatePage = true
     private var controlView = FLControlView.instanciateFromNib()
     
+    lazy var deleteElementButton: UIButton = {
+        let b = UIButton(type: .custom)
+        b.setImage(UIImage(named: "ic_v2_close"), for: .normal)
+        b.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+        b.backgroundColor = .white
+        b.tintColor = .black
+        b.cornerRadius = 10
+        b.contentVerticalAlignment = .fill
+        b.contentHorizontalAlignment = .fill
+        b.imageEdgeInsets = UIEdgeInsets(top: 6.8, left: 6.8, bottom: 6.8, right: 6.8)
+        return b
+    }()
     
     lazy var deletePageButton: UIButton = {
         let b = UIButton(type: .custom)
@@ -242,7 +254,10 @@ final class FLStageViewController: UIViewController {
             self.controlView.rightWidthButton.tag = FLTag.right.rawValue
             self.controlView.leftWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
             self.controlView.rightWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
+            
+            self.controlView.deleteButton = self.deleteElementButton
             self.controlView.deleteButton.addTarget(self, action: #selector(self.deleteElement(_:event:)), for: .touchDragInside)
+            self.controlView.deleteButton.isHidden = true
             self.controlView.isHidden = true
             
             self.collectionView.backgroundColor = .black
@@ -539,7 +554,7 @@ final class FLStageViewController: UIViewController {
         let size = iView.frame
         print("controlView width: \(size.width) ,controlView height: \(size.height)")
         iView.update(controlView: self.controlView)
-        stageView.addSubview(self.controlView)
+        stageView.addSubview(self.controlView.deleteButton)
         self.controlView.updateRelateView(iView)
     }
     
@@ -573,6 +588,8 @@ final class FLStageViewController: UIViewController {
         print("controlView width: \(size.width) ,controlView height: \(size.height)")
         textElement.update(controlView: self.controlView)
         stageView.addSubview(self.controlView)
+        stageView.addSubview(self.controlView.deleteButton)
+        self.controlView.updateRelateView(textElement)
     }
     
     private var startPosition: CGPoint!
@@ -609,6 +626,7 @@ final class FLStageViewController: UIViewController {
     
     @objc func deleteElement(_ button:UIButton, event: UIEvent) {
         self.controlView.isHidden = true
+        self.controlView.deleteButton.isHidden = true
         if let iView = self.flCreator.selectedView {
             iView.removeFromSuperview()
             if self.toolVC.viewModel.tool != .menu {

@@ -91,4 +91,5 @@ struct FlashStyle {
         static let marginIView: CGFloat = 40//left+right,top+botton
     }
     
+    static let deleteSize: CGFloat = 25
 }

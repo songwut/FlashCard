@@ -14,12 +14,13 @@ enum FLTag: Int {
 
 class FLControlView: UIView {
     @IBOutlet weak var view: UIView!
-    @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var leftWidthButton: UIButton!
     @IBOutlet weak var rightWidthButton: UIButton!
     @IBOutlet weak var topLeftButton: UIButton!
     @IBOutlet weak var bottomLeftButton: UIButton!
     @IBOutlet weak var bottomRightButton: UIButton!
+    
+    weak var deleteButton: UIButton!
     
     override func layoutSubviews() {
         print("FLControlView \(self.frame)")
@@ -27,16 +28,28 @@ class FLControlView: UIView {
     
     func updateRelateView(_ view: UIView) {
         self.isHidden = false
-        self.transform = view.transform
-        self.bounds = view.bounds
-        self.center = view.center
+        //self.transform = view.transform
+        //self.bounds = CGRect(origin: .zero, size: view.bounds.size)
+        self.frame = CGRect(origin: .zero, size: view.bounds.size)
+        //self.center = view.center
+        
+        let margin = FlashStyle.text.marginIView / 2
+        let x = (view.frame.origin.x + view.bounds.width) - margin
+        let y = view.frame.origin.y + margin
+        //self.deleteButton.transform = view.transform
+        self.deleteButton.center = CGPoint(x: x , y: y)
+        let w = self.deleteButton.frame.width
+        self.deleteButton.cornerRadius = w / 2
+        self.deleteButton.borderWidth = 1
+        self.deleteButton.borderColor = .black
+        self.deleteButton.isHidden = false
         //let margin: CGFloat = FlashStyle.text.marginIView
         //self.frame = CGRect(x: frame.origin.x - (margin / 2), y: frame.origin.y - (margin / 2), width: size.width + margin, height: size.height + margin)
     }
 
     override func awakeFromNib() {
-        self.isUserInteractionEnabled = false
-        self.view.isUserInteractionEnabled = false
+        self.isUserInteractionEnabled = true
+        self.view.isHidden = true
         self.view.borderWidth = 1
         self.view.borderColor = .black
         self.view.backgroundColor = .clear

@@ -86,7 +86,7 @@ struct FLCreator {
         textView.attributedText = atbString
         textView.textAlignment = element.flAlignment.alignment()
         
-        let margin = FlashStyle.text.marginIView
+        let margin: CGFloat = FlashStyle.text.marginIView
         let marginXY = margin / 2
         
         if element.width == 0, element.width == 0 {//case create new

@@ -44,7 +44,8 @@ class InteractView: UIView {
     }
     
     func update(controlView:FLControlView) {
-        controlView.frame = self.frame
+        self.controlBgView.addSubview(controlView)
+        controlView.bounds = CGRect(origin: .zero, size: self.bounds.size)
         controlView.isHidden = false
         let isText = self.type == .text
         controlView.leftWidthButton.isHidden = !isText
