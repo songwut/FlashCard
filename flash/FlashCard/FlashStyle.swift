@@ -77,6 +77,7 @@ struct FlashStyle {
     
     //color picker
     struct color {
+        static let fixRow: CGFloat = UIDevice.isIpad() ? 3 : 4
         static let column: CGFloat = UIDevice.isIpad() ? 10 : 7
         static let spaceing: CGFloat = UIDevice.isIpad() ? 16 : 8
         static let marginHor: CGFloat = UIDevice.isIpad() ? 38 : 180

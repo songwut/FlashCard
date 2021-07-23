@@ -45,14 +45,17 @@ class FLTextStyleView: UIView {
         self.boldLabel.text = FLTextStyle.bold.rawValue
         self.boldButton.textStyle = .bold
         self.boldButton.tintColor = ColorHelper.text75()
+        self.boldButton.cornerRadius = 8
         
         self.italicLabel.text = FLTextStyle.italic.rawValue
         self.italicButton.textStyle = .italic
         self.italicButton.tintColor = ColorHelper.text75()
+        self.italicButton.cornerRadius = 8
         
         self.underlineLabel.text = FLTextStyle.underline.rawValue
         self.underlineButton.textStyle = .underline
         self.underlineButton.tintColor = ColorHelper.text75()
+        self.underlineButton.cornerRadius = 8
         
         self.leftButton.alignment = .left
         self.leftButton.borderColor = UIColor("7D7D7D")

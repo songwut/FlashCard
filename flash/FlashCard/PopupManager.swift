@@ -33,6 +33,7 @@ class PopupManager: NSObject {
         icon.size = 75
         popup = PopupContent(title: "Warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: nil,  closeButtonTitle: "OK".localized(), isError: true)
         popup.closeColor = ColorHelper.error()
+        popup.confirmColor = ColorHelper.error()
         
         var vc = UIApplication.shared.windows.first?.rootViewController
         if let current = mainVC {

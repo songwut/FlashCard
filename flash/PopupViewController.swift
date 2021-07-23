@@ -231,7 +231,7 @@ class PopupViewController: UIViewController {
         }
         
         self.confirmButton.setTitleColor(popupContent.confirmColor, for: .normal)
-        self.closeButton.setTitleColor(.black, for: .normal)
+        self.closeButton.setTitleColor(popupContent.closeColor, for: .normal)
         self.closeButton.backgroundColor = popupContent.closeColorBackground
         self.titleLabel.textColor = .black
         self.closeButtonTitle = popupContent.closeButtonTitle ?? "close".localized()
