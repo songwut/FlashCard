@@ -38,17 +38,23 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
     deinit {
         self.cleanGesture()
     }
+    
+    var controlView: FLControlView?
 
     // MARK: - private method
     private weak var weakGestureView: UIView?
     private weak var weakTransformView: UIView?
 
+    private var tapGesture: UITapGestureRecognizer?
     private var panGesture: UIPanGestureRecognizer?
     private var pinchGesture: UIPinchGestureRecognizer?
     private var rotationGesture: UIRotationGestureRecognizer?
 
     private func addGestures(v: UIView) {
 
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapProcess(_:)))
+        v.addGestureRecognizer(tapGesture!)
+        
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(panProcess(_:)))
         v.isUserInteractionEnabled = true
         panGesture?.delegate = self     // for simultaneous recog
@@ -71,6 +77,10 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             //for recognizer in view.gestureRecognizers ?? [] {
             //    view.removeGestureRecognizer(recognizer)
             //}
+            if tapGesture != nil {
+                view.removeGestureRecognizer(tapGesture!)
+                tapGesture = nil
+            }
             if panGesture != nil {
                 view.removeGestureRecognizer(panGesture!)
                 panGesture = nil
@@ -115,6 +125,18 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
     open var isGestureEnabled = true
 
     // MARK: - gesture handle
+    
+    @objc func tapProcess(_ gesture: UITapGestureRecognizer) {
+        //self.flCreator.selectedView?.isSelected = false
+        
+        guard let iView = gesture.view as? InteractView else { return }
+        iView.isSelected = true
+        //self.flCreator.selectedView = iView
+        //self.controlView?.updateFrame(iView.frame)
+        self.controlView?.transform = iView.transform
+        self.controlView?.bounds = iView.bounds
+        self.controlView?.center = iView.center
+    }
 
     // location will jump when finger number change
     private var initPanFingerNumber:Int = 1
@@ -143,6 +165,9 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             // perform change
             let point = recognizer.location(in: view)
             view.transform = view.transform.translatedBy(x: point.x - lastPanPoint.x, y: point.y - lastPanPoint.y)
+            self.controlView?.transform = view.transform
+            self.controlView?.bounds = view.bounds
+            self.controlView?.center = view.center
             lastPanPoint = recognizer.location(in: view)
         }
     }
@@ -175,6 +200,9 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             // Translate
             let point = recognizer.location(in: view)
             view.transform = view.transform.translatedBy(x: point.x - lastPinchPoint.x, y: point.y - lastPinchPoint.y)
+            self.controlView?.transform = view.transform
+            self.controlView?.bounds = view.bounds
+            self.controlView?.center = view.center
             lastPinchPoint = recognizer.location(in: view)
         }
     }
@@ -185,6 +213,9 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             guard let view = self.weakTransformView else { return }
 
             view.transform = view.transform.rotated(by: recognizer.rotation)
+            self.controlView?.transform = view.transform
+            self.controlView?.bounds = view.bounds
+            self.controlView?.center = view.center
             recognizer.rotation = 0
         }
     }

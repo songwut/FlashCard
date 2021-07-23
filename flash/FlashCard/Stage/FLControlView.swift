@@ -25,16 +25,18 @@ class FLControlView: UIView {
         print("FLControlView \(self.frame)")
     }
     
-    func updateFrame(_ frame: CGRect) {
-        let size = frame.size
-        self.frame = CGRect(origin: .zero, size: size)
+    func updateRelateView(_ view: UIView) {
         self.isHidden = false
+        self.transform = view.transform
+        self.bounds = view.bounds
+        self.center = view.center
         //let margin: CGFloat = FlashStyle.text.marginIView
         //self.frame = CGRect(x: frame.origin.x - (margin / 2), y: frame.origin.y - (margin / 2), width: size.width + margin, height: size.height + margin)
     }
 
     override func awakeFromNib() {
-        self.isUserInteractionEnabled = true
+        self.isUserInteractionEnabled = false
+        self.view.isUserInteractionEnabled = false
         self.view.borderWidth = 1
         self.view.borderColor = .black
         self.view.backgroundColor = .clear

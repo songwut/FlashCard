@@ -37,10 +37,6 @@ class InteractView: UIView {
     var bottomLeftButton: UIButton?
     var bottomRightButton: UIButton?
     
-    func prepareGesture() {
-        self.gesture = SnapGesture(view: self)
-    }
-    
     var rotation: Float = 0 {
         didSet {
             print("update rotation: \(self.rotation)")
@@ -48,9 +44,7 @@ class InteractView: UIView {
     }
     
     func update(controlView:FLControlView) {
-        self.controlBgView.addSubview(controlView)
-        let size = self.controlBgView.frame.size
-        controlView.frame = CGRect(origin: .zero, size: size)
+        controlView.frame = self.frame
         controlView.isHidden = false
         let isText = self.type == .text
         controlView.leftWidthButton.isHidden = !isText

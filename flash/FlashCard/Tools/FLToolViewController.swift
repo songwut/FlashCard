@@ -39,7 +39,7 @@ class FLToolViewController: UIViewController {
     private var textStyleView = FLTextStyleView.instanciateFromNib()
     private var textColorView = FLColorView.instanciateFromNib()
     
-    private var viewModel = FLToolViewModel()
+    var viewModel = FLToolViewModel()
     var textMenu: FLTextMenu = .keyboard
     private var isToolReady = false
     private var keyboardFrame:CGRect?

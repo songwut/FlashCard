@@ -238,12 +238,11 @@ final class FLStageViewController: UIViewController {
             self.sliderView.leftWidth.constant = self.sectionEdge.left
             self.sliderView.rightWidth.constant = self.sectionEdge.right
             
-            let controlframe = CGRect(x: 0, y: 0, width: 100, height: 100)
-            self.controlView.updateFrame(controlframe)
             self.controlView.leftWidthButton.tag = FLTag.left.rawValue
             self.controlView.rightWidthButton.tag = FLTag.right.rawValue
             self.controlView.leftWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
             self.controlView.rightWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
+            self.controlView.deleteButton.addTarget(self, action: #selector(self.deleteElement(_:event:)), for: .touchDragInside)
             self.controlView.isHidden = true
             
             self.collectionView.backgroundColor = .black
@@ -518,7 +517,8 @@ final class FLStageViewController: UIViewController {
         
         self.flCreator.selectedView = iView
         
-        iView.prepareGesture()
+        iView.gesture = SnapGesture(view: iView)
+        iView.gesture?.controlView = self.controlView
 //        iView.enableZoom()
 //        iView.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
 //
@@ -538,8 +538,9 @@ final class FLStageViewController: UIViewController {
         
         let size = iView.frame
         print("controlView width: \(size.width) ,controlView height: \(size.height)")
-        self.controlView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         iView.update(controlView: self.controlView)
+        stageView.addSubview(self.controlView)
+        self.controlView.updateRelateView(iView)
     }
     
     func createTextView(_ element: TextElement, row: Int) {
@@ -570,9 +571,8 @@ final class FLStageViewController: UIViewController {
         
         let size = textElement.frame
         print("controlView width: \(size.width) ,controlView height: \(size.height)")
-        self.controlView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         textElement.update(controlView: self.controlView)
-        
+        stageView.addSubview(self.controlView)
     }
     
     private var startPosition: CGPoint!
@@ -606,6 +606,17 @@ final class FLStageViewController: UIViewController {
         }
         
     }
+    
+    @objc func deleteElement(_ button:UIButton, event: UIEvent) {
+        self.controlView.isHidden = true
+        if let iView = self.flCreator.selectedView {
+            iView.removeFromSuperview()
+            if self.toolVC.viewModel.tool != .menu {
+                self.toolVC.closePressed(nil)
+            }
+        }
+    }
+    
     private var isScaleWidth = false
     @objc func scaleWidthDraging(_ button:UIButton, event: UIEvent) {
         
@@ -639,8 +650,8 @@ final class FLStageViewController: UIViewController {
             let iViewFrameUpdate = CGRect(x: newX, y: iViewFrame.origin.y, width: newWidth, height: iViewFrame.height)
             
             iView.frame = iViewFrameUpdate
-            //self.controlView.updateFrame(iViewFrameUpdate, center: iView.center)
-            self.controlView.updateFrame(iView.frame)
+            
+            self.controlView.updateRelateView(iView)
             print("out iView:\(iView.frame)")
             if !self.isScaleWidth {//for textview fix layout
                 self.isScaleWidth = true
@@ -679,48 +690,11 @@ final class FLStageViewController: UIViewController {
         print("viewH:\(viewH)")
         let selfFrame = iView.frame
         iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: selfFrame.width, height: viewH * self.flCreator.stageRatio)
-        self.controlView.updateFrame(iView.frame)
+        self.controlView.updateRelateView(iView)
         
         //let newSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
         //textView.frame = CGRect(origin: textView.frame.origin, size: newSize)
     }
-    
-    /*
-    func create() {
-        self.flCreator = FLCreator(stage: self.stageView)
-        
-        let textElement = self.flCreator.createText(TextElement(), in: self.stageView)
-        
-        let vectorElement = self.flCreator.createVector(VectorElement(), in: self.stageView)
-        
-        let imageElement = self.flCreator.createImage(ImageElement(), in: self.stageView)
-        
-        let videoElement = self.flCreator.createVideo(VideoElement(), in: self.stageView)
-        
-        //zoom
-        textElement.enableZoom()
-        vectorElement.enableZoom()
-        imageElement.enableZoom()
-        videoElement.enableZoom()
-        
-        //tap
-        textElement.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.taped(_:))))
-        vectorElement.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(self.taped(_:))))
-        imageElement.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(self.taped(_:))))
-        
-        //move
-        textElement.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(self.move(_:))))
-        vectorElement.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(self.move(_:))))
-        imageElement.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(self.move(_:))))
-        videoElement.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(self.move(_:))))
-        
-        //rotation
-        textElement.addGestureRecognizer(UIRotationGestureRecognizer(target: self, action: #selector(self.rotated(_:))))
-        vectorElement.addGestureRecognizer(UIRotationGestureRecognizer(target: self, action: #selector(self.rotated(_:))))
-        imageElement.addGestureRecognizer(UIRotationGestureRecognizer(target: self, action: #selector(self.rotated(_:))))
-        videoElement.addGestureRecognizer(UIRotationGestureRecognizer(target: self, action: #selector(self.rotated(_:))))
-    }
-    */
     
     @objc func taped(_ gesture: UITapGestureRecognizer) {
         self.flCreator.selectedView?.isSelected = false
@@ -729,8 +703,7 @@ final class FLStageViewController: UIViewController {
         //let isSelected = !view.isSelected
         iView.isSelected = true
         self.flCreator.selectedView = iView
-        
-        self.controlView.updateFrame(iView.frame)
+        self.controlView.updateRelateView(iView)
     }
     
     @objc func move(_ gesture: UIPanGestureRecognizer) {
@@ -750,7 +723,7 @@ final class FLStageViewController: UIViewController {
         print("y : \(translation.y)")
         iView.transform = iView.transform.translatedBy(x: translation.x, y: translation.y)
         gesture.setTranslation(CGPoint.zero, in: self.stageView)
-        self.controlView.updateFrame(iView.frame)
+        self.controlView.updateRelateView(iView)
         
         if gesture.state == .began {
             
@@ -982,7 +955,7 @@ extension FLStageViewController: UITextViewDelegate {
         if let iView = textView.superview as? InteractView {
             iView.isSelected = true
             self.flCreator.selectedView = iView
-            self.controlView.updateFrame(iView.frame)
+            self.controlView.updateRelateView(iView)
             
             self.openToolBar(tool: .text, iView: iView)
             self.toolVC.open(.text)
@@ -1006,7 +979,7 @@ extension FLStageViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         if let iView = textView.superview as? InteractView {
             self.updateTextviewHeight(iView)
-            self.controlView.updateFrame(iView.frame)
+            self.controlView.updateRelateView(iView)
         }
     }
     
