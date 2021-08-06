@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="88" width="428" height="804"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Vb-Qd-kfA">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="200"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="250"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gj1-Dh-DKf">
                                                 <rect key="frame" x="0.0" y="0.0" width="428" height="50"/>
@@ -58,6 +58,16 @@
                                                 <state key="normal" title="Video Limit 1"/>
                                                 <connections>
                                                     <action selector="popupVideoLimitPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1OD-gG-YYV"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0zN-T8-ANS">
+                                                <rect key="frame" x="0.0" y="200" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="soc-hm-AgZ"/>
+                                                </constraints>
+                                                <state key="normal" title="Login"/>
+                                                <connections>
+                                                    <action selector="loginPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="McJ-Nb-s1d"/>
                                                 </connections>
                                             </button>
                                         </subviews>

@@ -129,8 +129,13 @@ struct FLCreator {
         guard let element = e as? ImageElement else { return nil }
         let viewX = (stage.frame.width * element.x / 100)
         let viewY = ((stage.frame.height * element.y) / 100)
-        let viewW = ((stage.frame.width * element.width) / 100)
-        let viewH = ((stage.frame.height * element.height) / 100)
+        var viewW = ((stage.frame.width * element.width) / 100)
+        var viewH = ((stage.frame.height * element.height) / 100)
+        
+        if let _ = element.graphicType {//fix size
+            viewW = stage.frame.width * FlashStyle.graphic.displayRatio
+            viewH = viewW
+        }
         
         var size = CGSize(width: viewW, height: viewH)
         if let rawSize = e.rawSize {
@@ -151,7 +156,7 @@ struct FLCreator {
             imageview.image = image
             
         } else if let imgSrc = element.src {
-            imageview.imageFromUrl(imgSrc)
+            imageview.imageUrl(imgSrc)
         }
         
         let center = CGPoint(x: viewX, y: viewY)

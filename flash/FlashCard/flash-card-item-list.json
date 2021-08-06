@@ -1,0 +1,40 @@
+{
+  "total": 1,
+  "results": [
+    {
+      "id": 2,
+      "image": "https://develop-location.conicle.co/media/default/content/default_image.png",
+      "sort": 1
+    },
+    {
+      "id": 1,
+      "image": "https://develop-location.conicle.co/media/default/content/default_image.png",
+      "sort": 2
+    },
+    {
+      "id": 3,
+      "image": "https://develop-location.conicle.co/media/default/content/default_image.png",
+      "sort": 3
+    },
+    {
+      "id": 4,
+      "image": "https://develop-location.conicle.co/media/default/content/default_image.png",
+      "sort": 4
+    },
+    {
+      "id": 5,
+      "image": "https://develop-location.conicle.co/media/default/content/default_image.png",
+      "sort": 5
+    },
+    {
+      "id": 6,
+      "image": "https://develop-location.conicle.co/media/default/content/default_image.png",
+      "sort": 6
+    },
+    {
+      "id": 7,
+      "image": "https://develop-location.conicle.co/media/default/content/default_image.png",
+      "sort": 7
+    }
+  ]
+}

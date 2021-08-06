@@ -1,0 +1,54 @@
+{
+  "next": null,
+  "next_url": null,
+  "previous": null,
+  "previous_url": null,
+  "count": 11,
+  "page_size": 24,
+  "results": [
+    {
+      "code": "shape_01",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-11-1.png"
+    },
+    {
+      "code": "shape_02",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-10-1.png"
+    },
+    {
+      "code": "shape_03",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-09-1.png"
+    },
+    {
+      "code": "shape_04",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-08-1.png"
+    },
+    {
+      "code": "shape_05",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-07-1.png"
+    },
+    {
+      "code": "shape_06",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-06-1.png"
+    },
+    {
+      "code": "shape_07",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-05-1.png"
+    },
+    {
+      "code": "shape_08",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-04-1.png"
+    },
+    {
+      "code": "shape_09",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-02-1.png"
+    },
+    {
+      "code": "shape_10",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-01-1.png"
+    },
+    {
+      "code": "shape_11",
+      "image": "https://develop.conicle.co/media/flash_card/shape/2021/07/202107_Stickers-03-1.png"
+    }
+  ]
+}

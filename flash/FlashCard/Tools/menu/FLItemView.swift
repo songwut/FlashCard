@@ -16,6 +16,36 @@ final class FLItemView: UIView {
     
     var didPressAlignment: DidAction?
     
+    func setColor(_ color: UIColor, count: Int? = nil, menu: FLMenuList) {
+        self.button.tintColor = color
+        self.titleLabel.textColor = color
+        var text = menu.text().localized()
+        if let c = count {
+            text = text + " (\(c))"
+        }
+        self.titleLabel.text = text
+    }
+    
+    var menu: FLMenuList = .select {
+        didSet {
+            
+            self.button.updateLayout()
+            let edge:CGFloat = self.button.frame.width * 0.3
+            self.button.imageEdgeInsets = UIEdgeInsets(top: edge, left: edge, bottom: edge, right: edge)
+            
+            let icon = UIImage(named: self.menu.iconName())
+            self.button.actionMenu = self.menu
+            self.button.setImage(icon, for: .normal)
+            self.button.backgroundColor = .clear
+            //self.button.contentVerticalAlignment = .center
+            //self.button.contentHorizontalAlignment = .center
+            
+            self.titleLabel.text = self.menu.text().localized()
+            self.button.tintColor = ColorHelper.text75()
+            self.titleLabel.textColor = ColorHelper.text()
+        }
+    }
+    
     var textStyle: FLTextStyle?{
         didSet {
             guard let textStyle = self.textStyle else { return }

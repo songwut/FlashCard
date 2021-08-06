@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CollectionViewPagingLayout
 import AVKit
 import SwiftUI
 
@@ -16,8 +15,6 @@ final class FLStageViewController: UIViewController {
     
     @IBOutlet private weak var contentPageView: UIView!
     @IBOutlet private weak var toolStackView: UIStackView!
-    @IBOutlet private weak var collectionView: UICollectionView!
-    @IBOutlet private weak var layout: UICollectionViewFlowLayout!
     @IBOutlet private weak var contentToolHeight: NSLayoutConstraint!
     
     @IBOutlet private weak var menuView: UIView!
@@ -85,8 +82,6 @@ final class FLStageViewController: UIViewController {
         self.contentPageView.backgroundColor = UIColor("F5F5F5")
         self.menuView.backgroundColor = UIColor("F5F5F5")
         self.viewModel.prepareModel()
-        self.configureCollectionView()
-        self.collectionView.updateLayout()
         
         self.view.backgroundColor = FlashStyle.screenColor
         self.contentToolHeight.constant = FlashStyle.contentToolHeight
@@ -121,22 +116,21 @@ final class FLStageViewController: UIViewController {
         self.flCreator = FLCreator(stage: self.stageView)
         self.manageStageFrame()
         
+        self.listButton.addTarget(self, action: #selector(self.listButtonPressed(_:)), for: .touchUpInside)
+        
         self.addButton.addTarget(self, action: #selector(self.addButtonPressed(_:)), for: .touchUpInside)
         self.addLeftPageButton.addTarget(self, action: #selector(self.appLeftPressed(_:)), for: .touchUpInside)
         self.addRightPageButton.addTarget(self, action: #selector(self.addRightPressed(_:)), for: .touchUpInside)
         
         self.prepareToolVC()
-        self.collectionView.reloadData()
+        
     }
     
     @objc func appLeftPressed(_ sender: UIButton) {
         let index = self.viewModel.pageIndex
         let newIndex = index - 1
-        let page = FlashPage()
+        let page = FlashPageResult(JSON: ["index" : newIndex])!
         self.viewModel.pageList.insert(page, at: newIndex)
-        
-        let indexPath = IndexPath(row: newIndex, section: 0)
-        self.collectionView.insertItems(at: [indexPath])
         
         guard let stackView = self.sliderView.contentStackView else {return}
         let frame = self.stageView.frame
@@ -151,11 +145,8 @@ final class FLStageViewController: UIViewController {
     @objc func addRightPressed(_ sender: UIButton) {
         let index = self.viewModel.pageIndex
         let newIndex = index + 1
-        let page = FlashPage()
+        let page = FlashPageResult(JSON: ["index" : newIndex])!
         self.viewModel.pageList.insert(page, at: newIndex)
-        
-        let indexPath = IndexPath(row: newIndex, section: 0)
-        self.collectionView.insertItems(at: [indexPath])
         
         guard let stackView = self.sliderView.contentStackView else {return}
         let frame = self.stageView.frame
@@ -169,7 +160,6 @@ final class FLStageViewController: UIViewController {
     
     func gotoPage(index: Int) {
         let indexPath = IndexPath(row: index, section: 0)
-        self.layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         self.viewModel.pageIndex = index
         self.manageAddLR()
         let max = self.viewModel.pageList.count
@@ -239,11 +229,7 @@ final class FLStageViewController: UIViewController {
             
             let edge = stageFrame.origin.x
             self.sectionEdge = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
-            self.layout.sectionInset = self.sectionEdge
             self.cellSize = stageFrame.size
-            self.layout.itemSize = self.cellSize
-            self.layout.minimumInteritemSpacing = 0
-            self.layout.minimumLineSpacing = FlashStyle.stage.cellSpacing
             
             self.sliderView.frame = CGRect(x: 0, y: 0, width: areaFrame.width, height: areaFrame.height)
             self.sliderView.stackHeight.constant = stageFrame.height
@@ -260,10 +246,8 @@ final class FLStageViewController: UIViewController {
             self.controlView.deleteButton.isHidden = true
             self.controlView.isHidden = true
             
-            self.collectionView.backgroundColor = .black
-            self.collectionView.reloadData()
+            
             self.stageView.isHidden = true
-            self.collectionView.isHidden = true
             
             if self.isCreatePage {
                 self.manageMultitleStage()
@@ -321,6 +305,20 @@ final class FLStageViewController: UIViewController {
         self.openToolBar(tool: .menu)
     }
     
+    @objc func listButtonPressed(_ sender: UIButton) {
+        let s = UIStoryboard(name: "FlashCard", bundle: nil)
+        if let vc = s.instantiateViewController(withIdentifier: "FLListViewController") as? FLListViewController {
+            
+            if let nav = self.navigationController {
+                nav.pushViewController(vc, animated: true)
+            } else {
+                self.present(vc, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    
+    
     private func indexOfMajorCell() -> Int {
         let itemWidth = self.cellSize.width
         let proportionalOffset = self.sliderView.scrollView.contentOffset.x / itemWidth
@@ -356,7 +354,7 @@ final class FLStageViewController: UIViewController {
 //        }
         
         //add child
-        if let vc = s.instantiateViewController(identifier: "FLToolViewController") as? FLToolViewController {
+        if let vc = s.instantiateViewController(withIdentifier: "FLToolViewController") as? FLToolViewController {
             self.toolVC = vc
             self.toolVC.didChangeTextAlignment = DidAction(handler: { [weak self] (sender) in
                 guard let self = self else { return }
@@ -391,6 +389,15 @@ final class FLStageViewController: UIViewController {
                 guard let self = self else { return }
                 self.createNewText()
             })
+            
+            self.toolVC.didSelectedGraphic = DidAction(handler: { [weak self] (sender) in
+                guard let self = self else { return }
+                guard let graphic = sender as? FLGraphicResult else { return }
+                let type = self.toolVC.viewModel.graphicMenu
+                self.createNewGraphic(type, graphic: graphic)
+            })
+            
+            
             
             self.toolVC.didClose = DidAction(handler: { (sender) in
                 //self.view.endEditing(true)
@@ -432,6 +439,17 @@ final class FLStageViewController: UIViewController {
         element.y = 50
         element.image = image
         element.rawSize = image.size
+        let row = self.indexOfMajorCell()
+        self.createElement(element, row: row)
+    }
+    
+    func createNewGraphic(_ graphicType: FLGraphicMenu, graphic: FLGraphicResult) {
+        let element = ImageElement()
+        element.x = 50
+        element.y = 50
+        element.graphicType = graphicType
+        //element.image = graphic.uiimage//bug
+        element.src = graphic.image
         let row = self.indexOfMajorCell()
         self.createElement(element, row: row)
     }
@@ -801,21 +819,6 @@ final class FLStageViewController: UIViewController {
         print("viewDidLayoutSubviews")
     }
     
-    private func configureCollectionView() {
-        collectionView.register(UINib(nibName: "FLPageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "FLPageCollectionViewCell")
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.clipsToBounds = false
-        collectionView.backgroundColor = .clear
-        collectionView.isPagingEnabled = false
-        
-        //let layout = CollectionViewPagingLayout()
-        //collectionView.collectionViewLayout = layout
-        //layout.delegate = self
-        collectionView.alwaysBounceHorizontal = true
-        collectionView.dataSource = self
-        collectionView.delegate = self
-    }
-    
     //Screen Rotation
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
@@ -1003,37 +1006,8 @@ extension FLStageViewController: UITextViewDelegate {
     
 }
 
-extension FLStageViewController: CollectionViewPagingLayoutDelegate {
-    func onCurrentPageChanged(layout: CollectionViewPagingLayout, currentPage: Int) {
-        //pageControlView.currentPage = currentPage
-    }
-}
 
-extension FLStageViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.pageList.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FLPageCollectionViewCell", for: indexPath) as! FLPageCollectionViewCell
-        let page = self.viewModel.pageList[indexPath.row]
-        for v in cell.stageView.subviews {
-            v.removeFromSuperview()
-        }
-        for e in page.componentList {
-            self.createElement(e, row: indexPath.row)
-        }
-        print("cell.frame index: \(indexPath.row)")
-        print("cell.frame: \(cell.frame)")
-        return cell
-    }
-    
-}
-
-
-extension FLStageViewController: UICollectionViewDelegate {
+extension FLStageViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.viewModel.pageIndex = self.indexOfMajorCell()
@@ -1055,9 +1029,9 @@ extension FLStageViewController: UICollectionViewDelegate {
         let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
         
         if didUseSwipeToSkipCell {
-            let lineSpacing = self.layout.minimumLineSpacing
+            let lineSpacing = FlashStyle.stage.cellSpacing
             let snapToIndex = self.viewModel.pageIndex + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
-            let toValue = (self.layout.itemSize.width + lineSpacing) * CGFloat(snapToIndex)
+            let toValue = (self.cellSize.width + lineSpacing) * CGFloat(snapToIndex)
             
             // Damping equal 1 => no oscillations => decay animation:
             UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
@@ -1068,7 +1042,7 @@ extension FLStageViewController: UICollectionViewDelegate {
         } else {
             // This is a much better way to scroll to a cell:
             let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
-            self.layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            //self.layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
     }
     
@@ -1091,9 +1065,5 @@ extension FLStageViewController: UICollectionViewDelegate {
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         print("scrollViewDidEndScrollingAnimation")
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
     }
 }

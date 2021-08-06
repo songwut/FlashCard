@@ -21,3 +21,10 @@ var isActiveDictKey = false
 var defaultLanguageIndex = 0
 var configLocale = ["en", "th"]
 var configParagraphLineSpacing:[String: CGFloat] = ["en": 2.0,"th": 5.0]
+var isLoginConicle = false
+
+
+var pathDomain = "develop.conicle.co/"
+var domainURL = "https://\(pathDomain)"
+var apiURL = "\(domainURL)api/"
+var isMaintenance = false

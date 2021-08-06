@@ -35,7 +35,7 @@ class PopupManager: NSObject {
         popup.closeColor = ColorHelper.error()
         popup.confirmColor = ColorHelper.error()
         
-        var vc = UIApplication.shared.windows.first?.rootViewController
+        var vc = UIApplication.shared.keyWindow?.rootViewController
         if let current = mainVC {
             vc = current
         } else {

@@ -1,0 +1,54 @@
+{
+  "next": null,
+  "next_url": null,
+  "previous": null,
+  "previous_url": null,
+  "count": 11,
+  "page_size": 24,
+  "results": [
+    {
+      "code": "sticker_01",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-1.png"
+    },
+    {
+      "code": "sticker_02",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-2.png"
+    },
+    {
+      "code": "sticker_03",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-3.png"
+    },
+    {
+      "code": "sticker_04",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-4.png"
+    },
+    {
+      "code": "sticker_05",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-5.png"
+    },
+    {
+      "code": "sticker_06",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-6.png"
+    },
+    {
+      "code": "sticker_07",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-7.png"
+    },
+    {
+      "code": "sticker_08",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-8.png"
+    },
+    {
+      "code": "sticker_09",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-9.png"
+    },
+    {
+      "code": "sticker_10",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-11.png"
+    },
+    {
+      "code": "sticker_11",
+      "image": "https://develop.conicle.co/media/flash_card/sticker/2021/07/202107_Stickers-03-10.png"
+    }
+  ]
+}

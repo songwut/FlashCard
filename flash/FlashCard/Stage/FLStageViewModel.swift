@@ -9,20 +9,20 @@ import UIKit
 
 class FLStageViewModel {
     
-    var pageList = [FlashPage]()
+    var pageList = [FlashPageResult]()
     
     //var pageList: [FlashElement] = []()
     var pageIndex = 0
-    var currentPage: FlashPage?
+    var currentPage: FlashPageResult?
     
     func prepareModel() {
         //mock data
         
         if self.pageList.count == 0 {
             //create new 1 + 1
-            let page0 = FlashPage()
+            let page0 = FlashPageResult(JSON: ["index" : 0])!
             self.pageList.append(page0)
-            let page1 = FlashPage()
+            let page1 = FlashPageResult(JSON: ["index" : 1])!
             self.pageList.append(page1)
             
 //            let page2 = FlashPage()

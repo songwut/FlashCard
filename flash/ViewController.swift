@@ -53,7 +53,7 @@ class ViewController: UIViewController {
     
     @objc func stageButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
-        let vc = s.instantiateViewController(identifier: "FLStageViewController")
+        let vc = s.instantiateViewController(withIdentifier: "FLStageViewController")
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
         } else {
@@ -75,6 +75,38 @@ class ViewController: UIViewController {
     }
     
     
+    @IBAction func loginPressed(_ sender: UIButton) {
+        if UserManager.shared.isLoggedin() {
+            UserManager.shared.updateProfile {
+                if let user = UserManager.shared.profile {
+                    PopupManager.showWarning("Login SUCCESS: User ID  \(user.id)", at: self)
+                }
+            }
+        } else {
+            self.loginAPI()
+        }
+    }
     
+    func loginAPI() {
+        let username = "sysadmin"
+        let password = "sysadminConicle"
+        
+        self.showLoading(nil)
+        let request = LoginRequest()
+        request.username = username
+        request.password = password
+        request.isRemember = true
+        API.request(request) { (responseBody: ResponseBody?, profile: ProfileResult?, isCache, error) in
+            self.hideLoading()
+            if let profile = profile {
+                DispatchQueue.main.async {
+                    UserDefaults.standard.set(true, forKey: "isLoggedin")
+                    UserDefaults.standard.synchronize()
+                    UserManager.shared.profile = profile
+                }
+                PopupManager.showWarning("Login SUCCESS: User ID  \(profile.id)", at: self)
+            }
+        }
+    }
 }
 

@@ -42,7 +42,7 @@ class FLControlView: UIView {
         self.deleteButton.cornerRadius = w / 2
         self.deleteButton.borderWidth = 1
         self.deleteButton.borderColor = .black
-        self.deleteButton.isHidden = false
+        self.deleteButton.isHidden = true //TODO: false
         //let margin: CGFloat = FlashStyle.text.marginIView
         //self.frame = CGRect(x: frame.origin.x - (margin / 2), y: frame.origin.y - (margin / 2), width: size.width + margin, height: size.height + margin)
     }

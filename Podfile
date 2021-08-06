@@ -10,6 +10,12 @@ target 'flash' do
   	pod 'iCarousel'
 	pod 'CollectionViewPagingLayout'
 
+	pod 'Alamofire', '= 5.0.0-rc.2'
+	pod 'AlamofireObjectMapper'
+	pod 'ObjectMapper'
+	pod 'SDWebImage'
+	pod 'MBProgressHUD', '~> 1.1.0'
+
   target 'flashTests' do
     inherit! :search_paths
     # Pods for testing

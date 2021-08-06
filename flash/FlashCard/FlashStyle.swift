@@ -48,6 +48,12 @@ enum FLTextMenu: String {
     case color = "color"
 }
 
+enum FLGraphicMenu: String {
+    case shape = "shape"
+    case sticker = "sticker"
+    
+}
+
 struct FlashStyle {
     static let isIpad = UIDevice.isIpad()
     static let stageColor:UIColor = .gray
@@ -55,6 +61,9 @@ struct FlashStyle {
     
     static let deletePageWidth:CGFloat = UIDevice.isIpad() ? 72 : 32
     static let addPageWidth:CGFloat = UIDevice.isIpad() ? 70 : 32
+    
+    static let listMenuHeight: CGFloat = UIDevice.isIpad() ? 138 : 84
+    
     
     static let baseStageWidth:CGFloat = 325
     static let baseWidth:CGFloat = 375
@@ -82,6 +91,17 @@ struct FlashStyle {
         static let spaceing: CGFloat = UIDevice.isIpad() ? 16 : 8
         static let marginHor: CGFloat = UIDevice.isIpad() ? 38 : 180
         static let marginVer: CGFloat = UIDevice.isIpad() ? 38 : 0
+        
+    }
+    
+    struct graphic {
+        static let displayRatio: CGFloat = UIDevice.isIpad() ? 0.3 : 0.3
+        static let menuSpacing: CGFloat = UIDevice.isIpad() ? 250 : 0
+        static let fixRow: CGFloat = UIDevice.isIpad() ? 3 : 2.5
+        static let column: CGFloat = UIDevice.isIpad() ? 6 : 3
+        static let spaceing: CGFloat = UIDevice.isIpad() ? 30 : 24
+        static let marginHor: CGFloat = UIDevice.isIpad() ? 32 : 190
+        static let marginVer: CGFloat = UIDevice.isIpad() ? 30 : 23
         
     }
     

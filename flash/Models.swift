@@ -22,22 +22,15 @@ class FLButton: UIButton {
     var tool: FLTool = .text
     var alignment: FLTextAlignment = .center
     var textStyle: FLTextStyle?
+    var actionMenu: FLMenuList = .select
 }
 
 class FLStageView: UIView {
-    var page: FlashPage? {
+    var page: FlashPageResult? {
         didSet {
             print("FLStageView frame: \(self.frame)")
         }
     }
-}
-
-class FlashPage {
-    var id = 0
-    var image = ""//cover
-    var bgColor = "FFFFFF"
-    var componentList = [FlashElement]()
-    
 }
 
 enum FLTextStyle: String {
@@ -138,6 +131,8 @@ class ImageElement: FlashElement {
     var height:CGFloat = 20
     
     var image: UIImage?
+    
+    var graphicType: FLGraphicMenu?
     
     override init() {
         super.init()

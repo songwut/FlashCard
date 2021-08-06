@@ -15,6 +15,7 @@ class FLToolViewController: UIViewController {
     var didChangeTextColor: DidAction?
     var didChangeTextStyle: DidAction?
     var didChangeTextAlignment: DidAction?
+    var didSelectedGraphic: DidAction?
     
     var didMediaPressed: DidAction?
     
@@ -34,13 +35,23 @@ class FLToolViewController: UIViewController {
     @IBOutlet weak var styleButton: UIButton!
     @IBOutlet weak var colorButton: UIButton!
     
+    @IBOutlet weak var graphicStackView: UIStackView!
+    @IBOutlet weak var graphicMenuStackView: UIStackView!
+    @IBOutlet weak var graphicToolStackView: UIStackView!
+    @IBOutlet weak var shapeButton: UIButton!
+    @IBOutlet weak var stickerButton: UIButton!
+    @IBOutlet weak var graphicLineView: UIView!
+    private var graphicSelectView: UIView!
+    
     private var addBarView = FLMenuBarView.instanciateFromNib()
     private var colorToolView = FLColorView.instanciateFromNib()
     private var textStyleView = FLTextStyleView.instanciateFromNib()
     private var textColorView = FLColorView.instanciateFromNib()
+    private var graphicView = FLGraphicView.instanciateFromNib()
     
     var viewModel = FLToolViewModel()
     var textMenu: FLTextMenu = .keyboard
+    var graphicMenu: FLGraphicMenu = .shape
     private var isToolReady = false
     private var keyboardFrame:CGRect?
     
@@ -70,6 +81,17 @@ class FLToolViewController: UIViewController {
         self.styleButton.setTitle("Style", for: .normal)
         self.colorButton.setTitle("Color", for: .normal)
         
+        self.graphicStackView.isHidden = true
+        self.graphicMenuStackView.updateLayout()
+        self.graphicSelectView = UIView()
+        self.graphicSelectView.backgroundColor = .black
+        self.graphicSelectView.frame = CGRect(x: 0, y: 28, width: self.shapeButton.frame.width, height: 2)
+        self.graphicLineView.addSubview(self.graphicSelectView)
+        self.graphicMenuStackView.spacing = FlashStyle.graphic.menuSpacing
+        
+        self.shapeButton.addTarget(self, action: #selector(self.shapePressed(_:)), for: .touchUpInside)
+        self.stickerButton.addTarget(self, action: #selector(self.stickerPressed(_:)), for: .touchUpInside)
+        
         self.keyboardButton.addTarget(self, action: #selector(self.keyboardPressed(_:)), for: .touchUpInside)
         self.styleButton.addTarget(self, action: #selector(self.stylePressed(_:)), for: .touchUpInside)
         self.colorButton.addTarget(self, action: #selector(self.colorPressed(_:)), for: .touchUpInside)
@@ -97,8 +119,23 @@ class FLToolViewController: UIViewController {
         
     }
     
+    @objc func shapePressed(_ button: UIButton) {
+        if self.graphicMenu != .shape {
+            self.graphicMenu = .shape
+            self.open(.graphic)
+            print("button frame:\(button.frame)")
+        }
+    }
+    
+    @objc func stickerPressed(_ button: UIButton) {
+        if self.graphicMenu != .sticker {
+            self.graphicMenu = .sticker
+            self.open(.graphic)
+            print("button frame:\(button.frame)")
+        }
+    }
+    
     @objc func keyboardPressed(_ button: UIButton) {
-        //TODO: show keyboard and height
         if self.textMenu != .keyboard {
             self.textMenu = .keyboard
             self.open(.text)
@@ -106,7 +143,6 @@ class FLToolViewController: UIViewController {
     }
     
     @objc func stylePressed(_ button: UIButton) {
-        //TODO: show text style
         if self.textMenu != .style {
             self.textMenu = .style
             self.open(.text)
@@ -153,6 +189,10 @@ class FLToolViewController: UIViewController {
             self.createColorTool(colorList)
             self.createTextTool(colorList)
         }
+        
+        self.viewModel.callApiGraphic { (graphicList) in
+            self.createGraphicTool(graphicList)
+        }
     }
     
     @objc func toolPressed(_ sender: UIButton) {
@@ -190,6 +230,17 @@ class FLToolViewController: UIViewController {
         self.updateViewLayout(self.textStyleView)
     }
     
+    func createGraphicTool(_ graphicList: [FLGraphicResult]) {
+        self.graphicView.didSelectedGraphic = self.didSelectedGraphic
+        self.graphicToolStackView.addArrangedSubview(self.graphicView)
+        self.graphicView.setup(graphicList: graphicList) {
+            self.graphicView.update(graphicList: graphicList)
+            self.graphicView.updateLayout()
+            let h = self.graphicView.height
+            self.graphicView.heightAnchor.constraint(equalToConstant: h).isActive = true
+        }
+    }
+    
     func updateViewLayout(_ view: UIView) {
         view.updateLayout()
         let h = view.frame.height
@@ -212,6 +263,7 @@ class FLToolViewController: UIViewController {
         
         switch tool {
         case .background:
+            self.graphicStackView.isHidden = true
             self.toolStackView.isHidden = true
             self.textStackView.isHidden = true
             self.colorStackView.isHidden = false
@@ -224,12 +276,18 @@ class FLToolViewController: UIViewController {
             break
         case .text:
             //show text editor
+            self.graphicStackView.isHidden = true
             self.toolStackView.isHidden = true
             self.textStackView.isHidden = false
             self.colorStackView.isHidden = true
             self.manageText(self.textMenu, isCreating: isCreating)
             break
         case .graphic:
+            self.graphicStackView.isHidden = false
+            self.toolStackView.isHidden = true
+            self.textStackView.isHidden = true
+            self.colorStackView.isHidden = true
+            self.manageGraphic(self.graphicMenu)
             //show graphic, sticker
             break
         case .quiz:
@@ -237,6 +295,27 @@ class FLToolViewController: UIViewController {
             break
         case .menu:
             //show hide all tool
+            break
+        }
+    }
+    
+    func manageGraphic(_ menu: FLGraphicMenu) {
+        self.viewModel.graphicMenu = menu
+        self.viewModel.callApiGraphic { (list) in
+            self.graphicView.update(graphicList: list)
+        }
+        
+        //self.graphicSelectView.frame = CGRect(x: 0, y: 28, width: self.shapeButton.frame.width, height: 2)
+        switch menu {
+        //TODO: api reload if need
+        case .sticker:
+            self.stickerButton.tintColor = .black
+            self.shapeButton.tintColor = ColorHelper.text50()
+            
+            break
+        case .shape:
+            self.stickerButton.tintColor = ColorHelper.text50()
+            self.shapeButton.tintColor = .black
             break
         }
     }
@@ -311,7 +390,6 @@ class FLToolViewController: UIViewController {
     @IBAction func closePressed(_ sender: UIButton?) {
         self.dismiss(animated: true, completion: nil)//if use present
         
-        
         //reset to tool UI
         self.toolStackView.isHidden = false
         let tool = self.viewModel.tool
@@ -334,6 +412,8 @@ class FLToolViewController: UIViewController {
             self.viewModel.tool = .menu
             break
         case .graphic:
+            self.graphicStackView.isHidden = true
+            self.viewModel.tool = .menu
             break
         case .quiz:
             break

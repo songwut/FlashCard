@@ -15,8 +15,10 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mwU-bU-3LJ">
                     <rect key="frame" x="0.0" y="0.0" width="54" height="54"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ip8-G6-BUx" customClass="FLButton" customModule="flash" customModuleProvider="target">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ip8-G6-BUx" customClass="FLButton" customModule="flash" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="54" height="54"/>
+                            <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                            <state key="normal" image="copy"/>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -53,4 +55,7 @@
             <point key="canvasLocation" x="53.623188405797109" y="52.566964285714285"/>
         </view>
     </objects>
+    <resources>
+        <image name="copy" width="40" height="40"/>
+    </resources>
 </document>
