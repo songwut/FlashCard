@@ -8,6 +8,11 @@
 import UIKit
 
 extension UIView {
+    static func className(_ aClass: AnyClass) -> String {
+        return NSStringFromClass(aClass).components(separatedBy: ".").last!
+    }
+    class var id: String { return self.className(self) }
+    
     @IBInspectable var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
@@ -82,7 +87,7 @@ extension UIView {
         self.heightAnchor.constraint(equalToConstant: height).isActive = true
     }
     
-    func addDash(_ lineWidth:CGFloat = 1, color:UIColor = .black) {
+    func addDash(_ lineWidth:CGFloat = 1, pattern: [NSNumber]? = nil, color:UIColor = .black) {
 
         let shapeLayer:CAShapeLayer = CAShapeLayer()
 
@@ -96,7 +101,7 @@ extension UIView {
         shapeLayer.strokeColor = color.cgColor
         shapeLayer.lineWidth = lineWidth
         shapeLayer.lineJoin = .round
-        shapeLayer.lineDashPattern = [2,4]
+        shapeLayer.lineDashPattern = pattern ?? [2,4]
         shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: self.layer.cornerRadius).cgPath
 
         self.layer.masksToBounds = false
@@ -139,5 +144,16 @@ extension UIView {
         self.layer.shadowOffset = offset
         self.layer.shadowRadius = radius
         self.layer.masksToBounds = false
+    }
+    
+    func pressAnimate() {
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 10, initialSpringVelocity: 10, options: [.curveLinear], animations: {
+            self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }) { (done) in
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 10, initialSpringVelocity: 10, options: [.curveLinear], animations: {
+                self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            }) { (done) in
+            }
+        }
     }
 }

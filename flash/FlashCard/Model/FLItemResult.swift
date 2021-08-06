@@ -8,15 +8,62 @@
 import Foundation
 import ObjectMapper
 
-class FLItemResult: FLBaseResult {
+class FlashPageResult: FLBaseResult {
+    var bgColor = "FFFFFF"
+    var componentList = [FlashElement]()
     
+    class func with(_ dict: [String : Any]) -> FlashPageResult? {
+        let item = Mapper<FlashPageResult>().map(JSON: dict)
+        return item
+    }
 }
 
-class FLPageResult: FLBaseResult {
+class FLNewResult: FLBaseItemResult {
+    var total = 0
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        total        <- map["total"]
+    }
+}
+
+class FLItemResult: FLBaseItemResult {
+    var pageList = [FlashPageResult]()
+    var dictPageList = [[String : AnyObject]]()
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        sort         <- map["sort"]
+        pageList     <- map["pageList"]
+        dictPageList <- map["pageList"]//for copy
+    }
+    
+    class func with(_ dict: [String : Any]) -> FLItemResult? {
+        let item = Mapper<FLItemResult>().map(JSON: dict)
+        return item
+    }
+}
+
+class FLListResult: FLBaseResult {
+    var total = 0
     var list = [FLItemResult]()
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        total        <- map["total"]
+        list         <- map["results"]
+    }
 }
 
-
+class FLBaseItemResult: FLBaseResult {
+    
+    var sort = 0
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        sort        <- map["sort"]
+    }
+}
 
 class FLBaseResult:Mappable {
 
@@ -40,3 +87,6 @@ class FLBaseResult:Mappable {
         imageURL  <- (map["image"], URLTransform())
     }
 }
+
+
+

@@ -20,5 +20,17 @@ final class FLImageCell: UICollectionViewCell {
             
         }
     }
+    
+    var image: String? {
+        didSet {
+            guard let imageStr = self.image else { return }
+            self.imageView.imageUrl(imageStr)
+            
+        }
+    }
+    
+    var uimage: UIImage? {
+        return self.imageView.image
+    }
 
 }

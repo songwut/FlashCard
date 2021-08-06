@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Alamofire
+import SDWebImage
 
 extension UIImageView {
     
@@ -16,7 +18,8 @@ extension UIImageView {
         }
     }
     
-    public func imageFromUrl(_ urlString: String) {
+    public func imageUrl(_ urlString: String, placeholderImage: UIImage? = nil) {
+        self.image = placeholderImage
         if let url = URL(string: urlString) {
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                     guard let data = data, error == nil else { return }
@@ -25,6 +28,22 @@ extension UIImageView {
                     }
                 }
             task.resume()
+        }
+    }
+    
+    func setImage(_ urlString: String, placeholderImage: UIImage?, completion :((_ image: UIImage) -> Void)? = nil) {
+        
+        guard let url = URL(string: urlString) else {
+            self.image = placeholderImage
+            return
+        }
+        
+        self.sd_setImage(with: url, placeholderImage: placeholderImage, progress: { (receivedSize, expectedSize, url) in
+            
+        }) { (image, error, type, url) in
+            if let img = image {
+                completion?(img)
+            }
         }
     }
     
