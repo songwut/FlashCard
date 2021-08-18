@@ -171,6 +171,28 @@ struct FLCreator {
         return iView
     }
     
+    func createQuiz(_ e: FlashElement ,in stage: UIView) -> FLQuizView? {
+        guard let element = e as? QuizElement else { return nil }
+        let originalFrame = CGRect(x: 0, y: 0, width: 325, height: 200)
+        let stageW = stage.frame.width
+        let quizW: CGFloat = 293
+        let scale: CGFloat = quizW / FlashStyle.baseStageWidth
+        let viewW: CGFloat = FlashStyle.baseStageWidth
+        let quizView = FLQuizView.instanciateFromNib()
+        quizView.createNew(question: element.question)
+        let viewX = ((stage.frame.width * 50) / 100)
+        let viewY = ((stage.frame.height * 50) / 100)
+        //use stage width and scale down
+        let size = CGSize(width: stageW, height: stageW)
+        
+        let center = CGPoint(x: viewX, y: viewY)
+        let frame = CGRect(origin: CGPoint.zero, size: size)
+        quizView.frame = frame
+        quizView.center = center
+        quizView.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
+        return quizView
+    }
+    
     func createVideo(_ element: VideoElement ,in stage: UIView) -> InteractView {
         let viewX = (stage.frame.width * element.x / 100)
         let viewY = ((stage.frame.height * element.y) / 100)

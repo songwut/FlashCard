@@ -7,6 +7,7 @@ PODS:
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
   - CollectionViewPagingLayout (1.0.2)
+  - GrowingTextView (0.7.2)
   - iCarousel (1.8.3)
   - MBProgressHUD (1.1.0)
   - ObjectMapper (3.5.3)
@@ -20,6 +21,7 @@ DEPENDENCIES:
   - Alamofire (= 5.0.0-rc.2)
   - AlamofireObjectMapper
   - CollectionViewPagingLayout
+  - GrowingTextView
   - iCarousel
   - MBProgressHUD (~> 1.1.0)
   - ObjectMapper
@@ -32,6 +34,7 @@ SPEC REPOS:
     - AlamofireObjectMapper
     - CocoaLumberjack
     - CollectionViewPagingLayout
+    - GrowingTextView
     - iCarousel
     - MBProgressHUD
     - ObjectMapper
@@ -43,12 +46,13 @@ SPEC CHECKSUMS:
   AlamofireObjectMapper: 74d1440c92c42bbcc2b5f4dc81654ac095ec669f
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   CollectionViewPagingLayout: 418c8f5fc92cb35673f961196d5e0509ab853667
+  GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
   iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
 
-PODFILE CHECKSUM: 539304434658fe3aefa7ca51dc19aaac48109033
+PODFILE CHECKSUM: 70da935f9ad9e6f8d6f7e63b6641a2100b6ac9e7
 
 COCOAPODS: 1.10.1

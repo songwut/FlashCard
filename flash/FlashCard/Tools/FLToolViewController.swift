@@ -10,6 +10,7 @@ import UIKit
 class FLToolViewController: UIViewController {
     
     var didClose: DidAction?
+    var didCreateQuiz: DidAction?
     var didCreateText: DidAction?
     var didSelectedColor: DidAction?
     var didChangeTextColor: DidAction?
@@ -52,6 +53,7 @@ class FLToolViewController: UIViewController {
     var viewModel = FLToolViewModel()
     var textMenu: FLTextMenu = .keyboard
     var graphicMenu: FLGraphicMenu = .shape
+    var quizMenu: FLItemView?
     private var isToolReady = false
     private var keyboardFrame:CGRect?
     
@@ -176,6 +178,9 @@ class FLToolViewController: UIViewController {
             toolView.button.addTarget(self, action: #selector(self.toolPressed(_:)), for: .touchUpInside)
             toolView.widthAnchor.constraint(equalToConstant: itemWidth).isActive = true
             self.addBarView.stackView.addArrangedSubview(toolView)
+            if tool == .quiz {
+                self.quizMenu = toolView
+            }
         }
         self.addBarView.stackView.spacing = spacing
         let h = self.addBarView.barHeight.constant
@@ -292,6 +297,11 @@ class FLToolViewController: UIViewController {
             break
         case .quiz:
             //show quiz editor
+            self.graphicStackView.isHidden = true
+            self.toolStackView.isHidden = false
+            self.textStackView.isHidden = true
+            self.colorStackView.isHidden = true
+            self.didCreateQuiz?.handler(nil)
             break
         case .menu:
             //show hide all tool

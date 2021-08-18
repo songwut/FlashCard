@@ -41,9 +41,19 @@ class FLStageViewModel {
         self.pageList[index].componentList.append(element)
     }
     
-    func genJSON() {
-        
+    func createNewQuiz(completion: @escaping (_ q: FLQuestionResult?) -> ()) {
+        let fileName = "flash-card-new-quiz"
+        JSON.read(fileName) { (object) in
+            if let json = object as? [String : Any],
+               let question = FLQuestionResult(JSON: json) {
+                completion(question)
+            } else {
+                completion(nil)
+            }
+        }
     }
+    
+    
     
     
 }

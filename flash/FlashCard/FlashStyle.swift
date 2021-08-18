@@ -73,6 +73,7 @@ struct FlashStyle {
     static let pageCardRatio: CGFloat = 485 / 325
     
     static let bottonToolColor: UIColor = ColorHelper.primary()
+    static let disableToolColor: UIColor = ColorHelper.disable()
     static let iconEedge: CGFloat = 0.3//
     static let bottonToolWidth: CGFloat = UIDevice.isIpad() ? 70 : 54
     static let toolMargin: CGFloat = 18 / 54
@@ -109,6 +110,13 @@ struct FlashStyle {
         static let placeholder = "Please\nInput Text\nHere"
         static let textWidthFromFont36:CGFloat = 120
         static let marginIView: CGFloat = 40//left+right,top+botton
+    }
+    
+    struct quiz {
+        static let maxChoice = 4
+        static let choiceMargin:CGFloat = UIDevice.isIpad() ? 28 : 16
+        static let choiceMinHeight:CGFloat = UIDevice.isIpad() ? 75 : 36
+        static let choiceSpacing: CGFloat = UIDevice.isIpad() ? 16 : 8
     }
     
     static let deleteSize: CGFloat = 25

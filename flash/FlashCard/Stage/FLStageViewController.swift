@@ -397,6 +397,16 @@ final class FLStageViewController: UIViewController {
                 self.createNewGraphic(type, graphic: graphic)
             })
             
+            self.toolVC.didCreateQuiz = DidAction(handler: { [weak self] (sender) in
+                guard let self = self else { return }
+                self.viewModel.createNewQuiz { (question) in
+                    guard let q = question else { return }
+                    self.createNewQuiz(question: q)
+                }
+            })
+            
+            
+            
             
             
             self.toolVC.didClose = DidAction(handler: { (sender) in
@@ -421,6 +431,13 @@ final class FLStageViewController: UIViewController {
             toolVC.view.isHidden = false
             
         }
+    }
+    
+    func createNewQuiz(question: FLQuestionResult) {
+        let element = QuizElement()
+        element.question = question
+        let row = self.indexOfMajorCell()
+        self.createElement(element, row: row)
     }
     
     func createNewText() {
@@ -535,8 +552,32 @@ final class FLStageViewController: UIViewController {
             
         }  else if let _ = element as? VideoElement {
             self.createIView(element, row: row)
+            
+        }  else if let _ = element as? QuizElement {
+            self.createQuizView(element, row: row)
         }
-        //TODO: add video, shape to stage
+    }
+    
+    func createQuizView(_ element: FlashElement, row: Int) {
+        self.flCreator.selectedView?.isSelected = false
+        self.flCreator.selectedView?.isCreateNew = false
+        
+        self.viewModel.save(element: element, at: row)
+        
+        let stageView = self.getStageView(at: row)
+        guard let quizView = self.flCreator.createQuiz(element, in: stageView) else { return}
+//        quizView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
+        //TODO: move only vertical
+        
+        stageView.addSubview(quizView)
+        quizView.updateLayout()
+        quizView.didDelete = DidAction(handler: { [weak self] (sender) in
+            quizView.removeFromSuperview()
+            self?.toolVC.quizMenu?.setQuizActive(true)
+        })
+        self.toolVC.quizMenu?.setQuizActive(false)
+        print("quizView: \(quizView.frame)")
+        print("quizView")
     }
     
     func createIView(_ element: FlashElement, row: Int) {

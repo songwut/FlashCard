@@ -6,7 +6,16 @@
 //
 
 import UIKit
-
+extension UITextField {
+    @IBInspectable var placeHolderColor: UIColor? {
+        get {
+            return self.placeHolderColor
+        }
+        set {
+            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : "", attributes:[.foregroundColor: newValue!])
+        }
+    }
+}
 extension UITextView {
     func frameFromContent(fixWidth: CGFloat? = nil) -> CGRect {
         //get width by content

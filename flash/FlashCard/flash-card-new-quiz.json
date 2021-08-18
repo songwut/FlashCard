@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "value": "question",
+  "choice": [
+    {
+      "id": 1,
+      "value": "Option 1",
+      "is_answer": true
+    },
+    {
+      "id": 2,
+      "value": "Option 2",
+      "is_answer": false
+    }
+  ]
+}

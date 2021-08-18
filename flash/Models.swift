@@ -183,3 +183,7 @@ class ArrowElement: FlashElement {
         
     }
 }
+
+class QuizElement: FlashElement {
+    var question: FLQuestionResult?
+}

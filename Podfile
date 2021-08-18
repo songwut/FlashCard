@@ -15,6 +15,7 @@ target 'flash' do
 	pod 'ObjectMapper'
 	pod 'SDWebImage'
 	pod 'MBProgressHUD', '~> 1.1.0'
+	pod 'GrowingTextView'
 
   target 'flashTests' do
     inherit! :search_paths
