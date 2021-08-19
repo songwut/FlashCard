@@ -21,7 +21,7 @@ class FLChoiceResult:Mappable {
     
     func mapping(map: Map) {
         id        <- map["id"]
-        value     <- map["title"]
+        value     <- map["value"]
         isAnswer  <- map["is_answer"]
         percent   <- map["percent"]
     }

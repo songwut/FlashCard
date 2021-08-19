@@ -13,29 +13,34 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L0v-Mh-bLM">
-                    <rect key="frame" x="0.0" y="0.0" width="282" height="49.5"/>
+                    <rect key="frame" x="0.0" y="0.0" width="282" height="36"/>
                     <subviews>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="Lorem ipsum dolor sit er elit lamet, consectetaur " textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="OQx-1n-Bn3" customClass="GrowingTextView" customModule="GrowingTextView">
-                            <rect key="frame" x="0.0" y="0.0" width="282" height="49.5"/>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="Option 1" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="OQx-1n-Bn3" customClass="GrowingTextView" customModule="GrowingTextView">
+                            <rect key="frame" x="0.0" y="0.0" width="282" height="36"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="VNU-25-y54"/>
-                            </constraints>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="minHeight">
+                                    <real key="value" value="36"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <outlet property="delegate" destination="iN0-l3-epB" id="eOs-5g-1SX"/>
+                            </connections>
                         </textView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="OQx-1n-Bn3" firstAttribute="top" secondItem="L0v-Mh-bLM" secondAttribute="top" id="JOo-FX-vUh"/>
+                        <constraint firstAttribute="height" constant="36" id="K6t-EK-nN3"/>
                         <constraint firstAttribute="trailing" secondItem="OQx-1n-Bn3" secondAttribute="trailing" id="RKd-68-Fk8"/>
-                        <constraint firstAttribute="bottom" secondItem="OQx-1n-Bn3" secondAttribute="bottom" id="b9D-6Y-e0m"/>
                         <constraint firstItem="OQx-1n-Bn3" firstAttribute="leading" secondItem="L0v-Mh-bLM" secondAttribute="leading" id="rI9-gm-0tp"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LQZ-QQ-qid">
-                    <rect key="frame" x="282" y="10" width="30" height="30"/>
+                    <rect key="frame" x="282" y="3" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="30" id="flr-Ks-7jz"/>
                         <constraint firstAttribute="height" constant="30" id="oV4-fJ-MjH"/>
@@ -64,7 +69,8 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="checkButton" destination="LQZ-QQ-qid" id="cJ7-IV-3Nk"/>
-                <outlet property="textView" destination="OQx-1n-Bn3" id="iOZ-z0-uFe"/>
+                <outlet property="contentHeight" destination="K6t-EK-nN3" id="bGL-eg-mSS"/>
+                <outlet property="textView" destination="OQx-1n-Bn3" id="qKO-20-ts7"/>
             </connections>
             <point key="canvasLocation" x="8.6956521739130448" y="83.035714285714278"/>
         </view>

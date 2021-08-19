@@ -47,4 +47,3 @@ class HalfModalTransitioningDelegate: NSObject, UIViewControllerTransitioningDel
     
 }
 
-extension UIViewController { }

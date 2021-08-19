@@ -54,8 +54,6 @@ class MyViewController : UIViewController {
         print(self.deg2rad(-180))
         
         
-        
-        
     }
 }
 // Present the view controller in the Live View window

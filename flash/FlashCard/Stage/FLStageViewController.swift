@@ -553,12 +553,12 @@ final class FLStageViewController: UIViewController {
         }  else if let _ = element as? VideoElement {
             self.createIView(element, row: row)
             
-        }  else if let _ = element as? QuizElement {
-            self.createQuizView(element, row: row)
+        }  else if let quiz = element as? QuizElement {
+            self.createQuizView(quiz, row: row)
         }
     }
     
-    func createQuizView(_ element: FlashElement, row: Int) {
+    func createQuizView(_ element: QuizElement, row: Int) {
         self.flCreator.selectedView?.isSelected = false
         self.flCreator.selectedView?.isCreateNew = false
         
@@ -569,15 +569,29 @@ final class FLStageViewController: UIViewController {
 //        quizView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
         //TODO: move only vertical
         
+        quizView.alpha = 0.0
+        //quizView.updateLayout()
         stageView.addSubview(quizView)
-        quizView.updateLayout()
+        //quizView.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
         quizView.didDelete = DidAction(handler: { [weak self] (sender) in
-            quizView.removeFromSuperview()
+            UIView.animateKeyframes(withDuration: 0.2, delay: 0, options:[]) {
+                quizView.alpha = 0.0
+            } completion: { (done) in
+                quizView.removeFromSuperview()
+            }
             self?.toolVC.quizMenu?.setQuizActive(true)
         })
-        self.toolVC.quizMenu?.setQuizActive(false)
+        quizView.createNew(question: element.question)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            quizView.popIn(scale: quizView.scale, fromScale: 0.5, duration: 0.5, delay: 0) { (done) in
+                print("popIn quizView: \(quizView.frame)")
+            }
+            
+        }
+        
         print("quizView: \(quizView.frame)")
-        print("quizView")
+
+        self.toolVC.quizMenu?.setQuizActive(false)
     }
     
     func createIView(_ element: FlashElement, row: Int) {
@@ -853,11 +867,6 @@ final class FLStageViewController: UIViewController {
         let degrees = radians * Double((180 / Float.pi))
         print("degrees: \(degrees)")
         return degrees
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        print("viewDidLayoutSubviews")
     }
     
     //Screen Rotation

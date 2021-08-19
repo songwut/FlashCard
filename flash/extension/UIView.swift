@@ -105,7 +105,7 @@ extension UIView {
         shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: self.layer.cornerRadius).cgPath
 
         self.layer.masksToBounds = false
-
+        self.layer.sublayers?.removeAll()
         self.layer.addSublayer(shapeLayer)
     }
     
@@ -117,20 +117,21 @@ extension UIView {
         layer.mask = mask
     }
     
-    func popIn(fromScale: CGFloat = 0.5,
-                                  duration: TimeInterval = 0.5,
-                                  delay: TimeInterval = 0,
-                                  completion: ((Bool) -> Void)? = nil) -> UIView {
+    func popIn(scale: CGFloat = 1.0,
+               fromScale: CGFloat = 0.5,
+               duration: TimeInterval = 0.5,
+               delay: TimeInterval = 0,
+               completion: ((Bool) -> Void)? = nil) {
       isHidden = false
       alpha = 0
       transform = CGAffineTransform(scaleX: fromScale, y: fromScale)
       UIView.animate(
         withDuration: duration, delay: delay, usingSpringWithDamping: 0.55, initialSpringVelocity: 3,
         options: .curveEaseOut, animations: {
-          self.transform = .identity
+          self.transform = CGAffineTransform(scaleX: scale, y: scale)
           self.alpha = 1
         }, completion: completion)
-      return self
+      
     }
     
     func updateLayout() {

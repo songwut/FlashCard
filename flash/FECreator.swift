@@ -179,7 +179,7 @@ struct FLCreator {
         let scale: CGFloat = quizW / FlashStyle.baseStageWidth
         let viewW: CGFloat = FlashStyle.baseStageWidth
         let quizView = FLQuizView.instanciateFromNib()
-        quizView.createNew(question: element.question)
+        quizView.scale = scale
         let viewX = ((stage.frame.width * 50) / 100)
         let viewY = ((stage.frame.height * 50) / 100)
         //use stage width and scale down
@@ -189,7 +189,6 @@ struct FLCreator {
         let frame = CGRect(origin: CGPoint.zero, size: size)
         quizView.frame = frame
         quizView.center = center
-        quizView.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
         return quizView
     }
     
