@@ -117,21 +117,16 @@ extension UIView {
         layer.mask = mask
     }
     
-    func popIn(scale: CGFloat = 1.0,
-               fromScale: CGFloat = 0.5,
-               duration: TimeInterval = 0.5,
-               delay: TimeInterval = 0,
-               completion: ((Bool) -> Void)? = nil) {
-      isHidden = false
-      alpha = 0
-      transform = CGAffineTransform(scaleX: fromScale, y: fromScale)
-      UIView.animate(
-        withDuration: duration, delay: delay, usingSpringWithDamping: 0.55, initialSpringVelocity: 3,
-        options: .curveEaseOut, animations: {
-          self.transform = CGAffineTransform(scaleX: scale, y: scale)
-          self.alpha = 1
-        }, completion: completion)
-      
+    func popIn(fromScale: CGFloat = 0.5, toScale: CGFloat = 1.0, duration: TimeInterval = 0.5, delay: TimeInterval = 0, completion: ((Bool) -> Void)? = nil) {
+        self.isHidden = false
+        self.alpha = 0
+        self.transform = CGAffineTransform(scaleX: fromScale, y: fromScale)
+        UIView.animate(
+          withDuration: duration, delay: delay, usingSpringWithDamping: 0.55, initialSpringVelocity: 3,
+          options: .curveEaseOut, animations: {
+            self.transform = CGAffineTransform(scaleX: toScale, y: toScale)
+            self.alpha = 1
+          }, completion: completion)
     }
     
     func updateLayout() {

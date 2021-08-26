@@ -6,12 +6,11 @@
 //
 
 import UIKit
-import CollectionViewPagingLayout
 
 class FLItemCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var cardView: UIView!
+    @IBOutlet weak var cardView: DashBorderView!
     @IBOutlet weak var selectView: UIView!
     @IBOutlet weak var addLabel: UILabel!
     
@@ -42,7 +41,6 @@ class FLItemCollectionViewCell: UICollectionViewCell {
         self.selectView.isHidden = true
         self.imageView.isHidden = true
         self.cardView.isHidden = false
-        self.cardView.addDash(2, pattern: [10,8], color: UIColor("7D7D7D"))
     }
     
     override func layoutSubviews() {
@@ -61,6 +59,8 @@ class FLItemCollectionViewCell: UICollectionViewCell {
         self.cardView.cornerRadius = 8
         self.cardView.clipsToBounds = true
         self.cardView.backgroundColor = .clear
+        self.cardView.dashColor = UIColor("7D7D7D")
+        self.cardView.dashBorderWidth = 1
         
         self.selectView.borderColor = UIColor("E7000A")
         self.selectView.borderWidth = 2

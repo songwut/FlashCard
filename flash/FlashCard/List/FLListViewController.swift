@@ -71,6 +71,7 @@ class FLListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.updateLayout()
         self.createMenu()
         self.collectionViewConfig()
         

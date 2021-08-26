@@ -14,12 +14,14 @@ final class FLChoiceView: UIView {
     @IBOutlet weak var checkButton: UIButton!
     
     var isCreate = false
+    var index = 0
+    var didDelete:DidAction?
     
     var choice: FLChoiceResult? {
         didSet {
             guard let choice = self.choice else { return }
-            //self.textView.text = choice.value
-            self.textView.placeholder = choice.value
+            self.textView.text = choice.value
+            //self.textView.placeholder = choice.value
             self.updateStyle(choice.isAnswer ?? false)
         }
     }
@@ -49,6 +51,7 @@ final class FLChoiceView: UIView {
     override func awakeFromNib() {
         self.cornerRadius = 8
         self.textView.maxHeight = 60
+        self.textView.maxLength = FlashStyle.maxCharChoice
         self.textView.minHeight = self.contentHeight.constant//36
         self.textView.placeholderColor = ColorHelper.text50()
         self.textView.text = ""
@@ -81,6 +84,18 @@ extension FLChoiceView: GrowingTextViewDelegate {
         self.textView.updateLayout()
         //self.textView.superview?.layoutIfNeeded()
         ConsoleLog.show("FLChoiceView textViewDidChange")
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        } else if text == "", textView.text.isEmpty {
+            textView.resignFirstResponder()
+            self.didDelete?.handler(self)
+            return false
+        }
+        return true
     }
     
 }

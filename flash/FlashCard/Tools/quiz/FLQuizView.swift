@@ -11,79 +11,102 @@ import GrowingTextView
 class FLQuizView: UIView {
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
-    //@IBOutlet weak var questionHeight: NSLayoutConstraint!
+    @IBOutlet weak var questionHeight: NSLayoutConstraint!
     @IBOutlet weak var questionTextView: GrowingTextView!
     @IBOutlet weak var choiceStackView: UIStackView!
-    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var addStackView: UIStackView!
+    @IBOutlet weak var addButton: FLDashButton?
     
     var didDelete: DidAction?
     var isCreate = false
-    var choiceCount = 0
     var scale:CGFloat = 1.0
+    var choiceCount: Int {
+        guard let question = self.question else { return 0 }
+        return question.choiceList.count
+    }
     
-    func createNew(question: FLQuestionResult?) {
+    func createNewUI(question: FLQuestionResult?) {
         guard let q = question else { return }
         self.isCreate = true
         self.question = q
-        self.addButton.isHidden = false
-        self.addButton.updateLayout()
-        self.addButton.addDash(1, color: UIColor("D7DFE9"))
         
+        self.addButton?.updateLayout()
+    }
+    
+    private func createChoiceView(_ choice: FLChoiceResult) -> FLChoiceView {
+        let choiceView = FLChoiceView.instanciateFromNib()
+        choiceView.isCreate = self.isCreate
+        
+        choiceView.choice = choice
+        choiceView.didDelete = DidAction(handler: { [weak self] (sender) in
+            guard let question = self?.question else { return }
+            if question.choiceList.count > 1 {
+                let index = choiceView.checkButton.tag - 1
+                question.choiceList.remove(at: index)
+                choiceView.removeFromSuperview()
+                
+                self?.addStackView.isHidden = question.choiceList.count == FlashStyle.maxChoice
+            }
+        })
+        choiceView.checkButton.addTarget(self, action: #selector(self.choicePressed(_:)), for: .touchUpInside)
+        return choiceView
     }
     
     var question: FLQuestionResult? {
         didSet {
-            //self.cardView.updateLayout()
             self.titleLabel.text = "Question :"
+            self.questionTextView.font = FontHelper.getFontSystem(.paragraph, font: .text)
             self.questionTextView.placeholder = "Write your question."
             self.questionTextView.placeholderColor = .white
             
             self.questionTextView.returnKeyType = .done
             self.questionTextView.enablesReturnKeyAutomatically = true
-            self.questionTextView.maxLength = 300
+            self.questionTextView.maxLength = FlashStyle.maxCharQuestion
             
             guard let question = self.question else { return }
             self.choiceStackView.removeAllArranged()
-            var choiceTag = 1
-            for choice in question.choiceList {
-                let choiceView = FLChoiceView.instanciateFromNib()
-                choiceView.isCreate = self.isCreate
+            for index in 0..<question.choiceList.count {
+                let choice = question.choiceList[index]
+                let choiceView = self.createChoiceView(choice)
+                choiceView.checkButton.tag = index + 1
                 self.choiceStackView.addArrangedSubview(choiceView)
-                choiceView.choice = choice
-                choiceView.checkButton.tag = choiceTag
-                
-                choiceView.checkButton.addTarget(self, action: #selector(self.choicePressed(_:)), for: .touchUpInside)
-                choiceTag += 1
             }
-            self.choiceStackView.translatesAutoresizingMaskIntoConstraints = false
         }
     }
     
     @objc func choicePressed(_ sender: UIButton) {
-        let index = sender.tag - 1
         guard let question = self.question else { return }
-        let choice = question.choiceList[index]
-        var newIsAnswer = false
-        if let isAnswer = choice.isAnswer {
-            newIsAnswer = !isAnswer
-        } else {
-            newIsAnswer = true
+        //reset select
+        for i in 0..<question.choiceList.count {
+            if let choiceView = self.choiceStackView.arrangedSubviews[i] as? FLChoiceView {
+                let choice = question.choiceList[i]
+                choice.isAnswer = false
+                choiceView.choice = choice
+            }
         }
-        choice.isAnswer = newIsAnswer
         
-        if let choiceView = self.choiceStackView.arrangedSubviews[index] as? FLChoiceView {
+        //update select
+        let selectedIndex = sender.tag - 1
+        let choice = question.choiceList[selectedIndex]
+        choice.isAnswer = true
+        if let choiceView = self.choiceStackView.arrangedSubviews[selectedIndex] as? FLChoiceView {
             choiceView.choice = choice
         }
-        
-        //self.didPressTool?.handler(self.tool)
     }
     
     @IBAction func addChoicePressed(_ sender: UIButton) {
-        let choiceView = FLChoiceView.instanciateFromNib()
-        let choice = FLChoiceResult(JSON: ["id" : -1])!
-        choiceView.choice = choice
-        self.question?.choiceList.append(choice)
+        guard let question = self.question else { return }
+        //create new choice
+        let order = self.choiceCount + 1
+        let title = "Option \(order)"
+        let choice = FLChoiceResult(JSON: ["id" : -1, "value" : title])!
+        let choiceView = self.createChoiceView(choice)
+        choiceView.checkButton.tag = order
         self.choiceStackView.addArrangedSubview(choiceView)
+        question.choiceList.append(choice)
+        
+        print("question.choiceList.count: \(question.choiceList.count)")
+        self.addStackView.isHidden = question.choiceList.count == FlashStyle.maxChoice
     }
     
     @IBAction func deletePressed(_ sender: UIButton) {
@@ -94,23 +117,15 @@ class FLQuizView: UIView {
         self.titleLabel.textColor = .white
         self.questionTextView.delegate = self
         self.questionTextView.backgroundColor = .clear
-        self.questionTextView.font = FontHelper.getFontSystem(.paragraph, font: .text)
         self.questionTextView.textColor = .white
         self.questionTextView.minHeight = 36
         
+        self.addButton?.titleFont =  FontHelper.getFontSystem(.paragraph, font: .text)
+        self.addButton?.setTitle("+ Add Option", for: .normal)
+        
         self.cardView.cornerRadius = 8
         self.cardView.backgroundColor = UIColor("4A4A4A")
-        self.addButton.isHidden = true
-        self.addButton.titleFont = FontHelper.getFontSystem(.paragraph, font: .text)
-        self.addButton.setTitle("+ Add Option", for: .normal)
-        self.addButton.tintColor = .white
-        self.addButton.setTitleColor(.white, for: .normal)
-        self.addButton.cornerRadius = 8
-        let edge = FlashStyle.quiz.choiceMargin
-        self.addButton.imageEdgeInsets = UIEdgeInsets(top: edge / 2, left: edge, bottom: edge / 2, right: edge)
         self.questionTextView.delegate = self
-        //self.button.backgroundColor = FlashStyle.bottonToolColor
-        //self.button.tintColor = .white
     }
     
     class func instanciateFromNib() -> FLQuizView {
@@ -119,17 +134,28 @@ class FLQuizView: UIView {
 }
 
 extension FLQuizView: GrowingTextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        ConsoleLog.show("textViewDidBeginEditing")
-    }
     func textViewDidChangeHeight(_ textView: GrowingTextView, height: CGFloat) {
-        ConsoleLog.show("GrowingTextView height:\(height)")
-        //self.questionTextView.maxHeight = height
+        ConsoleLog.show("question GrowingTextView height:\(height)")
+        //self.textView.superview?.layoutIfNeeded()
+        self.questionHeight.constant = height
     }
     
-    private func textViewDidChange(_ growingTextView: GrowingTextView) {
-        ConsoleLog.show("growingTextViewDidChange:\(String(describing: growingTextView.text))")
-        self.question?.value = growingTextView.text
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        ConsoleLog.show("question textViewDidBeginEditing")
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        self.question?.value = textView.text
+        self.questionTextView.updateLayout()
+        ConsoleLog.show("question textViewDidChange")
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text.contains("\n") {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }
 

@@ -55,6 +55,10 @@ enum FLGraphicMenu: String {
 }
 
 struct FlashStyle {
+    static let maxChoice = 4
+    static let maxCharQuestion = 100
+    static let maxCharChoice = 50
+    
     static let isIpad = UIDevice.isIpad()
     static let stageColor:UIColor = .gray
     static let screenColor:UIColor = .white

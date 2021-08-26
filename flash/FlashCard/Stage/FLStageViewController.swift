@@ -329,6 +329,24 @@ final class FLStageViewController: UIViewController {
     
     var halfModalDelegate: HalfModalTransitioningDelegate!
     
+    func openQuizStatVC() {
+        let s = UIStoryboard(name: "FlashCard", bundle: nil)
+        if #available(iOS 13.0, *) {
+            if let vc = s.instantiateViewController(identifier: "FLQuizInfoViewController") as? FLQuizInfoViewController {
+                // toolHelper = FLToolHelper(vc: self, toolBar: vc)
+                //tool parameter
+                
+                self.halfModalDelegate.startHeight = 150 + vc.safeAreaTopHeight
+                self.halfModalDelegate.backgroundColor = .clear
+                vc.modalPresentationStyle = .custom
+                vc.transitioningDelegate = self.halfModalDelegate
+                self.present(vc, animated: true, completion: nil)
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    
     func prepareToolVC() {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
 //        if let vc = s.instantiateViewController(identifier: "FLToolViewController") as? FLToolViewController {
@@ -566,8 +584,8 @@ final class FLStageViewController: UIViewController {
         
         let stageView = self.getStageView(at: row)
         guard let quizView = self.flCreator.createQuiz(element, in: stageView) else { return}
-//        quizView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
-        //TODO: move only vertical
+        quizView.isUserInteractionEnabled = true
+        quizView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.moveVertical(_:))))
         
         quizView.alpha = 0.0
         //quizView.updateLayout()
@@ -581,11 +599,12 @@ final class FLStageViewController: UIViewController {
             }
             self?.toolVC.quizMenu?.setQuizActive(true)
         })
-        quizView.createNew(question: element.question)
+        quizView.createNewUI(question: element.question)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            quizView.popIn(scale: quizView.scale, fromScale: 0.5, duration: 0.5, delay: 0) { (done) in
-                print("popIn quizView: \(quizView.frame)")
-            }
+            quizView.alpha = 1.0
+//            quizView.popIn(fromScale: 0.5, toScale: quizView.scale, duration: 0.5, delay: 0) { (done) in
+//                print("popIn quizView: \(quizView.frame)")
+//            }
             
         }
         
@@ -795,6 +814,24 @@ final class FLStageViewController: UIViewController {
         iView.isSelected = true
         self.flCreator.selectedView = iView
         self.controlView.updateRelateView(iView)
+    }
+    
+    @objc func moveVertical(_ gesture: UIPanGestureRecognizer) {
+        
+        guard let view = gesture.view else { return }
+        let translation = gesture.translation(in: self.stageView)
+        print("movevertical")
+        print("x : \(translation.x)")
+        print("y : \(translation.y)")
+        view.transform = view.transform.translatedBy(x: 0, y: translation.y)
+        gesture.setTranslation(CGPoint.zero, in: self.stageView)
+        
+        if gesture.state == .began {
+            
+        } else if gesture.state == .ended {
+            print("quiz view frame : \(view.frame)")//matgintop 16
+        }
+        
     }
     
     @objc func move(_ gesture: UIPanGestureRecognizer) {

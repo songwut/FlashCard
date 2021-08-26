@@ -3,7 +3,6 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,9 +13,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1hg-cn-8JH">
-                    <rect key="frame" x="0.0" y="16" width="325" height="259"/>
+                    <rect key="frame" x="0.0" y="0.0" width="325" height="259"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="OyF-5L-kWP">
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="OyF-5L-kWP">
                             <rect key="frame" x="16" y="16" width="293" height="227"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VOJ-MJ-UYP">
@@ -25,16 +24,12 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="fbbdfgfg" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="EPl-AR-6UR">
-                                    <rect key="frame" x="0.0" y="24.5" width="293" height="0.0"/>
-                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    <color key="textColor" systemColor="labelColor"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                </textView>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="PMM-BR-Iuh" customClass="GrowingTextView" customModule="GrowingTextView">
                                     <rect key="frame" x="0.0" y="28.5" width="293" height="33"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="33" id="z5h-Vq-jrG"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     <userDefinedRuntimeAttributes>
@@ -49,6 +44,9 @@
                                             <real key="value" value="300"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <outlet property="delegate" destination="iN0-l3-epB" id="4nT-NH-NiX"/>
+                                    </connections>
                                 </textView>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="3ON-0J-1ao">
                                     <rect key="frame" x="0.0" y="69.5" width="293" height="113.5"/>
@@ -73,17 +71,36 @@
                                         </label>
                                     </subviews>
                                 </stackView>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tos-of-ZcU">
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Oyb-kX-eOm">
                                     <rect key="frame" x="0.0" y="191" width="293" height="36"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="36" id="SnV-FT-1Sr"/>
-                                    </constraints>
-                                    <inset key="contentEdgeInsets" minX="16" minY="8" maxX="16" maxY="8"/>
-                                    <state key="normal" title="+ Add Option"/>
-                                    <connections>
-                                        <action selector="addChoicePressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="yU3-Xi-eq7"/>
-                                    </connections>
-                                </button>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="15t-c7-dXW" customClass="FLDashButton" customModule="flash" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="293" height="36"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="36" id="m5p-bG-phv"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="+ Add Card">
+                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            </state>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="dashBorderWidth">
+                                                    <real key="value" value="1"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="dashColor">
+                                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="8"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="addChoicePressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="MWv-pF-Wx2"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </stackView>
                             </subviews>
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rKo-bT-PHl">
@@ -113,17 +130,19 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="1hg-cn-8JH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="7Qt-vZ-9Ol"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="1hg-cn-8JH" secondAttribute="bottom" constant="16" id="QHy-ld-jeY"/>
-                <constraint firstItem="1hg-cn-8JH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="mj1-QM-Iua"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="1hg-cn-8JH" secondAttribute="bottom" id="QHy-ld-jeY"/>
+                <constraint firstItem="1hg-cn-8JH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="mj1-QM-Iua"/>
                 <constraint firstAttribute="trailing" secondItem="1hg-cn-8JH" secondAttribute="trailing" id="nUw-85-NHX"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="addButton" destination="tos-of-ZcU" id="AOR-9X-Ts0"/>
+                <outlet property="addButton" destination="15t-c7-dXW" id="ZUD-ZA-tQQ"/>
+                <outlet property="addStackView" destination="Oyb-kX-eOm" id="W2u-Mx-6cH"/>
                 <outlet property="cardView" destination="1hg-cn-8JH" id="u2p-DQ-oBU"/>
                 <outlet property="choiceStackView" destination="3ON-0J-1ao" id="Wmj-yg-kB9"/>
+                <outlet property="questionHeight" destination="z5h-Vq-jrG" id="ktu-5U-5cD"/>
                 <outlet property="questionTextView" destination="PMM-BR-Iuh" id="lcW-Za-k97"/>
                 <outlet property="titleLabel" destination="VOJ-MJ-UYP" id="Sge-op-wHh"/>
             </connections>
@@ -131,17 +150,14 @@
         </view>
     </objects>
     <designables>
+        <designable name="15t-c7-dXW">
+            <size key="intrinsicContentSize" width="78" height="30"/>
+        </designable>
         <designable name="PMM-BR-Iuh">
-            <size key="intrinsicContentSize" width="-1" height="30"/>
+            <size key="intrinsicContentSize" width="10" height="33"/>
         </designable>
     </designables>
     <resources>
         <image name="ic_v2_close" width="24" height="24"/>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

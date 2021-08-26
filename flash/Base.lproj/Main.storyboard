@@ -115,36 +115,6 @@
             </objects>
             <point key="canvasLocation" x="1103" y="113"/>
         </scene>
-        <!--AnimateVC-->
-        <scene sceneID="xFx-Si-vpk">
-            <objects>
-                <viewController storyboardIdentifier="FLAnimateVC" id="2v4-4y-4RQ" customClass="FLAnimateVC" customModule="flash" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="huK-ww-MZA">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QIt-lr-gvA" customClass="iCarousel">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="826"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="4yK-GB-PW7"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="QIt-lr-gvA" secondAttribute="bottom" constant="100" id="5aB-gW-U5r"/>
-                            <constraint firstItem="QIt-lr-gvA" firstAttribute="leading" secondItem="4yK-GB-PW7" secondAttribute="leading" id="Cil-aQ-1ig"/>
-                            <constraint firstAttribute="trailing" secondItem="QIt-lr-gvA" secondAttribute="trailing" id="N2J-b1-d4E"/>
-                            <constraint firstItem="QIt-lr-gvA" firstAttribute="top" secondItem="huK-ww-MZA" secondAttribute="top" id="ecm-R5-14o"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="carousel" destination="QIt-lr-gvA" id="Wk1-Dh-1GT"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qnd-qt-LYl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1122.8971962616822" y="-542.33261339092871"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="Zki-CC-sD0">
             <objects>
