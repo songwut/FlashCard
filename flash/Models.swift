@@ -7,6 +7,7 @@
 
 import UIKit
 import SVGKit
+import ObjectMapper
 
 open class DidAction {
     var handler: ((_ sender: Any?) -> Void)!
@@ -23,14 +24,6 @@ class FLButton: UIButton {
     var alignment: FLTextAlignment = .center
     var textStyle: FLTextStyle?
     var actionMenu: FLMenuList = .select
-}
-
-class FLStageView: UIView {
-    var page: FlashPageResult? {
-        didSet {
-            print("FLStageView frame: \(self.frame)")
-        }
-    }
 }
 
 enum FLTextStyle: String {
@@ -93,97 +86,80 @@ enum FLTextAlignment: String {
     }
 }
 
-class FlashElement {
+class FlashElement: FLBaseResult {
+    //Base
     var rotation: Float?
     var scale: Float = 1.0//default
     var tool: FLTool?
+    var x:NSNumber = 0
+    var y:NSNumber = 0
+    var width:NSNumber = 0
+    var height:NSNumber = 0
+    var type:FLType = .unknow
     var rawSize: CGSize?
-}
-
-class TextElement: FlashElement {
     
+    //text
     var text = ""
     var textColor = "#000000"
-    var fill:String?
-    var x:CGFloat = 50
-    var y:CGFloat = 50
     var fontSize:CGFloat = 36
-    var width:CGFloat = 0
     var flAlignment = FLTextAlignment.center
     var flTextStyle:[FLTextStyle] = [FLTextStyle]()//["bold", "italic", "underline"]
     
-    var widthPT:CGFloat?
-    
-    override init() {
-        super.init()
-        self.tool = .text
-        //self.rotation = 1.69
-    }
-}
-
-class ImageElement: FlashElement {
-    var src: String?
-    var textColor = "#005733"
-    var fill:String?
-    var x:CGFloat = 60
-    var y:CGFloat = 10
-    var width:CGFloat = 30
-    var height:CGFloat = 20
-    
-    var image: UIImage?
-    
+    //image
+    var src: String?//image,video.sticker,shape
+    var uiimage: UIImage?
     var graphicType: FLGraphicMenu?
     
-    override init() {
-        super.init()
-    }
-}
-
-class VectorElement: FlashElement {
-    var src = "https://openclipart.org/download/181651/manhammock.svg"
-    var textColor = "#005733"
-    var fill = "#8888EE"
-    var x:CGFloat = 70
-    var y:CGFloat = 70
-    var width:CGFloat = 40
-    var height:CGFloat = 20
-    
-    override init() {
-        
-    }
-}
-
-class VideoElement: FlashElement {
-    //https://test-videos.co.uk/bigbuckbunny/mp4-h264
-    var src = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    var textColor = "#005733"
-    var fill = "#8888EE"
-    var x:CGFloat = 50
-    var y:CGFloat = 80
-    var width:CGFloat = 80
-    var height:CGFloat = 30
+    //video
     var deviceUrl: URL?
     
-    override init() {
-        
-    }
-}
-
-class ArrowElement: FlashElement {
-    var textColor = "#005733"
-    var stroke = "#000000"
-    var strokeWidth:Float = 1
-    var fill = "#8888EE"
-    var x:CGFloat = 2
-    var y:CGFloat = 50
-    var width:CGFloat = 80
-    var height:CGFloat = 2
-    
-    override init() {
-        
-    }
-}
-
-class QuizElement: FlashElement {
+    //Quiz
     var question: FLQuestionResult?
+    
+    //maybe next
+    var fill: String?
+    //var stroke = "#000000"
+    var strokeWidth:Float?
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        //scale           <- map["scale"] not confirm
+        type            <- map["type"]
+        height          <- map["height"]
+        width           <- map["width"]
+        x               <- map["position_x"]
+        y               <- map["position_y"]
+        rotation        <- map["rotation"]
+        
+        text            <- map["text"]
+        textColor       <- map["text_color"]
+        fontSize        <- map["font_size"]
+        flAlignment     <- map["text_alignment"]
+        flTextStyle     <- map["text_style"]
+        
+        graphicType     <- map["type"]
+        src             <- map["src"]
+        
+        question        <- map["detail"]
+        
+        fill            <- map["fill"]
+        
+        if self.type == .text {
+            self.tool = .text
+        }
+    }
+    
+    class func with(_ dict: [String : Any]) -> FlashElement? {
+        let item = Mapper<FlashElement>().map(JSON: dict)
+        return item
+    }
 }
+//test element
+//https://test-videos.co.uk/bigbuckbunny/mp4-h264
+//var src = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
+//var deviceUrl: URL?
+//var src = "https://openclipart.org/download/181651/manhammock.svg"
+
+
+
+

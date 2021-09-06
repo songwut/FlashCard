@@ -23,7 +23,7 @@ final class FLStageViewController: UIViewController {
     @IBOutlet private weak var previewButton: UIButton!
     @IBOutlet private weak var listButton: UIButton!
     
-    private var stageView: UIView!
+    private var stageView: FLStageView!
     private var sliderView: FLSliderView!
     private var stageViewList = [FLStageView]()
     private var stageCell: UICollectionViewCell!
@@ -100,7 +100,8 @@ final class FLStageViewController: UIViewController {
         self.previewButton.tintColor = ColorHelper.text50()
         self.listButton.tintColor = ColorHelper.text50()
         
-        self.stageView = UIView()
+        self.stageView = FLStageView()
+        self.stageView.isEditor = true
         self.stageView.cornerRadius = 16
         self.stageView.backgroundColor = .white
         self.contentPageView.addSubview(self.stageView)
@@ -134,7 +135,7 @@ final class FLStageViewController: UIViewController {
         
         guard let stackView = self.sliderView.contentStackView else {return}
         let frame = self.stageView.frame
-        let stage = self.createStageView(frame.size)
+        let stage = self.createStageView(frame.size, creator: self.flCreator)
         stage.page = page
         stackView.insertArrangedSubview(stage, at: newIndex)
         self.stageViewList.insert(stage, at: newIndex)
@@ -150,7 +151,7 @@ final class FLStageViewController: UIViewController {
         
         guard let stackView = self.sliderView.contentStackView else {return}
         let frame = self.stageView.frame
-        let stage = self.createStageView(frame.size)
+        let stage = self.createStageView(frame.size, creator: self.flCreator)
         stage.page = page
         stackView.insertArrangedSubview(stage, at: newIndex)
         self.stageViewList.insert(stage, at: newIndex)
@@ -217,7 +218,7 @@ final class FLStageViewController: UIViewController {
             
             //FL#TEXT_SIZE
             self.stageView.frame = stageFrame
-            self.flCreator.stageRatio = stageFrame.width / FlashStyle.baseStageWidth
+            self.stageView.stageRatio = stageFrame.width / FlashStyle.baseStageWidth
             
             self.deletePageButton.center = CGPoint(x: self.stageView.center.x, y: self.stageView.frame.origin.y)
             
@@ -257,7 +258,7 @@ final class FLStageViewController: UIViewController {
         }
     }
     
-    func createStageView(_ size: CGSize) -> FLStageView {
+    func createStageView(_ size: CGSize, creator: FLCreator) -> FLStageView {
         let f = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         let stage = FLStageView(frame: f)
         stage.backgroundColor = .white
@@ -272,7 +273,7 @@ final class FLStageViewController: UIViewController {
         stackView.removeAllArranged()
         let frame = self.stageView.frame
         for page in self.viewModel.pageList {
-            let stage = self.createStageView(frame.size)
+            let stage = self.createStageView(frame.size, creator: self.flCreator)
             stage.page = page
             self.stageViewList.append(stage)
             stackView.addArrangedSubview(stage)
@@ -422,11 +423,6 @@ final class FLStageViewController: UIViewController {
                     self.createNewQuiz(question: q)
                 }
             })
-            
-            
-            
-            
-            
             self.toolVC.didClose = DidAction(handler: { (sender) in
                 //self.view.endEditing(true)
                 if let tool = sender as? FLTool, tool == .text {
@@ -452,14 +448,14 @@ final class FLStageViewController: UIViewController {
     }
     
     func createNewQuiz(question: FLQuestionResult) {
-        let element = QuizElement()
+        let element = FlashElement.with(["type": FLType.quiz.rawValue])!
         element.question = question
         let row = self.indexOfMajorCell()
         self.createElement(element, row: row)
     }
     
     func createNewText() {
-        let element = TextElement()
+        let element = FlashElement.with(["type": FLType.text.rawValue])!
         element.width = 0
         element.x = 50
         element.y = 50
@@ -469,17 +465,17 @@ final class FLStageViewController: UIViewController {
     }
     
     func createNewImage(_ image: UIImage) {
-        let element = ImageElement()
+        let element = FlashElement.with(["type": FLType.image.rawValue])!
         element.x = 50
         element.y = 50
-        element.image = image
+        element.uiimage = image
         element.rawSize = image.size
         let row = self.indexOfMajorCell()
         self.createElement(element, row: row)
     }
     
     func createNewGraphic(_ graphicType: FLGraphicMenu, graphic: FLGraphicResult) {
-        let element = ImageElement()
+        let element = FlashElement.with(["type": graphicType])!
         element.x = 50
         element.y = 50
         element.graphicType = graphicType
@@ -490,7 +486,7 @@ final class FLStageViewController: UIViewController {
     }
     
     func createNewVideo(_ url: URL, size: CGSize) {
-        let element = VideoElement()
+        let element = FlashElement.with(["type": FLType.video.rawValue])!
         element.x = 50
         element.y = 50
         element.deviceUrl = url
@@ -555,133 +551,123 @@ final class FLStageViewController: UIViewController {
     
     
     
-    func getStageView(at row: Int) -> UIView {
+    func getStageView(at row: Int) -> FLStageView {
         //let stageView = self.sliderView.contentStackView.arrangedSubviews[row]
         let stageView = self.stageViewList[row]
         return stageView
     }
     
     func createElement(_ element: FlashElement, row: Int) {
-        if let eText = element as? TextElement {
-            self.createTextView(eText, row: row)
+        if element.type == .text {
+            self.createTextView(element, row: row)
             
-        } else if let _ = element as? ImageElement {
+        } else if element.type == .image {
             self.createIView(element, row: row)
             
-        }  else if let _ = element as? VideoElement {
+        } else if element.type == .sticker {
             self.createIView(element, row: row)
             
-        }  else if let quiz = element as? QuizElement {
-            self.createQuizView(quiz, row: row)
+        } else if element.type == .shape {
+            self.createIView(element, row: row)
+            
+        }  else if element.type == .video {
+            self.createIView(element, row: row)
+            
+        }  else if element.type == .quiz {
+            self.createQuizView(element, row: row)
         }
+        self.viewModel.save(element: element, at: row)
     }
     
-    func createQuizView(_ element: QuizElement, row: Int) {
+    func createQuizView(_ element: FlashElement, row: Int) {
         self.flCreator.selectedView?.isSelected = false
         self.flCreator.selectedView?.isCreateNew = false
         
-        self.viewModel.save(element: element, at: row)
-        
         let stageView = self.getStageView(at: row)
-        guard let quizView = self.flCreator.createQuiz(element, in: stageView) else { return}
-        quizView.isUserInteractionEnabled = true
-        quizView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.moveVertical(_:))))
-        
-        quizView.alpha = 0.0
-        //quizView.updateLayout()
-        stageView.addSubview(quizView)
-        //quizView.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
-        quizView.didDelete = DidAction(handler: { [weak self] (sender) in
-            UIView.animateKeyframes(withDuration: 0.2, delay: 0, options:[]) {
-                quizView.alpha = 0.0
-            } completion: { (done) in
-                quizView.removeFromSuperview()
-            }
-            self?.toolVC.quizMenu?.setQuizActive(true)
-        })
-        quizView.createNewUI(question: element.question)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            quizView.alpha = 1.0
-//            quizView.popIn(fromScale: 0.5, toScale: quizView.scale, duration: 0.5, delay: 0) { (done) in
-//                print("popIn quizView: \(quizView.frame)")
-//            }
-            
+        if let quizView = stageView.createElement(element) as? FLQuizView {
+            quizView.createNewUI(question: element.question)
+            quizView.isUserInteractionEnabled = true
+            quizView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.moveVertical(_:))))
+            quizView.alpha = 0.0
+            //quizView.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
+            quizView.didDelete = DidAction(handler: { [weak self] (sender) in
+                UIView.animateKeyframes(withDuration: 0.2, delay: 0, options:[]) {
+                    quizView.alpha = 0.0
+                } completion: { (done) in
+                    quizView.removeFromSuperview()
+                }
+                self?.toolVC.quizMenu?.setQuizButtonEnable(true)
+            })
+            self.toolVC.quizMenu?.setQuizButtonEnable(false)
         }
         
-        print("quizView: \(quizView.frame)")
-
-        self.toolVC.quizMenu?.setQuizActive(false)
     }
     
     func createIView(_ element: FlashElement, row: Int) {
         self.flCreator.selectedView?.isSelected = false
         self.flCreator.selectedView?.isCreateNew = false
         
-        self.viewModel.save(element: element, at: row)
-        
         let stageView = self.getStageView(at: row)
-        guard let iView = self.flCreator.createImage(element, in: stageView) else { return}
-        
-        self.flCreator.selectedView = iView
-        
-        iView.gesture = SnapGesture(view: iView)
-        iView.gesture?.controlView = self.controlView
-//        iView.enableZoom()
-//        iView.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
-//
-//        iView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
-//        iView.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
-        iView.isCreateNew = true
-        //Auto select all test
-        //textElement.textView?.selectAll(self)
-        iView.textView?.becomeFirstResponder()
-        iView.isSelected = true
-        iView.textView?.delegate = self
-        
-        if let tool = element.tool {
-            self.openToolBar(tool: tool, iView: iView)
-            self.toolVC.open(tool, isCreating: true)
+        if let iView = stageView.createElement(element) as? InteractView {
+            self.flCreator.selectedView = iView
+            
+            iView.gesture = SnapGesture(view: iView)
+            iView.gesture?.controlView = self.controlView
+    //        iView.enableZoom()
+    //        iView.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
+    //
+    //        iView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
+    //        iView.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
+            iView.isCreateNew = true
+            //Auto select all test
+            //textElement.textView?.selectAll(self)
+            iView.textView?.becomeFirstResponder()
+            iView.isSelected = true
+            iView.textView?.delegate = self
+            
+            if let tool = element.tool {
+                self.openToolBar(tool: tool, iView: iView)
+                self.toolVC.open(tool, isCreating: true)
+            }
+            
+            let size = iView.frame
+            print("controlView width: \(size.width) ,controlView height: \(size.height)")
+            iView.update(controlView: self.controlView)
+            stageView.addSubview(self.controlView.deleteButton)
+            self.controlView.updateRelateView(iView)
         }
-        
-        let size = iView.frame
-        print("controlView width: \(size.width) ,controlView height: \(size.height)")
-        iView.update(controlView: self.controlView)
-        stageView.addSubview(self.controlView.deleteButton)
-        self.controlView.updateRelateView(iView)
     }
     
-    func createTextView(_ element: TextElement, row: Int) {
+    func createTextView(_ element: FlashElement, row: Int) {
         self.flCreator.selectedView?.isSelected = false
         self.flCreator.selectedView?.isCreateNew = false
         
         let stageView = self.getStageView(at: row)
-        self.viewModel.save(element: element, at: row)
-        
-        let textElement = self.flCreator.createText(element, in: stageView)
-        
-        self.flCreator.selectedView = textElement
-        
-        textElement.enableZoom()
-        textElement.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
-        
-        textElement.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
-        textElement.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
-        textElement.isCreateNew = true
-        //Auto select all test
-        //textElement.textView?.selectAll(self)
-        textElement.textView?.becomeFirstResponder()
-        textElement.isSelected = true
-        textElement.textView?.delegate = self
-        
-        self.openToolBar(tool: .text, iView: textElement)
-        self.toolVC.open(.text, isCreating: true)
-        
-        let size = textElement.frame
-        print("controlView width: \(size.width) ,controlView height: \(size.height)")
-        textElement.update(controlView: self.controlView)
-        stageView.addSubview(self.controlView)
-        stageView.addSubview(self.controlView.deleteButton)
-        self.controlView.updateRelateView(textElement)
+        if let textElement = stageView.createElement(element) as? InteractView {
+            self.flCreator.selectedView = textElement
+            
+            textElement.enableZoom()
+            textElement.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
+            
+            textElement.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
+            textElement.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
+            textElement.isCreateNew = true
+            //Auto select all test
+            //textElement.textView?.selectAll(self)
+            textElement.textView?.becomeFirstResponder()
+            textElement.isSelected = true
+            textElement.textView?.delegate = self
+            
+            self.openToolBar(tool: .text, iView: textElement)
+            self.toolVC.open(.text, isCreating: true)
+            
+            let size = textElement.frame
+            print("controlView width: \(size.width) ,controlView height: \(size.height)")
+            textElement.update(controlView: self.controlView)
+            stageView.addSubview(self.controlView)
+            stageView.addSubview(self.controlView.deleteButton)
+            self.controlView.updateRelateView(textElement)
+        }
     }
     
     private var startPosition: CGPoint!
@@ -799,7 +785,7 @@ final class FLStageViewController: UIViewController {
         textView.frame = CGRect(x: 0, y: 0, width: f.width, height: viewH)
         print("viewH:\(viewH)")
         let selfFrame = iView.frame
-        iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: selfFrame.width, height: viewH * self.flCreator.stageRatio)
+        iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: selfFrame.width, height: viewH * self.stageView.stageRatio)
         self.controlView.updateRelateView(iView)
         
         //let newSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
@@ -1009,7 +995,15 @@ extension UIImage {
 extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
-        if let img = info[.originalImage] as? UIImage {
+        if let originalImage = info[.originalImage] as? UIImage {
+            let size = originalImage.size
+            var newWidth: CGFloat = 1024
+            if size.height > size.width {// 3000, 2000
+                let ratio = size.width / size.height
+                newWidth = 1024 * ratio
+            }
+            //TODO: retest
+            let img = originalImage.resizeImage(newWidth: newWidth)
             let imgData = img.jpeg ?? img.png
             guard let data = imgData else { return }
             var imageSize: Int = data.count
@@ -1025,7 +1019,7 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
             if countImageElement >= 20 {
                 //TODO 20 image perpage
                 PopupManager.showWarning("You can upload 20 images per page !", at: self)
-            } else if mb >= 9.0 {
+            } else if mb >= 10.0 {
                 PopupManager.showWarning("Your image is too powerful\n(Maximum size is 4 MB)\nPlease upload again", at: self)
             } else {
                 self.createNewImage(img)

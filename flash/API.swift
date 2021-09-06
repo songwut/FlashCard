@@ -178,6 +178,31 @@ class API {
         
     }
     
+    class func requestForItems<T : Mappable>(_ request : APIRequest , completionHandler : @escaping (_ responseBody: ResponseBody?, _ items : [T]?, _ isCache : Bool, _ error : NSError?) -> Void) {
+        let method = Alamofire.HTTPMethod(rawValue: request.method.rawValue)
+        let urlString = request.urlStrWithFormat(request.url, method: method)
+        let params = request.params
+        let keyPath = request.responseKeyPath
+        let headers = request.headers
+        let encoding = getEncoding(request.paramsType)
+        ConsoleLog.trackAPI(request)
+        let r = AF.request(urlString, method: method, parameters: params, encoding: encoding, headers: HTTPHeaders(headers!), interceptor: nil)
+        r.validate(statusCode: 200..<300)
+        r.responseArray(queue: .main, keyPath: keyPath, context: nil) { (response:DataResponse<[T], AFError>) in
+            switch response.result {
+            case .success:
+                if let value = response.value {
+                    completionHandler(API.createResponseBody(response.data, urlResponse: response.response, url:request.url), value, false, nil)
+                } else {
+                    completionHandler(API.createResponseBody(response.data, urlResponse: response.response, url:request.url), nil, false, response.error! as NSError)
+                }
+                
+            case .failure(let error):
+                completionHandler(API.createResponseBody(response.data, urlResponse: response.response, url:request.url), nil, false, error as NSError)
+            }
+        }
+    }
+    
 }
 
 extension API {

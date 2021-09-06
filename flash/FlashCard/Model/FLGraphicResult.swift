@@ -36,3 +36,33 @@ class FLGraphicResult: FLBaseResult {
         imageBase64    <- map["image"]
     }
 }
+
+
+
+class FLColorPageResult: FLBaseResult {
+    var prv: Int?
+    var next: Int?
+    var count = 0
+    var pageSize = 0
+    var total = 0
+    var list = [FLColorResult]()
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        count        <- map["count"]
+        pageSize     <- map["page_size"]
+        total        <- map["total"]
+        list         <- map["results"]
+    }
+}
+
+class FLColorResult: FLBaseResult {
+    var code = ""
+    var hex = "FFFFFF"
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        code      <- map["code"]
+        hex       <- map["cl_code"]
+    }
+}

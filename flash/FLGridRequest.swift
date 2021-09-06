@@ -13,7 +13,9 @@ struct FLRequestSt {
 }
 
 enum EndPoint:String {
-    case ugcFlashList = "ugc/flash-card/%@/card/"
+    case ugcFlashCardDetail = "ugc/flash-card/%@/"
+    case ugcFlashCard = "ugc/flash-card/%@/card/"
+    case ugcCardList = "ugc/flash-card/%@/card/%@/"
     case ugcFlashCreate = "ugc/flash-card/"
     case ugcFlashColor = "ugc/flash-card/color/"
     case ugcFlashSticker = "ugc/flash-card/sticker/"//base64
@@ -23,7 +25,7 @@ enum EndPoint:String {
 class FLRequest: APIRequest {
     
     var flashId:Int = 0
-    var endPoint:EndPoint = .ugcFlashList
+    var endPoint:EndPoint = .ugcFlashCard
     var arguments = [String]()
     var selectList = [Int]()
     

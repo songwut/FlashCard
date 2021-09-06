@@ -80,10 +80,11 @@ extension FLChoiceView: GrowingTextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        self.choice?.value = textView.text
-        self.textView.updateLayout()
-        //self.textView.superview?.layoutIfNeeded()
-        ConsoleLog.show("FLChoiceView textViewDidChange")
+        if textView.text.count <= FlashStyle.maxCharChoice {
+            self.choice?.value = textView.text
+            self.textView.updateLayout()
+            ConsoleLog.show("FLChoiceView textViewDidChange: \(textView.text.count)")
+        }
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

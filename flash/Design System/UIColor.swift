@@ -8,9 +8,5 @@
 import UIKit
 
 var primaryColor: UIColor = UIColor("E7000A")
-var secondaryColor: UIColor = UIColor("E7000A")
+var secondaryColor: UIColor = UIColor("525252")
 
-extension UIColor {
-    
-
-}

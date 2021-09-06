@@ -26,8 +26,9 @@ final class FLItemView: UIView {
         self.titleLabel.text = text
     }
     
-    func setQuizActive(_ isActive:Bool) {
-        self.button.backgroundColor = isActive ? FlashStyle.bottonToolColor : FlashStyle.disableToolColor
+    func setQuizButtonEnable(_ isEnabled:Bool) {
+        self.button.isEnabled = isEnabled
+        self.button.backgroundColor = isEnabled ? FlashStyle.bottonToolColor : FlashStyle.disableToolColor
         self.button.tintColor = .white
     }
     

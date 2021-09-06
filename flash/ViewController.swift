@@ -61,6 +61,45 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func openFlashPlayer(_ sender: UIButton) {
+        let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController")
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func openProgressUI(_ sender: UIButton) {
+        
+        let s = UIStoryboard(name: "FlashCard", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "FLProgressUIController")
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func categoryListPressed(_ sender: UIButton) {
+        JSON.read("ugc-flash-card-category") { (object) in
+            if let dictList = object as? [[String : Any]],
+               let detail = UGCCategoryPageResult(JSON: ["results": dictList]) {
+                let mockList = detail.list
+                let host = UIHostingController(rootView: UGCCatagoryListView(items: mockList))
+                if let nav = self.navigationController {
+                    nav.pushViewController(host, animated: true)
+                } else {
+                    self.present(host, animated: true, completion: nil)
+                }
+            }
+            
+        }
+        
+        
+    }
+    
     
     @IBAction func popupImageLimitPressed(_ sender: UIButton) {
         PopupManager.showWarning("You can upload 20 images per page !", at: self)
@@ -80,6 +119,8 @@ class ViewController: UIViewController {
             UserManager.shared.updateProfile {
                 if let user = UserManager.shared.profile {
                     PopupManager.showWarning("Login SUCCESS: User ID  \(user.id)", at: self)
+                } else {
+                    self.loginAPI()
                 }
             }
         } else {

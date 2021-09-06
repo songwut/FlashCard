@@ -31,15 +31,13 @@ extension UIImageView {
 struct FLCreator {
     
     var selectedView: InteractView?
-    var stageView: UIView!
+    var stageView: FLStageView!
     
-    var stageRatio:CGFloat = 1//use for scale TextElement
-    
-    init(stage: UIView) {
+    init(stage: FLStageView) {
         self.stageView = stage
     }
     
-    func manageFont(element:TextElement) -> UIFont {
+    func manageFont(element:FlashElement) -> UIFont {
         let isItalic = element.flTextStyle.contains(.italic)
         var font = FontHelper.getFontSystem(element.fontSize, font: .text, isItalic: isItalic)
         if element.flTextStyle.contains(.bold) {
@@ -48,17 +46,17 @@ struct FLCreator {
         return font
     }
     
-    func createText(_ element:TextElement ,in stage: UIView) -> InteractView {
-        let viewX = (stage.frame.width * element.x / 100)
-        let viewY = ((stage.frame.height * element.y) / 100)
-        var viewW = ((stage.frame.width * element.width) / 100)
-        var viewH = ((stage.frame.height * element.width) / 100)
+    func createText(_ element:FlashElement ,in stage: FLStageView) -> InteractView {
+        let viewX = (stage.frame.width * CGFloat(element.x) / 100)
+        let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
+        var viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
+        var viewH = ((stage.frame.height * CGFloat(element.width)) / 100)
         
         let iView = InteractView()
         iView.type = .text
         let font:UIFont = self.manageFont(element: element)
         
-        let scale = (element.scale + Float(self.stageRatio)) - 1.0
+        let scale = (element.scale + Float(stage.stageRatio)) - 1.0
         
         let textView = FLTextView()
         textView.text = element.text
@@ -125,12 +123,11 @@ struct FLCreator {
         return iView
     }
     
-    func createImage(_ e: FlashElement ,in stage: UIView) -> InteractView? {
-        guard let element = e as? ImageElement else { return nil }
-        let viewX = (stage.frame.width * element.x / 100)
-        let viewY = ((stage.frame.height * element.y) / 100)
-        var viewW = ((stage.frame.width * element.width) / 100)
-        var viewH = ((stage.frame.height * element.height) / 100)
+    func createImage(_ element: FlashElement ,in stage: FLStageView) -> InteractView {
+        let viewX = (stage.frame.width * CGFloat(element.x) / 100)
+        let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
+        var viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
+        var viewH = ((stage.frame.height * CGFloat(element.height)) / 100)
         
         if let _ = element.graphicType {//fix size
             viewW = stage.frame.width * FlashStyle.graphic.displayRatio
@@ -138,7 +135,7 @@ struct FLCreator {
         }
         
         var size = CGSize(width: viewW, height: viewH)
-        if let rawSize = e.rawSize {
+        if let rawSize = element.rawSize {
             let ratio = rawSize.height / rawSize.width
             let w = stage.frame.width * 0.8//80% of stage
             let h = w * ratio//height by ratio
@@ -152,7 +149,7 @@ struct FLCreator {
         let imageview = UIImageView()
         imageview.frame = imageviewFrame
         
-        if let image = element.image {
+        if let image = element.uiimage {
             imageview.image = image
             
         } else if let imgSrc = element.src {
@@ -171,8 +168,7 @@ struct FLCreator {
         return iView
     }
     
-    func createQuiz(_ e: FlashElement ,in stage: UIView) -> FLQuizView? {
-        guard let element = e as? QuizElement else { return nil }
+    func createQuiz(_ element: FlashElement ,in stage: FLStageView) -> FLQuizView {
         let originalFrame = CGRect(x: 0, y: 0, width: 325, height: 200)
         let stageW = stage.frame.width
         let quizW: CGFloat = 293
@@ -192,11 +188,11 @@ struct FLCreator {
         return quizView
     }
     
-    func createVideo(_ element: VideoElement ,in stage: UIView) -> InteractView {
-        let viewX = (stage.frame.width * element.x / 100)
-        let viewY = ((stage.frame.height * element.y) / 100)
-        let viewW = ((stage.frame.width * element.width) / 100)
-        let viewH = ((stage.frame.height * element.height) / 100)
+    func createVideo(_ element: FlashElement ,in stage: FLStageView) -> InteractView {
+        let viewX = (stage.frame.width * CGFloat(element.x) / 100)
+        let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
+        let viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
+        let viewH = ((stage.frame.height * CGFloat(element.height)) / 100)
         let playerViewFrame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
         
         var playerLayer: AVPlayerLayer!
@@ -213,7 +209,7 @@ struct FLCreator {
         
         stage.addSubview(playerView)
         
-        if let url = URL(string: element.src) {
+        if let src = element.src, let url = URL(string: src) {
             playerItem = AVPlayerItem(url: url)
             player.replaceCurrentItem(with: playerItem)
             DispatchQueue.main.async {
@@ -233,11 +229,11 @@ struct FLCreator {
         return iView
     }
     
-    func createVector(_ element:VectorElement ,in stage: UIView) -> InteractView {
-        let viewX = (stage.frame.width * element.x / 100)
-        let viewY = ((stage.frame.height * element.y) / 100)
-        let viewW = ((stage.frame.width * element.width) / 100)
-        let viewH = ((stage.frame.height * element.height) / 100)
+    func createVector(_ element:FlashElement ,in stage: FLStageView) -> InteractView {
+        let viewX = (stage.frame.width * CGFloat(element.x) / 100)
+        let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
+        let viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
+        let viewH = ((stage.frame.height * CGFloat(element.height)) / 100)
         let imageviewFrame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
         
         let svg = URL(string: "https://openclipart.org/download/181651/manhammock.svg")!
@@ -246,7 +242,9 @@ struct FLCreator {
         let imageview = UIImageView()
         imageview.frame = imageviewFrame
         imageview.image = receivedimage.uiImage
-        imageview.backgroundColor = UIColor(element.fill)
+        if let fill = element.fill {
+            imageview.backgroundColor = UIColor(fill)
+        }
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
@@ -261,11 +259,11 @@ struct FLCreator {
         return iView
     }
     
-    func createArrow(_ element: ArrowElement ,in stage: UIView) -> InteractView {
-        let viewX = (stage.frame.width * element.x / 100)
-        let viewY = ((stage.frame.height * element.y) / 100)
-        let viewW = ((stage.frame.width * element.width) / 100)
-        let viewH = ((stage.frame.height * element.height) / 100)
+    func createArrow(_ element: FlashElement ,in stage: FLStageView) -> InteractView {
+        let viewX = (stage.frame.width * CGFloat(element.x) / 100)
+        let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
+        let viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
+        let viewH = ((stage.frame.height * CGFloat(element.height)) / 100)
         
         let viewFrame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
         
@@ -273,7 +271,7 @@ struct FLCreator {
         view.frame = viewFrame
         let start = CGPoint(x: 0, y: viewFrame.height / 2)
         let end = CGPoint(x: viewFrame.width, y: viewFrame.height / 2)
-        let strokeWidth = ((stage.frame.width * CGFloat(element.strokeWidth)) / 100)
+        let strokeWidth = ((stage.frame.width * CGFloat(element.strokeWidth ?? 1)) / 100)
         self.drawArrow(start: start, end: end, lineWidth: strokeWidth, in: view)
         
         let center = CGPoint(x: viewX, y: viewY)
@@ -287,7 +285,7 @@ struct FLCreator {
         return iView
     }
     
-    func drawArrow(start:CGPoint, end:CGPoint, lineWidth:CGFloat, in view:UIView) {
+    func drawArrow(start:CGPoint, end:CGPoint, lineWidth:CGFloat, in view: UIView) {
         let arrow = UIBezierPath()
         arrow.addArrow(start: start, end: end, pointerLineLength: 30, arrowAngle: CGFloat(Double.pi / 4))
         let arrowLayer = CAShapeLayer()

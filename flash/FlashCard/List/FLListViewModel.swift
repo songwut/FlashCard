@@ -19,7 +19,7 @@ class FLListViewModel: BaseViewModel {
     }
     
     func callApiList(completion: @escaping () -> ()) {
-        JSON.read("flash-card-item-list") { (object) in
+        JSON.read("ugc-flash-card-id-card") { (object) in
             guard let JSON = object as? [String: Any] else { return completion() }
             self.listResult = FLListResult(JSON: JSON)
             if let listResult = self.listResult {

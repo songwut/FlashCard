@@ -59,8 +59,6 @@ class FLQuizView: UIView {
             self.questionTextView.placeholder = "Write your question."
             self.questionTextView.placeholderColor = .white
             
-            self.questionTextView.returnKeyType = .done
-            self.questionTextView.enablesReturnKeyAutomatically = true
             self.questionTextView.maxLength = FlashStyle.maxCharQuestion
             
             guard let question = self.question else { return }
@@ -145,9 +143,12 @@ extension FLQuizView: GrowingTextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        self.question?.value = textView.text
-        self.questionTextView.updateLayout()
-        ConsoleLog.show("question textViewDidChange")
+        if textView.text.count  <= FlashStyle.maxCharQuestion {
+            self.question?.value = textView.text
+            self.questionTextView.updateLayout()
+            ConsoleLog.show("question textViewDidChange: \(textView.text.count)")
+        }
+        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

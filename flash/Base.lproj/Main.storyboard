@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="88" width="428" height="804"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Vb-Qd-kfA">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="250"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="400"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gj1-Dh-DKf">
                                                 <rect key="frame" x="0.0" y="0.0" width="428" height="50"/>
@@ -30,8 +30,38 @@
                                                 </constraints>
                                                 <state key="normal" title="Stage UI"/>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qdn-nQ-1rx">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PdI-EO-BW0">
                                                 <rect key="frame" x="0.0" y="50" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="wrf-jQ-vwt"/>
+                                                </constraints>
+                                                <state key="normal" title="Flash Player"/>
+                                                <connections>
+                                                    <action selector="openFlashPlayer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xqN-jx-4BM"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9l-uZ-GAd">
+                                                <rect key="frame" x="0.0" y="100" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="plM-se-gEN"/>
+                                                </constraints>
+                                                <state key="normal" title="Category list"/>
+                                                <connections>
+                                                    <action selector="categoryListPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Lvc-rs-uR6"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tb9-kW-HCk">
+                                                <rect key="frame" x="0.0" y="150" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="Muc-J1-muq"/>
+                                                </constraints>
+                                                <state key="normal" title="Progress UI[SwiftUI]"/>
+                                                <connections>
+                                                    <action selector="openProgressUI:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Urv-b2-Gsi"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qdn-nQ-1rx">
+                                                <rect key="frame" x="0.0" y="200" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="GBb-jW-mKC"/>
                                                 </constraints>
@@ -41,7 +71,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH6-xe-kb2">
-                                                <rect key="frame" x="0.0" y="100" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="250" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="XCD-AG-Hk7"/>
                                                 </constraints>
@@ -51,7 +81,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9s-hA-vSV">
-                                                <rect key="frame" x="0.0" y="150" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="300" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="kgS-IN-4FC"/>
                                                 </constraints>
@@ -61,7 +91,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0zN-T8-ANS">
-                                                <rect key="frame" x="0.0" y="200" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="350" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="soc-hm-AgZ"/>
                                                 </constraints>

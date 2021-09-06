@@ -6,6 +6,11 @@
 //
 
 import UIKit
+import SwiftUI
+
+extension UIFont {
+    var font: Font { Font(self) }
+}
 
 enum AppFont: Int {
     case regular = 0

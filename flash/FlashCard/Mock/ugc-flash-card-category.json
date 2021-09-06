@@ -1,0 +1,4606 @@
+[
+    {
+        "id": 914,
+        "name": "Integration Test Permission",
+        "child_list": null
+    },
+    {
+        "id": 750,
+        "name": "Sample Category 01",
+        "child_list": null
+    },
+    {
+        "id": 92,
+        "name": "Category Course LC1",
+        "child_list": [
+            {
+                "id": 93,
+                "name": "Category Course LC2",
+                "child_list": [
+                    {
+                        "id": 94,
+                        "name": "Category Course LC3",
+                        "child_list": [
+                            {
+                                "id": 95,
+                                "name": "Category Course LC4",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "name": "Test Category",
+        "child_list": [
+            {
+                "id": 10,
+                "name": "Cat L2",
+                "child_list": [
+                    {
+                        "id": 11,
+                        "name": "Cat L3",
+                        "child_list": [
+                            {
+                                "id": 12,
+                                "name": "Cat L4",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 13,
+                "name": "Cat LL2",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Computer Science",
+        "child_list": [
+            {
+                "id": 15,
+                "name": "Software Development",
+                "child_list": [
+                    {
+                        "id": 17,
+                        "name": "Backend Survice",
+                        "child_list": [
+                            {
+                                "id": 19,
+                                "name": "API",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 18,
+                        "name": "Frontends",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "name": "Communication",
+        "child_list": [
+            {
+                "id": 3,
+                "name": "CommunicationB Level 2-2",
+                "child_list": [
+                    {
+                        "id": 6,
+                        "name": "CommunicationB Level 3-1",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "name": "CommunicationA Level 2-1",
+                "child_list": [
+                    {
+                        "id": 4,
+                        "name": "CommunicationA Level 3-1",
+                        "child_list": [
+                            {
+                                "id": 5,
+                                "name": "CommunicationA Level 4-1",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "name": "releasse 2019.5.14",
+        "child_list": [
+            {
+                "id": 8,
+                "name": "vel 2",
+                "child_list": null
+            },
+            {
+                "id": 128,
+                "name": "UAT_Beauty Level2",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "name": "Category Course LB1",
+        "child_list": [
+            {
+                "id": 89,
+                "name": "Category Course LB2",
+                "child_list": [
+                    {
+                        "id": 90,
+                        "name": "Category Course LB3",
+                        "child_list": [
+                            {
+                                "id": 91,
+                                "name": "Category Course LB4",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 62,
+        "name": "CatActivity",
+        "child_list": [
+            {
+                "id": 63,
+                "name": "Level2 : 2019-6-25 16:31:2",
+                "child_list": [
+                    {
+                        "id": 64,
+                        "name": "Level3 : 2019-6-25 16:31:2",
+                        "child_list": [
+                            {
+                                "id": 65,
+                                "name": "Level4 : 2019-6-25 16:31:2",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 66,
+        "name": "Category Puppeteer : 2019-6-25 17:40:57",
+        "child_list": [
+            {
+                "id": 67,
+                "name": "Level2 : 2019-6-25 17:40:57",
+                "child_list": [
+                    {
+                        "id": 68,
+                        "name": "Level3 : 2019-6-25 17:40:57",
+                        "child_list": [
+                            {
+                                "id": 69,
+                                "name": "Level4 : 2019-6-25 17:40:57",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 70,
+        "name": "Category Puppeteer : 2019-6-25 17:53:54",
+        "child_list": [
+            {
+                "id": 71,
+                "name": "Level2 : 2019-6-25 17:53:54",
+                "child_list": [
+                    {
+                        "id": 72,
+                        "name": "Level3 : 2019-6-25 17:53:54",
+                        "child_list": [
+                            {
+                                "id": 73,
+                                "name": "Level4 : 2019-6-25 17:53:54",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 74,
+        "name": "อย่าใส่Content เข้ามานะคะ555",
+        "child_list": [
+            {
+                "id": 75,
+                "name": "อย่าใส่ เวล2",
+                "child_list": [
+                    {
+                        "id": 76,
+                        "name": "อย่าใส่ เวล3",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 77,
+        "name": "test",
+        "child_list": null
+    },
+    {
+        "id": 79,
+        "name": "Design",
+        "child_list": [
+            {
+                "id": 80,
+                "name": "UX",
+                "child_list": [
+                    {
+                        "id": 82,
+                        "name": "UX-1",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 81,
+                "name": "UI",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 83,
+        "name": "ardty",
+        "child_list": null
+    },
+    {
+        "id": 121,
+        "name": "fffff",
+        "child_list": null
+    },
+    {
+        "id": 122,
+        "name": "ห้ามใช้ PTT Report",
+        "child_list": [
+            {
+                "id": 123,
+                "name": "ห้ามใช้ Ptt report level 2",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 124,
+        "name": "[ห้ามใช้!!!] Cat vel1 PTT Report",
+        "child_list": [
+            {
+                "id": 125,
+                "name": "[ห้ามใช้!!!] Cat vel2 PTT Report",
+                "child_list": [
+                    {
+                        "id": 126,
+                        "name": "[ห้ามใช้!!!] Cat vel3 PTT Report",
+                        "child_list": [
+                            {
+                                "id": 127,
+                                "name": "[ห้ามใช้!!!] Cat vel4 PTT Report",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 129,
+        "name": "cp cp",
+        "child_list": [
+            {
+                "id": 130,
+                "name": "UAT_Beauty Level2",
+                "child_list": [
+                    {
+                        "id": 131,
+                        "name": "UAT_Beauty Level3",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 132,
+        "name": "zzzzzzzz",
+        "child_list": null
+    },
+    {
+        "id": 142,
+        "name": "Coding-jade",
+        "child_list": [
+            {
+                "id": 143,
+                "name": "Test Create content",
+                "child_list": [
+                    {
+                        "id": 144,
+                        "name": "Test Create Instructor",
+                        "child_list": null
+                    },
+                    {
+                        "id": 145,
+                        "name": "Test Create Category",
+                        "child_list": null
+                    },
+                    {
+                        "id": 146,
+                        "name": "Test Create Provider",
+                        "child_list": null
+                    },
+                    {
+                        "id": 147,
+                        "name": "Test Create Location",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 148,
+        "name": "11111",
+        "child_list": [
+            {
+                "id": 776,
+                "name": "11311341",
+                "child_list": null
+            },
+            {
+                "id": 777,
+                "name": "222",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 78,
+        "name": "Soft Skill",
+        "child_list": null
+    },
+    {
+        "id": 149,
+        "name": "20200317-111026-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 150,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 152,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 157,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 158,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 153,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 159,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 151,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 154,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 155,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 160,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 156,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 161,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 162,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 84,
+        "name": "Category Course LA1",
+        "child_list": [
+            {
+                "id": 85,
+                "name": "Category Course LA2",
+                "child_list": [
+                    {
+                        "id": 86,
+                        "name": "Category Course LA3",
+                        "child_list": [
+                            {
+                                "id": 87,
+                                "name": "Category Course LA4",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 726,
+                        "name": "Category Course LA5",
+                        "child_list": [
+                            {
+                                "id": 727,
+                                "name": "Category Course LA6",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 163,
+        "name": "20200317-121323-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 164,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 166,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 171,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 172,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 167,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 173,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 165,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 168,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 169,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 174,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 170,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 175,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 176,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 177,
+        "name": "20200317-122553-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 178,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 180,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 185,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 186,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 181,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 187,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 179,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 182,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 183,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 188,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 184,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 189,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 190,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 96,
+        "name": "Category Class L1",
+        "child_list": [
+            {
+                "id": 97,
+                "name": "Category Class L2",
+                "child_list": [
+                    {
+                        "id": 98,
+                        "name": "Category Class L3",
+                        "child_list": [
+                            {
+                                "id": 99,
+                                "name": "Category Class L4",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 191,
+        "name": "20200317-124442-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 192,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 194,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 199,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 200,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 195,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 201,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 193,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 196,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 197,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 202,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 198,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 203,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 204,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 103,
+        "name": "Category Course LA21",
+        "child_list": [
+            {
+                "id": 102,
+                "name": "Category Course LA22",
+                "child_list": [
+                    {
+                        "id": 101,
+                        "name": "Category Course LA23",
+                        "child_list": [
+                            {
+                                "id": 100,
+                                "name": "Category Course LA24",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 205,
+        "name": "20200317-125558-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 206,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 208,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 213,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 214,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 209,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 215,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 207,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 210,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 211,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 216,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 212,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 217,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 218,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 107,
+        "name": "FF Class L1",
+        "child_list": [
+            {
+                "id": 106,
+                "name": "FF Class L2",
+                "child_list": [
+                    {
+                        "id": 105,
+                        "name": "FF Class L3",
+                        "child_list": [
+                            {
+                                "id": 104,
+                                "name": "FF Class L4",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 219,
+        "name": "20200317-150138-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 220,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 222,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 223,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 221,
+                "name": "Level 2 (2)",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 108,
+        "name": "(CP)Compulsory(Business&People)",
+        "child_list": [
+            {
+                "id": 769,
+                "name": "cat2",
+                "child_list": null
+            },
+            {
+                "id": 770,
+                "name": "adasdasd",
+                "child_list": [
+                    {
+                        "id": 773,
+                        "name": "test child",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 763,
+                "name": "code12222",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 224,
+        "name": "20200317-150608-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 225,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 227,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 232,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 233,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 228,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 234,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 226,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 229,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 230,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 235,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 231,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 236,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 237,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 110,
+        "name": "Core Program(CP)",
+        "child_list": [
+            {
+                "id": 109,
+                "name": "(CP)Organization Knowledge",
+                "child_list": null
+            },
+            {
+                "id": 111,
+                "name": "(CP)Direction / Assignment",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 238,
+        "name": "20200317-152509-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 239,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 241,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 246,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 247,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 242,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 248,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 240,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 243,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 244,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 249,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 245,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 250,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 251,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 113,
+        "name": "Core Program",
+        "child_list": [
+            {
+                "id": 112,
+                "name": "Compulsory(Business&People)",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 252,
+        "name": "20200317-154222-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 253,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 255,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 260,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 261,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 256,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 262,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 254,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 257,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 258,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 263,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 259,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 264,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 265,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 266,
+        "name": "20200317-155428-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 267,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 269,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 274,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 275,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 270,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 276,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 268,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 271,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 272,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 277,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 273,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 278,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 279,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 115,
+        "name": "Leadership Development Program",
+        "child_list": [
+            {
+                "id": 114,
+                "name": "Public",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 280,
+        "name": "20200317-161346-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 281,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 283,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 288,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 289,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 284,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 290,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 282,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 285,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 286,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 291,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 287,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 292,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 117,
+        "name": "Functional Program",
+        "child_list": [
+            {
+                "id": 116,
+                "name": "Common Functional",
+                "child_list": null
+            },
+            {
+                "id": 118,
+                "name": "In-Houses",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 293,
+        "name": "20200317-163912-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 294,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 296,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 301,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 302,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 297,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 303,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 295,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 298,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 299,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 304,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 300,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 305,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 306,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 120,
+        "name": "Elective Program",
+        "child_list": [
+            {
+                "id": 119,
+                "name": "Essential Program",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 307,
+        "name": "20200317-165308-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 308,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 310,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 315,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 316,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 311,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 317,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 309,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 312,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 313,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 318,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 314,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 319,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 320,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 133,
+        "name": "Language",
+        "child_list": null
+    },
+    {
+        "id": 321,
+        "name": "20200317-173038-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 322,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 324,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 325,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 323,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 326,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 134,
+        "name": "Digital Skills & Literacy",
+        "child_list": null
+    },
+    {
+        "id": 327,
+        "name": "20200317-173420-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 328,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 330,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 335,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 336,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 331,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 337,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 329,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 332,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 333,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 338,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 334,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 339,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 340,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 135,
+        "name": "Finance",
+        "child_list": null
+    },
+    {
+        "id": 341,
+        "name": "20200317-174453-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 342,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 344,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 349,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 350,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 345,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 351,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 343,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 346,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 347,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 352,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 348,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 353,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 354,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 136,
+        "name": "Accountancy",
+        "child_list": null
+    },
+    {
+        "id": 355,
+        "name": "20200317-190701-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 356,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 358,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 359,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 357,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 360,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 137,
+        "name": "Management",
+        "child_list": null
+    },
+    {
+        "id": 361,
+        "name": "20200317-191241-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 362,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 364,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 369,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 370,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 365,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 371,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 363,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 366,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 367,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 372,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 368,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 373,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 374,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 138,
+        "name": "Data Analysis & Statistics",
+        "child_list": null
+    },
+    {
+        "id": 375,
+        "name": "20200317-203831-publish-upload-image-subcategory",
+        "child_list": null
+    },
+    {
+        "id": 139,
+        "name": "Productivity",
+        "child_list": null
+    },
+    {
+        "id": 376,
+        "name": "20200317-204252-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 377,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 379,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 384,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 385,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 380,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 386,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 378,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 381,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 382,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 387,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 383,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 388,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 389,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 140,
+        "name": "Marketing",
+        "child_list": null
+    },
+    {
+        "id": 390,
+        "name": "20200317-220344-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 391,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 393,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 398,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 399,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 394,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 400,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 392,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 395,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 396,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 401,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 397,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 402,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 403,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 141,
+        "name": "Leadership",
+        "child_list": null
+    },
+    {
+        "id": 404,
+        "name": "20200317-231715-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 405,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 407,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 412,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 413,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 408,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 414,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 406,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 409,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 410,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 415,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 411,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 416,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 417,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 418,
+        "name": "20200318-104656-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 419,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 421,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 426,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 427,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 422,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 428,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 420,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 423,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 424,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 429,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 425,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 430,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 431,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 432,
+        "name": "20200318-115824-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 433,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 435,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 440,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 441,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 436,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 442,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 434,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 437,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 438,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 443,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 439,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 444,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 445,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 446,
+        "name": "20200318-125736-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 447,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 449,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 454,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 455,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 450,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 456,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 448,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 451,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 452,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 457,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 453,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 458,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 459,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 460,
+        "name": "20200318-133346-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 461,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 463,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 468,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 469,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 464,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 470,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 462,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 465,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 466,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 471,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 467,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 472,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 473,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 474,
+        "name": "20200318-151228-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 475,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 477,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 482,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 483,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 478,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 484,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 476,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 479,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 480,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 485,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 481,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 486,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 487,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 488,
+        "name": "20200318-162720-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 489,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 491,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 496,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 497,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 492,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 498,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 490,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 493,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 494,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 499,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 495,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 500,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 501,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 502,
+        "name": "123213123",
+        "child_list": null
+    },
+    {
+        "id": 503,
+        "name": "20200318-181535-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 504,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 506,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 511,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 512,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 507,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 513,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 505,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 508,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 509,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 514,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 510,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 515,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 516,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 517,
+        "name": "20200318-183311-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 518,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 520,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 525,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 526,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 521,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 527,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 519,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 522,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 523,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 528,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 524,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 529,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 530,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 531,
+        "name": "20200318-214417-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 532,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 534,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 539,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 540,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 535,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 541,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 533,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 536,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 537,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 542,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 538,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 543,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 544,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 545,
+        "name": "20200318-233647-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 546,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 548,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 553,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 554,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 549,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 555,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 547,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 550,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 551,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 556,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 552,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 557,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 558,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 559,
+        "name": "20200319-085427-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 560,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 562,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 567,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 568,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 563,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 569,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 561,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 564,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 565,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 570,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 566,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 571,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 572,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 573,
+        "name": "20200319-110856-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 574,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 576,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 581,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 582,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 577,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 583,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 575,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 578,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 579,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 584,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 580,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 585,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 586,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 587,
+        "name": "20200319-124422-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 588,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 590,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 595,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 596,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 591,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 597,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 589,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 592,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 593,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 598,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 594,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 599,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 600,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 601,
+        "name": "20200323-162740-unpublish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 602,
+        "name": "20200323-162740-publish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 603,
+        "name": "20200323-162740-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 604,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 606,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 611,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 612,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 607,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 613,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 605,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 608,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 609,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 614,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 610,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 615,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 616,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 617,
+        "name": "20200323-171135-unpublish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 618,
+        "name": "20200323-171135-publish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 619,
+        "name": "20200323-171135-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 620,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 622,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 627,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 628,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 623,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 629,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 621,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 624,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 625,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 630,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 626,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 631,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 632,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 633,
+        "name": "20200323-185114-unpublish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 634,
+        "name": "20200323-185114-publish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 635,
+        "name": "20200323-185114-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 636,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 638,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 643,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 644,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 639,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 645,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 637,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 640,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 641,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 646,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 642,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 647,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 648,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 649,
+        "name": "20200324-144131-unpublish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 650,
+        "name": "20200324-144131-publish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 651,
+        "name": "20200324-144131-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 652,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 654,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 659,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 660,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 655,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 661,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 653,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 656,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 657,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 662,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 658,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 663,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 664,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 665,
+        "name": "20200324-151841-unpublish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 666,
+        "name": "20200324-151841-publish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 667,
+        "name": "20200324-151841-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 668,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 670,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 675,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 676,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 671,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 677,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 669,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 672,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 673,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 678,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 674,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 679,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 680,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 681,
+        "name": "20200324-160604-unpublish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 682,
+        "name": "20200324-160604-publish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 683,
+        "name": "20200324-160604-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 684,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 686,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 691,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 692,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 687,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 693,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 685,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 688,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 689,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 694,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 690,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 695,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 696,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 697,
+        "name": "20200324-164114-unpublish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 698,
+        "name": "20200324-164114-publish-upload-image",
+        "child_list": null
+    },
+    {
+        "id": 699,
+        "name": "20200324-164114-publish-upload-image-subcategory",
+        "child_list": [
+            {
+                "id": 700,
+                "name": "Level 2 (1)",
+                "child_list": [
+                    {
+                        "id": 702,
+                        "name": "Level 3 (1 > 1)",
+                        "child_list": [
+                            {
+                                "id": 707,
+                                "name": "Level 4 (1 > 1 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 708,
+                                "name": "Level 4 (1 > 1 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 703,
+                        "name": "Level 3 (1 > 2)",
+                        "child_list": [
+                            {
+                                "id": 709,
+                                "name": "Level 4 (1 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 701,
+                "name": "Level 2 (2)",
+                "child_list": [
+                    {
+                        "id": 704,
+                        "name": "Level 3 (2 > 1)",
+                        "child_list": null
+                    },
+                    {
+                        "id": 705,
+                        "name": "Level 3 (2 > 2)",
+                        "child_list": [
+                            {
+                                "id": 710,
+                                "name": "Level 4 (2 > 2 > 1)",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 706,
+                        "name": "Level 3 (2 > 3)",
+                        "child_list": [
+                            {
+                                "id": 711,
+                                "name": "Level 4 (2 > 3 > 1)",
+                                "child_list": null
+                            },
+                            {
+                                "id": 712,
+                                "name": "Level 4 (2 > 3 > 2)",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 719,
+        "name": "None",
+        "child_list": [
+            {
+                "id": 720,
+                "name": "Sample Category 01",
+                "child_list": [
+                    {
+                        "id": 721,
+                        "name": "Sample Category 02",
+                        "child_list": [
+                            {
+                                "id": 722,
+                                "name": "Sample Category 03",
+                                "child_list": [
+                                    {
+                                        "id": 723,
+                                        "name": "Sample Category 04",
+                                        "child_list": null
+                                    },
+                                    {
+                                        "id": 724,
+                                        "name": "Sample Category 0401",
+                                        "child_list": null
+                                    },
+                                    {
+                                        "id": 725,
+                                        "name": "Sample Category 0401",
+                                        "child_list": null
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 729,
+        "name": "Corporate Learning Program",
+        "child_list": [
+            {
+                "id": 780,
+                "name": "Mandatory",
+                "child_list": [
+                    {
+                        "id": 782,
+                        "name": "Safety",
+                        "child_list": null
+                    },
+                    {
+                        "id": 783,
+                        "name": "Management System & Complicance",
+                        "child_list": null
+                    },
+                    {
+                        "id": 784,
+                        "name": "Other",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 781,
+                "name": "Selective",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 751,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 752,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 753,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 754,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 755,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 756,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 757,
+        "name": "code1",
+        "child_list": [
+            {
+                "id": 758,
+                "name": "code1",
+                "child_list": null
+            },
+            {
+                "id": 759,
+                "name": "code2",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 760,
+        "name": "code3",
+        "child_list": [
+            {
+                "id": 761,
+                "name": "code4",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 764,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 766,
+        "name": "try to test category",
+        "child_list": [
+            {
+                "id": 767,
+                "name": "hamtaro",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 771,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 772,
+        "name": "code1",
+        "child_list": null
+    },
+    {
+        "id": 728,
+        "name": "แคทมินมินจะโกอินเตอร์ อิอิ CONICLEX GOGO [Parent CHILD1]",
+        "child_list": null
+    },
+    {
+        "id": 730,
+        "name": "แคทมินมินจะโกอินเตอร์ อิอิ CONICLEX GOGO [Parent MUMMM]",
+        "child_list": null
+    },
+    {
+        "id": 749,
+        "name": "enjoy little thing",
+        "child_list": null
+    },
+    {
+        "id": 765,
+        "name": "Business",
+        "child_list": null
+    },
+    {
+        "id": 768,
+        "name": "Conicle Category 01",
+        "child_list": null
+    },
+    {
+        "id": 774,
+        "name": "I Love The world",
+        "child_list": null
+    },
+    {
+        "id": 863,
+        "name": "tk cat",
+        "child_list": null
+    },
+    {
+        "id": 775,
+        "name": "Computer Literacy",
+        "child_list": null
+    },
+    {
+        "id": 864,
+        "name": "CategoryJP",
+        "child_list": null
+    },
+    {
+        "id": 778,
+        "name": "English Language",
+        "child_list": null
+    },
+    {
+        "id": 865,
+        "name": "live category",
+        "child_list": [
+            {
+                "id": 866,
+                "name": "livecat2",
+                "child_list": null
+            },
+            {
+                "id": 867,
+                "name": "livecat2.2",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 868,
+        "name": "toonko",
+        "child_list": [
+            {
+                "id": 869,
+                "name": "kiki",
+                "child_list": null
+            },
+            {
+                "id": 870,
+                "name": "sub cat2",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 879,
+        "name": "111",
+        "child_list": null
+    },
+    {
+        "id": 880,
+        "name": "111",
+        "child_list": null
+    },
+    {
+        "id": 883,
+        "name": "AAAAAAAAAAAA",
+        "child_list": null
+    },
+    {
+        "id": 884,
+        "name": "AAAAAAAAAAAA",
+        "child_list": null
+    },
+    {
+        "id": 888,
+        "name": "Mother Cate",
+        "child_list": [
+            {
+                "id": 889,
+                "name": "lvl2 first child",
+                "child_list": [
+                    {
+                        "id": 891,
+                        "name": "lvl 3 son of first child",
+                        "child_list": [
+                            {
+                                "id": 892,
+                                "name": "lvl4 grand child of first child / child of first child of first child",
+                                "child_list": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 890,
+                "name": "lvl2 second child",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 779,
+        "name": "Chinese Language",
+        "child_list": null
+    },
+    {
+        "id": 893,
+        "name": "unpublish category",
+        "child_list": [
+            {
+                "id": 894,
+                "name": "unpublish level2",
+                "child_list": null
+            },
+            {
+                "id": 895,
+                "name": "unpublish level2 - 2",
+                "child_list": [
+                    {
+                        "id": 896,
+                        "name": "unpublish 2-2/3-1",
+                        "child_list": null
+                    },
+                    {
+                        "id": 897,
+                        "name": "unpublish 2-2/3-2",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 785,
+        "name": "Leadership & Managerial Learning Program",
+        "child_list": [
+            {
+                "id": 786,
+                "name": "Leadership",
+                "child_list": [
+                    {
+                        "id": 788,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 789,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 787,
+                "name": "Managerial",
+                "child_list": [
+                    {
+                        "id": 790,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 791,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 792,
+        "name": "Functional Learning Program",
+        "child_list": [
+            {
+                "id": 793,
+                "name": "Marketing , Commercial and Supply (MCS)",
+                "child_list": null
+            },
+            {
+                "id": 794,
+                "name": "Polymers Business Unit (POL)",
+                "child_list": [
+                    {
+                        "id": 795,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 796,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 797,
+                "name": "EO-Based Performance Business Unit (EOB)",
+                "child_list": [
+                    {
+                        "id": 798,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 799,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 800,
+                "name": "Downstream Strategy and Business Development (DSB)",
+                "child_list": [
+                    {
+                        "id": 801,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 802,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 803,
+                "name": "Phenol Business Unit (PHN)",
+                "child_list": [
+                    {
+                        "id": 804,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 805,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 806,
+                "name": "Olefins (OLE)",
+                "child_list": [
+                    {
+                        "id": 807,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 808,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 809,
+                "name": "Utilities (UTY)",
+                "child_list": [
+                    {
+                        "id": 810,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 811,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 812,
+                "name": "Aromatics (ARO)",
+                "child_list": [
+                    {
+                        "id": 813,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 814,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 815,
+                "name": "Refinery and Shared Facilities (REF)",
+                "child_list": [
+                    {
+                        "id": 816,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 817,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 818,
+                "name": "Transformation Excellence (TFE)",
+                "child_list": [
+                    {
+                        "id": 819,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 820,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 821,
+                "name": "Procurement (PMT)",
+                "child_list": [
+                    {
+                        "id": 822,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 823,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 824,
+                "name": "Technical, Engineering and Maintenance (TEM)",
+                "child_list": [
+                    {
+                        "id": 825,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 826,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 827,
+                "name": "CAPEX Excellence (TPX)",
+                "child_list": [
+                    {
+                        "id": 828,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 829,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 830,
+                "name": "Quality , Safety , Occupational Health and\nEnvironment (QSE)",
+                "child_list": [
+                    {
+                        "id": 831,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 832,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 833,
+                "name": "Science and Innovation (ISI)",
+                "child_list": [
+                    {
+                        "id": 834,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 835,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 836,
+                "name": "Internal Audit (BIA)",
+                "child_list": [
+                    {
+                        "id": 837,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 838,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 839,
+                "name": "Sustainability and Corporate Branding (SCB)",
+                "child_list": [
+                    {
+                        "id": 840,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 841,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 842,
+                "name": "Corporate Secretary and Legal (CSL)",
+                "child_list": [
+                    {
+                        "id": 843,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 844,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 845,
+                "name": "Corporate Strategy (STG)",
+                "child_list": [
+                    {
+                        "id": 846,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 847,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 848,
+                "name": "Finance and Accounting (FNA)",
+                "child_list": [
+                    {
+                        "id": 849,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 850,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 851,
+                "name": "Organizational Effectiveness (HOE)",
+                "child_list": [
+                    {
+                        "id": 852,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 853,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 854,
+                "name": "International Business Operations (IBO)",
+                "child_list": [
+                    {
+                        "id": 855,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 856,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 857,
+                "name": "Digital Academy",
+                "child_list": [
+                    {
+                        "id": 858,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 859,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 860,
+                "name": "Engineering & Maintenance Academy",
+                "child_list": [
+                    {
+                        "id": 861,
+                        "name": "Mandatory",
+                        "child_list": null
+                    },
+                    {
+                        "id": 862,
+                        "name": "Selective",
+                        "child_list": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 899,
+        "name": "testcreate",
+        "child_list": [
+            {
+                "id": 903,
+                "name": "ouytt",
+                "child_list": [
+                    {
+                        "id": 908,
+                        "name": "yuuuu",
+                        "child_list": [
+                            {
+                                "id": 909,
+                                "name": "ooop",
+                                "child_list": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": 910,
+                        "name": "lev3",
+                        "child_list": null
+                    }
+                ]
+            },
+            {
+                "id": 904,
+                "name": "poop",
+                "child_list": null
+            },
+            {
+                "id": 905,
+                "name": "qweerr",
+                "child_list": null
+            },
+            {
+                "id": 906,
+                "name": "ooppp",
+                "child_list": null
+            },
+            {
+                "id": 907,
+                "name": "iuuuyy",
+                "child_list": null
+            }
+        ]
+    },
+    {
+        "id": 873,
+        "name": "Category from sandbox",
+        "child_list": null
+    },
+    {
+        "id": 900,
+        "name": "test",
+        "child_list": null
+    },
+    {
+        "id": 874,
+        "name": "Self Development",
+        "child_list": null
+    },
+    {
+        "id": 901,
+        "name": "test horror",
+        "child_list": null
+    },
+    {
+        "id": 875,
+        "name": "Sales",
+        "child_list": null
+    },
+    {
+        "id": 902,
+        "name": "test horror",
+        "child_list": null
+    },
+    {
+        "id": 876,
+        "name": "Leadership/Management",
+        "child_list": null
+    },
+    {
+        "id": 877,
+        "name": "New Skills",
+        "child_list": null
+    },
+    {
+        "id": 912,
+        "name": "Cate Perm",
+        "child_list": null
+    },
+    {
+        "id": 878,
+        "name": "Life is the flower for which love is the honey.",
+        "child_list": null
+    },
+    {
+        "id": 881,
+        "name": "[FTS] zesuz full text search",
+        "child_list": null
+    },
+    {
+        "id": 913,
+        "name": "CateCateCate",
+        "child_list": null
+    },
+    {
+        "id": 882,
+        "name": "Category Mohana",
+        "child_list": null
+    },
+    {
+        "id": 915,
+        "name": "Category Permission",
+        "child_list": null
+    },
+    {
+        "id": 885,
+        "name": "ชั้นก็มาจาก MASTER",
+        "child_list": null
+    },
+    {
+        "id": 886,
+        "name": "Category Lv1",
+        "child_list": null
+    },
+    {
+        "id": 887,
+        "name": "cate test learning history",
+        "child_list": null
+    },
+    {
+        "id": 898,
+        "name": "[cat minmin] Category min for import content",
+        "child_list": null
+    },
+    {
+        "id": 911,
+        "name": "category 1",
+        "child_list": null
+    }
+]

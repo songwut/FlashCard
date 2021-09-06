@@ -15,6 +15,7 @@ enum FLType: String {
     case video = "video"
     case shape = "shape"
     case sticker = "sticker"
+    case quiz = "question"
 }
 
 class InteractView: UIView {
@@ -23,7 +24,7 @@ class InteractView: UIView {
     
     var isCreateNew = true
     var imageView:UIImageView?
-    var element:TextElement?
+    var element: FlashElement?
     var type: FLType = .unknow
     var gesture: SnapGesture?
     

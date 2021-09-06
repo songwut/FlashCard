@@ -13,14 +13,14 @@ final class FLColorView: UIView {
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var layout: UICollectionViewFlowLayout!
     
-    private var colorList = [String]()
+    private var colorList = [FLColorResult]()
     private var selectedIndex = 0
     private var cellSize: CGSize = .zero
     
     var didSelectedColor: DidAction?
     var height = CGFloat.zero
     
-    func setup(colorList:[String]) {
+    func setup(colorList:[FLColorResult]) {
         self.colorList = colorList
         self.collectionView.updateLayout()
         
@@ -72,7 +72,7 @@ extension FLColorView : UICollectionViewDataSource, UICollectionViewDelegateFlow
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FLColorCell", for: indexPath) as! FLColorCell
         cell.isSelected = indexPath.row == self.selectedIndex
-        cell.colorHex = self.colorList[indexPath.row]
+        cell.colorHex = self.colorList[indexPath.row].hex
         return cell
     }
     
