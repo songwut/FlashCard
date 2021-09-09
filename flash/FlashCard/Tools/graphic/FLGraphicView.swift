@@ -17,7 +17,7 @@ final class FLGraphicView: UIView {
     private var selectedIndex = 0
     private var cellSize: CGSize = .zero
     
-    var didSelectedGraphic: DidAction?
+    var didSelectedGraphic: Action?
     var height = CGFloat.zero
     
     func setup(graphicList:[FLGraphicResult], complete: () -> Void) {
@@ -116,7 +116,6 @@ extension FLGraphicView : UICollectionViewDataSource, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FLImageCell", for: indexPath) as! FLImageCell
         self.selectedIndex = indexPath.row
-        collectionView.reloadData()
         let item = self.graphicList[indexPath.row]
         item.uiimage = cell.uimage
         self.didSelectedGraphic?.handler(item)

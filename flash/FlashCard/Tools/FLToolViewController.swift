@@ -9,16 +9,16 @@ import UIKit
 
 class FLToolViewController: UIViewController {
     
-    var didClose: DidAction?
-    var didCreateQuiz: DidAction?
-    var didCreateText: DidAction?
-    var didSelectedColor: DidAction?
-    var didChangeTextColor: DidAction?
-    var didChangeTextStyle: DidAction?
-    var didChangeTextAlignment: DidAction?
-    var didSelectedGraphic: DidAction?
+    var didClose: Action?
+    var didCreateQuiz: Action?
+    var didCreateText: Action?
+    var didSelectedColor: Action?
+    var didChangeTextColor: Action?
+    var didChangeTextStyle: Action?
+    var didChangeTextAlignment: Action?
+    var didSelectedGraphic: Action?
     
-    var didMediaPressed: DidAction?
+    var didMediaPressed: Action?
     
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -161,9 +161,9 @@ class FLToolViewController: UIViewController {
     
     func createMenuTool(_ tools: [FLTool]) {
         //prepare Tool UI
-        let didPressTool = DidAction(handler: { [weak self] (sender) in
+        let didPressTool = Action(handler: { (sender) in
             guard let tool = sender as? FLTool else { return }
-            self?.open(tool)
+            self.open(tool)
         })
         self.toolStackView.removeAllArranged()
         self.addBarView.stackView.removeAllArranged()

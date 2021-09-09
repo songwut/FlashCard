@@ -15,8 +15,14 @@ open class DidAction {
     init(handler: @escaping ((_ sender: Any?) -> Void)) {
         self.handler = handler
     }
- 
+}
+
+public struct Action {
+    var handler: ((_ sender: Any?) -> Void)!
     
+    init(handler: @escaping ((_ sender: Any?) -> Void)) {
+        self.handler = handler
+    }
 }
 
 class FLButton: UIButton {

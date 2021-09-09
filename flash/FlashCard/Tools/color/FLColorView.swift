@@ -17,7 +17,7 @@ final class FLColorView: UIView {
     private var selectedIndex = 0
     private var cellSize: CGSize = .zero
     
-    var didSelectedColor: DidAction?
+    var didSelectedColor: Action?
     var height = CGFloat.zero
     
     func setup(colorList:[FLColorResult]) {

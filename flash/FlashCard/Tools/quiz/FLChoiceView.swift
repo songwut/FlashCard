@@ -15,7 +15,7 @@ final class FLChoiceView: UIView {
     
     var isCreate = false
     var index = 0
-    var didDelete:DidAction?
+    var didDelete: Action?
     
     var choice: FLChoiceResult? {
         didSet {

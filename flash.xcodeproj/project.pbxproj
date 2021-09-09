@@ -1064,9 +1064,9 @@
 				6985B20526E6302A00FEAD8F /* UGCCategory.swift */,
 				6985B3C126E7C7E800FEAD8F /* UGCTag.swift */,
 				6985B1C426E5F1B000FEAD8F /* FLPostView.swift */,
+				696BBABD26E8760600E88B49 /* FLPostViewController.xib */,
 				696BBABC26E8760600E88B49 /* FLPostViewController.swift */,
 				696BBAEB26E8BE9A00E88B49 /* FLPostViewModel.swift */,
-				696BBABD26E8760600E88B49 /* FLPostViewController.xib */,
 				6985B38326E7B0DD00FEAD8F /* Tag */,
 				6985B37526E7B0B200FEAD8F /* Category */,
 			);

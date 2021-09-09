@@ -48,7 +48,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.stageButton.addTarget(self, action: #selector(self.stageButtonPressed(_:)), for: .touchUpInside)
         
-        
+        self.loginPressed(nil)
     }
     
     @objc func stageButtonPressed(_ sender: UIButton) {
@@ -98,7 +98,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tagListSelectPressed(_ sender: UIButton) {
-        //TagListSelectViewController
         JSON.read("ugc-flash-card-tag-list") { (object) in
             if let dict = object as? [String : Any],
                let detail = UGCTagPageResult(JSON: dict) {
@@ -142,7 +141,7 @@ class ViewController: UIViewController {
     }
     
     
-    @IBAction func loginPressed(_ sender: UIButton) {
+    @IBAction func loginPressed(_ sender: UIButton?) {
         if UserManager.shared.isLoggedin() {
             UserManager.shared.updateProfile {
                 if let user = UserManager.shared.profile {

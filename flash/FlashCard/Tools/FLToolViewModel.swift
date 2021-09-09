@@ -51,6 +51,8 @@ class FLToolViewModel {
         API.request(request) { (responseBody: ResponseBody?, pageResult: FLGraphicPageResult?, isCache, error) in
             if let page = pageResult {
                 self.graphicList = page.list
+            } else {
+                self.graphicList.removeAll()
             }
             complete(self.graphicList)
         }

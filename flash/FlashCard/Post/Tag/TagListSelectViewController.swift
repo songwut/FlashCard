@@ -61,16 +61,14 @@ class TagListSelectViewController: UIViewController {
         let totalText =  "\("total".localized()) \(value)"
         self.totalLabel.text =  totalText
     }
-
+    
     private func manageTagContentViewWith(tags:[UGCTagResult]) {
         self.countSelectedList(tags)
         
         if tags.isEmpty {
             self.tagView.isHidden = true
-        } else {
             
-            self.tagView.isHidden = false
-            self.tagView?.removeAllTags()
+        } else {
             var tagList = [String]()
             for tag in tags {
                 tagList.append(tag.name)
@@ -78,21 +76,24 @@ class TagListSelectViewController: UIViewController {
             
             self.tagView?.textFont = FontHelper.getFontSystem(13, font: .text)
             self.tagView?.addTags(tagList)
-            let marginY: CGFloat = self.tagView.marginY * 2
-            let paddingY: CGFloat = CGFloat(self.tagView.rows - 1) * self.tagView.paddingY
-            let tagViewContentHeight:CGFloat = (CGFloat(self.tagView.rows) * self.tagView.tagViewHeight) + marginY + paddingY // 168
-            ConsoleLog.show("tagViewContentHeight: \(tagViewContentHeight)")
-            self.tagHeight.constant = tagViewContentHeight + 2
-            
-            for i in 0..<self.tagView.tagViews.count {
-                let isSelected = tags[i].isSelected
-                self.tagView?.tagViews[i].tag = tags[i].id
-                self.tagView?.tagViews[i].cornerRadius = 15
-                self.tagView?.tagViews[i].borderWidth = 1
-                self.tagView?.tagViews[i].clipsToBounds = true
-                self.tagView?.tagViews[i].tagBackgroundColor = isSelected ? tagBgEnableColor : .white
-                self.tagView?.tagViews[i].textColor = tagTextEnableColor
-                self.tagView?.tagViews[i].borderColor = isSelected ? .clear : tagTextEnableColor
+            DispatchQueue.main.async {
+                self.tagView.isHidden = false
+                let marginY: CGFloat = self.tagView.marginY / 2
+                let paddingY: CGFloat = CGFloat(self.tagView.rows - 1) * self.tagView.paddingY
+                let tagViewContentHeight:CGFloat = (CGFloat(self.tagView.rows) * self.tagView.tagViewHeight) + marginY + paddingY // 168
+                ConsoleLog.show("tagViewContentHeight: \(tagViewContentHeight)")
+                self.tagHeight.constant = tagViewContentHeight + 2
+                
+                for i in 0..<self.tagView.tagViews.count {
+                    let isSelected = tags[i].isSelected
+                    self.tagView?.tagViews[i].tag = tags[i].id
+                    self.tagView?.tagViews[i].cornerRadius = 15
+                    self.tagView?.tagViews[i].borderWidth = 1
+                    self.tagView?.tagViews[i].clipsToBounds = true
+                    self.tagView?.tagViews[i].tagBackgroundColor = isSelected ? tagBgEnableColor : .white
+                    self.tagView?.tagViews[i].textColor = tagTextEnableColor
+                    self.tagView?.tagViews[i].borderColor = isSelected ? .clear : tagTextEnableColor
+                }
             }
         }
     }

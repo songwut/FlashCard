@@ -17,7 +17,7 @@ class FLQuizView: UIView {
     @IBOutlet weak var addStackView: UIStackView!
     @IBOutlet weak var addButton: FLDashButton?
     
-    var didDelete: DidAction?
+    var didDelete: Action?
     var isCreate = false
     var scale:CGFloat = 1.0
     var choiceCount: Int {
@@ -38,7 +38,7 @@ class FLQuizView: UIView {
         choiceView.isCreate = self.isCreate
         
         choiceView.choice = choice
-        choiceView.didDelete = DidAction(handler: { [weak self] (sender) in
+        choiceView.didDelete = Action(handler: { [weak self] (sender) in
             guard let question = self?.question else { return }
             if question.choiceList.count > 1 {
                 let index = choiceView.checkButton.tag - 1

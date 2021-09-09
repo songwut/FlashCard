@@ -12,7 +12,7 @@ final class FLItemView: UIView {
     @IBOutlet weak var button: FLButton!
     @IBOutlet weak var titleLabel: UILabel!
     
-    var didPressTool: DidAction?
+    var didPressTool: Action?
     
     var didPressAlignment: DidAction?
     

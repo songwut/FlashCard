@@ -10,7 +10,7 @@ import UIKit
 
 struct ActionButton {
     var title: String?
-    var action: DidAction?
+    var action: Action?
 }
 
 class PopupContent {

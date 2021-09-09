@@ -25,8 +25,8 @@ class FLTextStyleView: UIView {
     @IBOutlet weak var righrButton: FLButton!
     @IBOutlet weak var justifiedButton: FLButton!
     
-    var didChangeTextStyle: DidAction?
-    var didChangeTextAlignment: DidAction?
+    var didChangeTextStyle: Action?
+    var didChangeTextAlignment: Action?
     
     
     @IBAction func alignmentPressed(_ sender: UIButton) {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FLStageViewModel {
+struct FLStageViewModel {
     var detail: FLDetailResult?
     var pageList = [FlashPageResult]()
     var flCard: FlCardResult?
@@ -16,7 +16,7 @@ class FLStageViewModel {
     var currentPage: FLPageDetailResult?
     var flashId = 16
     
-    func prepareModel() {
+    mutating func prepareModel() {
         //mock data
         
         if self.pageList.count == 0 {
@@ -38,7 +38,7 @@ class FLStageViewModel {
         
     }
     
-    func callAPIDetail(complete: @escaping () -> ()) {
+    mutating func callAPIDetail(complete: @escaping () -> ()) {
 //        let request = FLRequest()
 //        request.endPoint = .ugcFlashCardDetail
 //        request.arguments = ["\(self.flashId)"]
@@ -57,7 +57,7 @@ class FLStageViewModel {
         }
     }
     
-    func callAPIFlashCard(complete: @escaping (_ result: FlCardResult?) -> ()) {
+    mutating func callAPIFlashCard(complete: @escaping (_ result: FlCardResult?) -> ()) {
 //        let request = FLRequest()
 //        request.endPoint = .ugcFlashCard
 //        request.arguments = ["\(self.flashId)"]
@@ -80,7 +80,7 @@ class FLStageViewModel {
         }
     }
     
-    func callAPICardList(cardId: Int ,complete: @escaping (_ page: FLPageDetailResult) -> ()) {
+    mutating func callAPICardList(cardId: Int ,complete: @escaping (_ page: FLPageDetailResult) -> ()) {
         
 //        let request = FLRequest()
 //        request.endPoint = .ugcCardList
