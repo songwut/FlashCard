@@ -1,0 +1,27 @@
+{
+  "next": null,
+  "next_url": null,
+  "previous": null,
+  "previous_url": null,
+  "count": 1,
+  "page_size": 24,
+  "results": [
+    {
+      "id": 16,
+      "code": null,
+      "image": "https://develop.conicle.co/media/default/content/default_flash_card.png",
+      "name": "Untitled - 01",
+      "desc": "up in your high place, liars!!! Time is ticking for the empire. The truth they feed is feeble as so many times before. The greed of all the people. They stumbling and fumbling and we about to riot. They woke up, they woke up the lions",
+      "content_type": {
+        "id": 379,
+        "code": "flashcard.flashcard"
+      },
+      "tag_list": [],
+      "instructor_list": null,
+      "category": null,
+      "provider": null,
+      "created_by": null,
+      "is_display": false
+    }
+  ]
+}

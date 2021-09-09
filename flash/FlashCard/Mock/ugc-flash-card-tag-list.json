@@ -1,0 +1,131 @@
+{
+  "next": 2,
+  "url": "https://develop.conicle.co/api/dashboard/tag/type/MATERIAL_TYPE/?page=1&format=json",
+  "next_url": "https://develop.conicle.co/api/dashboard/tag/type/MATERIAL_TYPE/?format=json&;amp;page=2",
+  "previous": null,
+  "previous_url": null,
+  "count": 749,
+  "page_size": 24,
+  "results": [
+    {
+      "id": 409,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 410,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 412,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 413,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 414,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 415,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 416,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 417,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 418,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 419,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 420,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 426,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 427,
+      "name": "0",
+      "code": "0"
+    },
+    {
+      "id": 180,
+      "name": "111",
+      "code": "111"
+    },
+    {
+      "id": 179,
+      "name": "112",
+      "code": "112"
+    },
+    {
+      "id": 181,
+      "name": "113",
+      "code": "113"
+    },
+    {
+      "id": 182,
+      "name": "115",
+      "code": "115"
+    },
+    {
+      "id": 285,
+      "name": "121212121",
+      "code": "121212121"
+    },
+    {
+      "id": 222,
+      "name": "123",
+      "code": "123"
+    },
+    {
+      "id": 290,
+      "name": "123123",
+      "code": "123123"
+    },
+    {
+      "id": 291,
+      "name": "123123",
+      "code": "123123"
+    },
+    {
+      "id": 293,
+      "name": "123123",
+      "code": "123123"
+    },
+    {
+      "id": 294,
+      "name": "123123",
+      "code": "123123"
+    },
+    {
+      "id": 286,
+      "name": "1231231231313123",
+      "code": "1231231231313123"
+    }
+  ]
+}

@@ -145,6 +145,10 @@ struct ColorHelper {
        return UIColor("1F75FE")
     }
     
+    static func info75() -> UIColor {
+        return info().withAlphaComponent(0.75)
+    }
+    
     static func noti() -> UIColor {
        return UIColor("FF202A")
     }

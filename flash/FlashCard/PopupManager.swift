@@ -44,4 +44,26 @@ class PopupManager: NSObject {
         
         PopupViewController.showVC(vc!, content: popup, didClose: btnAction)
     }
+    
+    class func showWarning(_ detail: String, confirm: ActionButton? = nil, at mainVC: UIViewController? = nil) {
+        let btnAction = DidAction { (sender) in
+            //do after close popup
+        }
+        let popup: PopupContent
+        let icon = ImageTint(image: UIImage(named: "ic_v2_alert"), color: ColorHelper.error())
+        icon.size = 75
+        //popup = PopupContent(title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: "confirm".localized(),  closeButtonTitle: "cancel".localized(), isError: true)
+        popup = PopupContent(atbTitle: nil, title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: nil, closeButtonTitle: "cancel".localized(), confirmAction: confirm)
+        popup.closeColor = ColorHelper.info75()
+        popup.confirmColor = ColorHelper.info75()
+        
+        var vc = UIApplication.shared.keyWindow?.rootViewController
+        if let current = mainVC {
+            vc = current
+        } else {
+            vc = UserManager.shared.tabMenu ?? UserManager.shared.rootVC
+        }
+        
+        PopupViewController.showVC(vc!, content: popup, didClose: btnAction)
+    }
 }

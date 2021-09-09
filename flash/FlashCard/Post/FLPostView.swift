@@ -9,7 +9,20 @@ import SwiftUI
 
 struct FLPostView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .center, spacing: 8, content: {
+            ZStack(content: {
+                Image("flash-cover")
+                    .frame(width: .infinity, height: .infinity, alignment: .center)
+                    
+                Button(action: {
+                    
+                }, label: {
+                    Image(systemName: "camera.circle.fill")
+                })
+                .frame(width: 32, height: 32, alignment: .center)
+            })
+            .frame(width: 120, height: 120, alignment: .center)
+        })
     }
 }
 

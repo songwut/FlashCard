@@ -94,12 +94,40 @@ class ViewController: UIViewController {
                     self.present(host, animated: true, completion: nil)
                 }
             }
-            
         }
-        
-        
     }
     
+    @IBAction func tagListSelectPressed(_ sender: UIButton) {
+        //TagListSelectViewController
+        JSON.read("ugc-flash-card-tag-list") { (object) in
+            if let dict = object as? [String : Any],
+               let detail = UGCTagPageResult(JSON: dict) {
+                let mockList = detail.list
+                let tagListVC = TagListSelectViewController()
+                tagListVC.tagList = mockList
+                if let nav = self.navigationController {
+                    nav.pushViewController(tagListVC, animated: true)
+                } else {
+                    self.present(tagListVC, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
+    @IBAction func flPostPressed(_ sender: UIButton) {
+        JSON.read("ugc-flash-card-tag-list") { (object) in
+            if let dict = object as? [String : Any],
+               let detail = FLDetailResult(JSON: dict) {
+                let model = FLPostViewModel(detail)
+                let flPostVC = FLPostViewController.instantiate(viewModel: model)
+                if let nav = self.navigationController {
+                    nav.pushViewController(flPostVC, animated: true)
+                } else {
+                    self.present(flPostVC, animated: true, completion: nil)
+                }
+            }
+        }
+    }
     
     @IBAction func popupImageLimitPressed(_ sender: UIButton) {
         PopupManager.showWarning("You can upload 20 images per page !", at: self)

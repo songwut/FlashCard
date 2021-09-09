@@ -28,3 +28,7 @@ var pathDomain = "develop.conicle.co/"
 var domainURL = "https://\(pathDomain)"
 var apiURL = "\(domainURL)api/"
 var isMaintenance = false
+
+var tagBgDisableColor = UIColor("EBEBEB")
+var tagBgEnableColor = UIColor("DFEBF5")
+var tagTextEnableColor = UIColor("2196F3")

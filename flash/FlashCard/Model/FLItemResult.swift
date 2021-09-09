@@ -8,8 +8,16 @@
 import Foundation
 import ObjectMapper
 
+enum FLStatus: Int {
+    case unknow = 0
+    case unpublish = 1
+    case waitForApprove = 2
+    case approved = 3
+}
+
 class FLDetailResult: FLBaseResult {
     var progress: Any?
+    var status: FLStatus = .unpublish
     var createdBy: [String: AnyObject]?
 //    "datetime_create": "2021-08-04T09:55:45.443966",
 //            "datetime_update": "2021-08-04T09:55:45.444002",

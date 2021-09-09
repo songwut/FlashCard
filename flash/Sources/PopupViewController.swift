@@ -198,7 +198,6 @@ class PopupViewController: UIViewController {
     func managePopupContent(_ popupContent: PopupContent) {
         if let confirmAction = popupContent.confirmAction {
             self.confirmButton.setTitle(confirmAction.title, for: .normal)
-//            self.imageRatio.priority = UILayoutPriority(rawValue: 100)
             self.imageHeight.priority = UILayoutPriority(rawValue: 900)
             self.imageHeight.constant = 0
             self.titleTop.constant = 0
