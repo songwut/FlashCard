@@ -75,8 +75,6 @@ class FLStageView: UIView {
     }
     
     func createQuizView(_ element: FlashElement) -> FLQuizView {
-        self.flCreator.selectedView?.isSelected = false
-        self.flCreator.selectedView?.isCreateNew = false
         
         let stageView = self
         let quizView = self.flCreator.createQuiz(element, in: stageView)
@@ -92,8 +90,6 @@ class FLStageView: UIView {
     }
     
     func createImage(_ element: FlashElement) -> InteractView {
-        self.flCreator.selectedView?.isSelected = false
-        self.flCreator.selectedView?.isCreateNew = false
         
         let stageView = self
         let iView = self.flCreator.createImage(element, in: stageView)
@@ -101,17 +97,13 @@ class FLStageView: UIView {
     }
     
     func createVideo(_ element: FlashElement) -> InteractView {
-        self.flCreator.selectedView?.isSelected = false
-        self.flCreator.selectedView?.isCreateNew = false
         
         let stageView = self
         let iView = self.flCreator.createVideo(element, in: stageView)
         return iView
     }
     
-    func createTextView(_ element: FlashElement) -> InteractView{
-        self.flCreator.selectedView?.isSelected = false
-        self.flCreator.selectedView?.isCreateNew = false
+    func createTextView(_ element: FlashElement) -> InteractView {
         
         let stageView = self
         let textElement = self.flCreator.createText(element, in: stageView)

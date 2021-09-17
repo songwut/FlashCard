@@ -7,16 +7,34 @@
 
 import SwiftUI
 
+protocol UGCCatagoryListViewDelegate {
+    func didSelectCategory(_ category: CategoryResult)
+}
+
 struct UGCCatagoryListView: View {
     @State var items = [UGCCategory]()
     
+    var delegate: UGCCatagoryListViewDelegate?
+    @State var selectedCategory: UGCCategory?
+    
     var body: some View {
-        ScrollView {
-            self.listView
-        }
-//        .foregroundColor(ColorHelper.primary().color)
-//        .navigationBarTitle(Text("category".localized()))
-//        .statusBar(hidden: false)
+        VStack(alignment: .center, spacing: nil, content: {
+            ScrollView {
+                self.listView
+            }
+            .background(ColorHelper.background().color)
+            //.frame(width: .infinity, height: .infinity)
+            
+            self.footerView
+                .frame(height: 80)
+                .background(Color.white)
+        })
+        
+        
+        
+        //        .foregroundColor(ColorHelper.primary().color)
+        //        .navigationBarTitle(Text("category".localized()))
+        //        .statusBar(hidden: false)
     }
     
     var listView: some View {
@@ -24,12 +42,32 @@ struct UGCCatagoryListView: View {
             let countCat = items.count.textNumber(many: "category_unit")
             let total = "total".localized()
             Text("\(total) \(countCat)")
+                .padding(.leading, 16)
+                .padding(.trailing, 16)
                 .foregroundColor(ColorHelper.text75().color)
                 .font(FontHelper.getFontSystem(.l, font: .text).font)
             
             ForEach(0..<items.count) { i in
-                UGCCategoryRow(category: self.items[i])
+                let category = self.items[i]
+                UGCCategoryRow(category: category, delegate: self.delegate)
             }
+        })
+        .padding(.top, 16)
+        .padding(.bottom, 16)
+    }
+    
+    var footerView: some View {
+        HStack(alignment: .center, spacing: /*@START_MENU_TOKEN@*/nil/*@END_MENU_TOKEN@*/, content: {
+            Button(action: {
+                if let c = self.selectedCategory {
+                    self.delegate?.didSelectCategory(c)
+                }
+            }, label: {
+                Text("done".localized().uppercased())
+                    .font(FontHelper.getFontSystem(16, font: .medium).font)
+                    .frame(maxWidth: .infinity, maxHeight: 42, alignment: .center)
+            })
+            .buttonStyle(ButtonFill(color: ColorHelper.primary().color))
         })
         .padding(.all, 16)
     }
@@ -52,9 +90,13 @@ struct GroupedListModifier: ViewModifier {
     }
 }
 
-//struct UGCCatagoryListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UGCCatagoryListView(items: UGCData.categoryList())
-//            .previewDevice("iPhone 8")
-//    }
-//}
+struct UGCCatagoryListView_Previews: PreviewProvider {
+    static var previews: some View {
+        let list = [
+            UGCCategory(JSON: ["name" : "1"])!,
+            UGCCategory(JSON: ["name" : "2"])!
+        ]
+        UGCCatagoryListView(items: list)
+            .previewDevice("iPhone 8")
+    }
+}

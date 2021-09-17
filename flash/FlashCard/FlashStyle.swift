@@ -127,4 +127,12 @@ struct FlashStyle {
     }
     
     static let deleteSize: CGFloat = 25
+    
+    struct post {
+        static let maxChaTitle = 30
+        static let descPlaceHolder = "Input message here"
+        static let categoryPlaceHolder = "Select category"
+        static let tagPlaceHolder = "Select tag"
+        
+    }
 }

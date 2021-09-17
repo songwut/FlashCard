@@ -1,27 +1,46 @@
 {
-  "next": null,
-  "next_url": null,
-  "previous": null,
-  "previous_url": null,
-  "count": 1,
-  "page_size": 24,
-  "results": [
-    {
-      "id": 16,
-      "code": null,
-      "image": "https://develop.conicle.co/media/default/content/default_flash_card.png",
-      "name": "Untitled - 01",
-      "desc": "up in your high place, liars!!! Time is ticking for the empire. The truth they feed is feeble as so many times before. The greed of all the people. They stumbling and fumbling and we about to riot. They woke up, they woke up the lions",
-      "content_type": {
-        "id": 379,
-        "code": "flashcard.flashcard"
-      },
-      "tag_list": [],
-      "instructor_list": null,
-      "category": null,
-      "provider": null,
-      "created_by": null,
-      "is_display": false
-    }
-  ]
+  "id": 1,
+  "estimate_time": 9,
+  "code": "0001",
+  "image": "https://develop-location.conicle.co/media/default/content/default_image.png",
+  "name": "Flash Card Example 01",
+  "desc": "",
+  "page_count": 1,
+  "content_type": {
+    "code": "flash_card.flashcard",
+    "id": 1
+  },
+  "tag_list": [],
+  "instructor_list": [],
+  "category": null,
+  "provider": null,
+  "datetime_create": "2021-01-29T06:14:46.284524Z",
+  "datetime_update": "2021-06-23T08:56:09.217225Z",
+  "datetime_publish": "2021-06-23T08:56:09.217225Z",
+  "datetime_latest_update": "2021-04-09T15:53:22.142768+07:00",
+  "created_by": {
+    "id": 1,
+    "name": "firstname middlename lastname",
+    "image": "https://develop-location.conicle.co/media/default/content/default_image.png"
+  },
+  "label": "content_label_open_to_enroll",
+  "is_display": true,
+  "count_view": 12,
+  "datetime_update_material": "2021-02-03T15:34:04.093233+07:00",
+  "progress": {
+    "id": 1692,
+    "status": 0,
+    "status_label": "not_start",
+    "percent": 0,
+    "page_current": 0,
+    "page_count": 1,
+    "page_max": 0,
+    "datetime_complete": null,
+    "is_override": false,
+    "has_action_log": false,
+    "datetime_create": "2021-02-02T17:55:13.225175+07:00",
+    "datetime_update": "2021-07-14T01:47:13.767559+07:00",
+    "account_id": 1,
+    "content_id": 1
+  }
 }

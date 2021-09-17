@@ -114,7 +114,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func flPostPressed(_ sender: UIButton) {
-        JSON.read("ugc-flash-card-tag-list") { (object) in
+        JSON.read("ugc-flash-card-detail") { (object) in
             if let dict = object as? [String : Any],
                let detail = FLDetailResult(JSON: dict) {
                 let model = FLPostViewModel(detail)

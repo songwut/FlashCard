@@ -21,6 +21,9 @@ extension String {
 struct UGCTagView: View {
     @State var tag: String
     
+    @State var row: Int?
+    @State var collumn: Int?
+    
     var body: some View {
         Text(tag.limit(20))
             .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))

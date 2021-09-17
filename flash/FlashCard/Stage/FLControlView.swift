@@ -20,7 +20,7 @@ class FLControlView: UIView {
     @IBOutlet weak var bottomLeftButton: UIButton!
     @IBOutlet weak var bottomRightButton: UIButton!
     
-    weak var deleteButton: UIButton!
+    weak var deleteButton: UIButton?
     
     override func layoutSubviews() {
         print("FLControlView \(self.frame)")
@@ -37,12 +37,12 @@ class FLControlView: UIView {
         let x = (view.frame.origin.x + view.bounds.width) - margin
         let y = view.frame.origin.y + margin
         //self.deleteButton.transform = view.transform
-        self.deleteButton.center = CGPoint(x: x , y: y)
-        let w = self.deleteButton.frame.width
-        self.deleteButton.cornerRadius = w / 2
-        self.deleteButton.borderWidth = 1
-        self.deleteButton.borderColor = .black
-        self.deleteButton.isHidden = true //TODO: false
+        self.deleteButton?.center = CGPoint(x: x , y: y)
+        let w = self.deleteButton?.frame.width ?? 0.0
+        self.deleteButton?.cornerRadius = w / 2
+        self.deleteButton?.borderWidth = 1
+        self.deleteButton?.borderColor = .black
+        self.deleteButton?.isHidden = true //TODO: false
         //let margin: CGFloat = FlashStyle.text.marginIView
         //self.frame = CGRect(x: frame.origin.x - (margin / 2), y: frame.origin.y - (margin / 2), width: size.width + margin, height: size.height + margin)
     }

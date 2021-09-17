@@ -69,6 +69,7 @@ class TagListSelectViewController: UIViewController {
             self.tagView.isHidden = true
             
         } else {
+            self.tagView?.removeAllTags()
             var tagList = [String]()
             for tag in tags {
                 tagList.append(tag.name)

@@ -14,21 +14,22 @@ struct FLRequestSt {
 
 enum EndPoint:String {
     case ugcFlashCardDetail = "ugc/flash-card/%@/"
-    case ugcFlashCard = "ugc/flash-card/%@/card/"
-    case ugcCardList = "ugc/flash-card/%@/card/%@/"
+    case ugcCardIdDropbox = "ugc/flash-card/%@/card/%@/dropbox/"
+    case ugcCardList = "ugc/flash-card/%@/card/"
+    case ugcCardDetail = "ugc/flash-card/%@/card/%@/"
     case ugcFlashCreate = "ugc/flash-card/"
     case ugcFlashColor = "ugc/flash-card/color/"
-    case ugcFlashSticker = "ugc/flash-card/sticker/"//base64
-    case ugcFlashShape = "ugc/flash-card/shape/"//base64
+    case ugcFlashSticker = "ugc/flash-card/sticker/"
+    case ugcFlashShape = "ugc/flash-card/shape/"
 }
 
 class FLRequest: APIRequest {
     
     var flashId:Int = 0
-    var endPoint:EndPoint = .ugcFlashCard
+    var endPoint:EndPoint = .ugcFlashCreate
     var arguments = [String]()
     var selectList = [Int]()
-    
+    var paramiter: [String: AnyObject]?
     var apiMethod: APIMethod = .get
     
     override var method: APIMethod {
@@ -44,6 +45,9 @@ class FLRequest: APIRequest {
     }
     
     override var params: [String: AnyObject]? {
+        if let param = self.paramiter {
+            return param
+        }
         var dict = [String: AnyObject]()
         if self.selectList.count > 1 {
             dict["id_list"] = self.selectList as AnyObject?

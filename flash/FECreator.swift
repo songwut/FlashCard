@@ -30,7 +30,6 @@ extension UIImageView {
 
 struct FLCreator {
     
-    var selectedView: InteractView?
     var stageView: FLStageView!
     
     init(stage: FLStageView) {
@@ -100,7 +99,7 @@ struct FLCreator {
         iView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: viewW, height: viewW))
         
         //textView.translatesAutoresizingMaskIntoConstraints = false
-        iView.view = textView
+        iView.contentView = textView
         textView.frame = CGRect(x: marginXY, y: marginXY, width: viewW - margin, height: viewH - margin)
         textView.textColor = UIColor(element.textColor)
         if let fill = element.fill {
@@ -162,7 +161,7 @@ struct FLCreator {
         iView.type = .image
         iView.frame = frame
         iView.center = center
-        iView.view = imageview
+        iView.contentView = imageview
         iView.update(rotation: element.rotation)
         stage.addSubview(iView)
         return iView
@@ -223,7 +222,7 @@ struct FLCreator {
         let iView = InteractView()
         iView.frame = frame
         iView.center = center
-        iView.view = playerView
+        iView.contentView = playerView
         iView.update(rotation: element.rotation)
         stage.addSubview(iView)
         return iView
@@ -251,7 +250,7 @@ struct FLCreator {
         let iView = InteractView()
         iView.frame = frame
         iView.center = center
-        iView.view = imageview
+        iView.contentView = imageview
         iView.svgImage = receivedimage
         iView.imageView = imageview
         iView.update(rotation: element.rotation)
@@ -279,7 +278,7 @@ struct FLCreator {
         let iView = InteractView()
         iView.frame = frame
         iView.center = center
-        iView.view = view
+        iView.contentView = view
         iView.update(rotation: element.rotation)
         stage.addSubview(iView)
         return iView

@@ -8,10 +8,15 @@
 import UIKit
 import AVKit
 import SwiftUI
+import Photos
+
+struct FLStageSetUp {
+   
+    var eventId: Int
+}
+
 
 final class FLStageViewController: UIViewController {
-    
-    
     
     @IBOutlet private weak var contentPageView: UIView!
     @IBOutlet private weak var toolStackView: UIStackView!
@@ -32,20 +37,8 @@ final class FLStageViewController: UIViewController {
     private var controlView: FLControlView?
     
     var toolVC: FLToolViewController?
+    var viewModelDelegate: FLStageViewModelProtocol!
     var viewModel = FLStageViewModel()
-    
-    lazy var deleteElementButton: UIButton? = {
-        let b = UIButton(type: .custom)
-        b.setImage(UIImage(named: "ic_v2_close"), for: .normal)
-        b.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
-        b.backgroundColor = .white
-        b.tintColor = .black
-        b.cornerRadius = 10
-        b.contentVerticalAlignment = .fill
-        b.contentHorizontalAlignment = .fill
-        b.imageEdgeInsets = UIEdgeInsets(top: 6.8, left: 6.8, bottom: 6.8, right: 6.8)
-        return b
-    }()
     
     lazy var deletePageButton: UIButton? = {
         let b = UIButton(type: .custom)
@@ -74,6 +67,27 @@ final class FLStageViewController: UIViewController {
     
     deinit {
         print("stage removed")
+    }
+    
+    func setUp(input: FLStageSetUp) {
+        viewModel = FLStageViewModel()
+        viewModel.stageVC = self
+    }
+    
+    var selectedView: InteractView?
+    
+    func setSelectedView(_ selectedView: InteractView) {
+        
+        if let view = self.selectedView {
+            if selectedView != view {
+                self.selectedView?.showEditingHandlers = false
+            }
+        }
+        
+        self.selectedView = selectedView
+        self.selectedView?.showEditingHandlers = true
+        self.selectedView?.superview?.bringSubviewToFront(selectedView)
+        
     }
     
     override func viewDidLoad() {
@@ -126,7 +140,17 @@ final class FLStageViewController: UIViewController {
         self.addRightPageButton?.addTarget(self, action: #selector(self.addRightPressed(_:)), for: .touchUpInside)
         
         self.prepareToolVC()
-        
+        self.view.alpha = 0.0
+        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlCardResult?) in
+            if let object = cardResult {
+                ConsoleLog.show("total:\(object.total)")
+                ConsoleLog.show("list:\(object.list)")
+                UIView.animate(withDuration: 0.3) {
+                    self?.view.alpha = 1.0
+                }
+            }
+            
+        }
     }
     
     @objc func appLeftPressed(_ sender: UIButton) {
@@ -184,8 +208,8 @@ final class FLStageViewController: UIViewController {
     }
     
     @objc func stageTaped(_ sender: TapGesture) {
-        self.flCreator?.selectedView?.isSelected = false
-        self.flCreator?.selectedView?.isCreateNew = false
+        self.selectedView?.isSelected = false
+        self.selectedView?.isCreateNew = false
         self.view.endEditing(true)
         self.toolVC?.closePressed(nil)
     }
@@ -245,9 +269,6 @@ final class FLStageViewController: UIViewController {
             self.controlView?.leftWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
             self.controlView?.rightWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
             
-            self.controlView?.deleteButton = self.deleteElementButton
-            self.controlView?.deleteButton.addTarget(self, action: #selector(self.deleteElement(_:event:)), for: .touchDragInside)
-            self.controlView?.deleteButton.isHidden = true
             self.controlView?.isHidden = true
             
             
@@ -354,27 +375,27 @@ final class FLStageViewController: UIViewController {
     
     func prepareToolVC() {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
-//        if let vc = s.instantiateViewController(identifier: "FLToolViewController") as? FLToolViewController {
-//            // toolHelper = FLToolHelper(vc: self, toolBar: vc)
-//            //tool parameter
-//
-//            vc.didSelectedColor = Action(handler: { (sender) in
-//                guard let hex = sender as? String else { return }
-//                self.stageView.backgroundColor = UIColor(hex)
-//            })
-//            vc.didCreateText = Action(handler: { (sender) in
-//                let element = TextElement()
-//                self.createTextView(element)
-//            })
-//            self.halfModalDelegate = HalfModalTransitioningDelegate(viewController: vc, presentingViewController: vc)
-//            vc.setup(FLToolViewSetup(tool: .none))
-//
-//            self.halfModalDelegate.startHeight = 150 + vc.safeAreaTopHeight
-//            self.halfModalDelegate.backgroundColor = .clear
-//            vc.modalPresentationStyle = .custom
-//            vc.transitioningDelegate = self.halfModalDelegate
-//            self.present(vc, animated: true, completion: nil)
-//        }
+        //        if let vc = s.instantiateViewController(identifier: "FLToolViewController") as? FLToolViewController {
+        //            // toolHelper = FLToolHelper(vc: self, toolBar: vc)
+        //            //tool parameter
+        //
+        //            vc.didSelectedColor = Action(handler: { (sender) in
+        //                guard let hex = sender as? String else { return }
+        //                self.stageView.backgroundColor = UIColor(hex)
+        //            })
+        //            vc.didCreateText = Action(handler: { (sender) in
+        //                let element = TextElement()
+        //                self.createTextView(element)
+        //            })
+        //            self.halfModalDelegate = HalfModalTransitioningDelegate(viewController: vc, presentingViewController: vc)
+        //            vc.setup(FLToolViewSetup(tool: .none))
+        //
+        //            self.halfModalDelegate.startHeight = 150 + vc.safeAreaTopHeight
+        //            self.halfModalDelegate.backgroundColor = .clear
+        //            vc.modalPresentationStyle = .custom
+        //            vc.transitioningDelegate = self.halfModalDelegate
+        //            self.present(vc, animated: true, completion: nil)
+        //        }
         
         //add child
         if let vc = s.instantiateViewController(withIdentifier: "FLToolViewController") as? FLToolViewController {
@@ -397,7 +418,7 @@ final class FLStageViewController: UIViewController {
             })
             self.toolVC?.didChangeTextColor = Action(handler: { [weak self] (sender) in
                 guard let hex = sender as? String else { return }
-                self?.flCreator?.selectedView?.textView?.textColor = UIColor(hex)
+                self?.selectedView?.textView?.textColor = UIColor(hex)
             })
             
             self.toolVC?.didMediaPressed = Action(handler: { [weak self] (sender) in
@@ -425,7 +446,7 @@ final class FLStageViewController: UIViewController {
             self.toolVC?.didClose = Action(handler: { [weak self] (sender) in
                 //self.view.endEditing(true)
                 if let tool = sender as? FLTool, tool == .text {
-                    self?.flCreator?.selectedView?.textView?.resignFirstResponder()
+                    self?.selectedView?.textView?.resignFirstResponder()
                 }
                 
             })
@@ -463,16 +484,6 @@ final class FLStageViewController: UIViewController {
         self.createElement(element, row: row)
     }
     
-    func createNewImage(_ image: UIImage) {
-        let element = FlashElement.with(["type": FLType.image.rawValue])!
-        element.x = 50
-        element.y = 50
-        element.uiimage = image
-        element.rawSize = image.size
-        let row = self.indexOfMajorCell()
-        self.createElement(element, row: row)
-    }
-    
     func createNewGraphic(_ graphicType: FLGraphicMenu, graphic: FLGraphicResult) {
         let element = FlashElement.with(["type": graphicType.rawValue])!
         element.x = 50
@@ -484,25 +495,37 @@ final class FLStageViewController: UIViewController {
         self.createElement(element, row: row)
     }
     
-    func createNewVideo(_ url: URL, size: CGSize) {
-        let element = FlashElement.with(["type": FLType.video.rawValue])!
+    func createNewImage(_ image: UIImage, media: FLMediaResult?) {
+        let type = FLType.image
+        let element = FlashElement.with(["type": type.rawValue])!
+        element.x = 50
+        element.y = 50
+        element.uiimage = image
+        element.rawSize = image.size
+        let row = self.indexOfMajorCell()
+        self.createElement(element, row: row, media: media)
+    }
+    
+    func createNewVideo(_ url: URL, size: CGSize, media: FLMediaResult?) {
+        let type = FLType.video
+        let element = FlashElement.with(["type": type.rawValue])!
         element.x = 50
         element.y = 50
         element.deviceUrl = url
         element.rawSize = size
         let row = self.indexOfMajorCell()
-        self.createElement(element, row: row)
+        self.createElement(element, row: row, media: media)
     }
     
     func updateTextAlignment(_ alignment: FLTextAlignment) {
-        guard let iView = self.flCreator?.selectedView else { return}
+        guard let iView = self.selectedView else { return}
         iView.element?.flAlignment = alignment
         
         self.manageTextAtb()
     }
     
     func updateTextStyle(_ style: FLTextStyle = .regular) {
-        guard let iView = self.flCreator?.selectedView else { return}
+        guard let iView = self.selectedView else { return}
         guard let element = iView.element else { return }
         //update style in iView
         if let index = element.flTextStyle.firstIndex(of: style) {
@@ -520,7 +543,7 @@ final class FLStageViewController: UIViewController {
     }
     
     func manageTextAtb() {
-        guard let iView = self.flCreator?.selectedView else { return}
+        guard let iView = self.selectedView else { return}
         guard let textView = iView.textView else { return }
         guard let element = iView.element else { return }
         let textColor = textView.textColor ?? .black
@@ -543,7 +566,7 @@ final class FLStageViewController: UIViewController {
         if text.count >= 1 {
             let atbString =  NSMutableAttributedString(string: text , attributes: atb)
             atbString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraph, range: NSRange(location: 0, length: atbString.length))
-            self.flCreator?.selectedView?.textView?.attributedText = atbString
+            self.selectedView?.textView?.attributedText = atbString
             //textView.textAlignment = element.flAlignment.alignment()
         }
     }
@@ -556,12 +579,12 @@ final class FLStageViewController: UIViewController {
         return stageView ?? FLStageView()
     }
     
-    func createElement(_ element: FlashElement, row: Int) {
+    func createElement(_ element: FlashElement, row: Int , media: FLMediaResult? = nil) {
         if element.type == .text {
             self.createTextView(element, row: row)
             
         } else if element.type == .image {
-            self.createIView(element, row: row)
+            self.createIView(element, row: row, media: media)
             
         } else if element.type == .sticker {
             self.createIView(element, row: row)
@@ -570,7 +593,7 @@ final class FLStageViewController: UIViewController {
             self.createIView(element, row: row)
             
         }  else if element.type == .video {
-            self.createIView(element, row: row)
+            self.createIView(element, row: row,  media: media)
             
         }  else if element.type == .quiz {
             self.createQuizView(element, row: row)
@@ -579,8 +602,8 @@ final class FLStageViewController: UIViewController {
     }
     
     func createQuizView(_ element: FlashElement, row: Int) {
-        self.flCreator?.selectedView?.isSelected = false
-        self.flCreator?.selectedView?.isCreateNew = false
+        self.selectedView?.isSelected = false
+        self.selectedView?.isCreateNew = false
         
         let stageView = self.getStageView(at: row)
         if let quizView = stageView.createElement(element) as? FLQuizView {
@@ -602,27 +625,35 @@ final class FLStageViewController: UIViewController {
         
     }
     
-    func createIView(_ element: FlashElement, row: Int) {
-        self.flCreator?.selectedView?.isSelected = false
-        self.flCreator?.selectedView?.isCreateNew = false
+    func createIView(_ element: FlashElement, row: Int, media: FLMediaResult? = nil) {
+        self.selectedView?.isSelected = false
+        self.selectedView?.isCreateNew = false
         
         let stageView = self.getStageView(at: row)
         if let iView = stageView.createElement(element) as? InteractView {
-            self.flCreator?.selectedView = iView
-            
+            self.setSelectedView(iView)
+            iView.outlineBorderColor = .black
+            iView.setIcon(UIImage(named: "fl_delete"), handler: .close)
+            iView.setHandlerSize(size: 30)
+//            [stickerView setImage:[UIImage imageNamed:@"Close"] forHandler:CHTStickerViewHandlerClose];
+//            [stickerView setImage:[UIImage imageNamed:@"Rotate"] forHandler:CHTStickerViewHandlerRotate];
+//            [stickerView setImage:[UIImage imageNamed:@"Flip"] forHandler:CHTStickerViewHandlerFlip];
+//            [stickerView setHandlerSize:40];
             iView.gesture = SnapGesture(view: iView)
             iView.gesture?.controlView = self.controlView
-    //        iView.enableZoom()
-    //        iView.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
-    //
-    //        iView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
-    //        iView.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
             iView.isCreateNew = true
             //Auto select all test
             //textElement.textView?.selectAll(self)
             iView.textView?.becomeFirstResponder()
             iView.isSelected = true
             iView.textView?.delegate = self
+            iView.delegate = self
+            
+            if element.type == .image || element.type == .video {
+                self.viewModel.callAPIDropboxUpload(type: element.type, row: row, media: media, view: iView) {
+                    
+                }
+            }
             
             if let tool = element.tool {
                 self.openToolBar(tool: tool, iView: iView)
@@ -633,19 +664,19 @@ final class FLStageViewController: UIViewController {
             print("controlView width: \(size.width) ,controlView height: \(size.height)")
             if let controlView = self.controlView {
                 iView.update(controlView: controlView)
-                stageView.addSubview(controlView.deleteButton)
+                //stageView.addSubview(controlView.deleteButton)
                 controlView.updateRelateView(iView)
             }
         }
     }
     
     func createTextView(_ element: FlashElement, row: Int) {
-        self.flCreator?.selectedView?.isSelected = false
-        self.flCreator?.selectedView?.isCreateNew = false
+        self.selectedView?.isSelected = false
+        self.selectedView?.isCreateNew = false
         
         let stageView = self.getStageView(at: row)
         if let textElement = stageView.createElement(element) as? InteractView {
-            self.flCreator?.selectedView = textElement
+            self.setSelectedView(textElement)
             
             textElement.enableZoom()
             textElement.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
@@ -667,7 +698,7 @@ final class FLStageViewController: UIViewController {
             if let controlView = self.controlView {
                 textElement.update(controlView: controlView)
                 stageView.addSubview(controlView)
-                stageView.addSubview(controlView.deleteButton)
+                //stageView.addSubview(controlView.deleteButton)
                 controlView.updateRelateView(textElement)
             }
             
@@ -706,17 +737,6 @@ final class FLStageViewController: UIViewController {
         
     }
     
-    @objc func deleteElement(_ button:UIButton, event: UIEvent) {
-        self.controlView?.isHidden = true
-        self.controlView?.deleteButton.isHidden = true
-        if let iView = self.flCreator?.selectedView {
-            iView.removeFromSuperview()
-            if self.toolVC?.viewModel.tool != .menu {
-                self.toolVC?.closePressed(nil)
-            }
-        }
-    }
-    
     private var isScaleWidth = false
     @objc func scaleWidthDraging(_ button:UIButton, event: UIEvent) {
         
@@ -739,13 +759,13 @@ final class FLStageViewController: UIViewController {
         print("location X: \(location.x) Y:\(location.y)")
         print("deltaX: \(deltaX) Y:\(deltaY)")
         //use only text
-        if let iView = self.flCreator?.selectedView, let textView = iView.textView {
+        if let iView = self.selectedView, let textView = iView.textView {
             //let textViewFrame = textView.frame
             let iViewFrame = iView.frame
             let deltaXConvert = deltaX * -1
             //scale left+right
             let newWidth = iViewFrame.width + (deltaXConvert * 2)
-                
+            
             let newX:CGFloat = iViewFrame.origin.x + deltaX
             let iViewFrameUpdate = CGRect(x: newX, y: iViewFrame.origin.y, width: newWidth, height: iViewFrame.height)
             
@@ -798,12 +818,12 @@ final class FLStageViewController: UIViewController {
     }
     
     @objc func taped(_ gesture: UITapGestureRecognizer) {
-        self.flCreator?.selectedView?.isSelected = false
+        self.selectedView?.isSelected = false
         
         guard let iView = gesture.view as? InteractView else { return }
         //let isSelected = !view.isSelected
         iView.isSelected = true
-        self.flCreator?.selectedView = iView
+        self.setSelectedView(iView)
         self.controlView?.updateRelateView(iView)
     }
     
@@ -904,12 +924,12 @@ final class FLStageViewController: UIViewController {
         
         if UIDevice.current.orientation.isLandscape {
             print("horizontal")
-           //stackView.axis = .horizontal
-
+            //stackView.axis = .horizontal
+            
         } else {
             print("vertical")
-           //stackView.axis = .vertical
-
+            //stackView.axis = .vertical
+            
         }
     }
     
@@ -930,11 +950,11 @@ final class FLStageViewController: UIViewController {
         
         //iOS 15 will usefull Hlaf and full screen
         //https://developer.apple.com/videos/play/wwdc2021/10063/
-//        if let sheet = picker.presentationController as? UISheetPresentationController {
-//            sheet.detents = [.medium(), .large()]
-//            sheet.smallestUndimmedDetentIdentifier = .medium
-//            sheet.prefersGrabberVisible = true
-//        }
+        //        if let sheet = picker.presentationController as? UISheetPresentationController {
+        //            sheet.detents = [.medium(), .large()]
+        //            sheet.smallestUndimmedDetentIdentifier = .medium
+        //            sheet.prefersGrabberVisible = true
+        //        }
         
         present(picker, animated: true, completion: nil)
     }
@@ -962,7 +982,7 @@ final class FLStageViewController: UIViewController {
         view.layer.render(in: UIGraphicsGetCurrentContext()!)
         let screenshot = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-
+        
         //send image(screenshot) to api save
         UIImageWriteToSavedPhotosAlbum(screenshot, self, #selector(self.imageWasSaved), nil)
     }
@@ -990,7 +1010,27 @@ final class FLStageViewController: UIViewController {
         }
         return iViewImageList.count
     }
+    
+}
 
+extension FLStageViewController: InteractViewDelegate {
+    func interacViewDidTap(view: InteractView) {
+        self.setSelectedView(view)
+    }
+    
+    func interacViewDidBeginMoving(view: InteractView) {
+        self.setSelectedView(view)
+    }
+    
+    func interacViewDidClose(view: InteractView) {
+        view.removeFromSuperview()
+        if self.toolVC?.viewModel.tool != .menu {
+            self.toolVC?.closePressed(nil)
+        }
+        self.controlView?.isHidden = true
+        //self.controlView?.deleteButton.isHidden = true
+        
+    }
 }
 
 extension UIImage {
@@ -1024,12 +1064,18 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
             print("formatted result: \(string)\n \(mb)")
             let countImageElement = self.countImageElement()
             if countImageElement >= 20 {
-                //TODO 20 image perpage
                 PopupManager.showWarning("You can upload 20 images per page !", at: self)
             } else if mb >= 10.0 {
                 PopupManager.showWarning("Your image is too powerful\n(Maximum size is 4 MB)\nPlease upload again", at: self)
             } else {
-                self.createNewImage(img)
+                let imgUrl = info[.imageURL] as? URL
+                let filename = imgUrl?.lastPathComponent ?? ""
+                let imageBase64 = data.base64EncodedData()
+                let uuid = UUID().uuidString
+                let JSON:[String : Any] = ["filename" : filename, "size" : imageSize, "uuid" : uuid]
+                let media = FLMediaResult(JSON: JSON)
+                media?.imageData = imageBase64
+                self.createNewImage(img, media: media)
             }
             
         } else if let movieUrl = info[.mediaURL] as? URL {
@@ -1043,45 +1089,61 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
             } else {
                 guard let track = asset.tracks(withMediaType: .video).first else { return }
                 let size = track.naturalSize.applying(track.preferredTransform)
-                self.createNewVideo(movieUrl, size: size)
+                
+                let uuid = UUID().uuidString
+                do {
+                    let fileAttributes = try movieUrl.resourceValues(forKeys:[.nameKey, .fileSizeKey])
+                    print(fileAttributes.name!) // is String
+                    print(fileAttributes.fileSize!) // is Int
+                    let filename = movieUrl.lastPathComponent
+                    let fileSize = fileAttributes.fileSize ?? 0
+                    let JSON:[String : Any] = ["filename" : filename, "size" : fileSize, "uuid" : uuid, "file" : movieUrl]
+                    let media = FLMediaResult(JSON: JSON)
+                    self.createNewVideo(movieUrl, size: size, media: media)
+                    
+                } catch {
+                    print(error, movieUrl)
+                }
+                
+                
             }
         }
-//        MediaManager.trimVideo(movieUrl) { [weak self] (destinationURL) in
-//            //self?.play(destinationURL)
-//            //TODO: create element image, video
-//        }
+        //        MediaManager.trimVideo(movieUrl) { [weak self] (destinationURL) in
+        //            //self?.play(destinationURL)
+        //            //TODO: create element image, video
+        //        }
         
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-
+    
 }
 
 extension FLStageViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if let iView = textView.superview as? InteractView {
             iView.isSelected = true
-            self.flCreator?.selectedView = iView
+            self.setSelectedView(iView)
             self.controlView?.updateRelateView(iView)
             
             self.openToolBar(tool: .text, iView: iView)
             self.toolVC?.open(.text)
             
-//            if iView.isCreateNew {
-//                self.openToolBar(tool: .text, iView: iView)
-//                self.toolVC.open(.text)
-//            } else {
-//                //select old textview
-//            }
+            //            if iView.isCreateNew {
+            //                self.openToolBar(tool: .text, iView: iView)
+            //                self.toolVC.open(.text)
+            //            } else {
+            //                //select old textview
+            //            }
         }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if let iView = textView.superview as? InteractView {
             iView.isSelected = false
-            self.flCreator?.selectedView = iView
+            self.setSelectedView(iView)
         }
     }
     

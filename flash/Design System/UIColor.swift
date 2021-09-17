@@ -7,6 +7,6 @@
 
 import UIKit
 
-var primaryColor: UIColor = UIColor("E7000A")
-var secondaryColor: UIColor = UIColor("525252")
+var primaryColor: UIColor = UIColor("EA2427")
+var secondaryColor: UIColor = UIColor("423F3B")
 

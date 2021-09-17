@@ -13,12 +13,41 @@ enum FLStatus: Int {
     case unpublish = 1
     case waitForApprove = 2
     case approved = 3
+    
+    func title() -> String {
+        switch self {
+        case .unpublish:
+            return "Unpublish"
+        case .waitForApprove:
+            return "Wait For Approve"
+        case .approved:
+            return "Approve"
+        default:
+            return ""
+        }
+    }
+    func color() -> UIColor {
+        switch self {
+        case .unpublish:
+            return ColorHelper.primary()
+        case .waitForApprove:
+            return ColorHelper.warning()
+        case .approved:
+            return ColorHelper.success()
+        default:
+            return ColorHelper.primary()
+        }
+    }
 }
 
 class FLDetailResult: FLBaseResult {
     var progress: Any?
     var status: FLStatus = .unpublish
-    var createdBy: [String: AnyObject]?
+    var owner: OwnerResult?
+    var code: String?
+    var datetimePublish: String?
+    var estimateTime: Int?//only min
+    //var contentCode: ContentCode?
 //    "datetime_create": "2021-08-04T09:55:45.443966",
 //            "datetime_update": "2021-08-04T09:55:45.444002",
 //            "is_display": 0,
@@ -38,8 +67,10 @@ class FLDetailResult: FLBaseResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        code                 <- map["code"]
         progress             <- map["progress"]
-        createdBy            <- map["created_by"]
+        owner                <- map["created_by"]
+        datetimePublish      <- map["datetime_publish"]
     }
     
     class func with(_ dict: [String : Any]) -> FLDetailResult? {
@@ -47,6 +78,11 @@ class FLDetailResult: FLBaseResult {
         return item
     }
 }
+
+class OwnerResult: BaseResult {
+    
+}
+
 
 class FlCardResult: FLBaseResult {
     var bgColor = "FFFFFF"
@@ -67,6 +103,8 @@ class FlCardResult: FLBaseResult {
 
 class FlashPageResult: FLBaseResult {
     
+    var dropboxPage: FLDropboxPageResult?
+    
     override func mapping(map: Map) {
         super.mapping(map: map)
         image              <- map["image"]
@@ -75,6 +113,41 @@ class FlashPageResult: FLBaseResult {
     class func with(_ dict: [String : Any]) -> FlashPageResult? {
         let item = Mapper<FlashPageResult>().map(JSON: dict)
         return item
+    }
+}
+
+class FLDropboxPageResult: FLBaseResult {
+    
+    var list = [FLMediaResult]()
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        list              <- map["results"]
+    }
+    
+    class func with(_ dict: [String : Any]) -> FLDropboxPageResult? {
+        let item = Mapper<FLDropboxPageResult>().map(JSON: dict)
+        return item
+    }
+}
+
+class FLMediaResult: FLBaseResult {
+    var file: String = ""
+    var imageBase64: String?
+    var imageData: Data?
+    var cardId: Int = 0
+    var uuid: String = ""
+    var filename: String = ""
+    var size: Int = 0
+
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        imageBase64       <- map["image"]
+        file              <- map["file"]
+        cardId            <- map["card_id"]
+        uuid              <- map["uuid"]
+        filename          <- map["filename"]
+        size              <- map["size"]
     }
 }
 

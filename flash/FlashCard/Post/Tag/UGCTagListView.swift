@@ -12,20 +12,19 @@ struct UGCTagListView: View {
     @State var tagList = [String]()
     
     var body: some View {
-        Text("ddd")
+        let column = 2
+        let row = Float(tagList.count / column)
         
-        
-//        ScrollView {
-//            ForEach(0..<tagList.count) { tag in
-//                HStack {
-//                    ForEach(0..<3) { tag in
-//                        let tag = tagList[tag]
-//                        UGCTagView(tag: tag)
-//                            .scaledToFit()
-//                    }
-//                }
-//            }
-//        }
+        ScrollView(.vertical, showsIndicators: true, content: {
+            ForEach(0..<Int(row.rounded(.up))) { i in
+                HStack {
+                    ForEach(0..<column) { j in
+                        let tag = tagList[j]
+                        UGCTagView(tag: tag, row: i, collumn: j)
+                    }
+                }
+            }
+        })
     }
 }
 

@@ -7,9 +7,11 @@
 
 import UIKit
 import SwiftUI
+import GrowingTextView
 
 final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var footerView: UIView!
     @IBOutlet private weak var coverImageView: UIImageView!
     @IBOutlet private weak var imageButton: UIButton!
     
@@ -17,11 +19,12 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var titleTextField: UITextField!
     @IBOutlet private weak var titleLimitLabel: UILabel!
     
+    @IBOutlet private weak var idView: UIView!
     @IBOutlet private weak var idLabel: UILabel!
     @IBOutlet private weak var idValueLabel: UILabel!
     
     @IBOutlet private weak var descLabel: UILabel!
-    @IBOutlet private weak var descTextView: UITextView!
+    @IBOutlet private weak var descTextView: GrowingTextView!
     
     @IBOutlet private weak var ownerLabel: UILabel!
     @IBOutlet private weak var ownerValueLabel: UILabel!
@@ -57,7 +60,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     var viewModel: FLPostViewModel! {
         didSet {
             let detail = self.viewModel.detail
-            detail.status = .waitForApprove
+            //detail.status = .waitForApprove //mock
         }
     }
     
@@ -67,10 +70,63 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         ConsoleLog.show("complete removed : FLPostViewController")
     }
     
+    @objc func titleTextFieldChange(_ textField: UITextField) {
+        if let text = textField.text {
+            let maxCha = FlashStyle.post.maxChaTitle
+            textField.text = String(text.prefix(maxCha))
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.footerView.setShadow(radius: 16, opacity: 0.09, color: .black, offset: CGSize(width: 0, height: -2))
+        let fontTitle = FontHelper.getFontSystem(16, font: .text)
+        let fontValue = FontHelper.getFontSystem(16, font: .text)
+        let maxChaTitle = FlashStyle.post.maxChaTitle
+        self.titleTextField.delegate = self
+        //self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
+        self.titleLimitLabel.text = "0/\(maxChaTitle) Characters Limit"
+        self.titleLimitLabel.font = FontHelper.getFontSystem(12, font: .text)
+        self.titleTextField.font = fontValue
+        self.titleTextField.textColor = ColorHelper.text()
+        self.idView.borderWidth = 1
+        self.idView.cornerRadius = 9
+        self.idLabel.font = fontTitle
+        self.idValueLabel.font = FontHelper.getFontSystem(14, font: .text)
+        self.descLabel.font = fontTitle
+        self.descTextView.borderWidth = 1
+        self.descTextView.borderColor = UIColor("A9A9A9")
+        self.descTextView.backgroundColor = .white
+        self.descTextView.placeholder = FlashStyle.post.descPlaceHolder
+        self.descTextView.placeholderColor = ColorHelper.text25()
+        self.descTextView.textColor = ColorHelper.text()
+        self.descTextView.font = fontValue
+        self.ownerLabel.font = fontTitle
+        self.ownerValueLabel.font = fontValue
+        self.ownerValueLabel.textColor = ColorHelper.text()
+        self.updateLabel.font = fontTitle
+        self.updateValueLabel.font = fontValue
+        self.updateValueLabel.textColor = ColorHelper.text()
+        self.timeLabel.font = fontTitle
+        self.timeMinLabel.font = fontTitle
+        self.timeValueLabel.font = fontValue
+        self.categoryLabel.font = fontTitle
+        self.categoryValueLabel.text = FlashStyle.post.categoryPlaceHolder
+        self.categoryValueLabel.textColor = ColorHelper.text25()
+        self.categoryValueLabel.font = fontValue
+        self.tagLabel.font = fontTitle
+        self.tagPlaceholderLabel.font = fontValue
+        self.tagPlaceholderLabel.text = FlashStyle.post.tagPlaceHolder
+        self.tagPlaceholderLabel.textColor = ColorHelper.text25()
+        self.statusLabel.font = fontTitle
+        self.statusValueLabel.font = fontValue
+        self.idView.backgroundColor = .clear
         self.categoryView.isUserInteractionEnabled = true
         self.tagContentView.isUserInteractionEnabled = true
+        
+        let previewBtn = UIBarButtonItem(title: "preview".localized(), style: .plain, target: self, action: #selector(self.previewPressed))
+
+        self.navigationItem.rightBarButtonItems = [previewBtn]
         
         let tapCategory = UITapGestureRecognizer(target: self, action: #selector(self.categoryPressed))
         self.categoryView.addGestureRecognizer(tapCategory)
@@ -90,12 +146,78 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     func loadDetail(_ detail: FLDetailResult) {
+        self.time = detail.estimateTime ?? 5 //TODO: get real time
+        self.titleTextField.text = detail.name
+        self.descTextView.text = detail.desc
+        if let owner = detail.owner {
+            self.ownerValueLabel.text = owner.name
+        }
+        if let datetimePublish = detail.datetimePublish {//yyyy-MM-dd HH:mm:ss
+            let dateTime = formatter.with(dateFormat: "d MMM yyyy HH:mm", dateString: datetimePublish)
+            self.updateValueLabel.text = dateTime
+        } else {
+            self.updateValueLabel.text = "now"
+        }
+        self.timeValueLabel.text = "\(self.time)"
+        self.idValueLabel.text = detail.code
+        self.idValueLabel.textColor = UIColor("52BCFF")//TODO: Content code color
+        self.idView.borderColor = UIColor("52BCFF")//TODO: Content code color
+        self.statusValueLabel.text = detail.status.title()
+        self.minusButton.isEnabled = !(self.time == 1)
+        
+        
         if detail.status == .unpublish {
             self.submitButton.isHidden = false
             self.cancelButton.isHidden = true
         } else if detail.status == .waitForApprove  {
             self.submitButton.isHidden = true
             self.cancelButton.isHidden = false
+        }
+        
+        let isEnable = detail.status == .unpublish
+        let disableColor = ColorHelper.disable()
+        let textColor = ColorHelper.text()
+        titleTextField.isEnabled = isEnable
+        titleTextField.textColor = isEnable ? textColor : disableColor
+        descTextView.isEditable = isEnable
+        descTextView.textColor = isEnable ? textColor : disableColor
+        timeValueLabel.textColor = isEnable ? textColor : disableColor
+        plusButton.isEnabled = isEnable
+        minusButton.isEnabled = isEnable
+        plusButton.tintColor = isEnable ? ColorHelper.primary() : disableColor
+        minusButton.tintColor = isEnable ? ColorHelper.primary() : disableColor
+        categoryView.isUserInteractionEnabled = isEnable
+        categoryValueLabel.textColor = isEnable ? ColorHelper.text25() : disableColor
+        categoryButton.isEnabled = isEnable
+        tagButton.isEnabled = isEnable
+        tagContentView.isUserInteractionEnabled = isEnable
+        tagView.isUserInteractionEnabled = isEnable
+        statusPin.backgroundColor = detail.status.color()
+        
+    }
+    var time = 1
+    @IBAction func timePlusPressed(_ sender: UIButton) {
+        self.time = self.time + 1
+        self.minusButton.isEnabled = !(self.time == 1)
+        self.timeValueLabel.text = "\(self.time)"
+        ConsoleLog.show("timeNumber: \(self.time)")
+    }
+    
+    @IBAction func timeMinusPressed(_ sender: UIButton) {
+        
+        self.time = self.time - 1
+        self.minusButton.isEnabled = !(self.time == 1)
+        self.timeValueLabel.text = "\(self.time)"
+        ConsoleLog.show("timeNumber: \(self.time)")
+    }
+    
+    @objc func previewPressed() {
+        let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController")
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
         }
     }
     
@@ -155,34 +277,39 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     @IBAction func submitPressed(_ sender: UIButton) {
         let detail = self.viewModel.detail
-        self.openPopupWith(status: detail.status)
+        self.openPopupWith(newStatus: .waitForApprove)
     }
     
     @IBAction func cancelPressed(_ sender: UIButton) {
         let detail = self.viewModel.detail
-        self.openPopupWith(status: detail.status)
+        self.openPopupWith(newStatus: .unpublish)
     }
     
-    func openPopupWith(status: FLStatus) {
+    func openPopupWith(newStatus: FLStatus) {
         let detail = self.viewModel.detail
         var desc = "Do you confirm to submit this material?"
-        if status == .waitForApprove {
+        if detail.status == .waitForApprove {
             desc = "Do you confirm to cancel the request?"
         }
         
         let confirm = ActionButton(
             title: "confirm".localized(),
             action: Action(handler: { (sender) in
-                self.callApiPost(status)
+                self.callApiPost(newStatus)
             })
         )
         PopupManager.showWarning(desc, confirm: confirm, at: self)
     }
     
     func callApiPost(_ status: FLStatus) {
-        self.viewModel.callAPIDetail(.post, status: status) {
-            
-        }
+        //mock
+        self.viewModel.detail.status = status
+        self.loadDetail(self.viewModel.detail)
+        
+        //api
+//        self.viewModel.callAPIDetail(.post, status: status) {
+//
+//        }
         print("submit confirm")
     }
     
@@ -238,9 +365,20 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
 }
 
-extension FLPostViewController: TagListViewDelegate, TagListSelectViewControllerDelegate {
+extension FLPostViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        if let text = textField.text, textField == self.titleTextField {
+            let currentText = text + string
+            let maxCha = FlashStyle.post.maxChaTitle
+            return currentText.count <= maxCha
+         }
+        return true
+    }
+}
+
+extension FLPostViewController: TagListViewDelegate, TagListSelectViewControllerDelegate, UGCCatagoryListViewDelegate {
     
-    //TagListViewDelegate
     func tagPressed(_ title: String, tagView: TagView, sender: TagListView) {
         ConsoleLog.show("Tag : \(title), \(sender), \(tagView.tag)")
         self.tagViewPressed()
@@ -250,7 +388,12 @@ extension FLPostViewController: TagListViewDelegate, TagListSelectViewController
         print("select: \(tags.count) tag")
         self.manageTagContentViewWith(tags: tags)
     }
+    
+    func didSelectCategory(_ category: CategoryResult) {
+        print("category: \(category.name) tag")
+    }
 }
+
 
 
 extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
@@ -267,6 +410,7 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
             let imgData = img.jpeg ?? img.png
             guard let data = imgData else { return }
             var imageSize: Int = data.count
+            self.coverImageView.image = UIImage(data: data)
             print("actual size of image in KB: %f ", Double(imageSize) / 1024.0)
         }
     }

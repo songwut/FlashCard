@@ -29,3 +29,13 @@ class BaseViewController: UIViewController {
     */
 
 }
+
+extension BaseViewController: BaseViewProtocol {
+    func showProgressLoading() {
+        self.showLoading(nil)
+    }
+    
+    func hideProgressLoading() {
+        self.hideLoading()
+    }
+}

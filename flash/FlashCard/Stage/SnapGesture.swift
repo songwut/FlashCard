@@ -196,6 +196,7 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             // Translate
             let point = recognizer.location(in: view)
             view.transform = view.transform.translatedBy(x: point.x - lastPinchPoint.x, y: point.y - lastPinchPoint.y)
+            view.setNeedsDisplay()
             self.controlView?.updateRelateView(view)
             lastPinchPoint = recognizer.location(in: view)
         }
