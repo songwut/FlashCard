@@ -641,13 +641,16 @@ final class FLStageViewController: UIViewController {
         if let iView = stageView.createElement(element) as? InteractView {
             self.setSelectedView(iView)
             iView.outlineBorderColor = .black
-            iView.setIcon(UIImage(named: "fl_delete"), handler: .close)
-            iView.setHandlerSize(size: 30)
+            iView.setImage(UIImage(named: "fl_delete"), for: .close)
+            iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
+            iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
+            iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
+            iView.setHandlerSize(30)
 //            [stickerView setImage:[UIImage imageNamed:@"Close"] forHandler:CHTStickerViewHandlerClose];
 //            [stickerView setImage:[UIImage imageNamed:@"Rotate"] forHandler:CHTStickerViewHandlerRotate];
 //            [stickerView setImage:[UIImage imageNamed:@"Flip"] forHandler:CHTStickerViewHandlerFlip];
 //            [stickerView setHandlerSize:40];
-            iView.gesture = SnapGesture(view: iView)
+            //iView.gesture = SnapGesture(view: iView)
             iView.gesture?.controlView = self.controlView
             iView.isCreateNew = true
             //Auto select all test
@@ -686,10 +689,13 @@ final class FLStageViewController: UIViewController {
         if let iView = stageView.createElement(element) as? InteractView {
             self.setSelectedView(iView)
             iView.outlineBorderColor = .black
-            iView.setIcon(UIImage(named: "fl_delete"), handler: .close)
-            iView.setHandlerSize(size: 30)
+            iView.setImage(UIImage(named: "fl_delete"), for: .close)
+            iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
+            iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
+            iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
+            iView.setHandlerSize(30)
             
-            iView.gesture = SnapGesture(view: iView)
+            //iView.gesture = SnapGesture(view: iView)
             iView.gesture?.controlView = self.controlView
             
 //            iView.enableZoom()
@@ -1226,4 +1232,8 @@ extension FLStageViewController: UIScrollViewDelegate {
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         print("scrollViewDidEndScrollingAnimation")
     }
+}
+
+extension FLStageViewController : CHTStickerViewDelegate {
+    
 }

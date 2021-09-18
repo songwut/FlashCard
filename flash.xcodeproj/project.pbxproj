@@ -518,6 +518,9 @@
 		69B0FCCB26A98D8D0086E6C5 /* PopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FCCA26A98D8D0086E6C5 /* PopupManager.swift */; };
 		69B0FCCC26A98D8D0086E6C5 /* PopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FCCA26A98D8D0086E6C5 /* PopupManager.swift */; };
 		69B0FCCD26A98D8D0086E6C5 /* PopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FCCA26A98D8D0086E6C5 /* PopupManager.swift */; };
+		69BA86E126F63B3D00954E40 /* CHTStickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86DF26F63B3D00954E40 /* CHTStickerView.m */; };
+		69BA86E226F63B3D00954E40 /* CHTStickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86DF26F63B3D00954E40 /* CHTStickerView.m */; };
+		69BA86E326F63B3D00954E40 /* CHTStickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86DF26F63B3D00954E40 /* CHTStickerView.m */; };
 		69C0A23C266E1EA7001C6F32 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C0A23B266E1EA7001C6F32 /* Arrow.swift */; };
 		69C0A23D266E1EA7001C6F32 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C0A23B266E1EA7001C6F32 /* Arrow.swift */; };
 		69C0A23E266E1EA7001C6F32 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C0A23B266E1EA7001C6F32 /* Arrow.swift */; };
@@ -749,6 +752,9 @@
 		69B0FCBC26A9835B0086E6C5 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		69B0FCC326A9871E0086E6C5 /* Localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localized.swift; sourceTree = "<group>"; };
 		69B0FCCA26A98D8D0086E6C5 /* PopupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupManager.swift; sourceTree = "<group>"; };
+		69BA86DF26F63B3D00954E40 /* CHTStickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTStickerView.m; sourceTree = "<group>"; };
+		69BA86E026F63B3D00954E40 /* CHTStickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTStickerView.h; sourceTree = "<group>"; };
+		69BA86EA26F641AB00954E40 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
 		69C0A23B266E1EA7001C6F32 /* Arrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Arrow.swift; sourceTree = "<group>"; };
 		69D53B442692F7090020E024 /* FlashStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashStyle.swift; sourceTree = "<group>"; };
 		69D53B4E2693031A0020E024 /* StatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatViewController.swift; sourceTree = "<group>"; };
@@ -831,6 +837,7 @@
 			children = (
 				69848FF226959B8800B5FEF6 /* flash.entitlements */,
 				695899A62669F0710012B032 /* AppDelegate.swift */,
+				69BA86EA26F641AB00954E40 /* Header.h */,
 				6985B39926E7BFDE00FEAD8F /* ExternalLibs */,
 				6985B2C426E779EC00FEAD8F /* Sources */,
 				697D19E126945ED50082783E /* HalfModalPresentationController */,
@@ -1134,6 +1141,7 @@
 		6985B39926E7BFDE00FEAD8F /* ExternalLibs */ = {
 			isa = PBXGroup;
 			children = (
+				69BA86DE26F63B3D00954E40 /* CHTStickerView */,
 				6985B39A26E7C00800FEAD8F /* TagListView */,
 			);
 			path = ExternalLibs;
@@ -1252,6 +1260,15 @@
 				69B0FC7726A977640086E6C5 /* Popup.storyboard */,
 			);
 			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		69BA86DE26F63B3D00954E40 /* CHTStickerView */ = {
+			isa = PBXGroup;
+			children = (
+				69BA86DF26F63B3D00954E40 /* CHTStickerView.m */,
+				69BA86E026F63B3D00954E40 /* CHTStickerView.h */,
+			);
+			path = CHTStickerView;
 			sourceTree = "<group>";
 		};
 		69EC51BE269C690C00A23790 /* Fonts */ = {
@@ -1642,6 +1659,7 @@
 				695DDCBC26EB537800B0194D /* Formatter.swift in Sources */,
 				696ABCD826DFD990009527D3 /* FLInfoView.swift in Sources */,
 				697D19FC2694685B0082783E /* FLToolViewController.swift in Sources */,
+				69BA86E126F63B3D00954E40 /* CHTStickerView.m in Sources */,
 				6968C79B26A15DE900A712B0 /* InteractTextView.swift in Sources */,
 				697C0AFE26CA6D0900CA1092 /* FLQuizViewController.swift in Sources */,
 				6989905526B7B8B4008A41C1 /* FLListViewController.swift in Sources */,
@@ -1804,6 +1822,7 @@
 				6972051F268E1B3C002E3149 /* FLMenuBarView.swift in Sources */,
 				69D53B462692F7090020E024 /* FlashStyle.swift in Sources */,
 				69720530268E298F002E3149 /* FLStageViewController.swift in Sources */,
+				69BA86E226F63B3D00954E40 /* CHTStickerView.m in Sources */,
 				696D034C268F9EBD002B3500 /* FLItemCollectionViewCell.swift in Sources */,
 				6968C77726A0233800A712B0 /* FLControlView.swift in Sources */,
 				698490762695F27900B5FEF6 /* FLColorCell.swift in Sources */,
@@ -1886,6 +1905,7 @@
 			files = (
 				69B0FC8F26A97A550086E6C5 /* CourseDetailViewController.swift in Sources */,
 				695005AF267A65B3009BBEC4 /* exAll.swift in Sources */,
+				69BA86E326F63B3D00954E40 /* CHTStickerView.m in Sources */,
 				6989906B26B7BB39008A41C1 /* BaseViewModel.swift in Sources */,
 				6989920B26BCF28C008A41C1 /* FLImageCell.swift in Sources */,
 				6985B3C426E7C7E800FEAD8F /* UGCTag.swift in Sources */,
@@ -2094,7 +2114,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2149,7 +2169,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -2170,7 +2190,7 @@
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = KJWUN9F44D;
 				INFOPLIST_FILE = flash/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2178,6 +2198,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.conicle.flash;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = flash/Header.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2194,7 +2215,7 @@
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = KJWUN9F44D;
 				INFOPLIST_FILE = flash/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2202,6 +2223,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.conicle.flash;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = flash/Header.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

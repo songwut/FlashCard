@@ -40,6 +40,7 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
     }
     
     var controlView: FLControlView?
+    var minimumSize:CGFloat = 30
 
     // MARK: - private method
     private weak var weakGestureView: UIView?
@@ -163,43 +164,83 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
             // perform change
             let point = recognizer.location(in: view)
             view.transform = view.transform.translatedBy(x: point.x - lastPanPoint.x, y: point.y - lastPanPoint.y)
+            print("width:\(view.bounds.width)")
+            view.setNeedsDisplay()
             self.controlView?.updateRelateView(view)
             lastPanPoint = recognizer.location(in: view)
         }
     }
 
 
+    var initialBounds = CGRect.zero
+    var initialDistance: CGFloat = 0
+    var deltaAngle: CGFloat = 0
 
     private var lastScale:CGFloat = 1.0
     private var lastPinchPoint:CGPoint = CGPoint(x: 0, y: 0)
     @objc func pinchProcess(_ recognizer:UIPinchGestureRecognizer) {
         if isGestureEnabled {
             guard let view = self.weakTransformView else { return }
-
-            // init
-            if recognizer.state == .began {
-                lastScale = 1.0;
-                lastPinchPoint = recognizer.location(in: view)
-            }
-
+            let touchLocation = recognizer.location(in: view.superview)
+            
+                //[recognizer locationInView:self.superview];
+            let center = view.center
             // judge valid
             if recognizer.numberOfTouches < 2 {
                 lastPinchPoint = recognizer.location(in: view)
                 return
             }
+            
+            // init
+            switch recognizer.state {
+            case .began:
+                lastScale = 1.0;
+                lastPinchPoint = recognizer.location(in: view)
+                deltaAngle = CGFloat(atan2f(Float(touchLocation.y - center.y), Float(touchLocation.x - center.x))) - getAngle(view.transform)
+                initialBounds = view.bounds
+                initialDistance = getDistance(center, touchLocation)
+                break
+            case .changed:
+                // Scale
+                let scale = 1.0 - (lastScale - recognizer.scale);
+                view.transform = view.transform.scaledBy(x: scale, y: scale)
+                lastScale = recognizer.scale;
 
-            // Scale
-            let scale = 1.0 - (lastScale - recognizer.scale);
-            view.transform = view.transform.scaledBy(x: scale, y: scale)
-            lastScale = recognizer.scale;
-
-            // Translate
-            let point = recognizer.location(in: view)
-            view.transform = view.transform.translatedBy(x: point.x - lastPinchPoint.x, y: point.y - lastPinchPoint.y)
-            view.setNeedsDisplay()
-            self.controlView?.updateRelateView(view)
-            lastPinchPoint = recognizer.location(in: view)
+                // Translate
+                let point = recognizer.location(in: view)
+                view.transform = view.transform.translatedBy(x: point.x - lastPinchPoint.x, y: point.y - lastPinchPoint.y)
+                
+                var fScale = getDistance(center, touchLocation) / initialDistance
+                let min:CGFloat = [initialBounds.size.width, initialBounds.size.height].min() ?? 0
+                let minimumScale = CGFloat(self.minimumSize) / min
+                let max: CGFloat = [fScale, minimumScale].max() ?? 0
+                fScale = max
+                let scaledBounds = getRectScale(initialBounds, fScale, scale)
+                view.bounds = scaledBounds
+                view.setNeedsDisplay()
+                print("Pinch width:\(view.bounds.width)")
+                //self.controlView?.updateRelateView(view)
+                lastPinchPoint = recognizer.location(in: view)
+                break
+            default:
+                break
+            }
+            
         }
+    }
+    
+    func  getRectScale(_ rect: CGRect, _ wScale: CGFloat, _ hScale: CGFloat) -> CGRect {
+        return CGRect(x: rect.origin.x, y: rect.origin.y, width: rect.size.width * wScale, height: rect.size.height * hScale)
+    }
+    
+    func getAngle(_ t: CGAffineTransform ) -> CGFloat {
+      return atan2(t.b, t.a);
+    }
+    
+    func getDistance(_ point1: CGPoint, _ point2: CGPoint ) -> CGFloat {
+        let fx = CGFloat(point2.x - point1.x)
+        let fy = CGFloat(point2.y - point1.y)
+        return sqrt((fx * fx + fy * fy))
     }
 
 

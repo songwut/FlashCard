@@ -46,7 +46,87 @@ class FLControlIcon: UIImageView {
     var position: FLInteractViewPosition = .topRight
 }
 
-class InteractView: UIView, UIGestureRecognizerDelegate {
+class InteractView: CHTStickerView {
+    //var delegate: InteractViewDelegate?
+    var textColor: String?
+    
+    var isCreateNew = true
+    var imageView:UIImageView?
+    var element: FlashElement?
+    var type: FLType = .unknow
+    var gesture: SnapGesture?
+    
+    var removeButton: UIButton?
+    var scaleLeftButton: UIButton?
+    var scaleRightButton: UIButton?
+    
+    var topLeftButton: UIButton?
+    var bottomLeftButton: UIButton?
+    var bottomRightButton: UIButton?
+    
+    var rotation: Float = 0 {
+        didSet {
+            print("update rotation: \(self.rotation)")
+        }
+    }
+    
+    func update(controlView:FLControlView) {
+//        self.controlBgView.addSubview(controlView)
+//        controlView.bounds = CGRect(origin: .zero, size: self.bounds.size)
+//        controlView.isHidden = false
+//        let isText = self.type == .text
+//        controlView.leftWidthButton.isHidden = !isText
+//        controlView.rightWidthButton.isHidden = !isText
+    }
+    
+    func update(rotation:Float?) {
+        if let r = rotation {
+            self.rotation = r
+            let rAngle = CGFloat(r)
+            self.transform = CGAffineTransform(rotationAngle: rAngle)
+        }
+    }
+    
+    var scale: Float = 0 {
+        didSet {
+            print("update scale: \(self.scale)")
+        }
+    }
+    
+    func update(scale: Float) {
+        self.scale = scale
+        self.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
+    }
+    
+    var isSelected: Bool = false {
+        didSet {
+            //self.layer.borderWidth = self.isSelected ? 1 : 0
+            //.layer.borderColor = UIColor.black.cgColor
+        }
+    }
+    
+    var textView: UITextView?
+    
+    var svgImage: SVGKImage?
+    
+    func updateVector(_ svgImage:SVGKImage?) {
+        self.imageView?.image = svgImage?.uiImage
+    }
+    
+    var currentScale: CGPoint {
+        let a = transform.a
+        let b = transform.b
+        let c = transform.c
+        let d = transform.d
+        
+        let sx = sqrt(a * a + b * b)
+        let sy = sqrt(c * c + d * d)
+        
+        return CGPoint(x: sx, y: sy)
+    }
+}
+
+class InteractView1: UIView, UIGestureRecognizerDelegate {
     var delegate: InteractViewDelegate?
     var textColor: String?
     
@@ -203,7 +283,7 @@ class InteractView: UIView, UIGestureRecognizerDelegate {
     }()
     
     @objc func handleCloseGesture(recognizer: UITapGestureRecognizer) {
-        self.delegate?.interacViewDidClose?(view: self)
+        //self.delegate?.interacViewDidClose?(view: self)
         self.removeFromSuperview()
     }
     
@@ -221,7 +301,7 @@ class InteractView: UIView, UIGestureRecognizerDelegate {
     var minimumSize: Int = 0//= [self.minimumSize, self.defaultMinimumSize].max() ?? 0
 }
 
-extension InteractView {
+extension InteractView1 {
     
     var currentScale: CGPoint {
         let a = transform.a

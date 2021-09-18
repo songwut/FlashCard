@@ -51,8 +51,6 @@ struct FLCreator {
         var viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
         var viewH = ((stage.frame.height * CGFloat(element.width)) / 100)
         
-        let iView = InteractView()
-        iView.type = .text
         let font:UIFont = self.manageFont(element: element)
         
         let scale = (element.scale + Float(stage.stageRatio)) - 1.0
@@ -94,12 +92,12 @@ struct FLCreator {
             viewH = textViewFrame.height + margin
         }
         
-        
+        let iView = InteractView(contentView: textView)!
+        iView.type = .text
         let selfFrame = iView.frame
         iView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: viewW, height: viewW))
         
-        //textView.translatesAutoresizingMaskIntoConstraints = false
-        iView.contentView = textView
+        //iView.contentView = textView
         textView.frame = CGRect(x: marginXY, y: marginXY, width: viewW - margin, height: viewH - margin)
         textView.textColor = UIColor(element.textColor)
         if let fill = element.fill {
@@ -157,11 +155,11 @@ struct FLCreator {
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(origin: CGPoint.zero, size: size)
-        let iView = InteractView()
+        let iView = InteractView(contentView: imageview)!
         iView.type = .image
         iView.frame = frame
         iView.center = center
-        iView.contentView = imageview
+        //iView.contentView = imageview
         iView.update(rotation: element.rotation)
         stage.addSubview(iView)
         return iView
@@ -219,10 +217,10 @@ struct FLCreator {
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
-        let iView = InteractView()
+        let iView = InteractView(contentView: playerView)!
         iView.frame = frame
         iView.center = center
-        iView.contentView = playerView
+        //iView.contentView = playerView
         iView.update(rotation: element.rotation)
         stage.addSubview(iView)
         return iView
@@ -247,10 +245,10 @@ struct FLCreator {
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
-        let iView = InteractView()
+        let iView = InteractView(contentView: imageview)!
         iView.frame = frame
         iView.center = center
-        iView.contentView = imageview
+        //iView.contentView = imageview
         iView.svgImage = receivedimage
         iView.imageView = imageview
         iView.update(rotation: element.rotation)
@@ -275,10 +273,10 @@ struct FLCreator {
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
-        let iView = InteractView()
+        let iView = InteractView(contentView: view)!
         iView.frame = frame
         iView.center = center
-        iView.contentView = view
+        //iView.contentView = view
         iView.update(rotation: element.rotation)
         stage.addSubview(iView)
         return iView

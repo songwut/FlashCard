@@ -196,7 +196,7 @@ class FLListViewController: UIViewController {
         let itemMargin:CGFloat = edgeMargin * (column - 1)
         let edgeLRMargin:CGFloat = edgeMargin * 2
         let allItemWidth = allwidth - (itemMargin + edgeLRMargin)
-        let cellWidth = allItemWidth / column
+        let cellWidth = (allItemWidth / column) - 1//some device over width
         let cellHeight = cellWidth * FlashStyle.pageCardRatio
         self.cellSize = CGSize(width: cellWidth, height: cellHeight)
         self.layout.itemSize = self.cellSize
