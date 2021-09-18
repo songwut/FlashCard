@@ -152,7 +152,7 @@ class FLMediaResult: FLBaseResult {
 }
 
 class FLPageDetailResult: FlashPageResult {
-    var bgColor = "FFFFFF"
+    var bgColor = FLColorResult(JSON: ["hex" : "ffffff"])!
     var componentList = [FlashElement]()
     
     override func mapping(map: Map) {

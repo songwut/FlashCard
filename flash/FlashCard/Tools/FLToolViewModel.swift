@@ -11,7 +11,6 @@ struct FLToolViewSetup {
     var title: String?
     var tool: FLTool
     var iView: InteractView?
-    
 }
 
 class FLToolViewModel {

@@ -106,7 +106,7 @@ class FlashElement: FLBaseResult {
     
     //text
     var text = ""
-    var textColor = "#000000"
+    var textColor = "000000"
     var fontSize:CGFloat = 36
     var flAlignment = FLTextAlignment.center
     var flTextStyle:[FLTextStyle] = [FLTextStyle]()//["bold", "italic", "underline"]

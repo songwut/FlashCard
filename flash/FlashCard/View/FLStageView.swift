@@ -39,7 +39,7 @@ class FLStageView: UIView {
         }
         self.cover.imageUrl(page.image)
         self.viewModel?.callAPICardList(cardId: page.id, complete: { (pageDetail: FLPageDetailResult) in
-            self.backgroundColor = UIColor(pageDetail.bgColor)
+            self.backgroundColor = UIColor(pageDetail.bgColor.hex)
             for element in pageDetail.componentList {
                 let v = self.createElement(element)
                 v?.tag = element.id

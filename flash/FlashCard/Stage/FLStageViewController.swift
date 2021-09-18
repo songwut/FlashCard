@@ -95,7 +95,6 @@ final class FLStageViewController: UIViewController {
         self.view.updateLayout()
         self.contentPageView.backgroundColor = UIColor("F5F5F5")
         self.menuView.backgroundColor = UIColor("F5F5F5")
-        self.viewModel.prepareModel()
         
         self.stageViewList = [FLStageView]()
         
@@ -131,7 +130,6 @@ final class FLStageViewController: UIViewController {
         self.contentPageView.addSubview(self.addRightPageButton!)
         
         self.flCreator = FLCreator(stage: self.stageView!)
-        self.manageStageFrame()
         
         self.listButton.addTarget(self, action: #selector(self.listButtonPressed(_:)), for: .touchUpInside)
         
@@ -148,8 +146,12 @@ final class FLStageViewController: UIViewController {
                 UIView.animate(withDuration: 0.3) {
                     self?.view.alpha = 1.0
                 }
+                self?.manageStageFrame()
             }
             
+            self?.viewModel.callAPICurrentPageDetail(complete: {
+                ConsoleLog.show("callAPIPageDetail")
+            })
         }
     }
     
@@ -215,6 +217,7 @@ final class FLStageViewController: UIViewController {
     }
     
     func manageStageFrame() {
+        self.contentPageView.updateLayout()
         DispatchQueue.main.async {
             print("self.view:\(self.view.frame)")
             print("self.contentPageView:\(self.contentPageView.frame)")
@@ -417,8 +420,8 @@ final class FLStageViewController: UIViewController {
                 stageView.backgroundColor = UIColor(flColor.hex)
             })
             self.toolVC?.didChangeTextColor = Action(handler: { [weak self] (sender) in
-                guard let hex = sender as? String else { return }
-                self?.selectedView?.textView?.textColor = UIColor(hex)
+                guard let flColor = sender as? FLColorResult else { return }
+                self?.selectedView?.textView?.textColor = UIColor(flColor.hex)
             })
             
             self.toolVC?.didMediaPressed = Action(handler: { [weak self] (sender) in
@@ -456,6 +459,9 @@ final class FLStageViewController: UIViewController {
             self.toolVC?.didMove(toParent: self)
             
             self.toolVC?.setup(FLToolViewSetup(tool: .menu))
+            if let page = self.viewModel.currentPageDetail {
+                self.toolVC?.updatePageDetail(page)
+            }
         }
     }
     
@@ -463,7 +469,9 @@ final class FLStageViewController: UIViewController {
         if let toolVC = self.toolVC {
             toolVC.setup(FLToolViewSetup(tool: tool, iView: iView))
             toolVC.view.isHidden = false
-            
+        }
+        if let page = self.viewModel.currentPageDetail {
+            self.toolVC?.updatePageDetail(page)
         }
     }
     
@@ -675,32 +683,38 @@ final class FLStageViewController: UIViewController {
         self.selectedView?.isCreateNew = false
         
         let stageView = self.getStageView(at: row)
-        if let textElement = stageView.createElement(element) as? InteractView {
-            self.setSelectedView(textElement)
+        if let iView = stageView.createElement(element) as? InteractView {
+            self.setSelectedView(iView)
+            iView.outlineBorderColor = .black
+            iView.setIcon(UIImage(named: "fl_delete"), handler: .close)
+            iView.setHandlerSize(size: 30)
             
-            textElement.enableZoom()
-            textElement.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
+            iView.gesture = SnapGesture(view: iView)
+            iView.gesture?.controlView = self.controlView
             
-            textElement.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
-            textElement.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
-            textElement.isCreateNew = true
-            //Auto select all test
-            //textElement.textView?.selectAll(self)
-            textElement.textView?.becomeFirstResponder()
-            textElement.isSelected = true
-            textElement.textView?.delegate = self
+//            iView.enableZoom()
+//            iView.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
+//            iView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
+//            iView.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
             
-            self.openToolBar(tool: .text, iView: textElement)
+            iView.isCreateNew = true
+            iView.textView?.isEditable = true
+            iView.textView?.selectAll(self)//Auto select all test
+            iView.isSelected = true
+            iView.textView?.delegate = self
+            iView.textView?.becomeFirstResponder()
+            
+            self.openToolBar(tool: .text, iView: iView)
             self.toolVC?.open(.text, isCreating: true)
             
-            let size = textElement.frame
+            let size = iView.frame
             print("controlView width: \(size.width) ,controlView height: \(size.height)")
-            if let controlView = self.controlView {
-                textElement.update(controlView: controlView)
-                stageView.addSubview(controlView)
-                //stageView.addSubview(controlView.deleteButton)
-                controlView.updateRelateView(textElement)
-            }
+//            if let controlView = self.controlView {
+//                textElement.update(controlView: controlView)
+//                stageView.addSubview(controlView)
+//                //stageView.addSubview(controlView.deleteButton)
+//                controlView.updateRelateView(textElement)
+//            }
             
         }
     }
@@ -771,7 +785,6 @@ final class FLStageViewController: UIViewController {
             
             iView.frame = iViewFrameUpdate
             
-            self.controlView?.updateRelateView(iView)
             print("out iView:\(iView.frame)")
             if !self.isScaleWidth {//for textview fix layout
                 self.isScaleWidth = true
@@ -804,6 +817,8 @@ final class FLStageViewController: UIViewController {
     func updateTextviewHeight(_ iView:InteractView) {
         guard let textView = iView.textView else { return }
         let f = iView.frame
+        textView.backgroundColor = .gray
+        iView.backgroundColor = .green
         //height growing
         let viewH = textView.systemLayoutSizeFitting(CGSize(width: f.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
         textView.frame = CGRect(x: 0, y: 0, width: f.width, height: viewH)
@@ -811,7 +826,6 @@ final class FLStageViewController: UIViewController {
         let selfFrame = iView.frame
         let stageView = self.stageView!
         iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: selfFrame.width, height: viewH * stageView.stageRatio)
-        self.controlView?.updateRelateView(iView)
         
         //let newSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
         //textView.frame = CGRect(origin: textView.frame.origin, size: newSize)
@@ -824,7 +838,6 @@ final class FLStageViewController: UIViewController {
         //let isSelected = !view.isSelected
         iView.isSelected = true
         self.setSelectedView(iView)
-        self.controlView?.updateRelateView(iView)
     }
     
     @objc func moveVertical(_ gesture: UIPanGestureRecognizer) {
@@ -862,7 +875,6 @@ final class FLStageViewController: UIViewController {
         print("y : \(translation.y)")
         iView.transform = iView.transform.translatedBy(x: translation.x, y: translation.y)
         gesture.setTranslation(CGPoint.zero, in: self.stageView)
-        self.controlView?.updateRelateView(iView)
         
         if gesture.state == .began {
             
@@ -1126,7 +1138,6 @@ extension FLStageViewController: UITextViewDelegate {
         if let iView = textView.superview as? InteractView {
             iView.isSelected = true
             self.setSelectedView(iView)
-            self.controlView?.updateRelateView(iView)
             
             self.openToolBar(tool: .text, iView: iView)
             self.toolVC?.open(.text)
@@ -1150,7 +1161,6 @@ extension FLStageViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         if let iView = textView.superview as? InteractView {
             self.updateTextviewHeight(iView)
-            self.controlView?.updateRelateView(iView)
         }
     }
     

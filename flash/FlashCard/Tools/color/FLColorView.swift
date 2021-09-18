@@ -14,11 +14,15 @@ final class FLColorView: UIView {
     @IBOutlet private weak var layout: UICollectionViewFlowLayout!
     
     private var colorList = [FLColorResult]()
-    private var selectedIndex = 0
     private var cellSize: CGSize = .zero
     
     var didSelectedColor: Action?
     var height = CGFloat.zero
+    var selectedColor = "000000"
+    
+    func reloadColor()  {
+        self.collectionView.reloadData()
+    }
     
     func setup(colorList:[FLColorResult]) {
         self.colorList = colorList
@@ -71,8 +75,9 @@ extension FLColorView : UICollectionViewDataSource, UICollectionViewDelegateFlow
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FLColorCell", for: indexPath) as! FLColorCell
-        cell.isSelected = indexPath.row == self.selectedIndex
-        cell.colorHex = self.colorList[indexPath.row].hex
+        let hex = self.colorList[indexPath.row].hex
+        cell.isSelected = hex == self.selectedColor
+        cell.colorHex = hex
         return cell
     }
     
@@ -82,10 +87,10 @@ extension FLColorView : UICollectionViewDataSource, UICollectionViewDelegateFlow
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.selectedIndex = indexPath.row
         collectionView.reloadData()
-        let hex = self.colorList[indexPath.row]
-        self.didSelectedColor?.handler(hex)
+        let color = self.colorList[indexPath.row]
+        self.selectedColor = color.hex
+        self.didSelectedColor?.handler(color)
     }
     
 }

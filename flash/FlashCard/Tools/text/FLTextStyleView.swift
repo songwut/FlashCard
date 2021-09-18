@@ -28,15 +28,46 @@ class FLTextStyleView: UIView {
     var didChangeTextStyle: Action?
     var didChangeTextAlignment: Action?
     
+    var alignment: FLTextAlignment? {
+        didSet {
+        }
+    }
+    
+    var styleList = [FLTextStyle]() {
+        didSet {
+            self.setStyle(button: boldButton, list: styleList)
+            self.setStyle(button: italicButton, list: styleList)
+            self.setStyle(button: underlineButton, list: styleList)
+        }
+    }
     
     @IBAction func alignmentPressed(_ sender: UIButton) {
         guard let btn = sender as? FLButton else { return }
+        self.setAlinement(a: btn.alignment)
         self.didChangeTextAlignment?.handler(btn.alignment)
     }
     
     @IBAction func stylePressed(_ sender: UIButton) {
         guard let btn = sender as? FLButton else { return }
+        self.manageStyleList(new: btn.textStyle)
+        self.setStyle(button: btn, list: styleList)
         self.didChangeTextStyle?.handler(btn.textStyle)
+    }
+    
+    func manageStyleList(new: FLTextStyle?) {
+        guard let newStyle = new else { return }
+        if styleList.contains(newStyle) {
+            let index = styleList.firstIndex { (style) -> Bool in
+                return style == newStyle
+            }
+            if let i = index {
+                styleList.remove(at: i)
+            }
+        } else {
+            styleList.append(newStyle)
+        }
+        
+        print("styleList: \(styleList)")
     }
     
     override func awakeFromNib() {
@@ -58,21 +89,60 @@ class FLTextStyleView: UIView {
         self.underlineButton.cornerRadius = 8
         
         self.leftButton.alignment = .left
-        self.leftButton.borderColor = UIColor("7D7D7D")
         self.leftButton.tintColor = ColorHelper.text50()
         
         self.centerButton.alignment = .center
-        self.centerButton.borderColor = UIColor("7D7D7D")
-        self.centerButton.tintColor = ColorHelper.text50()
+        self.centerButton.tintColor = .text50()
         
         self.righrButton.alignment = .right
-        self.righrButton.borderColor = UIColor("7D7D7D")
-        self.righrButton.tintColor = ColorHelper.text50()
+        self.righrButton.tintColor = .text50()
         
         self.justifiedButton.alignment = .justified
-        self.justifiedButton.borderColor = UIColor("7D7D7D")
-        self.justifiedButton.tintColor = ColorHelper.text50()
+        self.justifiedButton.tintColor = .text50()
         
+    }
+    
+    func setAlinement(a: FLTextAlignment) {
+        let color = UIColor("7D7D7D")
+        self.leftButton.tintColor = self.leftButton.alignment == a ? .black : color
+        self.centerButton.tintColor = self.centerButton.alignment == a ? .black : color
+        self.righrButton.tintColor = self.righrButton.alignment == a ? .black : color
+        self.justifiedButton.tintColor = self.justifiedButton.alignment == a ? .black : color
+    }
+    
+    func setStyle(button: FLButton, list: [FLTextStyle]) {
+        let boldList = list.filter { (style) -> Bool in
+            return style == .bold
+        }
+        if let _ = boldList.first {
+            self.boldButton.tintColor = .black
+            self.boldButton.borderColor = .black
+        } else {
+            self.boldButton.tintColor = ColorHelper.text75()
+            self.boldButton.borderColor = UIColor("7D7D7D")
+        }
+        
+        let italicList = list.filter { (style) -> Bool in
+            return style == .italic
+        }
+        if let _ = italicList.first {
+            self.italicButton.tintColor = .black
+            self.italicButton.borderColor = .black
+        } else {
+            self.italicButton.tintColor = ColorHelper.text75()
+            self.italicButton.borderColor = UIColor("7D7D7D")
+        }
+        
+        let underlineList = list.filter { (style) -> Bool in
+            return style == .underline
+        }
+        if let _ = underlineList.first {
+            self.underlineButton.tintColor = .black
+            self.underlineButton.borderColor = .black
+        } else {
+            self.underlineButton.tintColor = ColorHelper.text75()
+            self.underlineButton.borderColor = UIColor("7D7D7D")
+        }
     }
     
     class func instanciateFromNib() -> FLTextStyleView {
