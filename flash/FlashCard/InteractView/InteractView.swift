@@ -7,6 +7,7 @@
 
 import UIKit
 import SVGKit
+import AVKit
 
 enum FLInteractViewHandler: Int {
     case close
@@ -46,6 +47,34 @@ class FLControlIcon: UIImageView {
     var position: FLInteractViewPosition = .topRight
 }
 
+struct FLPlayerCreator {
+    //for media
+    var mediaUrl: URL
+    var playerViewFrame: CGRect
+    
+    var playerLayer: AVPlayerLayer?
+    var player: AVPlayer?
+    var playerItem: AVPlayerItem?
+    
+    mutating func createPlayerView(_ url: URL) -> UIView {
+        
+        let playerView = UIView()
+        playerView.frame = playerViewFrame
+        playerView.backgroundColor = .black
+        
+        player = AVPlayer()
+        playerLayer = AVPlayerLayer(player: self.player!)
+        playerView.layer.addSublayer(playerLayer!)
+        
+        playerItem = AVPlayerItem(url: mediaUrl)
+        player?.replaceCurrentItem(with: playerItem)
+        self.playerLayer?.frame = playerView.bounds
+        player?.play()
+        
+        return playerView
+    }
+}
+
 class InteractView: CHTStickerView {
     //var delegate: InteractViewDelegate?
     var textColor: String?
@@ -64,6 +93,8 @@ class InteractView: CHTStickerView {
     var bottomLeftButton: UIButton?
     var bottomRightButton: UIButton?
     
+    var playerCreator: FLPlayerCreator?
+    
     var rotation: Float = 0 {
         didSet {
             print("update rotation: \(self.rotation)")
@@ -78,6 +109,8 @@ class InteractView: CHTStickerView {
 //        controlView.leftWidthButton.isHidden = !isText
 //        controlView.rightWidthButton.isHidden = !isText
     }
+    
+    
     
     func update(rotation:Float?) {
         if let r = rotation {

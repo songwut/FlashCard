@@ -249,14 +249,12 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2) {
     [self addSubview:self.flipImageView];
       [self setPosition:CHTStickerViewPositionBottomLeft forHandler:CHTStickerViewHandlerNone];
       [self addSubview:self.noneImageView];
-      
-      self.noneImageView.hidden = NO;
-      self.noneImageView.userInteractionEnabled = YES;
 
     self.showEditingHandlers = YES;
     self.enableClose = YES;
     self.enableRotate = YES;
     self.enableFlip = YES;
+      self.enableNone = YES;
 
     self.minimumSize = defaultMinimumSize;
     self.outlineBorderColor = [UIColor brownColor];

@@ -522,6 +522,7 @@ final class FLStageViewController: UIViewController {
         element.deviceUrl = url
         element.rawSize = size
         let row = self.indexOfMajorCell()
+        media?.deviceUrl = url
         self.createElement(element, row: row, media: media)
     }
     
@@ -661,9 +662,9 @@ final class FLStageViewController: UIViewController {
             iView.delegate = self
             
             if element.type == .image || element.type == .video {
-                self.viewModel.callAPIDropboxUpload(type: element.type, row: row, media: media, view: iView) {
-                    
-                }
+//                self.viewModel.callAPIDropboxUpload(type: element.type, row: row, media: media, iView: iView) {
+//
+//                }
             }
             
             if let tool = element.tool {
@@ -673,11 +674,7 @@ final class FLStageViewController: UIViewController {
             
             let size = iView.frame
             print("controlView width: \(size.width) ,controlView height: \(size.height)")
-            if let controlView = self.controlView {
-                iView.update(controlView: controlView)
-                //stageView.addSubview(controlView.deleteButton)
-                controlView.updateRelateView(iView)
-            }
+            
         }
     }
     
@@ -1092,7 +1089,7 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
                 let uuid = UUID().uuidString
                 let JSON:[String : Any] = ["filename" : filename, "size" : imageSize, "uuid" : uuid]
                 let media = FLMediaResult(JSON: JSON)
-                media?.imageData = imageBase64
+                media?.imageData = data//imageBase64
                 self.createNewImage(img, media: media)
             }
             
@@ -1115,7 +1112,7 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
                     print(fileAttributes.fileSize!) // is Int
                     let filename = movieUrl.lastPathComponent
                     let fileSize = fileAttributes.fileSize ?? 0
-                    let JSON:[String : Any] = ["filename" : filename, "size" : fileSize, "uuid" : uuid, "file" : movieUrl]
+                    let JSON:[String : Any] = ["filename" : filename]
                     let media = FLMediaResult(JSON: JSON)
                     self.createNewVideo(movieUrl, size: size, media: media)
                     

@@ -521,6 +521,9 @@
 		69BA86E126F63B3D00954E40 /* CHTStickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86DF26F63B3D00954E40 /* CHTStickerView.m */; };
 		69BA86E226F63B3D00954E40 /* CHTStickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86DF26F63B3D00954E40 /* CHTStickerView.m */; };
 		69BA86E326F63B3D00954E40 /* CHTStickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86DF26F63B3D00954E40 /* CHTStickerView.m */; };
+		69BA86FE26F89F9F00954E40 /* VideoConvertor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86FD26F89F9F00954E40 /* VideoConvertor.swift */; };
+		69BA86FF26F89FA000954E40 /* VideoConvertor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86FD26F89F9F00954E40 /* VideoConvertor.swift */; };
+		69BA870026F89FA000954E40 /* VideoConvertor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BA86FD26F89F9F00954E40 /* VideoConvertor.swift */; };
 		69C0A23C266E1EA7001C6F32 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C0A23B266E1EA7001C6F32 /* Arrow.swift */; };
 		69C0A23D266E1EA7001C6F32 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C0A23B266E1EA7001C6F32 /* Arrow.swift */; };
 		69C0A23E266E1EA7001C6F32 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C0A23B266E1EA7001C6F32 /* Arrow.swift */; };
@@ -755,6 +758,7 @@
 		69BA86DF26F63B3D00954E40 /* CHTStickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTStickerView.m; sourceTree = "<group>"; };
 		69BA86E026F63B3D00954E40 /* CHTStickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTStickerView.h; sourceTree = "<group>"; };
 		69BA86EA26F641AB00954E40 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		69BA86FD26F89F9F00954E40 /* VideoConvertor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoConvertor.swift; sourceTree = "<group>"; };
 		69C0A23B266E1EA7001C6F32 /* Arrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Arrow.swift; sourceTree = "<group>"; };
 		69D53B442692F7090020E024 /* FlashStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashStyle.swift; sourceTree = "<group>"; };
 		69D53B4E2693031A0020E024 /* StatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatViewController.swift; sourceTree = "<group>"; };
@@ -1056,6 +1060,7 @@
 				6972052E268E298F002E3149 /* FLStageViewController.swift */,
 				6984901C2695A66A00B5FEF6 /* FLStageViewModel.swift */,
 				69B0FC1A26A7356B0086E6C5 /* SnapGesture.swift */,
+				69BA86FD26F89F9F00954E40 /* VideoConvertor.swift */,
 			);
 			path = Stage;
 			sourceTree = "<group>";
@@ -1679,6 +1684,7 @@
 				69EC5216269D9D6D00A23790 /* FLTextStyleView.swift in Sources */,
 				6984904B2695DD3700B5FEF6 /* FLToolHelper.swift in Sources */,
 				6989909826B7E9A5008A41C1 /* ConsoleLog.swift in Sources */,
+				69BA86FE26F89F9F00954E40 /* VideoConvertor.swift in Sources */,
 				6968C7AB26A183FB00A712B0 /* UIFont.swift in Sources */,
 				6989923626BCF932008A41C1 /* FLGraphicResult.swift in Sources */,
 				695899DD2669F35E0012B032 /* AVAssetTrim.swift in Sources */,
@@ -1841,6 +1847,7 @@
 				698990BB26B7EF88008A41C1 /* ErrorType.swift in Sources */,
 				6989909226B7CB40008A41C1 /* API.swift in Sources */,
 				6985B1C626E5F1B000FEAD8F /* FLPostView.swift in Sources */,
+				69BA86FF26F89FA000954E40 /* VideoConvertor.swift in Sources */,
 				699012882696FA180059ACE4 /* SlideSheetPresentationController.swift in Sources */,
 				69B0FBC626A6D0930086E6C5 /* UITextView.swift in Sources */,
 				696ABCA726DFC496009527D3 /* FLSwipeView.swift in Sources */,
@@ -1913,6 +1920,7 @@
 				698991E026BC2802008A41C1 /* FLStickerResult.swift in Sources */,
 				69B0FCB126A9805F0086E6C5 /* UIViewController.swift in Sources */,
 				698490142695A19000B5FEF6 /* JSON.swift in Sources */,
+				69BA870026F89FA000954E40 /* VideoConvertor.swift in Sources */,
 				696ABB6F26D7BE54009527D3 /* FLDashButton.swift in Sources */,
 				6985B3B126E7C37700FEAD8F /* TagListSelectViewController.swift in Sources */,
 				698490572695E13D00B5FEF6 /* FLToolViewModel.swift in Sources */,

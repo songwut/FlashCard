@@ -185,45 +185,36 @@ struct FLCreator {
         return quizView
     }
     
-    func createVideo(_ element: FlashElement ,in stage: FLStageView) -> InteractView {
-        let viewX = (stage.frame.width * CGFloat(element.x) / 100)
-        let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
-        let viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
-        let viewH = ((stage.frame.height * CGFloat(element.height)) / 100)
+    func createVideo(_ element: FlashElement ,in stage: FLStageView) -> InteractView? {
+        let viewX = (stage.frame.width * CGFloat(truncating: element.x) / 100)
+        let viewY = ((stage.frame.height * CGFloat(truncating: element.y)) / 100)
+        let viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
+        let viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
         let playerViewFrame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
         
-        var playerLayer: AVPlayerLayer!
-        var player: AVPlayer!
-        var playerItem: AVPlayerItem!
-        
-        let playerView = UIView()
-        playerView.frame = playerViewFrame
-        playerView.backgroundColor = .black
-        
-        player = AVPlayer()
-        playerLayer = AVPlayerLayer(player: player)
-        playerView.layer.addSublayer(playerLayer)
-        
-        stage.addSubview(playerView)
-        
-        if let src = element.src, let url = URL(string: src) {
-            playerItem = AVPlayerItem(url: url)
-            player.replaceCurrentItem(with: playerItem)
-            DispatchQueue.main.async {
-                playerLayer!.frame = playerView.bounds
-            }
-            player.play()
+        var url: URL?
+        if let deviceUrl = element.deviceUrl {
+            url = deviceUrl
+            
+        } else if let src = element.src, let urlsrc = URL(string: src) {
+            url = urlsrc
         }
         
-        let center = CGPoint(x: viewX, y: viewY)
-        let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
-        let iView = InteractView(contentView: playerView)!
-        iView.frame = frame
-        iView.center = center
-        //iView.contentView = playerView
-        iView.update(rotation: element.rotation)
-        stage.addSubview(iView)
-        return iView
+        if let mediaUrl = url {
+            var playerCreator = FLPlayerCreator(mediaUrl: mediaUrl, playerViewFrame: playerViewFrame)
+            let center = CGPoint(x: viewX, y: viewY)
+            let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
+            let playerView = playerCreator.createPlayerView(mediaUrl)
+            let iView = InteractView(contentView: playerView)!
+            iView.playerCreator = playerCreator
+            iView.frame = frame
+            iView.center = center
+            //iView.contentView = playerView
+            iView.update(rotation: element.rotation)
+            stage.addSubview(iView)
+            return iView
+        }
+        return nil
     }
     
     func createVector(_ element:FlashElement ,in stage: FLStageView) -> InteractView {

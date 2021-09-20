@@ -96,7 +96,7 @@ class FLStageView: UIView {
         return iView
     }
     
-    func createVideo(_ element: FlashElement) -> InteractView {
+    func createVideo(_ element: FlashElement) -> InteractView? {
         
         let stageView = self
         let iView = self.flCreator.createVideo(element, in: stageView)

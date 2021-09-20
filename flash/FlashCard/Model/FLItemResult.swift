@@ -132,13 +132,15 @@ class FLDropboxPageResult: FLBaseResult {
 }
 
 class FLMediaResult: FLBaseResult {
-    var file: String = ""
+    var file: String?
     var imageBase64: String?
     var imageData: Data?
     var cardId: Int = 0
     var uuid: String = ""
     var filename: String = ""
     var size: Int = 0
+    
+    var deviceUrl: URL?
 
     override func mapping(map: Map) {
         super.mapping(map: map)

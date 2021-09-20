@@ -151,7 +151,7 @@ class FLStageViewModel {
         }
     }
     
-    func callAPIDropboxUpload(type: FLType ,row: Int, media: FLMediaResult?, view: UIView? ,complete: @escaping () -> ()) {
+    func callAPIDropboxUpload(type: FLType ,row: Int, media: FLMediaResult?, iView: InteractView ,complete: @escaping () -> ()) {
         
         let card = self.pageList[row]
         
@@ -172,10 +172,18 @@ class FLStageViewModel {
         let headers = request.headers
         ConsoleLog.show("URL:\(request.url)")
         AF.upload(multipartFormData: { (multipartFormData) in
-            if let m = media, let imageData = m.imageData {
+            
+            if let m = media {
                 multipartFormData.append(m.filename.data(using: String.Encoding.utf8)!, withName: "filename")
-                let fileType = URL(string: m.filename)?.pathExtension ?? "jpeg"
-                multipartFormData.append(imageData, withName: "image", fileName: m.filename, mimeType: "image/\(fileType)")
+                
+                if let imageData = m.imageData {
+                    let fileType = URL(string: m.filename)?.pathExtension ?? "jpeg"
+                    multipartFormData.append(imageData, withName: "image", fileName: m.filename, mimeType: "image/\(fileType)")
+                }
+                
+                if let deviceUrl = m.deviceUrl {
+                    multipartFormData.append(deviceUrl, withName: "file")
+                }
             }
         }, to: request.url, headers: HTTPHeaders(headers!))
         .uploadProgress(queue: .main, closure: { progress in
@@ -189,9 +197,11 @@ class FLStageViewModel {
                 ConsoleLog.show("Upload respond: \(respond)")
                 if let data = respond.data {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        let dropboxPage = FLDropboxPageResult(JSON: json)
+                        let dropboxPage = FLDropboxPageResult(JSON: json)!
                         print("JSON: \(json)")
-                        currentPage?.dropboxPage = dropboxPage
+                        currentPageDetail?.dropboxPage = dropboxPage
+                        //currentPageDetail?.componentList
+                        iView.element?.src = dropboxPage.image
                         complete()
                     }
                 }
