@@ -185,12 +185,19 @@ struct FLCreator {
         return quizView
     }
     
+    func sizeFromRaw(_ rawSize: CGSize) -> CGSize {
+        let ratio = rawSize.height / rawSize.width
+        let w = stageView.frame.width * 0.8//80% of stage
+        let h = w * ratio//height by ratio
+        return CGSize(width: w, height: h)
+    }
+    
     func createVideo(_ element: FlashElement ,in stage: FLStageView) -> InteractView? {
         let viewX = (stage.frame.width * CGFloat(truncating: element.x) / 100)
         let viewY = ((stage.frame.height * CGFloat(truncating: element.y)) / 100)
         let viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
         let viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
-        let playerViewFrame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
+        
         
         var url: URL?
         if let deviceUrl = element.deviceUrl {
@@ -200,10 +207,18 @@ struct FLCreator {
             url = urlsrc
         }
         
+        var size = CGSize(width: viewW, height: viewH)
+        if let rawSize = element.rawSize {
+            size = self.sizeFromRaw(rawSize)
+        }
+        let margin = FlashStyle.text.marginIView
+        let marginXY = margin / 2
+        let playerViewFrame = CGRect(x: marginXY, y: marginXY, width: size.width - margin, height: size.height - margin)
+        
         if let mediaUrl = url {
             var playerCreator = FLPlayerCreator(mediaUrl: mediaUrl, playerViewFrame: playerViewFrame)
             let center = CGPoint(x: viewX, y: viewY)
-            let frame = CGRect(x: viewX, y: viewY, width: viewW, height: viewH)
+            let frame = CGRect(x: viewX, y: viewY, width: size.width, height: size.height)
             let playerView = playerCreator.createPlayerView(mediaUrl)
             let iView = InteractView(contentView: playerView)!
             iView.playerCreator = playerCreator

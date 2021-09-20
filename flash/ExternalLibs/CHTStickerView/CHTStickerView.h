@@ -56,6 +56,9 @@ typedef NS_ENUM (NSInteger, CHTStickerViewPosition) {
 /// A convenient property for you to store extra information.
 @property (nonatomic, strong) NSDictionary *userInfo;
 
+@property (nonatomic, assign) CGFloat angle;
+@property (nonatomic, assign) CGFloat hardScale;
+
 /**
  *  Initialize a sticker view. This is the designated initializer.
  *

@@ -86,7 +86,8 @@ final class FLStageViewController: UIViewController {
         
         self.selectedView = selectedView
         self.selectedView?.showEditingHandlers = true
-        self.selectedView?.superview?.bringSubviewToFront(selectedView)
+        //TODO: uncomment
+        //self.selectedView?.superview?.bringSubviewToFront(selectedView)
         
     }
     
@@ -706,6 +707,7 @@ final class FLStageViewController: UIViewController {
             iView.isSelected = true
             iView.textView?.delegate = self
             iView.textView?.becomeFirstResponder()
+            iView.delegate = self
             
             self.openToolBar(tool: .text, iView: iView)
             self.toolVC?.open(.text, isCreating: true)
@@ -1028,26 +1030,6 @@ final class FLStageViewController: UIViewController {
     
 }
 
-extension FLStageViewController: InteractViewDelegate {
-    func interacViewDidTap(view: InteractView) {
-        self.setSelectedView(view)
-    }
-    
-    func interacViewDidBeginMoving(view: InteractView) {
-        self.setSelectedView(view)
-    }
-    
-    func interacViewDidClose(view: InteractView) {
-        view.removeFromSuperview()
-        if self.toolVC?.viewModel.tool != .menu {
-            self.toolVC?.closePressed(nil)
-        }
-        self.controlView?.isHidden = true
-        //self.controlView?.deleteButton.isHidden = true
-        
-    }
-}
-
 extension UIImage {
     // QUALITY min = 0 / max = 1
     var jpeg: Data? { jpegData(compressionQuality: 1) }
@@ -1231,6 +1213,52 @@ extension FLStageViewController: UIScrollViewDelegate {
     }
 }
 
+extension FLStageViewController: InteractViewDelegate {
+    func interacViewDidTap(view: InteractView) {
+        self.setSelectedView(view)
+    }
+    
+    func interacViewDidBeginMoving(view: InteractView) {
+        self.setSelectedView(view)
+    }
+    
+    func interacViewDidClose(view: InteractView) {
+        view.removeFromSuperview()
+        if self.toolVC?.viewModel.tool != .menu {
+            self.toolVC?.closePressed(nil)
+        }
+        self.controlView?.isHidden = true
+        //self.controlView?.deleteButton.isHidden = true
+        
+    }
+}
+
+
 extension FLStageViewController : CHTStickerViewDelegate {
     
+    func stickerViewDidTap(_ stickerView: CHTStickerView!) {
+        guard let iView = stickerView as? InteractView else { return }
+        self.setSelectedView(iView)
+    }
+    
+    func stickerViewDidBeginMoving(_ stickerView: CHTStickerView!) {
+        guard let iView = stickerView as? InteractView else { return }
+        self.setSelectedView(iView)
+    }
+    
+    func stickerViewDidClose(_ stickerView: CHTStickerView!) {
+        view.removeFromSuperview()
+        if self.toolVC?.viewModel.tool != .menu {
+            self.toolVC?.closePressed(nil)
+        }
+        self.controlView?.isHidden = true
+    }
+    
+    func stickerViewDidChangeRotating(_ stickerView: CHTStickerView!) {
+        guard let iView = stickerView as? InteractView else { return }
+        let degrees = Double(stickerView.angle) * Double((180 / Float.pi))
+        iView.element?.rotation = Float(degrees)
+        iView.element?.scale = 
+        print("stickerView angle: \(stickerView.angle) degrees: \(degrees)")
+    }
 }

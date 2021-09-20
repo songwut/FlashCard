@@ -47,6 +47,10 @@ class FLControlIcon: UIImageView {
     var position: FLInteractViewPosition = .topRight
 }
 
+class FLPlaverView: UIView {
+    
+}
+
 struct FLPlayerCreator {
     //for media
     var mediaUrl: URL
@@ -56,9 +60,9 @@ struct FLPlayerCreator {
     var player: AVPlayer?
     var playerItem: AVPlayerItem?
     
-    mutating func createPlayerView(_ url: URL) -> UIView {
+    mutating func createPlayerView(_ url: URL) -> FLPlaverView {
         
-        let playerView = UIView()
+        let playerView = FLPlaverView()
         playerView.frame = playerViewFrame
         playerView.backgroundColor = .black
         

@@ -220,7 +220,7 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2) {
     return nil;
   }
 
-  defaultInset = 11;
+  defaultInset = 15;
   defaultMinimumSize = 4 * defaultInset;
 
   CGRect frame = contentView.frame;
@@ -311,19 +311,20 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2) {
       }
       break;
     }
-
     case UIGestureRecognizerStateChanged: {
       float angle = atan2f(touchLocation.y - center.y, touchLocation.x - center.x);
+        
       float angleDiff = deltaAngle - angle;
+        self.angle = -angleDiff;
       self.transform = CGAffineTransformMakeRotation(-angleDiff);
 
       CGFloat scale = CGPointGetDistance(center, touchLocation) / initialDistance;
       CGFloat minimumScale = self.minimumSize / MIN(initialBounds.size.width, initialBounds.size.height);
       scale = MAX(scale, minimumScale);
       CGRect scaledBounds = CGRectScale(initialBounds, scale, scale);
+        self.hardScale = scale;
       self.bounds = scaledBounds;
       [self setNeedsDisplay];
-        NSLog(@"scaledBounds %f",scaledBounds.size.width);
       if ([self.delegate respondsToSelector:@selector(stickerViewDidChangeRotating:)]) {
         [self.delegate stickerViewDidChangeRotating:self];
       }
