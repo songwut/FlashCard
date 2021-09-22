@@ -19,15 +19,21 @@ protocol UGCCategoryRowDelegate: AnyObject {
 //         return copy
 //     }
 //}
+class Box<T> {
+    let content: T
+    init(_ item: T) { content = item }
+}
 
 struct UGCCategoryRow: View {
     @State var isChecked: Bool = false
     @State var isExpaned: Bool = false
     @State var category: CategoryResult
     
+    var parent: Box<UGCCategoryRow>?
     var isFirst: Bool = true
-    
     var delegate: UGCCatagoryListViewDelegate?
+    
+    var checkPressed: ( _ category: CategoryResult) -> ()?
     
     var body: some View {
         VStack(alignment: .leading, spacing: nil, content: {
@@ -40,23 +46,25 @@ struct UGCCategoryRow: View {
                 self.contentView
                     .padding(.leading, 16)
                     .padding(.trailing, 16)
-                
             }
             .frame(height: 42, alignment: .leading)
             
-            let childList = self.category.childList
+            let childList = category.childList
             if childList.count >= 1 {
-                if self.isExpaned {
+                if isExpaned {
                     VStack(alignment: .leading, spacing: 8) {
                         ForEach(0..<childList.count) { i in
                             let c = childList[i]
-                            UGCCategoryRow(category: c, isFirst: false, delegate: self.delegate)
-                                .padding(.leading, 16)
+                            UGCCategoryRow(category: c, isFirst: false) { category in
+                                print("createPressed")
+                                self.isChecked = category.isChecked
+                                return checkPressed(category)
+                            }
+                            .padding(.leading, 16)
                         }
                     }
                 }
             }
-            
         })
         .frame(minHeight: 42, alignment: .leading)
     }
@@ -64,10 +72,10 @@ struct UGCCategoryRow: View {
     var contentView: some View {
         HStack {
             //arrow
-            let iconName = self.isExpaned ? "ic_v2_chevron-down" : "ic_v2_chevron-right"
-            if self.category.childList.count >= 1 {
+            let iconName = isExpaned ? "ic_v2_chevron-down" : "ic_v2_chevron-right"
+            if category.childList.count >= 1 {
                 Button(action: {
-                    self.isExpaned.toggle()
+                    isExpaned.toggle()
                 }, label: {
                     Image(iconName)
                         .foregroundColor(ColorHelper.secondary50().color)
@@ -80,8 +88,9 @@ struct UGCCategoryRow: View {
             
             
             Button(action: {
-                self.isChecked.toggle()
-                self.delegate?.didSelectCategory(self.category)
+                isChecked.toggle()
+                category.isChecked = isChecked
+                checkPressed(category)
             }, label: {
                 Image("ic_v2_check")
                     .resizable()
@@ -108,8 +117,10 @@ struct UGCCategoryItemView_Previews: PreviewProvider {
         let name = "Cat name sdf  sfsd fdsf sedfsafsfdssf fd fsf sdf  dsf dsfcdfdfdsfs ds dsfdfdfsf dfs"
         let chlidList = "{\"id\":92,\"name\":\"Category Course LC1\",\"child_list\":[{\"id\":93,\"name\":\"Category Course LC2\",\"child_list\":[{\"id\":94,\"name\":\"Category Course LC3\",\"child_list\":[{\"id\":95,\"name\":\"Category Course LC4\",\"child_list\":null}]}]}]}"
         let c = UGCCategory(JSON: ["name" : name, "child_list": chlidList])!
-        UGCCategoryRow(category: c)
-            .previewLayout(.fixed(width: 300.0, height: 60))
-            .environment(\.sizeCategory, .small)
+        UGCCategoryRow(category: c) { isChecked in
+            
+        }
+        .previewLayout(.fixed(width: 300.0, height: 60))
+        .environment(\.sizeCategory, .small)
     }
 }

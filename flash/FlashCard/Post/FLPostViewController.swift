@@ -237,7 +237,9 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             if let dictList = object as? [[String : Any]],
                let detail = UGCCategoryPageResult(JSON: ["results": dictList]) {
                 let mockList = detail.list
-                let host = UIHostingController(rootView: UGCCatagoryListView(items: mockList))
+                let host = UIHostingController(rootView: UGCCatagoryListView(items: mockList) { category in
+                    print("UGCCatagoryListView: select: \(category.name)")
+                })
                 if let nav = self.navigationController {
                     nav.pushViewController(host, animated: true)
                 } else {
@@ -389,8 +391,8 @@ extension FLPostViewController: TagListViewDelegate, TagListSelectViewController
         self.manageTagContentViewWith(tags: tags)
     }
     
-    func didSelectCategory(_ category: CategoryResult) {
-        print("category: \(category.name) tag")
+    func didSelectCategory(_ categoryId: Int) {
+        print("category: \(categoryId)")
     }
 }
 

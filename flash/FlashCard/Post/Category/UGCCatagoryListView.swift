@@ -8,14 +8,16 @@
 import SwiftUI
 
 protocol UGCCatagoryListViewDelegate {
-    func didSelectCategory(_ category: CategoryResult)
+    func didSelectCategory(_ categoryId: Int)
 }
 
 struct UGCCatagoryListView: View {
     @State var items = [UGCCategory]()
     
     var delegate: UGCCatagoryListViewDelegate?
-    @State var selectedCategory: UGCCategory?
+    @State var selectedCategoryId: Int = 0
+    
+    var didSelectCategory: (_ category: CategoryResult) -> ()
     
     var body: some View {
         VStack(alignment: .center, spacing: nil, content: {
@@ -49,7 +51,11 @@ struct UGCCatagoryListView: View {
             
             ForEach(0..<items.count) { i in
                 let category = self.items[i]
-                UGCCategoryRow(category: category, delegate: self.delegate)
+                UGCCategoryRow(category: category) { selectedCategory in
+                    print("createPressed:\(selectedCategory.name)")
+                    selectedCategoryId = selectedCategory.id
+                    return didSelectCategory(selectedCategory)
+                }
             }
         })
         .padding(.top, 16)
@@ -59,9 +65,7 @@ struct UGCCatagoryListView: View {
     var footerView: some View {
         HStack(alignment: .center, spacing: /*@START_MENU_TOKEN@*/nil/*@END_MENU_TOKEN@*/, content: {
             Button(action: {
-                if let c = self.selectedCategory {
-                    self.delegate?.didSelectCategory(c)
-                }
+                self.delegate?.didSelectCategory(selectedCategoryId)
             }, label: {
                 Text("done".localized().uppercased())
                     .font(FontHelper.getFontSystem(16, font: .medium).font)
@@ -96,7 +100,9 @@ struct UGCCatagoryListView_Previews: PreviewProvider {
             UGCCategory(JSON: ["name" : "1"])!,
             UGCCategory(JSON: ["name" : "2"])!
         ]
-        UGCCatagoryListView(items: list)
+        UGCCatagoryListView(items: list) { category in
+            print("UGCCatagoryListView: select: \(category.name)")
+        }
             .previewDevice("iPhone 8")
     }
 }

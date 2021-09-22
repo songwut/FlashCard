@@ -129,6 +129,7 @@ final class FLStageViewController: UIViewController {
         self.contentPageView.addSubview(self.deletePageButton!)
         self.contentPageView.addSubview(self.addLeftPageButton!)
         self.contentPageView.addSubview(self.addRightPageButton!)
+        self.deletePageButton?.addTarget(self, action: #selector(self.deletePressed(_:)), for: .touchUpInside)
         
         self.flCreator = FLCreator(stage: self.stageView!)
         
@@ -154,6 +155,11 @@ final class FLStageViewController: UIViewController {
                 ConsoleLog.show("callAPIPageDetail")
             })
         }
+    }
+    
+    @objc func deletePressed(_ sender: UIButton) {
+        let stageView = self.getStageView(at: self.viewModel.pageIndex)
+        self.takeScreenshot(of: stageView)
     }
     
     @objc func appLeftPressed(_ sender: UIButton) {
@@ -993,6 +999,7 @@ final class FLStageViewController: UIViewController {
     }
     
     func takeScreenshot(of view: UIView) {
+        //TODO: clear select view
         let size = CGSize(width: view.bounds.width, height: view.bounds.height)
         UIGraphicsBeginImageContextWithOptions(size, false, 2)
         
@@ -1258,7 +1265,8 @@ extension FLStageViewController : CHTStickerViewDelegate {
         guard let iView = stickerView as? InteractView else { return }
         let degrees = Double(stickerView.angle) * Double((180 / Float.pi))
         iView.element?.rotation = Float(degrees)
-        iView.element?.scale = 
+        iView.element?.scale = Float(iView.hardScale)
         print("stickerView angle: \(stickerView.angle) degrees: \(degrees)")
+        print("stickerView scale: \(iView.hardScale)")
     }
 }

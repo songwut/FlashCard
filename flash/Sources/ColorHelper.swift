@@ -74,7 +74,7 @@ extension UIColor {
 }
 
 extension UIColor {
-    struct colorApi {
+    struct colorConfig {
         static func primary(_ alpha: CGFloat = 1.0) -> UIColor {
             return primaryColor.withAlphaComponent(alpha)//config-primary-color
         }

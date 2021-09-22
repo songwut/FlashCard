@@ -51,6 +51,22 @@ class ViewController: UIViewController {
         self.loginPressed(nil)
     }
     
+    @IBAction func myMaterialPressed(_ sender: UIButton) {
+        let vm = FLStageViewModel()
+        self.showLoading(nil)
+        vm.callAPIMyFlashCard(method: .get) { (myFlash: MaterialFlashPageResult?) in
+            self.hideLoading()
+            guard let item = myFlash else { return }
+            let vc = UIHostingController(rootView: MyMaterialListView(myMaterialFlash: item))
+            if let nav = self.navigationController {
+                nav.pushViewController(vc, animated: true)
+            } else {
+                self.present(vc, animated: true, completion: nil)
+            }
+        }
+        
+    }
+    
     @objc func stageButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLStageViewController")
@@ -87,7 +103,9 @@ class ViewController: UIViewController {
             if let dictList = object as? [[String : Any]],
                let detail = UGCCategoryPageResult(JSON: ["results": dictList]) {
                 let mockList = detail.list
-                let host = UIHostingController(rootView: UGCCatagoryListView(items: mockList))
+                let host = UIHostingController(rootView: UGCCatagoryListView(items: mockList) { category in
+                    print("UGCCatagoryListView: select: \(category.name)")
+                })
                 if let nav = self.navigationController {
                     nav.pushViewController(host, animated: true)
                 } else {
@@ -156,8 +174,8 @@ class ViewController: UIViewController {
     }
     
     func loginAPI() {
-        let username = "sysadmin"
-        let password = "sysadminConicle"
+        let username = "wnios"
+        let password = "adminadmin"
         
         self.showLoading(nil)
         let request = LoginRequest()

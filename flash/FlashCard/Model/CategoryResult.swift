@@ -17,6 +17,7 @@ class CategoryResult: BaseResult {
     var isAll = false
     var subList = [CategoryResult]()
     var allCategory: CategoryResult?
+    var isChecked: Bool = false
     
     class func createAll(category:CategoryResult?) -> CategoryResult {
         var id = 0

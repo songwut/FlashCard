@@ -24,7 +24,7 @@ protocol FLStageViewModelProtocol: BaseViewProtocol {
 class FLStageViewModel {
     
     var stageVC: FLStageViewController?
-    
+    var myFlashCard: MaterialFlashPageResult?
     var detail: FLDetailResult?
     var pageList = [FlashPageResult]()
     var flCard: FlCardResult?
@@ -54,6 +54,16 @@ class FLStageViewModel {
             //read api
         }
         
+    }
+    
+    func callAPIMyFlashCard(method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
+        let request = FLRequest()
+        request.endPoint = .ugcFlashCreate
+        request.apiMethod = method
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: MaterialFlashPageResult?, isCache, error) in
+            self?.myFlashCard = result
+            complete(result)
+        }
     }
     
     func callAPICurrentPageDetail(complete: @escaping () -> ()) {

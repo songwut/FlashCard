@@ -40,12 +40,7 @@ enum FLStatus: Int {
     }
 }
 
-class FLDetailResult: FLBaseResult {
-    var progress: Any?
-    var status: FLStatus = .unpublish
-    var owner: OwnerResult?
-    var code: String?
-    var datetimePublish: String?
+class FLDetailResult: MaterialFlashResult {
     var estimateTime: Int?//only min
     //var contentCode: ContentCode?
 //    "datetime_create": "2021-08-04T09:55:45.443966",
@@ -73,8 +68,29 @@ class FLDetailResult: FLBaseResult {
         datetimePublish      <- map["datetime_publish"]
     }
     
-    class func with(_ dict: [String : Any]) -> FLDetailResult? {
+    override class func with(_ dict: [String : Any]) -> FLDetailResult? {
         let item = Mapper<FLDetailResult>().map(JSON: dict)
+        return item
+    }
+}
+
+class MaterialFlashResult: BaseResult {
+    var progress: Any?
+    var status: FLStatus = .unpublish
+    var owner: OwnerResult?
+    var code: String?
+    var datetimePublish: String?
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        code                 <- map["code"]
+        progress             <- map["progress"]
+        owner                <- map["created_by"]
+        datetimePublish      <- map["datetime_publish"]
+    }
+    
+    class func with(_ dict: [String : Any]) -> MaterialFlashResult? {
+        let item = Mapper<MaterialFlashResult>().map(JSON: dict)
         return item
     }
 }
@@ -239,5 +255,24 @@ class FLBaseResult:Mappable {
     }
 }
 
+class MaterialFlashPageResult: BaseResult {
+    var count = 0
+    var list = [MaterialFlashResult]()
+    
+    required init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        count            <- map["count"]
+        list             <- map["results"]
+    }
+    
+    class func with(_ dict: [String : Any]) -> MaterialFlashPageResult? {
+        let item = Mapper<MaterialFlashPageResult>().map(JSON: dict)
+        return item
+    }
+}
 
 
