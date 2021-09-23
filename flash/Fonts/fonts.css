@@ -1,29 +1,28 @@
 
-@font-face { font-family: 'IBMPlexSansThai-Text'; src: local('IBMPlexSansThai-Text'),url('IBMPlexSansThai-Text.ttf') format('truetype'); }
-@font-face { font-family: 'IBMPlexSansThai-Medium'; src: local('IBMPlexSansThai-Medium'),url('IBMPlexSansThai-Medium.ttf') format('truetype'); }
-@font-face{ font-family: 'IBMPlexSansThai-Bold'; src: local('IBMPlexSansThai-Bold'),url('IBMPlexSansThai-Bold.ttf') format('truetype'); }
-@font-face{ font-family: 'Kanit-Italic'; src: local('Kanit-Italic'),url('Kanit-Italic.ttf') format('truetype'); }
+@font-face { font-family: 'DBHeaventRounded'; src: local('DBHeaventRounded'),url('DB HeaventRoundedv3.2.1.ttf') format('truetype'); }
+@font-face { font-family: 'DBHeaventRounded-Med'; src: local('DBHeaventRounded-Med'),url('DB HeaventRounded Med v3.2.1.ttf') format('truetype'); }
+@font-face{ font-family: 'DBHeaventRounded-Bold'; src: local('DBHeaventRounded-Bold'),url('DB HeaventRounded Bd v3.2.1.ttf') format('truetype'); }
 
 img { max-width:100%!important;height:auto!important;}
 table {width:100%;}
 
 h1
 {
-    font-family: 'IBMPlexSansThai-Text';
+    font-family: 'DBHeaventRounded';
     font-size: 20px;
     font-weight: normal;
 }
 
 h2
 {
-    font-family: 'IBMPlexSansThai-Medium';
+    font-family: 'DBHeaventRounded-Med';
     font-size: 16px;
     font-weight: normal;
 }
 
 h3
 {
-    font-family: 'IBMPlexSansThai-Bold';
+    font-family: 'DBHeaventRounded-Bold';
     font-size: 14px;
     font-weight: normal;
 }

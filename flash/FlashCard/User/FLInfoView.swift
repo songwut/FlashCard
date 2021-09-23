@@ -45,7 +45,7 @@ struct FLInfoView: View {
                 
             }, label: {
                 Image("info")
-                    .foregroundColor(Color(ColorHelper.secondary50()))
+                    .foregroundColor(Color(UIColor.config.secondary50()))
             })
             .frame(width: 42, height: 42, alignment: .center)
         })

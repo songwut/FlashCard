@@ -443,42 +443,18 @@
 		69B0FBC526A6D0930086E6C5 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FBC426A6D0930086E6C5 /* UITextView.swift */; };
 		69B0FBC626A6D0930086E6C5 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FBC426A6D0930086E6C5 /* UITextView.swift */; };
 		69B0FBC726A6D0930086E6C5 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FBC426A6D0930086E6C5 /* UITextView.swift */; };
-		69B0FBDC26A6F6F60086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBCE26A6F6F20086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf */; };
-		69B0FBDD26A6F6F60086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBCE26A6F6F20086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf */; };
-		69B0FBDE26A6F6F60086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBCE26A6F6F20086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf */; };
 		69B0FBDF26A6F6F60086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBCF26A6F6F20086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf */; };
 		69B0FBE026A6F6F60086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBCF26A6F6F20086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf */; };
 		69B0FBE126A6F6F60086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBCF26A6F6F20086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf */; };
-		69B0FBE226A6F6F60086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD026A6F6F20086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf */; };
-		69B0FBE326A6F6F60086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD026A6F6F20086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf */; };
-		69B0FBE426A6F6F60086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD026A6F6F20086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf */; };
 		69B0FBE526A6F6F60086E6C5 /* DB HeaventRounded Med v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD126A6F6F30086E6C5 /* DB HeaventRounded Med v3.2.1.ttf */; };
 		69B0FBE626A6F6F60086E6C5 /* DB HeaventRounded Med v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD126A6F6F30086E6C5 /* DB HeaventRounded Med v3.2.1.ttf */; };
 		69B0FBE726A6F6F60086E6C5 /* DB HeaventRounded Med v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD126A6F6F30086E6C5 /* DB HeaventRounded Med v3.2.1.ttf */; };
-		69B0FBE826A6F6F60086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD226A6F6F30086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf */; };
-		69B0FBE926A6F6F60086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD226A6F6F30086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf */; };
-		69B0FBEA26A6F6F60086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD226A6F6F30086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf */; };
 		69B0FBEB26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD326A6F6F30086E6C5 /* DB HeaventRoundedv3.2.1.ttf */; };
 		69B0FBEC26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD326A6F6F30086E6C5 /* DB HeaventRoundedv3.2.1.ttf */; };
 		69B0FBED26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD326A6F6F30086E6C5 /* DB HeaventRoundedv3.2.1.ttf */; };
-		69B0FBEE26A6F6F60086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD426A6F6F40086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf */; };
-		69B0FBEF26A6F6F60086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD426A6F6F40086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf */; };
-		69B0FBF026A6F6F60086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD426A6F6F40086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf */; };
-		69B0FBF126A6F6F60086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD526A6F6F40086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf */; };
-		69B0FBF226A6F6F60086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD526A6F6F40086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf */; };
-		69B0FBF326A6F6F60086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD526A6F6F40086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf */; };
 		69B0FBF426A6F6F60086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD626A6F6F40086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf */; };
 		69B0FBF526A6F6F60086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD626A6F6F40086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf */; };
 		69B0FBF626A6F6F60086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD626A6F6F40086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf */; };
-		69B0FBF726A6F6F60086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD726A6F6F50086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf */; };
-		69B0FBF826A6F6F60086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD726A6F6F50086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf */; };
-		69B0FBF926A6F6F60086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD726A6F6F50086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf */; };
-		69B0FBFA26A6F6F60086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD826A6F6F50086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf */; };
-		69B0FBFB26A6F6F60086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD826A6F6F50086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf */; };
-		69B0FBFC26A6F6F60086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD826A6F6F50086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf */; };
-		69B0FBFD26A6F6F60086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD926A6F6F50086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf */; };
-		69B0FBFE26A6F6F60086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD926A6F6F50086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf */; };
-		69B0FBFF26A6F6F60086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBD926A6F6F50086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf */; };
 		69B0FC0026A6F6F60086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBDA26A6F6F50086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf */; };
 		69B0FC0126A6F6F60086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBDA26A6F6F50086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf */; };
 		69B0FC0226A6F6F60086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FBDA26A6F6F50086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf */; };
@@ -747,18 +723,10 @@
 		699012862696FA180059ACE4 /* SlideSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideSheetPresentationController.swift; sourceTree = "<group>"; };
 		69B0FBBD26A6CBE40086E6C5 /* Units.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Units.swift; sourceTree = "<group>"; };
 		69B0FBC426A6D0930086E6C5 /* UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextView.swift; sourceTree = "<group>"; };
-		69B0FBCE26A6F6F20086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Bd Cond v3.2.1.ttf"; sourceTree = "<group>"; };
 		69B0FBCF26A6F6F20086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Bd v3.2.1.ttf"; sourceTree = "<group>"; };
-		69B0FBD026A6F6F20086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Cond v3.2.1.ttf"; sourceTree = "<group>"; };
 		69B0FBD126A6F6F30086E6C5 /* DB HeaventRounded Med v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Med v3.2.1.ttf"; sourceTree = "<group>"; };
-		69B0FBD226A6F6F30086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Cond It v3.2.1.ttf"; sourceTree = "<group>"; };
 		69B0FBD326A6F6F30086E6C5 /* DB HeaventRoundedv3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRoundedv3.2.1.ttf"; sourceTree = "<group>"; };
-		69B0FBD426A6F6F40086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Blk It v3.2.1.ttf"; sourceTree = "<group>"; };
-		69B0FBD526A6F6F40086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Bd Cond It v3.2.1.ttf"; sourceTree = "<group>"; };
 		69B0FBD626A6F6F40086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Med It v3.2.1.ttf"; sourceTree = "<group>"; };
-		69B0FBD726A6F6F50086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Med Cond v3.2.1.ttf"; sourceTree = "<group>"; };
-		69B0FBD826A6F6F50086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Blk v3.2.1.ttf"; sourceTree = "<group>"; };
-		69B0FBD926A6F6F50086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Med Cond It v3.2.1.ttf"; sourceTree = "<group>"; };
 		69B0FBDA26A6F6F50086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded Bd It v3.2.1.ttf"; sourceTree = "<group>"; };
 		69B0FBDB26A6F6F60086E6C5 /* DB HeaventRounded It v3.2.1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DB HeaventRounded It v3.2.1.ttf"; sourceTree = "<group>"; };
 		69B0FC0C26A6FB3A0086E6C5 /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
@@ -1310,17 +1278,9 @@
 			isa = PBXGroup;
 			children = (
 				697328DF26A5938F001BFC67 /* fonts.css */,
-				69B0FBD526A6F6F40086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf */,
-				69B0FBCE26A6F6F20086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf */,
 				69B0FBDA26A6F6F50086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf */,
 				69B0FBCF26A6F6F20086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf */,
-				69B0FBD426A6F6F40086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf */,
-				69B0FBD826A6F6F50086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf */,
-				69B0FBD226A6F6F30086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf */,
-				69B0FBD026A6F6F20086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf */,
 				69B0FBDB26A6F6F60086E6C5 /* DB HeaventRounded It v3.2.1.ttf */,
-				69B0FBD926A6F6F50086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf */,
-				69B0FBD726A6F6F50086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf */,
 				69B0FBD626A6F6F40086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf */,
 				69B0FBD126A6F6F30086E6C5 /* DB HeaventRounded Med v3.2.1.ttf */,
 				69B0FBD326A6F6F30086E6C5 /* DB HeaventRoundedv3.2.1.ttf */,
@@ -1445,13 +1405,11 @@
 				696ABB3826D75692009527D3 /* FlashUserDisplay.storyboard in Resources */,
 				697328EE26A59391001BFC67 /* fonts.css in Resources */,
 				696ABCAF26DFC496009527D3 /* ic_skip@2x.png in Resources */,
-				69B0FBFD26A6F6F60086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf in Resources */,
 				696ABCB526DFC496009527D3 /* ic_like@2x.png in Resources */,
 				69720525268E1B55002E3149 /* FLMenuBarView.xib in Resources */,
 				6985B1FC26E6251D00FEAD8F /* ugc-flash-card-category.json in Resources */,
 				6968C7A426A15E1000A712B0 /* InteractTextView.xib in Resources */,
 				69B0FBF426A6F6F60086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf in Resources */,
-				69B0FBE226A6F6F60086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf in Resources */,
 				69B0FC7826A977640086E6C5 /* Popup.storyboard in Resources */,
 				69EC5205269D90AA00A23790 /* FLSliderView.xib in Resources */,
 				698991B526BAA246008A41C1 /* ugc-flash-card-id-card.json in Resources */,
@@ -1464,9 +1422,7 @@
 				695899B32669F07A0012B032 /* Assets.xcassets in Resources */,
 				6985B1BA26E270D900FEAD8F /* ugc-flash-card-id.json in Resources */,
 				696D034E268F9EBD002B3500 /* FLItemCollectionViewCell.xib in Resources */,
-				69B0FBEE26A6F6F60086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf in Resources */,
 				6989920026BCF28C008A41C1 /* FLGraphicView.xib in Resources */,
-				69B0FBDC26A6F6F60086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf in Resources */,
 				696ABCAC26DFC496009527D3 /* overlay_like@3x.png in Resources */,
 				69720537268E29D4002E3149 /* FlashCard.storyboard in Resources */,
 				697C0C0026CD207D00CA1092 /* flash-card-quiz-1.json in Resources */,
@@ -1485,21 +1441,17 @@
 				697C0AB726CA30FB00CA1092 /* FLQuizView.xib in Resources */,
 				69848FFA2695A10D00B5FEF6 /* flash-card-color.json in Resources */,
 				697C0AF426CA6CBD00CA1092 /* FLQuiz.storyboard in Resources */,
-				69B0FBFA26A6F6F60086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf in Resources */,
-				69B0FBE826A6F6F60086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf in Resources */,
 				696ABCA926DFC496009527D3 /* overlay_skip@3x.png in Resources */,
 				69B0FC0026A6F6F60086E6C5 /* DB HeaventRounded Bd It v3.2.1.ttf in Resources */,
 				696ABCBB26DFC496009527D3 /* overlay_like.png in Resources */,
 				697C0AEA26CA57EE00CA1092 /* FLChoiceView.xib in Resources */,
 				69720514268E0EA8002E3149 /* FLItemView.xib in Resources */,
-				69B0FBF126A6F6F60086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf in Resources */,
 				6989922226BCF51E008A41C1 /* flash-card-sticker.json in Resources */,
 				6989920626BCF28C008A41C1 /* FLImageCell.xib in Resources */,
 				69B0FBEB26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */,
 				698490782695F27900B5FEF6 /* FLColorCell.xib in Resources */,
 				69B0FBDF26A6F6F60086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf in Resources */,
 				6985B21326E65FB500FEAD8F /* ugc-flash-card-tag-list.json in Resources */,
-				69B0FBF726A6F6F60086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1509,7 +1461,6 @@
 			files = (
 				698991B626BAA246008A41C1 /* ugc-flash-card-id-card.json in Resources */,
 				6968C78B26A0257400A712B0 /* FLControlView.xib in Resources */,
-				69B0FBE326A6F6F60086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf in Resources */,
 				69B0FBEC26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */,
 				696ABCB026DFC496009527D3 /* ic_skip@2x.png in Resources */,
 				696ABCBC26DFC496009527D3 /* overlay_like.png in Resources */,
@@ -1526,7 +1477,6 @@
 				6989922D26BCF54B008A41C1 /* flash-card-shape.json in Resources */,
 				696ABB3926D75692009527D3 /* FlashUserDisplay.storyboard in Resources */,
 				6985B1B026E23E5A00FEAD8F /* ugc-flash-card-id-card-id.json in Resources */,
-				69B0FBEF26A6F6F60086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf in Resources */,
 				69720526268E1B55002E3149 /* FLMenuBarView.xib in Resources */,
 				696ABCB326DFC496009527D3 /* ic_like@3x.png in Resources */,
 				69B0FBE026A6F6F60086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf in Resources */,
@@ -1535,11 +1485,9 @@
 				697C0AF526CA6CBD00CA1092 /* FLQuiz.storyboard in Resources */,
 				6984903E2695BEF700B5FEF6 /* FLAssets.xcassets in Resources */,
 				696ABCBF26DFC496009527D3 /* overlay_skip.png in Resources */,
-				69B0FBFE26A6F6F60086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf in Resources */,
 				6985B3B326E7C37700FEAD8F /* TagListSelectViewController.xib in Resources */,
 				696D034F268F9EBD002B3500 /* FLItemCollectionViewCell.xib in Resources */,
 				6968C7A526A15E1000A712B0 /* InteractTextView.xib in Resources */,
-				69B0FBDD26A6F6F60086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf in Resources */,
 				6985B21426E65FB500FEAD8F /* ugc-flash-card-tag-list.json in Resources */,
 				696ABCB626DFC496009527D3 /* ic_like@2x.png in Resources */,
 				6989922326BCF51E008A41C1 /* flash-card-sticker.json in Resources */,
@@ -1550,16 +1498,12 @@
 				69EC521E269D9D7E00A23790 /* FLTextStyleView.xib in Resources */,
 				698490642695E93D00B5FEF6 /* FLColorView.xib in Resources */,
 				697C0BF726CD169300CA1092 /* flash-card-new-quiz.json in Resources */,
-				69B0FBE926A6F6F60086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf in Resources */,
 				6989920126BCF28C008A41C1 /* FLGraphicView.xib in Resources */,
 				696BBAC226E8760600E88B49 /* FLPostViewController.xib in Resources */,
-				69B0FBF826A6F6F60086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf in Resources */,
-				69B0FBFB26A6F6F60086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf in Resources */,
 				6985B1BB26E270D900FEAD8F /* ugc-flash-card-id.json in Resources */,
 				697C0C0126CD207D00CA1092 /* flash-card-quiz-1.json in Resources */,
 				696ABCAA26DFC496009527D3 /* overlay_skip@3x.png in Resources */,
 				696BBAC926E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */,
-				69B0FBF226A6F6F60086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf in Resources */,
 				697C0AB826CA30FB00CA1092 /* FLQuizView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1570,7 +1514,6 @@
 			files = (
 				698991B726BAA246008A41C1 /* ugc-flash-card-id-card.json in Resources */,
 				6968C78C26A0257400A712B0 /* FLControlView.xib in Resources */,
-				69B0FBE426A6F6F60086E6C5 /* DB HeaventRounded Cond v3.2.1.ttf in Resources */,
 				69B0FBED26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */,
 				696ABCB126DFC496009527D3 /* ic_skip@2x.png in Resources */,
 				696ABCBD26DFC496009527D3 /* overlay_like.png in Resources */,
@@ -1587,7 +1530,6 @@
 				6989922E26BCF54B008A41C1 /* flash-card-shape.json in Resources */,
 				696ABB3A26D75692009527D3 /* FlashUserDisplay.storyboard in Resources */,
 				6985B1B126E23E5A00FEAD8F /* ugc-flash-card-id-card-id.json in Resources */,
-				69B0FBF026A6F6F60086E6C5 /* DB HeaventRounded Blk It v3.2.1.ttf in Resources */,
 				69720527268E1B55002E3149 /* FLMenuBarView.xib in Resources */,
 				696ABCB426DFC496009527D3 /* ic_like@3x.png in Resources */,
 				69B0FBE126A6F6F60086E6C5 /* DB HeaventRounded Bd v3.2.1.ttf in Resources */,
@@ -1596,11 +1538,9 @@
 				697C0AF626CA6CBD00CA1092 /* FLQuiz.storyboard in Resources */,
 				6984903F2695BEF700B5FEF6 /* FLAssets.xcassets in Resources */,
 				696ABCC026DFC496009527D3 /* overlay_skip.png in Resources */,
-				69B0FBFF26A6F6F60086E6C5 /* DB HeaventRounded Med Cond It v3.2.1.ttf in Resources */,
 				6985B3B426E7C37700FEAD8F /* TagListSelectViewController.xib in Resources */,
 				696D0350268F9EBD002B3500 /* FLItemCollectionViewCell.xib in Resources */,
 				6968C7A626A15E1000A712B0 /* InteractTextView.xib in Resources */,
-				69B0FBDE26A6F6F60086E6C5 /* DB HeaventRounded Bd Cond v3.2.1.ttf in Resources */,
 				6985B21526E65FB500FEAD8F /* ugc-flash-card-tag-list.json in Resources */,
 				696ABCB726DFC496009527D3 /* ic_like@2x.png in Resources */,
 				6989922426BCF51E008A41C1 /* flash-card-sticker.json in Resources */,
@@ -1611,16 +1551,12 @@
 				69EC521F269D9D7E00A23790 /* FLTextStyleView.xib in Resources */,
 				698490652695E93D00B5FEF6 /* FLColorView.xib in Resources */,
 				697C0BF826CD169300CA1092 /* flash-card-new-quiz.json in Resources */,
-				69B0FBEA26A6F6F60086E6C5 /* DB HeaventRounded Cond It v3.2.1.ttf in Resources */,
 				6989920226BCF28C008A41C1 /* FLGraphicView.xib in Resources */,
 				696BBAC326E8760600E88B49 /* FLPostViewController.xib in Resources */,
-				69B0FBF926A6F6F60086E6C5 /* DB HeaventRounded Med Cond v3.2.1.ttf in Resources */,
-				69B0FBFC26A6F6F60086E6C5 /* DB HeaventRounded Blk v3.2.1.ttf in Resources */,
 				6985B1BC26E270D900FEAD8F /* ugc-flash-card-id.json in Resources */,
 				697C0C0226CD207D00CA1092 /* flash-card-quiz-1.json in Resources */,
 				696ABCAB26DFC496009527D3 /* overlay_skip@3x.png in Resources */,
 				696BBACA26E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */,
-				69B0FBF326A6F6F60086E6C5 /* DB HeaventRounded Bd Cond It v3.2.1.ttf in Resources */,
 				697C0AB926CA30FB00CA1092 /* FLQuizView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

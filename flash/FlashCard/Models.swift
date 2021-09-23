@@ -50,8 +50,6 @@ enum FLTextStyle: String {
             return ""
         }
     }
-    
-    //UIFont.w
 }
 
 enum FLTextAlignment: String {

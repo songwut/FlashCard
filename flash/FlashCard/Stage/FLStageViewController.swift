@@ -45,8 +45,8 @@ final class FLStageViewController: UIViewController {
         b.setImage(UIImage(named: "ic_v2_delete"), for: .normal)
         let w = FlashStyle.deletePageWidth
         b.bounds = CGRect(x: 0, y: 0, width: w, height: w)
-        b.backgroundColor = ColorHelper.elementBackground()
-        b.tintColor = ColorHelper.light()
+        b.backgroundColor = .elementBackground()
+        b.tintColor = .light()
         b.cornerRadius = w / 2
         return b
     }()
@@ -104,17 +104,17 @@ final class FLStageViewController: UIViewController {
         
         self.addButton.updateLayout()
         self.addButton.cornerRadius = self.addButton.bounds.width / 2
-        self.addButton.backgroundColor = ColorHelper.primary()
-        self.addButton.tintColor = ColorHelper.light()
+        self.addButton.backgroundColor = UIColor.disable()
+        self.addButton.tintColor = .light()
         let edge = self.addButton.bounds.height * FlashStyle.iconEedge
         let iconPading = UIEdgeInsets(top: edge, left: edge, bottom: edge, right: edge)
         self.addButton.imageEdgeInsets = iconPading
         self.previewButton.imageEdgeInsets = iconPading
         self.listButton.imageEdgeInsets = iconPading
         
-        self.pageCountLabel.textColor = ColorHelper.text50()
-        self.previewButton.tintColor = ColorHelper.text50()
-        self.listButton.tintColor = ColorHelper.text50()
+        self.pageCountLabel.textColor = .text50()
+        self.previewButton.tintColor = .text50()
+        self.listButton.tintColor = .text50()
         
         self.stageView = FLStageView()
         self.stageView?.isEditor = true

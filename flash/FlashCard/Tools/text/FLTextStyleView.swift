@@ -75,21 +75,21 @@ class FLTextStyleView: UIView {
         
         self.boldLabel.text = FLTextStyle.bold.rawValue
         self.boldButton.textStyle = .bold
-        self.boldButton.tintColor = ColorHelper.text75()
+        self.boldButton.tintColor = .text75()
         self.boldButton.cornerRadius = 8
         
         self.italicLabel.text = FLTextStyle.italic.rawValue
         self.italicButton.textStyle = .italic
-        self.italicButton.tintColor = ColorHelper.text75()
+        self.italicButton.tintColor = .text75()
         self.italicButton.cornerRadius = 8
         
         self.underlineLabel.text = FLTextStyle.underline.rawValue
         self.underlineButton.textStyle = .underline
-        self.underlineButton.tintColor = ColorHelper.text75()
+        self.underlineButton.tintColor = .text75()
         self.underlineButton.cornerRadius = 8
         
         self.leftButton.alignment = .left
-        self.leftButton.tintColor = ColorHelper.text50()
+        self.leftButton.tintColor = .text50()
         
         self.centerButton.alignment = .center
         self.centerButton.tintColor = .text50()
@@ -118,7 +118,7 @@ class FLTextStyleView: UIView {
             self.boldButton.tintColor = .black
             self.boldButton.borderColor = .black
         } else {
-            self.boldButton.tintColor = ColorHelper.text75()
+            self.boldButton.tintColor = .text75()
             self.boldButton.borderColor = UIColor("7D7D7D")
         }
         
@@ -129,7 +129,7 @@ class FLTextStyleView: UIView {
             self.italicButton.tintColor = .black
             self.italicButton.borderColor = .black
         } else {
-            self.italicButton.tintColor = ColorHelper.text75()
+            self.italicButton.tintColor = .text75()
             self.italicButton.borderColor = UIColor("7D7D7D")
         }
         
@@ -140,7 +140,7 @@ class FLTextStyleView: UIView {
             self.underlineButton.tintColor = .black
             self.underlineButton.borderColor = .black
         } else {
-            self.underlineButton.tintColor = ColorHelper.text75()
+            self.underlineButton.tintColor = .text75()
             self.underlineButton.borderColor = UIColor("7D7D7D")
         }
     }

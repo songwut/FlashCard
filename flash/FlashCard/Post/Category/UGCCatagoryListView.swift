@@ -24,7 +24,7 @@ struct UGCCatagoryListView: View {
             ScrollView {
                 self.listView
             }
-            .background(ColorHelper.background().color)
+            .background(UIColor.background().color)
             //.frame(width: .infinity, height: .infinity)
             
             self.footerView
@@ -46,7 +46,7 @@ struct UGCCatagoryListView: View {
             Text("\(total) \(countCat)")
                 .padding(.leading, 16)
                 .padding(.trailing, 16)
-                .foregroundColor(ColorHelper.text75().color)
+                .foregroundColor(UIColor.text75().color)
                 .font(FontHelper.getFontSystem(.l, font: .text).font)
             
             ForEach(0..<items.count) { i in
@@ -71,7 +71,7 @@ struct UGCCatagoryListView: View {
                     .font(FontHelper.getFontSystem(16, font: .medium).font)
                     .frame(maxWidth: .infinity, maxHeight: 42, alignment: .center)
             })
-            .buttonStyle(ButtonFill(color: ColorHelper.primary().color))
+            .buttonStyle(ButtonFill(color: UIColor.config.primary().color))
         })
         .padding(.all, 16)
     }

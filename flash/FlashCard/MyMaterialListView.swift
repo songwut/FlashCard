@@ -27,7 +27,7 @@ struct MyMaterialListView: View {
             let totalText =  count.textNumber(many: "learning_material".localized())
             Text("\(total) \(totalText)")
                 .frame(height: 40)
-                .foregroundColor(ColorHelper.text75().color)
+                .foregroundColor(UIColor.text75().color)
                 .font(FontHelper.getFontSystem(.l, font: .text).font)
             
             let createList = [

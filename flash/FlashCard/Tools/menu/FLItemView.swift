@@ -47,8 +47,8 @@ final class FLItemView: UIView {
             //self.button.contentHorizontalAlignment = .center
             
             self.titleLabel.text = self.menu.text().localized()
-            self.button.tintColor = ColorHelper.text75()
-            self.titleLabel.textColor = ColorHelper.text()
+            self.button.tintColor = .text75()
+            self.titleLabel.textColor = .text()
         }
     }
     
@@ -63,7 +63,7 @@ final class FLItemView: UIView {
             self.button.borderWidth = 1
             self.button.borderColor = .clear
             self.button.backgroundColor = .clear
-            self.button.tintColor = ColorHelper.text75()
+            self.button.tintColor = .text75()
         }
         
     }
@@ -78,7 +78,7 @@ final class FLItemView: UIView {
             self.button.borderWidth = 1
             self.button.borderColor = UIColor("7D7D7D")
             self.button.backgroundColor = .clear
-            self.button.tintColor = ColorHelper.text50()
+            self.button.tintColor = .text50()
             self.titleLabel.isHidden = true
         }
     }

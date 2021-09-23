@@ -88,7 +88,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.titleLimitLabel.text = "0/\(maxChaTitle) Characters Limit"
         self.titleLimitLabel.font = FontHelper.getFontSystem(12, font: .text)
         self.titleTextField.font = fontValue
-        self.titleTextField.textColor = ColorHelper.text()
+        self.titleTextField.textColor = .text()
         self.idView.borderWidth = 1
         self.idView.cornerRadius = 9
         self.idLabel.font = fontTitle
@@ -98,26 +98,26 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.descTextView.borderColor = UIColor("A9A9A9")
         self.descTextView.backgroundColor = .white
         self.descTextView.placeholder = FlashStyle.post.descPlaceHolder
-        self.descTextView.placeholderColor = ColorHelper.text25()
-        self.descTextView.textColor = ColorHelper.text()
+        self.descTextView.placeholderColor = .text25()
+        self.descTextView.textColor = .text()
         self.descTextView.font = fontValue
         self.ownerLabel.font = fontTitle
         self.ownerValueLabel.font = fontValue
-        self.ownerValueLabel.textColor = ColorHelper.text()
+        self.ownerValueLabel.textColor = .text()
         self.updateLabel.font = fontTitle
         self.updateValueLabel.font = fontValue
-        self.updateValueLabel.textColor = ColorHelper.text()
+        self.updateValueLabel.textColor = .text()
         self.timeLabel.font = fontTitle
         self.timeMinLabel.font = fontTitle
         self.timeValueLabel.font = fontValue
         self.categoryLabel.font = fontTitle
         self.categoryValueLabel.text = FlashStyle.post.categoryPlaceHolder
-        self.categoryValueLabel.textColor = ColorHelper.text25()
+        self.categoryValueLabel.textColor = .text25()
         self.categoryValueLabel.font = fontValue
         self.tagLabel.font = fontTitle
         self.tagPlaceholderLabel.font = fontValue
         self.tagPlaceholderLabel.text = FlashStyle.post.tagPlaceHolder
-        self.tagPlaceholderLabel.textColor = ColorHelper.text25()
+        self.tagPlaceholderLabel.textColor = .text25()
         self.statusLabel.font = fontTitle
         self.statusValueLabel.font = fontValue
         self.idView.backgroundColor = .clear
@@ -141,7 +141,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.submitButton.isHidden = false
         self.cancelButton.isHidden = true
         self.coverImageView.image = UIImage(named: "flash-cover")
-        self.imageButton.backgroundColor = ColorHelper.elementBackground()
+        self.imageButton.backgroundColor = UIColor.elementBackground()
         self.loadDetail(self.viewModel.detail)
     }
     
@@ -175,8 +175,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
         
         let isEnable = detail.status == .unpublish
-        let disableColor = ColorHelper.disable()
-        let textColor = ColorHelper.text()
+        let disableColor = UIColor.disable()
+        let textColor = UIColor.text()
         titleTextField.isEnabled = isEnable
         titleTextField.textColor = isEnable ? textColor : disableColor
         descTextView.isEditable = isEnable
@@ -184,10 +184,10 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         timeValueLabel.textColor = isEnable ? textColor : disableColor
         plusButton.isEnabled = isEnable
         minusButton.isEnabled = isEnable
-        plusButton.tintColor = isEnable ? ColorHelper.primary() : disableColor
-        minusButton.tintColor = isEnable ? ColorHelper.primary() : disableColor
+        plusButton.tintColor = isEnable ? UIColor.config.primary() : disableColor
+        minusButton.tintColor = isEnable ? UIColor.config.primary() : disableColor
         categoryView.isUserInteractionEnabled = isEnable
-        categoryValueLabel.textColor = isEnable ? ColorHelper.text25() : disableColor
+        categoryValueLabel.textColor = isEnable ? .text25() : disableColor
         categoryButton.isEnabled = isEnable
         tagButton.isEnabled = isEnable
         tagContentView.isUserInteractionEnabled = isEnable

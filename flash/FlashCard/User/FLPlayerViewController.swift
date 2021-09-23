@@ -43,8 +43,8 @@ class FLPlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.footerMargin.constant = UIDevice.isIpad() ? 60.0 : 16.0
-        self.leftButton.tintColor = ColorHelper.secondary()
-        self.rightButton.tintColor = ColorHelper.secondary()
+        self.leftButton.tintColor = UIColor.config.secondary()
+        self.rightButton.tintColor = UIColor.config.secondary()
         self.leftButton.addTarget(self, action: #selector(self.prvAction(_:)), for: .touchUpInside)
         self.rightButton.addTarget(self, action: #selector(self.nextAction(_:)), for: .touchUpInside)
         self.viewContainer.updateLayout()

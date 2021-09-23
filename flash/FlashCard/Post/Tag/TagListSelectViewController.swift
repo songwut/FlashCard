@@ -27,7 +27,7 @@ class TagListSelectViewController: UIViewController {
 
         self.navigationItem.rightBarButtonItems = [reset]
         self.totalLabel.font = FontHelper.getFontSystem(14, font: .text)
-        self.totalLabel.textColor = ColorHelper.text75()
+        self.totalLabel.textColor = .text75()
         self.tagView.delegate = self
         self.tagView.tagLineBreakMode = .byTruncatingTail
         self.manageTagContentViewWith(tags: self.tagList)

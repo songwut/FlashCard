@@ -6,9 +6,9 @@
 //
 
 import UIKit
-import SVGKit
+//import SVGKit
 import AVKit
-
+/*
 extension UIImageView {
     func downloadedsvg(from url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
         contentMode = mode
@@ -26,7 +26,7 @@ extension UIImageView {
         }.resume()
     }
 }
-
+*/
 
 struct FLCreator {
     
@@ -231,7 +231,7 @@ struct FLCreator {
         }
         return nil
     }
-    
+    /*
     func createVector(_ element:FlashElement ,in stage: FLStageView) -> InteractView {
         let viewX = (stage.frame.width * CGFloat(element.x) / 100)
         let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
@@ -261,7 +261,7 @@ struct FLCreator {
         stage.addSubview(iView)
         return iView
     }
-    
+    */
     func createArrow(_ element: FlashElement ,in stage: FLStageView) -> InteractView {
         let viewX = (stage.frame.width * CGFloat(element.x) / 100)
         let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)

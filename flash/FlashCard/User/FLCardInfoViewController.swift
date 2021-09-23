@@ -20,7 +20,7 @@ class FLCardInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let textColor = ColorHelper.text()
+        let textColor = UIColor.text()
         self.iconCount.tintColor = textColor
         self.iconLike.tintColor = textColor
         self.iconQuiz.tintColor = textColor

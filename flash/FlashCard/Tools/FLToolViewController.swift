@@ -327,11 +327,11 @@ class FLToolViewController: UIViewController {
         //TODO: api reload if need
         case .sticker:
             self.stickerButton.tintColor = .black
-            self.shapeButton.tintColor = ColorHelper.text50()
+            self.shapeButton.tintColor = .text50()
             
             break
         case .shape:
-            self.stickerButton.tintColor = ColorHelper.text50()
+            self.stickerButton.tintColor = .text50()
             self.shapeButton.tintColor = .black
             break
         }

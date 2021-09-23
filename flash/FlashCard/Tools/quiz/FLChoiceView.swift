@@ -27,11 +27,11 @@ final class FLChoiceView: UIView {
     }
     
     func updateStyle(_ isAnswer: Bool) {
-        let bgColor: UIColor = isAnswer ? ColorHelper.success() : UIColor("F8F8F8")
+        let bgColor: UIColor = isAnswer ? .success() : UIColor("F8F8F8")
         self.backgroundColor = bgColor
         let icon: UIImage? = isAnswer ? UIImage(named: "ic_v2_check") : nil
-        let iconBgColor = isAnswer ? ColorHelper.light() : ColorHelper.disable()
-        let textColor = isAnswer ?.white : ColorHelper.text50()
+        let iconBgColor: UIColor = isAnswer ? UIColor.light() : UIColor.disable()
+        let textColor: UIColor = isAnswer ?.white : .text50()
         self.checkButton.setImage(icon, for: .normal)
         self.checkButton.tintColor = bgColor
         self.checkButton.backgroundColor = iconBgColor
@@ -53,7 +53,7 @@ final class FLChoiceView: UIView {
         self.textView.maxHeight = 60
         self.textView.maxLength = FlashStyle.maxCharChoice
         self.textView.minHeight = self.contentHeight.constant//36
-        self.textView.placeholderColor = ColorHelper.text50()
+        self.textView.placeholderColor = .text50()
         self.textView.text = ""
     }
     

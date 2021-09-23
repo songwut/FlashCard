@@ -79,8 +79,8 @@ struct FlashStyle {
     static let pageCardWidthRatio: CGFloat = UIDevice.isIpad() ?  575 / 1024 : 325.0 / 375
     static let pageCardRatio: CGFloat = 485 / 325
     
-    static let bottonToolColor: UIColor = ColorHelper.primary()
-    static let disableToolColor: UIColor = ColorHelper.disable()
+    static let bottonToolColor: UIColor = UIColor.config.primary()
+    static let disableToolColor: UIColor = UIColor.disable()
     static let iconEedge: CGFloat = 0.3//
     static let bottonToolWidth: CGFloat = UIDevice.isIpad() ? 70 : 54
     static let toolMargin: CGFloat = 18 / 54

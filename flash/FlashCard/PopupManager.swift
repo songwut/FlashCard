@@ -29,11 +29,11 @@ class PopupManager: NSObject {
             //do after close popup
         }
         let popup: PopupContent
-        let icon = ImageTint(image: UIImage(named: "ic_v2_alert"), color: ColorHelper.error())
+        let icon = ImageTint(image: UIImage(named: "ic_v2_alert"), color: UIColor.error())
         icon.size = 75
         popup = PopupContent(title: "Warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: nil,  closeButtonTitle: "OK".localized(), isError: true)
-        popup.closeColor = ColorHelper.error()
-        popup.confirmColor = ColorHelper.error()
+        popup.closeColor = UIColor.error()
+        popup.confirmColor = UIColor.error()
         
         var vc = UIApplication.shared.keyWindow?.rootViewController
         if let current = mainVC {
@@ -50,12 +50,12 @@ class PopupManager: NSObject {
             //do after close popup
         }
         let popup: PopupContent
-        let icon = ImageTint(image: UIImage(named: "ic_v2_alert"), color: ColorHelper.error())
+        let icon = ImageTint(image: UIImage(named: "ic_v2_alert"), color: .error())
         icon.size = 75
         //popup = PopupContent(title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: "confirm".localized(),  closeButtonTitle: "cancel".localized(), isError: true)
         popup = PopupContent(atbTitle: nil, title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: nil, closeButtonTitle: "cancel".localized(), confirmAction: confirm)
-        popup.closeColor = ColorHelper.info75()
-        popup.confirmColor = ColorHelper.info75()
+        popup.closeColor = .info75()
+        popup.confirmColor = .info75()
         
         var vc = UIApplication.shared.keyWindow?.rootViewController
         if let current = mainVC {

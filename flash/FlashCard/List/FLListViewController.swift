@@ -127,8 +127,8 @@ class FLListViewController: UIViewController {
             if self.userAction == "select" {
                 //case can delete, duplicate
                 let count = self.selectSortList.count
-                self.menuSelect.setColor(ColorHelper.primary(), count: count, menu: .select)
-                self.menuAdd.setColor(ColorHelper.disable(), menu: .add)
+                self.menuSelect.setColor(UIColor.config.primary(), count: count, menu: .select)
+                self.menuAdd.setColor(UIColor.disable(), menu: .add)
                 self.menuDuplicate.menu = .duplicate
                 self.menuDelete.menu = .delete
             } else {
@@ -300,7 +300,7 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
                 }
                 
                 let count = self.selectSortList.count
-                self.menuSelect.setColor(ColorHelper.primary(), count: count, menu: .select)
+                self.menuSelect.setColor(UIColor.config.primary(), count: count, menu: .select)
                 
                 self.collectionView.reloadData()
                 

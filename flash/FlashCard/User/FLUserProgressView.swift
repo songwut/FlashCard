@@ -17,8 +17,8 @@ struct FLProgressView: View {
     var maximum: Int = 7
     var height: CGFloat = UIDevice.isIpad() ? 5 : 2
     var spacing: CGFloat = 2
-    var selectedColor: Color = ColorHelper.primary().color
-    var unselectedColor: Color = ColorHelper.disable().color
+    var selectedColor: Color = UIColor.config.primary().color
+    var unselectedColor: Color = UIColor.disable().color
     
     var body: some View {
         HStack(spacing: spacing) {
