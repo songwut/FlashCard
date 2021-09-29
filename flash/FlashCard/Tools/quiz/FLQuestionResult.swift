@@ -23,6 +23,6 @@ class FLQuestionResult:Mappable {
         id           <- map["id"]
         value        <- map["value"]
         choiceList   <- map["choice"]
-        answer       <- map["choice"]
+        answer       <- map["answer"]
     }
 }

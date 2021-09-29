@@ -32,3 +32,4 @@ var isMaintenance = false
 var tagBgDisableColor = UIColor("EBEBEB")
 var tagBgEnableColor = UIColor("DFEBF5")
 var tagTextEnableColor = UIColor("2196F3")
+let defaultUserImage = UIImage(named: "ic_profile_gray")

@@ -77,6 +77,14 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
     }
     
+    var selectedCategory: CategoryResult? {
+        didSet {
+            guard let category = self.selectedCategory else { return  }
+            self.categoryValueLabel.text = category.name
+            self.categoryValueLabel.textColor = .text()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.footerView.setShadow(radius: 16, opacity: 0.09, color: .black, offset: CGSize(width: 0, height: -2))
@@ -134,6 +142,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         let tapTag = UITapGestureRecognizer(target: self, action: #selector(self.tagViewPressed))
         self.tagContentView.addGestureRecognizer(tapTag)
         self.tagContentView.updateLayout()
+        self.tagContentView.backgroundColor = .white
         self.tagView.updateLayout()
         self.tagView.delegate = self
         self.tagView.tagLineBreakMode = .byTruncatingTail
@@ -237,9 +246,11 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             if let dictList = object as? [[String : Any]],
                let detail = UGCCategoryPageResult(JSON: ["results": dictList]) {
                 let mockList = detail.list
-                let host = UIHostingController(rootView: UGCCatagoryListView(items: mockList) { category in
+                var categoryView = UGCCatagoryListView(items: mockList) { category in
                     print("UGCCatagoryListView: select: \(category.name)")
-                })
+                }
+                categoryView.delegate = self
+                let host = UIHostingController(rootView: categoryView)
                 if let nav = self.navigationController {
                     nav.pushViewController(host, animated: true)
                 } else {
@@ -391,8 +402,9 @@ extension FLPostViewController: TagListViewDelegate, TagListSelectViewController
         self.manageTagContentViewWith(tags: tags)
     }
     
-    func didSelectCategory(_ categoryId: Int) {
-        print("category: \(categoryId)")
+    func didSelectCategory(_ category: CategoryResult) {
+        print("category: \(category.id) \(category.name)")
+        self.selectedCategory = category
     }
 }
 

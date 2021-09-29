@@ -276,3 +276,26 @@ class MaterialFlashPageResult: BaseResult {
 }
 
 
+class UserAnswerResult: BaseResult {
+    var page: Int = 0
+    var index: Int = 0
+    var answer: FLAnswerResult?
+
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        answer            <- map["answer"]
+        page              <- map["page"]
+        index              <- map["index"]
+    }
+}
+
+class UserAnswerPageResult: BaseResult {
+    var choiceList = [FLChoiceResult]()
+    var userAnswerList = [UserAnswerResult]()
+
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        choiceList        <- map["choice"]
+        userAnswerList    <- map["user_answer_list"]
+    }
+}

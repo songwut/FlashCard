@@ -24,7 +24,7 @@ struct MyNewMaterialView: View {
         VStack(alignment: .leading, spacing: 8, content: {
             let items = content.list
             let limit = 3
-            if items.count == 0 {
+            if content.count == 0 {
                 FLCreateMaterialView()
                     .frame(height: 122)
                     .padding(.bottom, 8)

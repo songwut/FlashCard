@@ -109,6 +109,10 @@ extension UIColor {
        return UIColor("1F75FE")
     }
     
+    static func info10() -> UIColor {
+        return info().withAlphaComponent(0.10)
+    }
+    
     static func info75() -> UIColor {
         return info().withAlphaComponent(0.75)
     }

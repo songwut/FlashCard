@@ -34,6 +34,13 @@ class FLStageViewModel {
     var currentPageDetail: FLPageDetailResult?
     var flashId = 16
     
+    func getQuizContent() -> FlashElement? {
+        let current = self.currentPageDetail?.componentList.filter({ (flash) -> Bool in
+            return flash.type == .quiz
+        })
+        return current?.first
+    }
+    
     func prepareModel() {
         //mock data
         
@@ -234,5 +241,6 @@ class FLStageViewModel {
             }
         }
     }
+    
     
 }

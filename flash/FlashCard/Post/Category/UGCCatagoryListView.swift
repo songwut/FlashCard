@@ -8,38 +8,31 @@
 import SwiftUI
 
 protocol UGCCatagoryListViewDelegate {
-    func didSelectCategory(_ categoryId: Int)
+    func didSelectCategory(_ category: CategoryResult)
 }
 
 struct UGCCatagoryListView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var items = [UGCCategory]()
-    
+    @State var selectedCategory: CategoryResult?
     var delegate: UGCCatagoryListViewDelegate?
-    @State var selectedCategoryId: Int = 0
     
     var didSelectCategory: (_ category: CategoryResult) -> ()
     
     var body: some View {
         VStack(alignment: .center, spacing: nil, content: {
             ScrollView {
-                self.listView
+                ListView
             }
             .background(UIColor.background().color)
-            //.frame(width: .infinity, height: .infinity)
             
-            self.footerView
+            FooterView
                 .frame(height: 80)
                 .background(Color.white)
         })
-        
-        
-        
-        //        .foregroundColor(ColorHelper.primary().color)
-        //        .navigationBarTitle(Text("category".localized()))
-        //        .statusBar(hidden: false)
     }
     
-    var listView: some View {
+    var ListView: some View {
         VStack(alignment: .leading, spacing: 8, content: {
             let countCat = items.count.textNumber(many: "category_unit")
             let total = "total".localized()
@@ -53,7 +46,7 @@ struct UGCCatagoryListView: View {
                 let category = self.items[i]
                 UGCCategoryRow(category: category) { selectedCategory in
                     print("createPressed:\(selectedCategory.name)")
-                    selectedCategoryId = selectedCategory.id
+                    self.selectedCategory = selectedCategory
                     return didSelectCategory(selectedCategory)
                 }
             }
@@ -62,10 +55,12 @@ struct UGCCatagoryListView: View {
         .padding(.bottom, 16)
     }
     
-    var footerView: some View {
+    var FooterView: some View {
         HStack(alignment: .center, spacing: /*@START_MENU_TOKEN@*/nil/*@END_MENU_TOKEN@*/, content: {
             Button(action: {
-                self.delegate?.didSelectCategory(selectedCategoryId)
+                guard let c = selectedCategory else { return }
+                delegate?.didSelectCategory(c)
+                presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text("done".localized().uppercased())
                     .font(FontHelper.getFontSystem(16, font: .medium).font)

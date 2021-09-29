@@ -1,0 +1,106 @@
+{
+  "next": 2,
+  "url": "https://develop.conicle.co/api/dashboard/tag/type/MATERIAL_TYPE/?page=1&format=json",
+  "next_url": "https://develop.conicle.co/api/dashboard/tag/type/MATERIAL_TYPE/?format=json&;amp;page=2",
+  "previous": null,
+  "previous_url": null,
+  "count": 749,
+  "page_size": 24,
+  "choice": [
+      {
+        "id": 1,
+        "value": "Option 1",
+        "is_answer": true,
+        "percent": 80
+      },
+      {
+        "id": 1,
+        "value": "Option 1",
+        "is_answer": false,
+        "percent": 20
+      }
+    ]
+  "user_answer_list": [
+    {
+      "id": 409,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name1",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    },
+    {
+      "id": 410,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name2",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    },
+    {
+      "id": 412,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name3",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    },
+    {
+      "id": 413,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name4",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    },
+    {
+      "id": 414,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name5",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    },
+    {
+      "id": 415,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name6",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    },
+    {
+      "id": 416,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name7",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    },
+    {
+      "id": 417,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name8",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    },
+    {
+      "id": 418,
+      "image": "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+      "name": "Name9",
+      "answer": {
+          "id": 1,
+          "value": "Option 1"
+        }
+    }
+  ]
+}

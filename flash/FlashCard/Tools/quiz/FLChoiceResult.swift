@@ -16,17 +16,36 @@ class FLChoiceResult:Mappable {
     var percent: NSNumber?
     var isHidden = false
     
+    var progressValue: Float = 0
+    
+    func calProgress() {
+        if let percent = self.percent {
+            progressValue = percent.floatValue / 100
+        } else {
+            progressValue = 0.0
+        }
+    }
+    
+    func infoProgressColor() -> UIColor {
+        if let isAnswer = self.isAnswer, isAnswer {
+            return UIColor.success()
+        } else {
+            return UIColor.config.primary25()
+        }
+    }
+    
     required init?(map: Map) {
         
     }
     
     func mapping(map: Map) {
         id        <- map["id"]
-        id        <- map["id"]
         value     <- map["value"]
         isHidden  <- map["is_hidden"]
         isAnswer  <- map["is_answer"]
         percent   <- map["percent"]
+        
+        calProgress()
     }
 }
 

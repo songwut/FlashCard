@@ -21,6 +21,7 @@ class FLPlayerViewController: UIViewController {
     @IBOutlet weak var infoStackView: UIStackView!
     @IBOutlet weak var progressStackView: UIStackView!
     @IBOutlet weak var viewContainer: UIView!
+    @IBOutlet weak var footerStackView: UIStackView!
     
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
@@ -60,6 +61,7 @@ class FLPlayerViewController: UIViewController {
         
         self.infoView.view.frame = CGRect(x: 0, y: 0, width: self.infoStackView.frame.width, height: 60)
         self.infoView.view.backgroundColor = .clear
+        self.infoView.rootView.delegate = self
         self.infoStackView.addArrangedSubview(self.infoView.view)
         self.showLoading(nil)
         self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlCardResult?) in
@@ -171,13 +173,31 @@ class FLPlayerViewController: UIViewController {
             print("undoButtonPressed")
         }
     }
+    var pageInfoVC: FLInfoPageViewController?
+    var cardInfoVC: FLCardInfoViewController?
+    var quizInfoVC: FLQuizInfoViewController?
 }
 
-extension FLPlayerViewController: FLUserProgressViewDelegate {
+extension FLPlayerViewController: FLUserProgressViewDelegate, FLInfoViewDelegate {
+    
+    //FLUserProgressViewDelegate
     func segmentSelected(_ index: Int) {
         print("segmentSelected index:\(index)")
     }
     
+    //FLInfoViewDelegate
+    func didOpenInfo() {
+        self.footerStackView.updateLayout()
+        self.footerStackView.removeAllArranged()
+        let quiz = FlashElement(JSON: ["type" : "question"]) //TODO: remove mock viewModel.getQuizContent()
+        let isQuiz = !(quiz == nil)
+        let pageInfoVC = self.pageInfoVC ?? FLInfoPageViewController()
+        //pageInfoVC.delegate = self
+        pageInfoVC.quiz = quiz
+        pageInfoVC.modalPresentationStyle = .overCurrentContext
+        pageInfoVC.modalTransitionStyle = .crossDissolve
+        present(pageInfoVC, animated: true, completion: nil)
+    }
 }
 
 extension FLPlayerViewController : FLSwipeViewDelegate {

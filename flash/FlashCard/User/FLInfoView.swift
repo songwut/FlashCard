@@ -7,7 +7,13 @@
 
 import SwiftUI
 
+protocol FLInfoViewDelegate {
+    func didOpenInfo()
+}
+
 struct FLInfoView: View {
+    
+    var delegate: FLInfoViewDelegate?
     
     var body: some View {
         self.box
@@ -42,7 +48,7 @@ struct FLInfoView: View {
             })
             
             Button(action: {
-                
+                delegate?.didOpenInfo()
             }, label: {
                 Image("info")
                     .foregroundColor(Color(UIColor.config.secondary50()))
