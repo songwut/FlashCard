@@ -13,6 +13,7 @@ struct FLQuizInfoProgressView: View {
     
     var body: some View {
         ContentView
+            .background(Color.white)
     }
     
     var ContentView: some View {
@@ -26,10 +27,6 @@ struct FLQuizInfoProgressView: View {
             
             Spacer()
         })
-        .padding(.top, 0)
-        .padding([.leading, .trailing], 16)
-        .frame(width: .infinity, height: .infinity, alignment: .top)
-        
     }
 }
 

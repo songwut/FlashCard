@@ -64,7 +64,7 @@ class FLPlayerViewController: UIViewController {
         self.infoView.rootView.delegate = self
         self.infoStackView.addArrangedSubview(self.infoView.view)
         self.showLoading(nil)
-        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlCardResult?) in
+        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlDetailResult?) in
             self?.hideLoading()
             guard let viewContainer = self?.viewContainer else { return }
             self?.manageStageFrame(viewContainer)
@@ -174,8 +174,6 @@ class FLPlayerViewController: UIViewController {
         }
     }
     var pageInfoVC: FLInfoPageViewController?
-    var cardInfoVC: FLCardInfoViewController?
-    var quizInfoVC: FLQuizInfoViewController?
 }
 
 extension FLPlayerViewController: FLUserProgressViewDelegate, FLInfoViewDelegate {
@@ -193,6 +191,7 @@ extension FLPlayerViewController: FLUserProgressViewDelegate, FLInfoViewDelegate
         let isQuiz = !(quiz == nil)
         let pageInfoVC = self.pageInfoVC ?? FLInfoPageViewController()
         //pageInfoVC.delegate = self
+        pageInfoVC.flashCardDetail = self.viewModel.flashCardDetail
         pageInfoVC.quiz = quiz
         pageInfoVC.modalPresentationStyle = .overCurrentContext
         pageInfoVC.modalTransitionStyle = .crossDissolve

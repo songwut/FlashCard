@@ -13,6 +13,8 @@ protocol FLQuizInfoViewControllerDelegate {
 }
 
 class FLQuizInfoViewController: UIViewController {
+    
+    @IBOutlet private weak var titleLabel: UILabel!
 
     @IBOutlet private weak var cardView: UIView!
     @IBOutlet private weak var footerHeight: NSLayoutConstraint!
@@ -22,9 +24,12 @@ class FLQuizInfoViewController: UIViewController {
     @IBOutlet private weak var userTableView: UITableView!
     @IBOutlet private weak var userListHeight: NSLayoutConstraint!
     
-    var userListView: FLQuizUserListView?
-    var quizInfoSheetView: FLQuizInfoProgressView?
+    
+    private var quizInfoSheetView: FLQuizInfoProgressView?
+    
+    var flashCardDetail: FlDetailResult?
     var delegate: FLQuizInfoViewControllerDelegate?
+    
     let userAnswerList = [
         UserAnswerResult(JSON: ["name" : "wrrwer"])!,
         UserAnswerResult(JSON: ["name" : "ererwre"])!,
@@ -42,6 +47,11 @@ class FLQuizInfoViewController: UIViewController {
         super.viewDidLoad()
         self.view.isOpaque = false
         self.view.backgroundColor = .clear
+        self.titleLabel.textColor = .black
+        self.answerLabel.textColor = .black
+        self.titleLabel.text = "quiz".localized()
+        self.answerLabel.text = "Answer".localized()
+        self.userTableView.backgroundColor = .white
         self.cardView.updateLayout()
         self.userTableView.updateLayout()
         self.cardView.roundCorners([.topLeft, .topRight], radius: 16)
@@ -55,25 +65,17 @@ class FLQuizInfoViewController: UIViewController {
         let userAnswerPage = UserAnswerPageResult(JSON: ["value" : "quiz name", "choice" : [["value" : "ฮอกไกโด", "is_answer":true, "percent": 70], ["value" : "เขาใหญ่", "percent": 30]], "user_answer_list": userAns])!
         let infoSheetView = self.quizInfoSheetView ?? FLQuizInfoProgressView(userAnswerPage: userAnswerPage)
         let infoVC = UIHostingController(rootView: infoSheetView)
-        //infoVC.rootView.delegate = self
         
         let width = self.progressStackView.frame.width
         let pading: CGFloat = CGFloat(8 * userAnswerPage.choiceList.count)
         let allChoice: CGFloat = CGFloat(36 * userAnswerPage.choiceList.count)
         let height: CGFloat = 50 + allChoice + pading
         infoVC.view.frame = CGRect(x: 0, y: 0, width: width, height: height)
-        //infoVC.view.translatesAutoresizingMaskIntoConstraints = false
         self.progressStackView.addArrangedSubview(infoVC.view)
         
-        
-        let userListView = self.userListView ?? FLQuizUserListView(maxSize: 50)
-        userListView.items = userAnswerList
         let maxHeight: CGFloat = 358
         let allH: CGFloat = CGFloat(userAnswerList.count * 60)
         let userH = allH >= maxHeight ? maxHeight : allH
-        let userListVC = UIHostingController(rootView: userListView)
-        userListVC.view.bounds = CGRect(x: 0, y: 0, width: width, height: userH)
-        //self.userView.addSubview(userListVC.view)
         self.userListHeight.constant = userH
         
         self.userTableView.separatorStyle = .none

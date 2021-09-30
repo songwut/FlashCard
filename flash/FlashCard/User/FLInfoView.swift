@@ -42,8 +42,10 @@ struct FLInfoView: View {
             
             VStack(alignment: .center, spacing: 0, content: {
                 Text("10 Figma Tricks I WishI Knew...")
+                    .foregroundColor(Color("222831"))
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text("by username")
+                    .foregroundColor(Color("979797"))
                     .frame(maxWidth: .infinity, alignment: .leading)
             })
             

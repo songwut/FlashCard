@@ -41,7 +41,7 @@ class FLCardInfoViewController: UIViewController {
     @IBOutlet private weak var quizView: UIView!
     
     var delegate: FLCardInfoViewControllerDelegate?
-    
+    var flashCardDetail: FlDetailResult?
     var isQuiz = false
     
     override func viewDidLoad() {
@@ -67,6 +67,13 @@ class FLCardInfoViewController: UIViewController {
             
         self.likeView.isHidden = true// next phace
         
+        self.titleLabel.textColor = UIColor("010B19")
+        let detailColor = UIColor.text75()
+        self.instructorLabel.textColor = detailColor
+        self.providerLabel.textColor = detailColor
+        self.categoryLabel.textColor = detailColor
+        self.descLabel.textColor = detailColor
+        
         let textColor = UIColor.text()
         self.iconCount.tintColor = textColor
         self.iconLike.tintColor = textColor
@@ -86,6 +93,17 @@ class FLCardInfoViewController: UIViewController {
         self.tagView.tagLineBreakMode = .byTruncatingTail
         
         self.footerHeight.constant = self.safeAreaBottomHeight
+        
+    }
+    
+    func updateUI() {
+        guard let detail = self.flashCardDetail else { return }
+        self.nameLabel.text = detail.name
+        self.instructorLabel.text = "instructor".localized() + " : " + (detail.instructor?.name ?? "")
+        self.providerLabel.text = "content_provider".localized() + " : " + (detail.provider?.name ?? "")
+        self.categoryLabel.text = "category".localized() + " : " + (detail.category?.name ?? "")
+        self.descLabel.text = detail.desc
+        self.manageTagContentViewWith(tags: detail.tagList)
     }
     
     @IBAction func closePressed(_ sender: UIButton?) {

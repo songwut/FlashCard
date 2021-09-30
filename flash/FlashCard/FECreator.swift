@@ -121,10 +121,10 @@ struct FLCreator {
     }
     
     func createImage(_ element: FlashElement ,in stage: FLStageView) -> InteractView {
-        let viewX = (stage.frame.width * CGFloat(element.x) / 100)
-        let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
-        var viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
-        var viewH = ((stage.frame.height * CGFloat(element.height)) / 100)
+        let viewX = (stage.frame.width * CGFloat(truncating: element.x) / 100)
+        let viewY = ((stage.frame.height * CGFloat(truncating: element.y)) / 100)
+        var viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
+        var viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
         
         if let _ = element.graphicType {//fix size
             viewW = stage.frame.width * FlashStyle.graphic.displayRatio
@@ -200,8 +200,8 @@ struct FLCreator {
         
         
         var url: URL?
-        if let deviceUrl = element.deviceUrl {
-            url = deviceUrl
+        if let deviceVideoUrl = element.deviceVideoUrl {
+            url = deviceVideoUrl
             
         } else if let src = element.src, let urlsrc = URL(string: src) {
             url = urlsrc
@@ -216,12 +216,13 @@ struct FLCreator {
         let playerViewFrame = CGRect(x: marginXY, y: marginXY, width: size.width - margin, height: size.height - margin)
         
         if let mediaUrl = url {
-            var playerCreator = FLPlayerCreator(mediaUrl: mediaUrl, playerViewFrame: playerViewFrame)
+            let playerView = FLPlaverView(frame: playerViewFrame)
+            playerView.createVideo(url: mediaUrl)
+            
             let center = CGPoint(x: viewX, y: viewY)
             let frame = CGRect(x: viewX, y: viewY, width: size.width, height: size.height)
-            let playerView = playerCreator.createPlayerView(mediaUrl)
             let iView = InteractView(contentView: playerView)!
-            iView.playerCreator = playerCreator
+            iView.playerView = playerView
             iView.frame = frame
             iView.center = center
             //iView.contentView = playerView

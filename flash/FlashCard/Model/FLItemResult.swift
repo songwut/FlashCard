@@ -100,10 +100,15 @@ class OwnerResult: BaseResult {
 }
 
 
-class FlCardResult: FLBaseResult {
+class FlDetailResult: FLBaseResult {
     var bgColor = "FFFFFF"
     var list = [FlashPageResult]()
     var total = 0
+    
+    var provider: BaseResult?
+    var category: CategoryResult?
+    var instructor: BaseResult?
+    var tagList = [UGCTagResult]()
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -111,8 +116,8 @@ class FlCardResult: FLBaseResult {
         list          <- map["results"]
     }
     
-    class func with(_ dict: [String : Any]) -> FlCardResult? {
-        let item = Mapper<FlCardResult>().map(JSON: dict)
+    class func with(_ dict: [String : Any]) -> FlDetailResult? {
+        let item = Mapper<FlDetailResult>().map(JSON: dict)
         return item
     }
 }
@@ -156,7 +161,8 @@ class FLMediaResult: FLBaseResult {
     var filename: String = ""
     var size: Int = 0
     
-    var deviceUrl: URL?
+    var deviceVideoUrl: URL?
+    var mp4VideoUrl: URL?
 
     override func mapping(map: Map) {
         super.mapping(map: map)

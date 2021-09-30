@@ -16,6 +16,7 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
     var pageVC: UIPageViewController!
     var pages = [UIViewController]()
     
+    var flashCardDetail: FlDetailResult?
     var quiz: FlashElement?
     
     override func viewDidLoad() {
@@ -27,12 +28,14 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
         
         let isQuiz = !(self.quiz == nil)
         self.cardInfoVC = FLCardInfoViewController()
+        self.cardInfoVC.flashCardDetail = self.flashCardDetail
         self.cardInfoVC.delegate = self
         self.cardInfoVC.isQuiz = isQuiz
         self.pages.append(self.cardInfoVC)
         
         if isQuiz {
             self.quizInfoVC = FLQuizInfoViewController()
+            self.quizInfoVC.flashCardDetail = self.flashCardDetail
             self.quizInfoVC.delegate = self
             self.pages.append(self.cardInfoVC)
         }

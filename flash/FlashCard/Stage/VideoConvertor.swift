@@ -8,80 +8,89 @@
 import Foundation
 import AVKit
 
-struct VideoConvertor {
-    let videoURL: URL
-    
-    func encodeVideo(videoURL: URL)  {
-        let avAsset = AVURLAsset(url: videoURL, options: nil)
-
-        var startDate = Date()
-
-        //Create Export session
-        var exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetPassthrough)
-
-        // exportSession = AVAssetExportSession(asset: composition, presetName: mp4Quality)
-        //Creating temp path to save the converted video
-
-        let name = videoURL.pathExtension
-        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        let myDocumentPath = URL(fileURLWithPath: documentsDirectory).appendingPathComponent("\(name).mp4").absoluteString
-        let url = URL(fileURLWithPath: myDocumentPath)
-
-        let documentsDirectory2 = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-
-        let filePath = documentsDirectory2.appendingPathComponent("rendered-Video.mp4")
-        deleteFile(filePath: filePath)
-
-        //Check if the file already exists then remove the previous file
-        if FileManager.default.fileExists(atPath: myDocumentPath) {
-            do {
-                try FileManager.default.removeItem(atPath: myDocumentPath)
-            }
-            catch let error {
-                print(error)
-            }
-        }
-
-        exportSession!.outputURL = filePath
-        exportSession!.outputFileType = AVFileType.mp4
-        exportSession!.shouldOptimizeForNetworkUse = true
-        let start = CMTimeMakeWithSeconds(0.0, preferredTimescale: 0)
-        let range = CMTimeRangeMake(start: start, duration: avAsset.duration)
-        exportSession!.timeRange = range
-
-        exportSession!.exportAsynchronously(completionHandler: {() -> Void in
-            switch exportSession!.status {
-            case .failed:
-                print("%@",exportSession?.error as Any)
-            case .cancelled:
-                print("Export canceled")
-            case .completed:
-                //Video conversion finished
-                var endDate = Date()
-
-                var time = endDate.timeIntervalSince(startDate)
-                print(time)
-                print("Successful!")
-                print(exportSession?.outputURL)
-
-            default:
-                break
-            }
-
-        })
-
-
+class VideoConvertor {
+    init(videoURL: URL) {
+        self.videoURL = videoURL
     }
-
-    func deleteFile(filePath: URL) {
-        guard FileManager.default.fileExists(atPath: filePath.path) else {
+    
+    var videoURL: URL
+    var assetExport: AVAssetExportSession!
+    var timeInterval: Timer?
+    
+    func endTime() {
+        self.timeInterval?.invalidate()
+        self.timeInterval = nil
+    }
+    
+    func encodeVideo( progressing: @escaping ((Float) -> Void), completion: @escaping ((URL?, Error?) -> Void))  {
+        let avAsset = AVURLAsset(url: self.videoURL, options: nil)
+            
+        let startDate = Date()
+            
+        //Create Export session
+        guard let exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetPassthrough) else {
+            completion(nil, nil)
             return
         }
-
-        do {
-            try FileManager.default.removeItem(atPath: filePath.path)
-        }catch{
-            fatalError("Unable to delete file: \(error)")
+        
+        self.assetExport = exportSession
+        
+        self.timeInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
+            let progress = Float(exportSession.progress)
+            print("progress:\(progress)")
+                if (progress < 0.99) {
+                    progressing(progress)
+                } else if progress == 1.0 {
+                    progressing(progress)
+                    self.endTime()
+                }
+        })
+            
+        //Creating temp path to save the converted video
+        let name = self.videoURL.deletingPathExtension().lastPathComponent//videoURL.pathExtension
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as URL
+        let filePath = documentsDirectory.appendingPathComponent("\(name).mp4")
+            
+        //Check if the file already exists then remove the previous file
+        if FileManager.default.fileExists(atPath: filePath.path) {
+            do {
+                try FileManager.default.removeItem(at: filePath)
+            } catch {
+                completion(nil, error)
+            }
         }
+            
+        exportSession.outputURL = filePath
+        exportSession.outputFileType = AVFileType.mp4
+        exportSession.shouldOptimizeForNetworkUse = true
+        let start = CMTimeMakeWithSeconds(0.0, preferredTimescale: 0)
+        let range = CMTimeRangeMake(start: start, duration: avAsset.duration)
+        exportSession.timeRange = range
+            
+        exportSession.exportAsynchronously(completionHandler: {() -> Void in
+            
+            switch exportSession.status {
+            case .failed:
+                print(exportSession.error ?? "NO ERROR")
+                completion(nil, exportSession.error)
+            case .cancelled:
+                print("Export canceled")
+                completion(nil, nil)
+            case .completed:
+                //Video conversion finished
+                let endDate = Date()
+                    
+                let time = endDate.timeIntervalSince(startDate)
+                print(time)
+                print("Successful!")
+                print(exportSession.outputURL ?? "NO OUTPUT URL")
+                completion(exportSession.outputURL, nil)
+                    
+                default: break
+            }
+                
+        })
     }
+    
+    
 }

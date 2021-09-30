@@ -116,7 +116,7 @@ struct FlashStyle {
     struct text {
         static let placeholder = "Please\nInput Text\nHere"
         static let textWidthFromFont36:CGFloat = 120
-        static let marginIView: CGFloat = 40//left+right,top+botton
+        static let marginIView: CGFloat = 30//left+right,top+botton
     }
     
     struct quiz {

@@ -17,7 +17,8 @@ struct FLStageSetUp {
 
 
 final class FLStageViewController: UIViewController {
-    
+    @IBOutlet private weak var topView: UIView!
+    @IBOutlet private weak var topViewHeight: NSLayoutConstraint!
     @IBOutlet private weak var contentPageView: UIView!
     @IBOutlet private weak var toolStackView: UIStackView!
     @IBOutlet private weak var contentToolHeight: NSLayoutConstraint!
@@ -94,9 +95,11 @@ final class FLStageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.updateLayout()
-        self.contentPageView.backgroundColor = UIColor("F5F5F5")
-        self.menuView.backgroundColor = UIColor("F5F5F5")
-        
+        self.view.backgroundColor = .background()
+        self.topView.backgroundColor = .background()
+        self.contentPageView.backgroundColor = .background()
+        self.menuView.backgroundColor = .background()
+        self.topViewHeight.constant = UIDevice.isIpad() ? 58 : 40
         self.stageViewList = [FLStageView]()
         
         self.view.backgroundColor = FlashStyle.screenColor
@@ -141,7 +144,7 @@ final class FLStageViewController: UIViewController {
         
         self.prepareToolVC()
         self.view.alpha = 0.0
-        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlCardResult?) in
+        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlDetailResult?) in
             if let object = cardResult {
                 ConsoleLog.show("total:\(object.total)")
                 ConsoleLog.show("list:\(object.list)")
@@ -526,10 +529,10 @@ final class FLStageViewController: UIViewController {
         let element = FlashElement.with(["type": type.rawValue])!
         element.x = 50
         element.y = 50
-        element.deviceUrl = url
+        element.deviceVideoUrl = url
         element.rawSize = size
         let row = self.indexOfMajorCell()
-        media?.deviceUrl = url
+        media?.deviceVideoUrl = url
         self.createElement(element, row: row, media: media)
     }
     
@@ -653,11 +656,8 @@ final class FLStageViewController: UIViewController {
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
-            iView.setHandlerSize(30)
-//            [stickerView setImage:[UIImage imageNamed:@"Close"] forHandler:CHTStickerViewHandlerClose];
-//            [stickerView setImage:[UIImage imageNamed:@"Rotate"] forHandler:CHTStickerViewHandlerRotate];
-//            [stickerView setImage:[UIImage imageNamed:@"Flip"] forHandler:CHTStickerViewHandlerFlip];
-//            [stickerView setHandlerSize:40];
+            iView.setHandlerSize(Int(FlashStyle.text.marginIView))
+            
             //iView.gesture = SnapGesture(view: iView)
             iView.gesture?.controlView = self.controlView
             iView.isCreateNew = true
@@ -668,10 +668,13 @@ final class FLStageViewController: UIViewController {
             iView.textView?.delegate = self
             iView.delegate = self
             
-            if element.type == .image || element.type == .video {
-//                self.viewModel.callAPIDropboxUpload(type: element.type, row: row, media: media, iView: iView) {
-//
-//                }
+            if element.type == .image {
+                
+            } else if element.type == .video {
+                if let deviceVideoUrl = element.deviceVideoUrl {
+                    
+                }
+
             }
             
             if let tool = element.tool {
@@ -697,7 +700,7 @@ final class FLStageViewController: UIViewController {
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
-            iView.setHandlerSize(30)
+            iView.setHandlerSize(Int(FlashStyle.text.marginIView))
             
             //iView.gesture = SnapGesture(view: iView)
             iView.gesture?.controlView = self.controlView
@@ -727,6 +730,31 @@ final class FLStageViewController: UIViewController {
 //                controlView.updateRelateView(textElement)
 //            }
             
+        }
+    }
+    
+    func mp4Convert(deviceVideoUrl: URL,  complete: @escaping (URL) -> Void) {
+        var videoConvertor = VideoConvertor(videoURL: deviceVideoUrl)
+        videoConvertor.encodeVideo { (progress) in
+            DispatchQueue.main.async {
+                print("progress: \(progress)")
+                if progress == 1.0 {
+                    self.hideLoading()
+                } else {
+                    let percent = progress * 100
+                    self.showLoading("Video Progressing: \(percent)%")
+                }
+            }
+        } completion: { (url, error) in
+            if let e = error {
+                print("error: \(e)")
+            } else if let urlMP4 = url {
+                print("encodeVideo:\(urlMP4.absoluteString)")
+                complete(urlMP4)
+//                            self.viewModel.callAPIDropboxUpload(type: element.type, row: row, media: media, iView: iView) {
+//
+//                            }
+            }
         }
     }
     
@@ -1085,28 +1113,35 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
         } else if let movieUrl = info[.mediaURL] as? URL {
             print("movieUrl: \(movieUrl)")
             //TODO: check only 1 video per page
-            let asset = AVURLAsset(url: movieUrl)
-            let seconds = asset.duration.seconds
-            print(seconds)
-            if seconds > 60 {
+            let deviceAsset = AVURLAsset(url: movieUrl)
+            let deviceSeconds = deviceAsset.duration.seconds
+            print(deviceSeconds)
+            if deviceSeconds > 60 {
                 PopupManager.showWarning("Your video is too powerful\n(Maximum length is 60 seconds)\nPlease upload again", at: self)
             } else {
-                guard let track = asset.tracks(withMediaType: .video).first else { return }
-                let size = track.naturalSize.applying(track.preferredTransform)
-                
                 let uuid = UUID().uuidString
-                do {
-                    let fileAttributes = try movieUrl.resourceValues(forKeys:[.nameKey, .fileSizeKey])
-                    print(fileAttributes.name!) // is String
-                    print(fileAttributes.fileSize!) // is Int
-                    let filename = movieUrl.lastPathComponent
-                    let fileSize = fileAttributes.fileSize ?? 0
-                    let JSON:[String : Any] = ["filename" : filename]
-                    let media = FLMediaResult(JSON: JSON)
-                    self.createNewVideo(movieUrl, size: size, media: media)
-                    
-                } catch {
-                    print(error, movieUrl)
+                self.mp4Convert(deviceVideoUrl: movieUrl) { [weak self] (mp4Url) in
+                    DispatchQueue.main.async {
+                        let asset = AVURLAsset(url: mp4Url)
+                        let seconds = asset.duration.seconds
+                        guard let track = asset.tracks(withMediaType: .video).first else { return }
+                        let size = track.naturalSize.applying(track.preferredTransform)
+                        
+                        do {
+                            let fileAttributes = try mp4Url.resourceValues(forKeys:[.nameKey, .fileSizeKey])
+                            print(fileAttributes.name!) // is String
+                            print(fileAttributes.fileSize!) // is Int
+                            let fileSize = fileAttributes.fileSize ?? 0
+                            let filename = movieUrl.lastPathComponent
+                            let JSON:[String : Any] = ["filename" : filename]
+                            let media = FLMediaResult(JSON: JSON)
+                            print("video mp4 size: width \(size.width) height: \(size.height)")
+                            self?.createNewVideo(movieUrl, size: size, media: media)
+                        } catch {
+                            print(error, movieUrl)
+                        }
+                        
+                    }
                 }
                 
                 
@@ -1254,7 +1289,7 @@ extension FLStageViewController : CHTStickerViewDelegate {
     }
     
     func stickerViewDidClose(_ stickerView: CHTStickerView!) {
-        view.removeFromSuperview()
+        stickerView.removeFromSuperview()
         if self.toolVC?.viewModel.tool != .menu {
             self.toolVC?.closePressed(nil)
         }

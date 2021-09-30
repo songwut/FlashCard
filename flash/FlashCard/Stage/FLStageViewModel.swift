@@ -27,7 +27,7 @@ class FLStageViewModel {
     var myFlashCard: MaterialFlashPageResult?
     var detail: FLDetailResult?
     var pageList = [FlashPageResult]()
-    var flCard: FlCardResult?
+    var flashCardDetail: FlDetailResult?
     //var pageList: [FlashElement] = []()
     var pageIndex = 0
     var currentPage: FlashPageResult?
@@ -93,23 +93,23 @@ class FLStageViewModel {
 //        }
     }
     
-    func callAPIFlashCard(complete: @escaping (_ result: FlCardResult?) -> ()) {
+    func callAPIFlashCard(complete: @escaping (_ result: FlDetailResult?) -> ()) {
         let request = FLRequest()
         request.endPoint = .ugcCardList
         request.arguments = ["\(self.flashId)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FlCardResult?, isCache, error) in
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FlDetailResult?, isCache, error) in
             if let item = result {
-                self?.flCard = item
+                self?.flashCardDetail = item
                 self?.pageList = item.list
                 self?.currentPage = item.list.first
-                complete(self?.flCard)
+                complete(self?.flashCardDetail)
             }
         }
 
 //        let fileName = "ugc-flash-card-id-card"
 //        JSON.read(fileName) { (object) in
 //            if let json = object as? [String : Any],
-//               let item = FlCardResult(JSON: json) {
+//               let item = FlDetailResult(JSON: json) {
 //                flCard = item
 //                pageList = item.list
 //            }
@@ -198,8 +198,8 @@ class FLStageViewModel {
                     multipartFormData.append(imageData, withName: "image", fileName: m.filename, mimeType: "image/\(fileType)")
                 }
                 
-                if let deviceUrl = m.deviceUrl {
-                    multipartFormData.append(deviceUrl, withName: "file")
+                if let mp4VideoUrl = iView.element?.mp4VideoUrl {
+                    multipartFormData.append(mp4VideoUrl, withName: "file")
                 }
             }
         }, to: request.url, headers: HTTPHeaders(headers!))

@@ -48,34 +48,35 @@ class FLControlIcon: UIImageView {
 }
 
 class FLPlaverView: UIView {
-    
-}
-
-struct FLPlayerCreator {
-    //for media
-    var mediaUrl: URL
-    var playerViewFrame: CGRect
-    
-    var playerLayer: AVPlayerLayer?
-    var player: AVPlayer?
+    var player = AVPlayer()
     var playerItem: AVPlayerItem?
     
-    mutating func createPlayerView(_ url: URL) -> FLPlaverView {
-        
-        let playerView = FLPlaverView()
-        playerView.frame = playerViewFrame
-        playerView.backgroundColor = .black
-        
-        player = AVPlayer()
-        playerLayer = AVPlayerLayer(player: self.player!)
-        playerView.layer.addSublayer(playerLayer!)
+    var playerLayer: CALayer?
+    var mediaUrl: URL!
+    
+    func createVideo(url: URL) {
+        self.backgroundColor = .black
+        mediaUrl = url
+        playerLayer = AVPlayerLayer(player: self.player)
+        playerLayer?.contentsGravity = .resizeAspectFill
+        playerLayer?.backgroundColor = UIColor.purple.cgColor
+        playerLayer?.frame = self.bounds
+        layer.addSublayer(playerLayer!)
         
         playerItem = AVPlayerItem(url: mediaUrl)
-        player?.replaceCurrentItem(with: playerItem)
-        self.playerLayer?.frame = playerView.bounds
-        player?.play()
-        
-        return playerView
+        player.replaceCurrentItem(with: playerItem)
+        player.play()
+    }
+    
+    func updateUrl(url: URL) {
+        mediaUrl = url
+        playerItem = AVPlayerItem(url: mediaUrl)
+        player.replaceCurrentItem(with: playerItem)
+    }
+    
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        playerLayer?.frame = self.bounds
     }
 }
 
@@ -97,7 +98,7 @@ class InteractView: CHTStickerView {
     var bottomLeftButton: UIButton?
     var bottomRightButton: UIButton?
     
-    var playerCreator: FLPlayerCreator?
+    var playerView: FLPlaverView?
     
     var rotation: Float = 0 {
         didSet {

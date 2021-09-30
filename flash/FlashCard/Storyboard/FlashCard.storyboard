@@ -20,8 +20,15 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1kN-E2-MyB">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fh3-hy-noL">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="1a3-le-XxD"/>
+                                        </constraints>
+                                    </view>
                                     <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vYx-kI-wnH">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="574"/>
+                                        <rect key="frame" x="0.0" y="40" width="414" height="534"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Sxh-OY-E83">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="574"/>
@@ -136,7 +143,7 @@
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ccy-HK-XBq"/>
-                        <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.98431372549019602" green="0.98431372549019602" blue="0.98431372549019602" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="Ccy-HK-XBq" firstAttribute="bottom" secondItem="1kN-E2-MyB" secondAttribute="bottom" id="HS1-aS-uHV"/>
                             <constraint firstItem="1kN-E2-MyB" firstAttribute="leading" secondItem="Civ-fJ-RPp" secondAttribute="leading" id="Hnn-br-Dga"/>
@@ -158,6 +165,8 @@
                         <outlet property="pageCountLabel" destination="ZDb-66-8aP" id="lqw-G6-vMg"/>
                         <outlet property="previewButton" destination="bDI-eO-9LU" id="qKe-W3-PUn"/>
                         <outlet property="toolStackView" destination="fSa-hT-gZS" id="pNh-Xd-UlJ"/>
+                        <outlet property="topView" destination="fh3-hy-noL" id="d7T-Fv-8sO"/>
+                        <outlet property="topViewHeight" destination="1a3-le-XxD" id="7rB-bw-iGQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kcJ-Zg-zvq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

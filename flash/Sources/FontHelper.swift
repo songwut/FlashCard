@@ -78,23 +78,53 @@ enum StyleName: CGFloat {
     //case xsmall = 12.0
     //case xxsmall = 10.0
 }
-
+let fontScale: CGFloat = UIScreen.main.scale * 0.5
 struct FontHelper {
     //design system
     static func getFontSystem(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> UIFont {
-        return UIFont(name: font.fontName(isItalic), size: rawSize)!
+        
+        return UIFont(name: font.fontName(isItalic), size: rawSize * fontScale)!
     }
     
     static func getFontSystem(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> UIFont {
-        return UIFont(name: font.fontName(isItalic), size: size.rawValue)!
+        return UIFont(name: font.fontName(isItalic), size: size.rawValue * fontScale)!
     }
     
     //before use design system
     static func getFont(_ font: AppFont, size: SizeName) -> UIFont {
-        return UIFont(name: font.fontName(), size: size.rawValue)!
+        return UIFont(name: font.fontName(), size: size.rawValue * fontScale)!
     }
     
     static func getFont(_ font: AppFont, rawSize: CGFloat) -> UIFont {
-        return UIFont(name: font.fontName(), size: rawSize)!
+        return UIFont(name: font.fontName(), size: rawSize * fontScale)!
+    }
+}
+
+extension UIFont {
+    static func getFontSystem(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> UIFont {
+        return UIFont(name: font.fontName(isItalic), size: rawSize * fontScale)!
+    }
+    
+    static func getFontSystem(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> UIFont {
+        return UIFont(name: font.fontName(isItalic), size: size.rawValue * fontScale)!
+    }
+    
+    //before use design system
+    static func getFont(_ font: AppFont, size: SizeName) -> UIFont {
+        return UIFont(name: font.fontName(), size: size.rawValue * fontScale)!
+    }
+    
+    static func getFont(_ font: AppFont, rawSize: CGFloat) -> UIFont {
+        return UIFont(name: font.fontName(), size: rawSize * fontScale)!
+    }
+}
+
+extension Font {
+    static func getFontSystem(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> Font {
+        return UIFont(name: font.fontName(isItalic), size: rawSize * fontScale)!.font
+    }
+    
+    static func getFontSystem(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> Font {
+        return UIFont(name: font.fontName(isItalic), size: size.rawValue * fontScale)!.font
     }
 }

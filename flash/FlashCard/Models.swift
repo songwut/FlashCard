@@ -115,7 +115,8 @@ class FlashElement: FLBaseResult {
     var graphicType: FLGraphicMenu?
     
     //video
-    var deviceUrl: URL?
+    var deviceVideoUrl: URL?
+    var mp4VideoUrl: URL?
     
     //Quiz
     var question: FLQuestionResult?

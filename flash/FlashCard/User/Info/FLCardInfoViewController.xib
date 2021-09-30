@@ -324,6 +324,11 @@
             <point key="canvasLocation" x="-186.95652173913044" y="94.419642857142847"/>
         </view>
     </objects>
+    <designables>
+        <designable name="6CR-pa-ALz">
+            <size key="intrinsicContentSize" width="294" height="28"/>
+        </designable>
+    </designables>
     <resources>
         <image name="card-info-cover" width="80" height="80"/>
         <image name="ic_quiz" width="24" height="24"/>
