@@ -37,7 +37,6 @@ struct UGCCategoryRow: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: nil, content: {
-            
             ZStack {
                 if isFirst, isExpaned {
                     Rectangle()

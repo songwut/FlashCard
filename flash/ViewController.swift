@@ -69,7 +69,7 @@ class ViewController: UIViewController {
     
     @objc func stageButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
-        let vc = s.instantiateViewController(withIdentifier: "FLStageViewController")
+        let vc = s.instantiateViewController(withIdentifier: "FLCreateViewController")
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
         } else {

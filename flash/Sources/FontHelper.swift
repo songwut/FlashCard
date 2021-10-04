@@ -12,6 +12,8 @@ extension UIFont {
     var font: Font { Font(self) }
 }
 
+let fontScale: CGFloat = UIScreen.main.scale * 0.5
+
 enum AppFont: Int {
     case regular = 0
     case italic = 1
@@ -66,19 +68,14 @@ enum StyleName: CGFloat {
     case heading4 = 24.0
     case heading5 = 22.0
     case heading6 = 18.0
-
-    //Body
+    
     case paragraph = 16.0
     case l = 14.0
     case m = 13.0
     case s = 12.0
     case xs = 10.0
-    
-    //case small = 13.0
-    //case xsmall = 12.0
-    //case xxsmall = 10.0
 }
-let fontScale: CGFloat = UIScreen.main.scale * 0.5
+
 struct FontHelper {
     //design system
     static func getFontSystem(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> UIFont {
@@ -108,18 +105,9 @@ extension UIFont {
     static func getFontSystem(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> UIFont {
         return UIFont(name: font.fontName(isItalic), size: size.rawValue * fontScale)!
     }
-    
-    //before use design system
-    static func getFont(_ font: AppFont, size: SizeName) -> UIFont {
-        return UIFont(name: font.fontName(), size: size.rawValue * fontScale)!
-    }
-    
-    static func getFont(_ font: AppFont, rawSize: CGFloat) -> UIFont {
-        return UIFont(name: font.fontName(), size: rawSize * fontScale)!
-    }
 }
 
-extension Font {
+extension Font {//SwiftUI
     static func getFontSystem(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> Font {
         return UIFont(name: font.fontName(isItalic), size: rawSize * fontScale)!.font
     }

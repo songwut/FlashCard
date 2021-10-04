@@ -122,7 +122,7 @@ extension UIColor {
     }
     
     static func disable() -> UIColor {
-       return UIColor("FF202A")
+       return UIColor("DDDDDD")
     }
 }
 

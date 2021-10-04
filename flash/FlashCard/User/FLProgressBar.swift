@@ -17,7 +17,8 @@ struct FLQuizProgressBar: View {
                     .opacity(0.3)
                     .foregroundColor(Color("F5F5F5"))
                 
-                Rectangle().frame(width: min(CGFloat(choice.progressValue)*geometry.size.width, geometry.size.width), height: geometry.size.height)
+                Rectangle()
+                    .frame(width: min(CGFloat(choice.progressValue)*geometry.size.width, geometry.size.width), height: geometry.size.height)
                     .foregroundColor(choice.infoProgressColor().color)
                     .animation(.linear)
                 

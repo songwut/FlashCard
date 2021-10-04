@@ -109,14 +109,35 @@ class FlashElement: FLBaseResult {
     var flAlignment = FLTextAlignment.center
     var flTextStyle:[FLTextStyle] = [FLTextStyle]()//["bold", "italic", "underline"]
     
+    private func createStyleList() -> [String] {
+        var textStyle = [String]()
+        for style in flTextStyle {
+            textStyle.append(style.rawValue)
+        }
+        
+        return textStyle
+    }
+    
+    func createTextJSON() -> [String: AnyObject]? {
+        var dict = [String: AnyObject]()
+        dict["text"] = self.text as AnyObject
+        dict["textColor"] = self.textColor as AnyObject
+        dict["font_size"] = self.fontSize as AnyObject
+        dict["text_alignment"] = self.flAlignment.rawValue as AnyObject//"left" center" "right" "justified"
+        dict["text_style"] = self.createStyleList() as AnyObject
+        return dict
+    }
+    
     //image
     var src: String?//image,video.sticker,shape
+    var imageUploaded: String?
     var uiimage: UIImage?
     var graphicType: FLGraphicMenu?
     
     //video
     var deviceVideoUrl: URL?
     var mp4VideoUrl: URL?
+    var mp4VideoUploade: String?
     
     //Quiz
     var question: FLQuestionResult?

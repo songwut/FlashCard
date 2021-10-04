@@ -154,7 +154,7 @@
             <size key="intrinsicContentSize" width="78" height="30"/>
         </designable>
         <designable name="PMM-BR-Iuh">
-            <size key="intrinsicContentSize" width="10" height="33"/>
+            <size key="intrinsicContentSize" width="-1" height="30"/>
         </designable>
     </designables>
     <resources>

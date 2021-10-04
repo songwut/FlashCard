@@ -15,7 +15,7 @@ protocol BaseViewProtocol {
 
 protocol FLStageViewModelProtocol: BaseViewProtocol {
     func stageUploading()
-    var stageVC: FLStageViewController? { get set }
+    var stageVC: FLCreateViewController? { get set }
     
     func showProgressLoading()
     func hideProgressLoading()
@@ -23,7 +23,7 @@ protocol FLStageViewModelProtocol: BaseViewProtocol {
 
 class FLStageViewModel {
     
-    var stageVC: FLStageViewController?
+    var stageVC: FLCreateViewController?
     var myFlashCard: MaterialFlashPageResult?
     var detail: FLDetailResult?
     var pageList = [FlashPageResult]()

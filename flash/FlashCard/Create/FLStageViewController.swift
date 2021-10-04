@@ -1,5 +1,5 @@
 //
-//  FLStageViewController.swift
+//  FLCreateViewController.swift
 //  flash
 //
 //  Created by Songwut Maneefun on 1/7/2564 BE.
@@ -16,7 +16,7 @@ struct FLStageSetUp {
 }
 
 
-final class FLStageViewController: UIViewController {
+final class FLCreateViewController: UIViewController {
     @IBOutlet private weak var topView: UIView!
     @IBOutlet private weak var topViewHeight: NSLayoutConstraint!
     @IBOutlet private weak var contentPageView: UIView!
@@ -944,12 +944,12 @@ final class FLStageViewController: UIViewController {
             //let newRotation = gesture.rotation + originalRotation
             //view.transform = CGAffineTransform(rotationAngle: newRotation)
             
-            let degrees = self.getDegreesRotation(view)
+            let degrees = view.getDegreesRotation()
             print("changed degrees: \(degrees)")
             
         } else if gesture.state == .ended {
             // Save the last rotation
-            let degrees = self.getDegreesRotation(view)
+            let degrees = view.getDegreesRotation()
             print("ended degrees: \(degrees)")
             view.rotation = Float(degrees)
             gesture.rotation = 0
@@ -959,13 +959,6 @@ final class FLStageViewController: UIViewController {
     func getRadians(degrees: Double) -> Double {
         let radians = degrees * .pi / 180
         return radians
-    }
-    
-    func getDegreesRotation(_ view: UIView) -> Double {
-        let radians:Double = atan2( Double(view.transform.b), Double(view.transform.a))
-        let degrees = radians * Double((180 / Float.pi))
-        print("degrees: \(degrees)")
-        return degrees
     }
     
     //Screen Rotation
@@ -1071,7 +1064,7 @@ extension UIImage {
     var png: Data? { pngData() }
 }
 
-extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+extension FLCreateViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         if let originalImage = info[.originalImage] as? UIImage {
@@ -1160,7 +1153,7 @@ extension FLStageViewController: UINavigationControllerDelegate, UIImagePickerCo
     
 }
 
-extension FLStageViewController: UITextViewDelegate {
+extension FLCreateViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if let iView = textView.superview as? InteractView {
             iView.isSelected = true
@@ -1194,7 +1187,7 @@ extension FLStageViewController: UITextViewDelegate {
 }
 
 
-extension FLStageViewController: UIScrollViewDelegate {
+extension FLCreateViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.viewModel.pageIndex = self.indexOfMajorCell()
@@ -1255,7 +1248,7 @@ extension FLStageViewController: UIScrollViewDelegate {
     }
 }
 
-extension FLStageViewController: InteractViewDelegate {
+extension FLCreateViewController: InteractViewDelegate {
     func interacViewDidTap(view: InteractView) {
         self.setSelectedView(view)
     }
@@ -1276,7 +1269,7 @@ extension FLStageViewController: InteractViewDelegate {
 }
 
 
-extension FLStageViewController : CHTStickerViewDelegate {
+extension FLCreateViewController : CHTStickerViewDelegate {
     
     func stickerViewDidTap(_ stickerView: CHTStickerView!) {
         guard let iView = stickerView as? InteractView else { return }

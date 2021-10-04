@@ -16,7 +16,7 @@ struct FLFlashEditorView: View {
 struct StageViewController: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> some UIViewController {
         let storyboard = UIStoryboard(name: "FlashCard", bundle: Bundle.main)
-        let controller = storyboard.instantiateViewController(identifier: "FLStageViewController")
+        let controller = storyboard.instantiateViewController(identifier: "FLCreateViewController")
         return controller
     }
     

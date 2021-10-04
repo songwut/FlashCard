@@ -37,7 +37,7 @@ struct FLInfoView: View {
             })
             .frame(width: 42, height: 42, alignment: .center)
             .foregroundColor(.white)
-            .background(UIColor("4782DA").color)
+            .background(Color("4782DA"))
             .cornerRadius(8)
             
             VStack(alignment: .center, spacing: 0, content: {

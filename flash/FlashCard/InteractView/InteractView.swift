@@ -100,6 +100,68 @@ class InteractView: CHTStickerView {
     
     var playerView: FLPlaverView?
     
+    func createJSON() -> [String: AnyObject]? {
+        
+        var dict = [String: AnyObject]()
+        guard let stage = self.superview as? FLStageView else { return nil }
+        guard let element = self.element else { return nil }
+        let marginIView = FlashStyle.text.marginIView
+        let size = self.bounds.size
+        let contentSize = CGSize(width: size.width - marginIView, height: size.height - marginIView)
+        let percentWidth = (contentSize.width / stage.bounds.width) * 100
+        let percentHeight = (contentSize.height / stage.bounds.height) * 100
+        
+        let rotationDegree = self.getDegreesRotation()
+        let angle = self.angle
+        let scale = self.hardScale
+        let elementCenter = self.center
+        let centerX = (elementCenter.x / stage.bounds.width) * 100
+        let centerY = (elementCenter.y / stage.bounds.height) * 100
+        let type = element.type.rawValue
+        
+        dict["width"] = percentWidth as AnyObject
+        dict["height"] = percentHeight as AnyObject
+        dict["center_x"] = centerX as AnyObject
+        dict["center_x"] = centerY as AnyObject
+        dict["rotation"] = angle as AnyObject
+        dict["scale"] = scale as AnyObject
+        dict["type"] = type as AnyObject
+        
+        if element.type == .image {
+            if let imageSrc = element.imageUploaded { //TODO: set after upload api
+                dict["src"] = imageSrc as AnyObject
+            }
+            
+        } else if element.type == .shape {
+            if let src = element.src { //TODO: get Graphic object after select
+                dict["src"] = src as AnyObject
+            }
+        } else if element.type == .video {
+            if let videoSrc = element.mp4VideoUploade { //TODO: set after upload api
+                dict["src"] = videoSrc as AnyObject
+            }
+        } else if element.type == .text {
+            if let textDict = element.createTextJSON() {
+                for (key, value) in textDict { //TODO: ถาม ตูน format text style,aliment
+                    dict[key] = value
+                }
+            }
+            
+        } else if element.type == .quiz {
+            let question = element.question
+        }
+        
+        return dict
+    }
+    
+    func getDegreesRotation() -> Double {
+        let view = self
+        let radians:Double = atan2( Double(view.transform.b), Double(view.transform.a))
+        let degrees = radians * Double((180 / Float.pi))
+        print("degrees: \(degrees)")
+        return degrees
+    }
+    
     var rotation: Float = 0 {
         didSet {
             print("update rotation: \(self.rotation)")
