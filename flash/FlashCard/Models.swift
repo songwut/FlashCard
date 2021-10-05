@@ -108,6 +108,24 @@ class FlashElement: FLBaseResult {
     var fontSize:CGFloat = 36
     var flAlignment = FLTextAlignment.center
     var flTextStyle:[FLTextStyle] = [FLTextStyle]()//["bold", "italic", "underline"]
+    var fontScale:CGFloat = 1.0
+    
+    func updateNewFontSize() {
+        let newSize = self.fontSize * self.fontScale
+        self.fontSize = newSize
+    }
+    
+    func manageFont(scale: CGFloat = 1.0) -> UIFont {
+        self.fontScale = scale
+        let isItalic = self.flTextStyle.contains(.italic)
+        let size = self.fontSize * self.fontScale
+        print("manageFont size: \(size)")
+        var font:UIFont = .getFontSystem(size, font: .text, isItalic: isItalic)
+        if self.flTextStyle.contains(.bold) {
+            font = .getFontSystem(size, font: .bold, isItalic: isItalic)
+        }
+        return font
+    }
     
     private func createStyleList() -> [String] {
         var textStyle = [String]()

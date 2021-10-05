@@ -36,6 +36,8 @@ final class FLCreateViewController: UIViewController {
     private var didScrollCollectionViewToMiddle = false
     private var isCreatePage = true
     private var controlView: FLControlView?
+    var selectedView: InteractView?
+    var widthChange:CGFloat = 0.0
     
     var toolVC: FLToolViewController?
     var viewModelDelegate: FLStageViewModelProtocol!
@@ -75,23 +77,6 @@ final class FLCreateViewController: UIViewController {
         viewModel.stageVC = self
     }
     
-    var selectedView: InteractView?
-    
-    func setSelectedView(_ selectedView: InteractView) {
-        
-        if let view = self.selectedView {
-            if selectedView != view {
-                self.selectedView?.showEditingHandlers = false
-            }
-        }
-        
-        self.selectedView = selectedView
-        self.selectedView?.showEditingHandlers = true
-        //TODO: uncomment
-        //self.selectedView?.superview?.bringSubviewToFront(selectedView)
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.updateLayout()
@@ -107,7 +92,7 @@ final class FLCreateViewController: UIViewController {
         
         self.addButton.updateLayout()
         self.addButton.cornerRadius = self.addButton.bounds.width / 2
-        self.addButton.backgroundColor = UIColor.disable()
+        self.addButton.backgroundColor = UIColor.config.primary()
         self.addButton.tintColor = .light()
         let edge = self.addButton.bounds.height * FlashStyle.iconEedge
         let iconPading = UIEdgeInsets(top: edge, left: edge, bottom: edge, right: edge)
@@ -220,8 +205,6 @@ final class FLCreateViewController: UIViewController {
     }
     
     @objc func stageTaped(_ sender: TapGesture) {
-        self.selectedView?.isSelected = false
-        self.selectedView?.isCreateNew = false
         self.view.endEditing(true)
         self.toolVC?.closePressed(nil)
     }
@@ -568,7 +551,7 @@ final class FLCreateViewController: UIViewController {
         let textColor = textView.textColor ?? .black
         let text = textView.text ?? ""
         
-        let font = self.flCreator?.manageFont(element: element)
+        let font = element.manageFont()
         let alignment = element.flAlignment.alignment()
         
         let paragraph = NSMutableParagraphStyle()
@@ -621,8 +604,6 @@ final class FLCreateViewController: UIViewController {
     }
     
     func createQuizView(_ element: FlashElement, row: Int) {
-        self.selectedView?.isSelected = false
-        self.selectedView?.isCreateNew = false
         
         let stageView = self.getStageView(at: row)
         if let quizView = stageView.createElement(element) as? FLQuizView {
@@ -645,24 +626,25 @@ final class FLCreateViewController: UIViewController {
     }
     
     func createIView(_ element: FlashElement, row: Int, media: FLMediaResult? = nil) {
-        self.selectedView?.isSelected = false
-        self.selectedView?.isCreateNew = false
         
         let stageView = self.getStageView(at: row)
         if let iView = stageView.createElement(element) as? InteractView {
-            self.setSelectedView(iView)
             iView.outlineBorderColor = .black
             iView.setImage(UIImage(named: "fl_delete"), for: .close)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
             iView.setHandlerSize(Int(FlashStyle.text.marginIView))
+//            iView.enableClose = true
+//            iView.enableFlip = false
+//            iView.enableRotate = false
+//            iView.enableNone = false
             
             //iView.gesture = SnapGesture(view: iView)
-            iView.gesture?.controlView = self.controlView
+            
             iView.isCreateNew = true
             //Auto select all test
-            //textElement.textView?.selectAll(self)
+            iView.textView?.selectAll(self)
             iView.textView?.becomeFirstResponder()
             iView.isSelected = true
             iView.textView?.delegate = self
@@ -689,26 +671,21 @@ final class FLCreateViewController: UIViewController {
     }
     
     func createTextView(_ element: FlashElement, row: Int) {
-        self.selectedView?.isSelected = false
-        self.selectedView?.isCreateNew = false
         
         let stageView = self.getStageView(at: row)
         if let iView = stageView.createElement(element) as? InteractView {
-            self.setSelectedView(iView)
             iView.outlineBorderColor = .black
             iView.setImage(UIImage(named: "fl_delete"), for: .close)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
             iView.setHandlerSize(Int(FlashStyle.text.marginIView))
+//            iView.enableClose = true
+//            iView.enableFlip = false
+//            iView.enableRotate = false
+//            iView.enableNone = false
             
             //iView.gesture = SnapGesture(view: iView)
-            iView.gesture?.controlView = self.controlView
-            
-//            iView.enableZoom()
-//            iView.addGestureRecognizer(TapGesture(target: self, action: #selector(self.taped(_:))))
-//            iView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.move(_:))))
-//            iView.addGestureRecognizer(RotationGesture(target: self, action: #selector(self.rotated(_:))))
             
             iView.isCreateNew = true
             iView.textView?.isEditable = true
@@ -853,30 +830,42 @@ final class FLCreateViewController: UIViewController {
         }
     }
     
-    func updateTextviewHeight(_ iView:InteractView) {
+    func updateTextviewHeight(_ iView:InteractView) {//frame vs bounds
         guard let textView = iView.textView else { return }
-        let f = iView.frame
-        textView.backgroundColor = .gray
-        iView.backgroundColor = .green
-        //height growing
-        let viewH = textView.systemLayoutSizeFitting(CGSize(width: f.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
-        textView.frame = CGRect(x: 0, y: 0, width: f.width, height: viewH)
-        print("viewH:\(viewH)")
-        let selfFrame = iView.frame
-        let stageView = self.stageView!
-        iView.frame = CGRect(x: selfFrame.origin.x, y: selfFrame.origin.y, width: selfFrame.width, height: viewH * stageView.stageRatio)
+        let originalCenter = iView.center
+        let textViewPoint = textView.frame.origin
+        let pading = FlashStyle.text.marginIView
+        let stageFrame = self.stageView?.frame ?? .zero
+        
+        let textViewFrame = textView.frameFromContent()
+        textView.bounds = textViewFrame
+        
+        //let size =  textView.text.size(font: font!, maxWidth: stageFrame.width, maxHeight: stageFrame.height)
+        //print("size: \(size)")
+        
+        //let viewH = textView.systemLayoutSizeFitting(CGSize(width: textView.bounds.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
+        //textView.frame = CGRect(x: textViewPoint.x, y: textViewPoint.y, width: size.width, height: size.height)
+        //print("viewH:\(viewH)")
+        iView.bounds = CGRect(x: 0, y: 0, width: iView.bounds.width, height: textViewFrame.height + textViewPoint.y)
+        iView.setPosition(.topRight, for: .close)
+        iView.setPosition(.topLeft, for: .none)
+        iView.setPosition(.bottomLeft, for: .flip)
+        iView.setPosition(.bottomRight, for: .rotate)
+        
+        //update icon tool after bounds change
+        iView.setImage(UIImage(named: "fl_delete"), for: .close)
+        iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
+        iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
+        iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
+        
+        //TODO: some bug after \n
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            iView.setNeedsDisplay()
+        }
         
         //let newSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
         //textView.frame = CGRect(origin: textView.frame.origin, size: newSize)
-    }
-    
-    @objc func taped(_ gesture: UITapGestureRecognizer) {
-        self.selectedView?.isSelected = false
-        
-        guard let iView = gesture.view as? InteractView else { return }
-        //let isSelected = !view.isSelected
-        iView.isSelected = true
-        self.setSelectedView(iView)
     }
     
     @objc func moveVertical(_ gesture: UIPanGestureRecognizer) {
@@ -895,70 +884,6 @@ final class FLCreateViewController: UIViewController {
             print("quiz view frame : \(view.frame)")//matgintop 16
         }
         
-    }
-    
-    @objc func move(_ gesture: UIPanGestureRecognizer) {
-        let location = gesture.location(in: self.stageView)
-        guard let iView = gesture.view as? InteractView else { return }
-        if let textView = iView.textView {
-            textView.selectedTextRange = nil
-        }
-        iView.isSelected = true
-        
-        let translation = gesture.translation(in: self.stageView)
-        //for center
-        //iView.center = location
-        //iView.center = CGPoint(x: iView.center.x + translation.x, y: iView.center.y + translation.y)
-        print("move")
-        print("x : \(translation.x)")
-        print("y : \(translation.y)")
-        iView.transform = iView.transform.translatedBy(x: translation.x, y: translation.y)
-        gesture.setTranslation(CGPoint.zero, in: self.stageView)
-        
-        if gesture.state == .began {
-            
-        } else if gesture.state == .ended {
-            
-        }
-        
-    }
-    
-    @objc func rotated(_ gesture: UIRotationGestureRecognizer) {
-        guard let view = gesture.view as? InteractView else { return }
-        view.isSelected = true
-        var originalRotation = CGFloat()
-        if gesture.state == .began {
-            print("sender.rotation: \(gesture.rotation)")
-            //gesture.rotation is radians
-            //view.rotation is degrees
-            let radians = self.getRadians(degrees: Double(view.rotation))
-            gesture.rotation = CGFloat(radians)
-            originalRotation = gesture.rotation
-            
-        } else if gesture.state == .changed {
-            let scale = CGAffineTransform(scaleX: view.currentScale.x, y: view.currentScale.y)
-            let newRotation = gesture.rotation + originalRotation
-            view.transform = scale.rotated(by: newRotation)
-            
-            
-            //let newRotation = gesture.rotation + originalRotation
-            //view.transform = CGAffineTransform(rotationAngle: newRotation)
-            
-            let degrees = view.getDegreesRotation()
-            print("changed degrees: \(degrees)")
-            
-        } else if gesture.state == .ended {
-            // Save the last rotation
-            let degrees = view.getDegreesRotation()
-            print("ended degrees: \(degrees)")
-            view.rotation = Float(degrees)
-            gesture.rotation = 0
-        }
-    }
-    
-    func getRadians(degrees: Double) -> Double {
-        let radians = degrees * .pi / 180
-        return radians
     }
     
     //Screen Rotation
@@ -1153,40 +1078,6 @@ extension FLCreateViewController: UINavigationControllerDelegate, UIImagePickerC
     
 }
 
-extension FLCreateViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if let iView = textView.superview as? InteractView {
-            iView.isSelected = true
-            self.setSelectedView(iView)
-            
-            self.openToolBar(tool: .text, iView: iView)
-            self.toolVC?.open(.text)
-            
-            //            if iView.isCreateNew {
-            //                self.openToolBar(tool: .text, iView: iView)
-            //                self.toolVC.open(.text)
-            //            } else {
-            //                //select old textview
-            //            }
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if let iView = textView.superview as? InteractView {
-            iView.isSelected = false
-            self.setSelectedView(iView)
-        }
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        if let iView = textView.superview as? InteractView {
-            self.updateTextviewHeight(iView)
-        }
-    }
-    
-}
-
-
 extension FLCreateViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -1248,13 +1139,37 @@ extension FLCreateViewController: UIScrollViewDelegate {
     }
 }
 
+
+extension FLCreateViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if let iView = textView.superview as? InteractView {
+            iView.isSelected = true
+            
+            self.openToolBar(tool: .text, iView: iView)
+            self.toolVC?.open(.text)
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if let iView = textView.superview as? InteractView {
+            iView.isSelected = false
+        }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if let iView = textView.superview as? InteractView {
+            self.updateTextviewHeight(iView)
+        }
+    }
+    
+}
+
 extension FLCreateViewController: InteractViewDelegate {
     func interacViewDidTap(view: InteractView) {
-        self.setSelectedView(view)
     }
     
     func interacViewDidBeginMoving(view: InteractView) {
-        self.setSelectedView(view)
+        
     }
     
     func interacViewDidClose(view: InteractView) {
@@ -1273,12 +1188,22 @@ extension FLCreateViewController : CHTStickerViewDelegate {
     
     func stickerViewDidTap(_ stickerView: CHTStickerView!) {
         guard let iView = stickerView as? InteractView else { return }
-        self.setSelectedView(iView)
+        self.selectedView = iView
+        guard let element = iView.element else { return }
+        if let textView = iView.textView {
+            textView.isUserInteractionEnabled = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                textView.becomeFirstResponder()
+            }
+        }
+        
     }
     
     func stickerViewDidBeginMoving(_ stickerView: CHTStickerView!) {
         guard let iView = stickerView as? InteractView else { return }
-        self.setSelectedView(iView)
+        self.selectedView = iView
+        
+        iView.unSelectTextView()
     }
     
     func stickerViewDidClose(_ stickerView: CHTStickerView!) {
@@ -1289,12 +1214,45 @@ extension FLCreateViewController : CHTStickerViewDelegate {
         self.controlView?.isHidden = true
     }
     
+    
+    func stickerViewDidBeginRotating(_ stickerView: CHTStickerView!) {
+        self.widthChange = stickerView.bounds.width
+    }
+    
     func stickerViewDidChangeRotating(_ stickerView: CHTStickerView!) {
         guard let iView = stickerView as? InteractView else { return }
+        guard let element = iView.element else { return }
         let degrees = Double(stickerView.angle) * Double((180 / Float.pi))
         iView.element?.rotation = Float(degrees)
         iView.element?.scale = Float(iView.hardScale)
         print("stickerView angle: \(stickerView.angle) degrees: \(degrees)")
         print("stickerView scale: \(iView.hardScale)")
+        
+        iView.unSelectTextView()
+        
+        if element.type == .text {
+            //*Need to scale font size
+            //CHTStickerView not scale textview just change bounds
+            let widthChange = (stickerView.bounds.width / self.widthChange)
+            print("widthChange scale: \(widthChange)")
+            let font = element.manageFont(scale: iView.hardScale)
+            iView.textView?.font = font
+            // update font size
+        }
+    }
+    
+    func stickerViewDidEndRotating(_ stickerView: CHTStickerView!) {
+        
+        stickerView.updateLayout()
+        guard let iView = stickerView as? InteractView else { return }
+        self.selectedView = iView
+        guard let element = iView.element else { return }
+        
+        print("element.fontScale: \(element.fontScale)")
+        
+        if element.type == .text {
+            //iView.textView?.updateLayout()
+            element.updateNewFontSize()
+        }
     }
 }

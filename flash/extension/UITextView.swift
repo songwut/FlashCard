@@ -21,11 +21,12 @@ extension UITextView {
         //get width by content
         let textViewSize = self.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
         //with from content
-        let width = fixWidth ?? textViewSize.width
-        
-        let callH = self.systemLayoutSizeFitting(CGSize(width: width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
+        var width = fixWidth ?? textViewSize.width
+        let fix: CGFloat = 10
+        width = width + fix
+        let height = self.systemLayoutSizeFitting(CGSize(width: width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
         print("textViewSize: \(textViewSize)")
-        print("callH: \(callH)")
-        return CGRect(origin: self.frame.origin, size: textViewSize)
+        print("height: \(height)")
+        return CGRect(origin: self.frame.origin, size: CGSize(width: width, height: height + fix))
     }
 }

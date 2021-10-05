@@ -36,33 +36,25 @@ struct FLCreator {
         self.stageView = stage
     }
     
-    func manageFont(element:FlashElement) -> UIFont {
-        let isItalic = element.flTextStyle.contains(.italic)
-        var font = FontHelper.getFontSystem(element.fontSize, font: .text, isItalic: isItalic)
-        if element.flTextStyle.contains(.bold) {
-            font = FontHelper.getFontSystem(element.fontSize, font: .bold, isItalic: isItalic)
-        }
-        return font
-    }
-    
     func createText(_ element:FlashElement ,in stage: FLStageView) -> InteractView {
         let viewX = (stage.frame.width * CGFloat(element.x) / 100)
         let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
         var viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
         var viewH = ((stage.frame.height * CGFloat(element.width)) / 100)
         
-        let font:UIFont = self.manageFont(element: element)
+        let font:UIFont = element.manageFont()
         
         let scale = (element.scale + Float(stage.stageRatio)) - 1.0
         
         let textView = FLTextView()
+        textView.minimumZoomScale = 0.1
         textView.text = element.text
         textView.textAlignment = element.flAlignment.alignment()
         textView.textColor = UIColor(element.textColor)
         textView.font = font
         textView.isEditable = true
         textView.isScrollEnabled = false
-        textView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         var atb: [NSAttributedString.Key:Any] = [
             .font: font,
@@ -83,22 +75,26 @@ struct FLCreator {
         
         let margin: CGFloat = FlashStyle.text.marginIView
         let marginXY = margin / 2
-        
+        /* case for need width
         if element.width == 0, element.width == 0 {//case create new
-            let textViewFrame = textView.frameFromContent()
+            //let textViewFrame = textView.frameFromContent()
             //let fixWidth:CGFloat = 40//plus for digit missing
             //viewW = (FlashStyle.text.textWidthFromFont36 * CGFloat(scale)) + fixWidth
-            viewW = textViewFrame.width + margin
-            viewH = textViewFrame.height + margin
+            viewW = textViewSize.width + margin
+            viewH = textViewSize.height + margin
         }
+        */
+        //let textViewSize = element.text.size(font: font, maxWidth: stage.frame.width, maxHeight: stage.frame.height)
+        let textViewSize = textView.frameFromContent()
+        viewW = textViewSize.width + margin
+        viewH = textViewSize.height + margin
         
         let iView = InteractView(contentView: textView)!
         iView.type = .text
-        let selfFrame = iView.frame
-        iView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: viewW, height: viewW))
+        //iView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: viewW, height: viewW))
         
         //iView.contentView = textView
-        textView.frame = CGRect(x: marginXY, y: marginXY, width: viewW - margin, height: viewH - margin)
+        //textView.frame = CGRect(x: marginXY, y: marginXY, width: viewW - margin, height: viewH - margin)
         textView.textColor = UIColor(element.textColor)
         if let fill = element.fill {
             textView.backgroundColor = UIColor(fill)

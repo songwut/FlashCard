@@ -207,6 +207,14 @@ class InteractView: CHTStickerView {
     
     var textView: UITextView?
     
+    func unSelectTextView() {
+        if let textView = self.textView {
+            if let _ = textView.selectedTextRange {
+                textView.selectedTextRange = nil
+            }
+        }
+    }
+    
     var svgImage: SVGKImage?
     
     func updateVector(_ svgImage:SVGKImage?) {
@@ -413,26 +421,6 @@ extension InteractView1 {
         let sy = sqrt(c * c + d * d)
         
         return CGPoint(x: sx, y: sy)
-    }
-    
-    func enableZoom() {
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(startZooming(_:)))
-        isUserInteractionEnabled = true
-        addGestureRecognizer(pinchGesture)
-    }
-    
-    @objc private func startZooming(_ gesture: UIPinchGestureRecognizer) {
-        print("x:\(gesture.scale)")
-        print("y:\(gesture.scale)")
-        guard let view = gesture.view as? InteractView else { return }
-        let scale = view.transform.scaledBy(x: gesture.scale, y: gesture.scale)
-        view.transform = scale
-        gesture.scale = 1
-        
-        //limit scale
-        if scale.a > 1, scale.d > 1 {
-            
-        }
     }
     
     func setIcon(_ image: UIImage?, handler: FLInteractViewHandler) {

@@ -48,15 +48,15 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2) {
 }
 @property (nonatomic, strong, readwrite) UIView *contentView;
 @property (nonatomic, strong) UIPanGestureRecognizer *moveGesture;
-@property (nonatomic, strong) UIImageView *rotateImageView;
+//@property (nonatomic, strong) UIImageView *rotateImageView;
 @property (nonatomic, strong) UIPanGestureRecognizer *rotateGesture;
-@property (nonatomic, strong) UIImageView *closeImageView;
+//@property (nonatomic, strong) UIImageView *closeImageView;
 @property (nonatomic, strong) UITapGestureRecognizer *closeGesture;
-@property (nonatomic, strong) UIImageView *flipImageView;
+//@property (nonatomic, strong) UIImageView *flipImageView;
 @property (nonatomic, strong) UITapGestureRecognizer *flipGesture;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 
-@property (nonatomic, strong) UIImageView *noneImageView;
+//@property (nonatomic, strong) UIImageView *noneImageView;
 @end
 
 @implementation CHTStickerView
@@ -194,22 +194,22 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2) {
 #pragma mark - Private Methods
 
 - (void)_setEnableClose:(BOOL)enableClose {
-  self.closeImageView.hidden = !enableClose;
+    self.closeImageView.hidden = NO;//!enableClose;
   self.closeImageView.userInteractionEnabled = enableClose;
 }
 
 - (void)_setEnableRotate:(BOOL)enableRotate {
-  self.rotateImageView.hidden = !enableRotate;
+    self.rotateImageView.hidden = NO;//!enableRotate;
   self.rotateImageView.userInteractionEnabled = enableRotate;
 }
 
 - (void)_setEnableFlip:(BOOL)enableFlip {
-  self.flipImageView.hidden = !enableFlip;
+    self.flipImageView.hidden = NO;//!enableFlip;
   self.flipImageView.userInteractionEnabled = enableFlip;
 }
 
 - (void)_setEnableNone:(BOOL)enableNone {
-  self.noneImageView.hidden = !enableNone;
+    self.noneImageView.hidden = NO;//!enableNone;
   self.noneImageView.userInteractionEnabled = enableNone;
 }
 
@@ -317,7 +317,17 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2) {
       float angleDiff = deltaAngle - angle;
         self.angle = -angleDiff;
       self.transform = CGAffineTransformMakeRotation(-angleDiff);
-
+        /*
+        // Scale
+        let scale = 1.0 - (lastScale - recognizer.scale);
+        let tScale = view.transform.scaledBy(x: scale, y: scale)
+        view.transform = tScale
+        lastScale = recognizer.scale;
+        
+        // Translate
+        let point = recognizer.location(in: view)
+        view.transform = view.transform.translatedBy(x: point.x - lastPinchPoint.x, y: point.y - lastPinchPoint.y)
+*/
       CGFloat scale = CGPointGetDistance(center, touchLocation) / initialDistance;
       CGFloat minimumScale = self.minimumSize / MIN(initialBounds.size.width, initialBounds.size.height);
       scale = MAX(scale, minimumScale);

@@ -56,6 +56,10 @@ typedef NS_ENUM (NSInteger, CHTStickerViewPosition) {
 /// A convenient property for you to store extra information.
 @property (nonatomic, strong) NSDictionary *userInfo;
 
+@property (nonatomic, strong) UIImageView *noneImageView;
+@property (nonatomic, strong) UIImageView *flipImageView;
+@property (nonatomic, strong) UIImageView *closeImageView;
+@property (nonatomic, strong) UIImageView *rotateImageView;
 @property (nonatomic, assign) CGFloat angle;
 @property (nonatomic, assign) CGFloat hardScale;
 

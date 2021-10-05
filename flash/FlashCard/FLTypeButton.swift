@@ -29,16 +29,21 @@ class TapGesture: UITapGestureRecognizer {
     
 }
 
+class PinchGesture: UIPinchGestureRecognizer {
+    
+}
+
 class FLTextView: UITextView {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if action == #selector(UIResponderStandardEditActions.paste(_:)) {
-            return false
-        } else if action == #selector(UIResponderStandardEditActions.copy(_:)) {
-            return false
-        } else if action == #selector(UIResponderStandardEditActions.cut(_:)) {
-            return false
-        }
-        return false
-        //return super.canPerformAction(action, withSender: sender)
+//        if action == #selector(UIResponderStandardEditActions.paste(_:)) {
+//            return false
+//        } else if action == #selector(UIResponderStandardEditActions.copy(_:)) {
+//            return false
+//        } else if action == #selector(UIResponderStandardEditActions.cut(_:)) {
+//            return false
+//        }
+//        return false
+        
+        return super.canPerformAction(action, withSender: sender)
     }
 }
