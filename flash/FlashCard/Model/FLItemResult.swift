@@ -100,9 +100,9 @@ class OwnerResult: BaseResult {
 }
 
 
-class FlDetailResult: FLBaseResult {
+class FlFlashDetailResult: FLBaseResult {
     var bgColor = "FFFFFF"
-    var list = [FlashPageResult]()
+    var list = [FLCardPageResult]()
     var total = 0
     
     var provider: BaseResult?
@@ -116,13 +116,13 @@ class FlDetailResult: FLBaseResult {
         list          <- map["results"]
     }
     
-    class func with(_ dict: [String : Any]) -> FlDetailResult? {
-        let item = Mapper<FlDetailResult>().map(JSON: dict)
+    class func with(_ dict: [String : Any]) -> FlFlashDetailResult? {
+        let item = Mapper<FlFlashDetailResult>().map(JSON: dict)
         return item
     }
 }
 
-class FlashPageResult: FLBaseResult {
+class FLCardPageResult: FLBaseResult {
     
     var dropboxPage: FLDropboxPageResult?
     
@@ -131,8 +131,8 @@ class FlashPageResult: FLBaseResult {
         image              <- map["image"]
     }
     
-    class func with(_ dict: [String : Any]) -> FlashPageResult? {
-        let item = Mapper<FlashPageResult>().map(JSON: dict)
+    class func with(_ dict: [String : Any]) -> FLCardPageResult? {
+        let item = Mapper<FLCardPageResult>().map(JSON: dict)
         return item
     }
 }
@@ -175,9 +175,11 @@ class FLMediaResult: FLBaseResult {
     }
 }
 
-class FLPageDetailResult: FlashPageResult {
+class FLCardPageDetailResult: FLCardPageResult {
     var bgColor = FLColorResult(JSON: ["hex" : "ffffff"])!
     var componentList = [FlashElement]()
+    
+    var coverImageBase64: String?
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -185,8 +187,8 @@ class FLPageDetailResult: FlashPageResult {
         componentList        <- map["data.component"]
     }
     
-    override class func with(_ dict: [String : Any]) -> FLPageDetailResult? {
-        let item = Mapper<FLPageDetailResult>().map(JSON: dict)
+    override class func with(_ dict: [String : Any]) -> FLCardPageDetailResult? {
+        let item = Mapper<FLCardPageDetailResult>().map(JSON: dict)
         return item
     }
 }
@@ -201,7 +203,7 @@ class FLNewResult: FLBaseItemResult {
 }
 
 class FLItemResult: FLBaseItemResult {
-    var pageList = [FlashPageResult]()
+    var pageList = [FLCardPageResult]()
     var dictPageList = [[String : AnyObject]]()
     
     override func mapping(map: Map) {

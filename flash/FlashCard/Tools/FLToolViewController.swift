@@ -212,7 +212,7 @@ class FLToolViewController: UIViewController {
         }
     }
     
-    func updatePageDetail(_ detail: FLPageDetailResult) {
+    func updatePageDetail(_ detail: FLCardPageDetailResult) {
         self.colorToolView.selectedColor = detail.bgColor.hex
         self.colorToolView.reloadColor()
     }

@@ -12,7 +12,7 @@ class FLPlayerViewController: UIViewController {
 
     var viewModel = FLStageViewModel()
     
-    private var swipeView: FLSwipeView<FlashPageResult>!{
+    private var swipeView: FLSwipeView<FLCardPageResult>!{
         didSet{
             self.swipeView.delegate = self
         }
@@ -64,7 +64,7 @@ class FLPlayerViewController: UIViewController {
         self.infoView.rootView.delegate = self
         self.infoStackView.addArrangedSubview(self.infoView.view)
         self.showLoading(nil)
-        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlDetailResult?) in
+        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlFlashDetailResult?) in
             self?.hideLoading()
             guard let viewContainer = self?.viewContainer else { return }
             self?.manageStageFrame(viewContainer)
@@ -122,7 +122,7 @@ class FLPlayerViewController: UIViewController {
     
     func createStageAnimate(cardFrame: CGRect) {
         // Dynamically create view for each card
-        let contentView: (Int, CGRect, FlashPageResult) -> (UIView) = { (index: Int ,frame: CGRect , pageResult: FlashPageResult) -> (UIView) in
+        let contentView: (Int, CGRect, FLCardPageResult) -> (UIView) = { (index: Int ,frame: CGRect , pageResult: FLCardPageResult) -> (UIView) in
             
             let stageView = FLStageView(frame: frame)
             stageView.viewModel = self.viewModel
@@ -133,7 +133,7 @@ class FLPlayerViewController: UIViewController {
         self.sgProgress.rootView.maximum = self.viewModel.pageList.count
         self.pageLabel.text = self.updatePageNumber()
                 
-        self.swipeView = FLSwipeView<FlashPageResult>(frame: self.viewContainer.bounds, contentView: contentView)
+        self.swipeView = FLSwipeView<FLCardPageResult>(frame: self.viewContainer.bounds, contentView: contentView)
         self.swipeView.cardFrame = cardFrame
         self.viewContainer.addSubview(self.swipeView)
         self.swipeView.showTinderCards(with: self.viewModel.pageList ,isDummyShow: true)
@@ -214,13 +214,13 @@ extension FLPlayerViewController : FLSwipeViewDelegate {
     
     func fallbackCard(model: Any) {
         //emojiView.rateValue =  2.5
-        let page = model as! FlashPageResult
+        let page = model as! FLCardPageResult
         print("Cancelling \(page.name)")
     }
     
     func cardGoesLeft(model: Any) {
         //emojiView.rateValue =  2.5
-        let page = model as! FlashPageResult
+        let page = model as! FLCardPageResult
         print("Watchout Left \(page.id)")
         let nextIndex = self.swipeView.index + 1
         print("nextIndex \(nextIndex)")
@@ -232,13 +232,13 @@ extension FLPlayerViewController : FLSwipeViewDelegate {
     
     func cardGoesRight(model : Any) {
         //emojiView.rateValue =  2.5
-        let page = model as! FlashPageResult
+        let page = model as! FLCardPageResult
         print("Watchout Right \(page.id)")
     }
     
     func undoCardsDone(model: Any) {
         //emojiView.rateValue =  2.5
-        let page = model as! FlashPageResult
+        let page = model as! FLCardPageResult
         print("Reverting done \(page.name)")
     }
     

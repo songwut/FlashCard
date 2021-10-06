@@ -47,6 +47,7 @@ struct FLCreator {
         let scale = (element.scale + Float(stage.stageRatio)) - 1.0
         
         let textView = FLTextView()
+        textView.contentMode = .scaleAspectFill
         textView.minimumZoomScale = 0.1
         textView.text = element.text
         textView.textAlignment = element.flAlignment.alignment()
@@ -54,6 +55,7 @@ struct FLCreator {
         textView.font = font
         textView.isEditable = true
         textView.isScrollEnabled = false
+        textView.sizeToFit()
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         var atb: [NSAttributedString.Key:Any] = [

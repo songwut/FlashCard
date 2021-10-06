@@ -254,7 +254,7 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2) {
     self.enableClose = YES;
     self.enableRotate = YES;
     self.enableFlip = YES;
-      self.enableNone = YES;
+    self.enableNone = YES;
 
     self.minimumSize = defaultMinimumSize;
     self.outlineBorderColor = [UIColor brownColor];

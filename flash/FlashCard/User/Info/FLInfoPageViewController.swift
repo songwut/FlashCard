@@ -16,7 +16,7 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
     var pageVC: UIPageViewController!
     var pages = [UIViewController]()
     
-    var flashCardDetail: FlDetailResult?
+    var flashCardDetail: FlFlashDetailResult?
     var quiz: FlashElement?
     
     override func viewDidLoad() {

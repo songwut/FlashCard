@@ -26,12 +26,12 @@ class FLStageViewModel {
     var stageVC: FLCreateViewController?
     var myFlashCard: MaterialFlashPageResult?
     var detail: FLDetailResult?
-    var pageList = [FlashPageResult]()
-    var flashCardDetail: FlDetailResult?
+    var pageList = [FLCardPageResult]()
+    var flashCardDetail: FlFlashDetailResult?
     //var pageList: [FlashElement] = []()
     var pageIndex = 0
-    var currentPage: FlashPageResult?
-    var currentPageDetail: FLPageDetailResult?
+    var currentPage: FLCardPageResult?
+    var currentPageDetail: FLCardPageDetailResult?
     var flashId = 16
     
     func getQuizContent() -> FlashElement? {
@@ -46,22 +46,24 @@ class FLStageViewModel {
         
         if pageList.count == 0 {
             //create new 1 + 1
-            let page0 = FLPageDetailResult(JSON: ["id" : 102])!
+            let page0 = FLCardPageDetailResult(JSON: ["id" : 102])!
             pageList.append(page0)
-            let page1 = FLPageDetailResult(JSON: ["id" : 2])!
+            let page1 = FLCardPageDetailResult(JSON: ["id" : 2])!
             pageList.append(page1)
             
-            let page2 = FLPageDetailResult(JSON: ["id" : 3])!
+            let page2 = FLCardPageDetailResult(JSON: ["id" : 3])!
             pageList.append(page2)
-            let page3 = FLPageDetailResult(JSON: ["id" : 4])!
+            let page3 = FLCardPageDetailResult(JSON: ["id" : 4])!
             pageList.append(page3)
             
-            currentPage = page0
+            self.currentPage = page0
         } else {
             //read api
         }
         
     }
+    
+    
     
     func callAPIMyFlashCard(method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
         let request = FLRequest()
@@ -73,31 +75,12 @@ class FLStageViewModel {
         }
     }
     
-    func callAPICurrentPageDetail(complete: @escaping () -> ()) {
-        guard let page = self.currentPage else { return complete() }
-        let request = FLRequest()
-        request.endPoint = .ugcCardListDetail
-        request.arguments = ["\(self.flashId)", "\(page.id)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLPageDetailResult?, isCache, error) in
-            self?.currentPageDetail = result
-            complete()
-        }
-//
-//        let fileName = "ugc-flash-card-id"
-//        JSON.read(fileName) { (object) in
-//            if let json = object as? [String : Any],
-//               let item = FLDetailResult(JSON: json) {
-//                detail = item
-//            }
-//            complete()
-//        }
-    }
-    
-    func callAPIFlashCard(complete: @escaping (_ result: FlDetailResult?) -> ()) {
+    //Flash create get list
+    func callAPIFlashCard(complete: @escaping (_ result: FlFlashDetailResult?) -> ()) {
         let request = FLRequest()
         request.endPoint = .ugcCardList
         request.arguments = ["\(self.flashId)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FlDetailResult?, isCache, error) in
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FlFlashDetailResult?, isCache, error) in
             if let item = result {
                 self?.flashCardDetail = item
                 self?.pageList = item.list
@@ -117,7 +100,27 @@ class FLStageViewModel {
 //        }
     }
     
-    func callAPICardList(cardId: Int ,complete: @escaping (_ page: FLPageDetailResult) -> ()) {
+    func callAPICurrentPageDetail(complete: @escaping () -> ()) {
+        guard let page = self.currentPage else { return complete() }
+        let request = FLRequest()
+        request.endPoint = .ugcCardListDetail
+        request.arguments = ["\(self.flashId)", "\(page.id)"]
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLCardPageDetailResult?, isCache, error) in
+            self?.currentPageDetail = result
+            complete()
+        }
+//
+//        let fileName = "ugc-flash-card-id"
+//        JSON.read(fileName) { (object) in
+//            if let json = object as? [String : Any],
+//               let item = FLDetailResult(JSON: json) {
+//                detail = item
+//            }
+//            complete()
+//        }
+    }
+    
+    func callAPICardList(cardId: Int ,complete: @escaping (_ page: FLCardPageDetailResult) -> ()) {
         //ugcCardIdDropbox
         
         let request = FLRequest()
@@ -143,7 +146,7 @@ class FLStageViewModel {
         let fileName = "ugc-flash-card-id-card-id"
         JSON.read(fileName) { (object) in
             if let dict = object as? [String : Any] {
-                let detail = FLPageDetailResult(JSON: dict)!
+                let detail = FLCardPageDetailResult(JSON: dict)!
                 self.currentPageDetail = detail
                 complete(detail)
             }
@@ -229,7 +232,7 @@ class FLStageViewModel {
         })
     }
     
-    func callAPIDropboxList(cardId: Int ,complete: @escaping (_ page: FLPageDetailResult) -> ()) {
+    func callAPIDropboxList(cardId: Int ,complete: @escaping (_ page: FLCardPageDetailResult) -> ()) {
         
         let request = FLRequest()
         request.apiMethod = .get

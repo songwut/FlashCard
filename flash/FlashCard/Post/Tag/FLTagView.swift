@@ -18,9 +18,9 @@ struct FLTagView: View {
 		HStack {
 			Text(tag.lowercased())
 				.padding(.leading, 2)
-//			Image(systemName: "xmark.circle.fill")
-//				.opacity(0.4)
-//				.padding(.leading, -6)
+			Image(systemName: "xmark.circle.fill")
+				.opacity(0.4)
+				.padding(.leading, -6)
 		}
 		.foregroundColor(UIColor.info().color)
         .font(font.font)

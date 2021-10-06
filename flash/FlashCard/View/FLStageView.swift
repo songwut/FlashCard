@@ -26,7 +26,7 @@ class FLStageView: UIView {
         self.cover = UIImageView(frame: CGRect(origin: .zero, size: frame.size))
     }
     
-    var page: FlashPageResult? {
+    var page: FLCardPageResult? {
         didSet {
             print("FLStageView frame: \(self.frame)")
         }
@@ -38,7 +38,7 @@ class FLStageView: UIView {
            v.removeFromSuperview()
         }
         self.cover.imageUrl(page.image)
-        self.viewModel?.callAPICardList(cardId: page.id, complete: { (pageDetail: FLPageDetailResult) in
+        self.viewModel?.callAPICardList(cardId: page.id, complete: { (pageDetail: FLCardPageDetailResult) in
             self.backgroundColor = UIColor(pageDetail.bgColor.hex)
             for element in pageDetail.componentList {
                 let v = self.createElement(element)

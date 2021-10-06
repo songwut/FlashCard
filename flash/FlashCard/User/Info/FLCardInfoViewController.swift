@@ -41,7 +41,7 @@ class FLCardInfoViewController: UIViewController {
     @IBOutlet private weak var quizView: UIView!
     
     var delegate: FLCardInfoViewControllerDelegate?
-    var flashCardDetail: FlDetailResult?
+    var flashCardDetail: FlFlashDetailResult?
     var isQuiz = false
     
     override func viewDidLoad() {

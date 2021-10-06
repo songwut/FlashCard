@@ -62,6 +62,8 @@ typedef NS_ENUM (NSInteger, CHTStickerViewPosition) {
 @property (nonatomic, strong) UIImageView *rotateImageView;
 @property (nonatomic, assign) CGFloat angle;
 @property (nonatomic, assign) CGFloat hardScale;
+@property (nonatomic, assign) NSInteger defaultInset;
+@property (nonatomic, assign) NSInteger defaultMinimumSize;
 
 /**
  *  Initialize a sticker view. This is the designated initializer.

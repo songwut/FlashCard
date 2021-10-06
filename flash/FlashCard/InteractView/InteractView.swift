@@ -15,7 +15,10 @@ enum FLInteractViewHandler: Int {
     case flip
 }
 
-enum FLInteractViewPosition: Int {
+enum FLInteractViewPosition {
+    case midLeft
+    case midRight
+    
     case topLeft
     case topRight
     case bottomLeft
@@ -44,7 +47,7 @@ enum FLType: String {
 }
 
 class FLControlIcon: UIImageView {
-    var position: FLInteractViewPosition = .topRight
+    var position: FLInteractViewPosition = .midLeft
 }
 
 class FLPlaverView: UIView {
@@ -83,7 +86,7 @@ class FLPlaverView: UIView {
 class InteractView: CHTStickerView {
     //var delegate: InteractViewDelegate?
     var textColor: String?
-    
+    var contentFixWidth: CGFloat?
     var isCreateNew = true
     var imageView:UIImageView?
     var element: FlashElement?
@@ -99,6 +102,196 @@ class InteractView: CHTStickerView {
     var bottomRightButton: UIButton?
     
     var playerView: FLPlaverView?
+    
+    var isHiddenEditingTool: Bool = false {
+        didSet {
+            self.noneImageView.isHidden = self.isHiddenEditingTool
+            self.closeImageView.isHidden = self.isHiddenEditingTool
+            self.flipImageView.isHidden = self.isHiddenEditingTool
+            self.rotateImageView.isHidden = self.isHiddenEditingTool
+            self.controlTextLeft.isHidden = self.isHiddenEditingTool
+            self.controlTextRight.isHidden = self.isHiddenEditingTool
+            self.contentView.layer.borderWidth = self.isHiddenEditingTool ? 0 : 2
+        }
+    }
+    
+    private let controlWidthIcon = UIImage(named: "controll_width")
+    
+    lazy var controlTextLeft: FLControlIcon = {
+        let width = FlashStyle.text.marginIView
+        let icon  = FLControlIcon(frame: CGRect(x: 0, y: 0, width: width, height: 60))
+        icon.image = controlWidthIcon
+        icon.contentMode = .center
+        icon.backgroundColor = .clear
+        icon.isUserInteractionEnabled = true
+        //imageView.addGestureRecognizer(self.closeGesture)
+        return icon
+    }()
+    
+    lazy var controlTextRight: FLControlIcon = {
+        let width = FlashStyle.text.marginIView
+        let icon  = FLControlIcon(frame: CGRect(x: 0, y: 0, width: width, height: 60))
+        icon.image = controlWidthIcon
+        icon.contentMode = .center
+        icon.backgroundColor = .clear
+        icon.isUserInteractionEnabled = true
+        //imageView.addGestureRecognizer(self.closeGesture)
+        return icon
+    }()
+    
+    override init!(contentView: UIView!) {
+        super.init(contentView: contentView)
+        
+        if let _ = contentView as? FLTextView {
+            self.setPositionTextControl(view: self.controlTextLeft, position: .midLeft)
+            self.setPositionTextControl(view: self.controlTextRight, position: .midRight)
+            self.controlTextLeft.addGestureRecognizer(PanGesture(target: self, action: #selector(self.scaleWidthDraging(_:))))
+            self.controlTextRight.addGestureRecognizer(PanGesture(target: self, action: #selector(self.scaleWidthDraging(_:))))
+            self.addSubview(self.controlTextLeft)
+            self.addSubview(self.controlTextRight)
+        }
+        self.isHiddenEditingTool = false
+    }
+    
+    override func setPosition(_ position: CHTStickerViewPosition, for handler: CHTStickerViewHandler) {
+        super.setPosition(position, for: handler)
+        
+        self.setPositionTextControl(view: self.controlTextLeft, position: .midLeft)
+        self.setPositionTextControl(view: self.controlTextRight, position: .midRight)
+        
+        self.controlTextLeft.image = controlWidthIcon
+        self.controlTextRight.image = controlWidthIcon
+    }
+    
+    private func getDistance(_ point1: CGPoint, _ point2: CGPoint) -> CGFloat {
+      let fx = CGFloat(point2.x - point1.x)
+      let fy = CGFloat(point2.y - point1.y)
+      return sqrt((fx * fx + fy * fy))
+    }
+    
+    private func CGAffineTransformGetAngle(_ t: CGAffineTransform) -> CGFloat {
+      return atan2(t.b, t.a);
+    }
+    
+    private func CGRectScale(_ rect: CGRect, _ wScale: CGFloat, _ hScale: CGFloat) -> CGRect {
+        return CGRect(x: rect.origin.x, y: rect.origin.y, width: rect.size.width * wScale, height: rect.size.height * hScale);
+    }
+    
+    private var isScaleWidth = false
+    var initialBounds = CGRect.zero
+    var initialDistance: CGFloat = 0
+    var deltaAngle: CGFloat = 0
+    
+    @objc func scaleWidthDraging(_ gesture: UIPanGestureRecognizer) {
+        let touchLocation = gesture.location(in: self.superview)
+        let center = self.center
+        let originalBounds = self.bounds
+        
+        switch gesture.state {
+        case .began:
+            deltaAngle = CGFloat(atan2f(Float(touchLocation.y - center.y), Float(touchLocation.x - center.x))) - CGAffineTransformGetAngle(self.transform)
+            initialBounds = self.bounds
+            initialDistance = getDistance(center, touchLocation)
+            break
+        case .changed:
+            var scale = getDistance(center, touchLocation) / initialDistance
+            let min:CGFloat = [initialBounds.size.width, initialBounds.size.height].min() ?? 0.0
+            let minimumScale = CGFloat(self.minimumSize) / CGFloat(min)
+            let max: CGFloat = [scale, minimumScale].max() ?? 0
+            scale = max
+            
+            let scaledBounds = CGRectScale(initialBounds, scale, scale)
+            
+            self.hardScale = scale
+            self.bounds = CGRect(x: 0, y: 0, width: scaledBounds.width, height: originalBounds.height)
+            self.contentFixWidth = scaledBounds.width - (FlashStyle.text.marginIView / 2)
+            self.setNeedsDisplay()
+            break
+        default:
+            break
+        }
+        /*
+        //scale X
+        //textViewDidChange
+        var deltaX:CGFloat
+        var deltaY:CGFloat
+        if button.tag == FLTag.left.rawValue {
+            deltaX = location.x - previous.x
+            deltaY = location.y - previous.y
+        } else {
+            deltaX = location.x + previous.x
+            deltaY = location.y + previous.y
+        }
+        print("******")
+        print("previous X: \(previous.x) Y:\(previous.y)")
+        print("location X: \(location.x) Y:\(location.y)")
+        print("deltaX: \(deltaX) Y:\(deltaY)")
+        //use only text
+        if let iView = self.selectedView, let textView = iView.textView {
+            //let textViewFrame = textView.frame
+            let iViewFrame = iView.frame
+            let deltaXConvert = deltaX * -1
+            //scale left+right
+            let newWidth = iViewFrame.width + (deltaXConvert * 2)
+            
+            let newX:CGFloat = iViewFrame.origin.x + deltaX
+            let iViewFrameUpdate = CGRect(x: newX, y: iViewFrame.origin.y, width: newWidth, height: iViewFrame.height)
+            
+            iView.frame = iViewFrameUpdate
+            
+            print("out iView:\(iView.frame)")
+            if !self.isScaleWidth {//for textview fix layout
+                self.isScaleWidth = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    UIView.animate(withDuration: 0.05, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                        textView.frame = CGRect(x: 0, y: 0, width: iViewFrameUpdate.width, height: iViewFrameUpdate.height)
+                        //textView.frame = CGRect(x: 0, y: 0, width: iViewFrameUpdate.width, height: iViewFrameUpdate.width)
+                        //textView.contentSize.width
+                        
+                        self.updateTextviewHeight(iView)
+                    }, completion: { [weak self] (ended) in
+                        self?.isScaleWidth = false
+                        let factH = iView.frame.height - textView.frame.height
+                        print("factH:\(factH)")
+                        print("iView:\(iView.frame)")
+                        print("textView:\(textView.frame)")
+                        print("contentsize:\(textView.contentSize)")
+                    })
+                }
+                
+            }
+            //TODO: Do when touches end
+            //iView.textView?.contentSize = iViewFrameUpdate.size
+            //iView.textView?.frame.size = iViewFrameUpdate.size
+            //iView.textView?.textContainer
+            //button.center = CGPointMake(button.center.x + delta_x, button.center.y + delta_y);
+        }
+        */
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setPositionTextControl(view: FLControlIcon, position: FLInteractViewPosition) {
+        let origin = self.contentView.frame.origin
+        let size = self.contentView.frame.size
+        
+        view.translatesAutoresizingMaskIntoConstraints = true
+        
+        switch position {
+        case .midLeft:
+            view.center = CGPoint(x: origin.x, y: origin.y + (size.height / 2))
+            view.autoresizingMask = [.flexibleRightMargin , .flexibleBottomMargin, .flexibleTopMargin]
+            break
+        case .midRight:
+            view.center = CGPoint(x: origin.x + size.width, y: origin.y + (size.height / 2))
+            view.autoresizingMask = [.flexibleLeftMargin , .flexibleBottomMargin, .flexibleTopMargin]
+            break
+        default :
+            break
+        }
+    }
     
     func createJSON() -> [String: AnyObject]? {
         
@@ -359,8 +552,8 @@ class InteractView1: UIView, UIGestureRecognizerDelegate {
 //        self.controlBgView.frame = CGRect(origin: CGPoint.zero, size: self.frame.size)
     }
     
-    var defaultInset: Int = 11
-    var defaultMinimumSize: Int = 4 * 11
+    var defaultInset: Int = Int(FlashStyle.text.marginIView / 2)
+    var defaultMinimumSize: Int = 4 * Int(FlashStyle.text.marginIView / 2)
     var enableRotate = false
     var enableFlip = false
     
@@ -478,6 +671,9 @@ extension InteractView1 {
             handlerView.center = CGPoint(x: origin.x + size.width, y: origin.y + size.height)
             handlerView.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
             break
+        default :
+        break
+        
         }
         
         handlerView.position = position

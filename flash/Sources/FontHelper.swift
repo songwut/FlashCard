@@ -12,7 +12,7 @@ extension UIFont {
     var font: Font { Font(self) }
 }
 
-let fontScale: CGFloat = UIScreen.main.scale * 0.5
+let fontScale: CGFloat = UIScreen.main.scale * 0.4
 
 enum AppFont: Int {
     case regular = 0

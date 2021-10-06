@@ -34,6 +34,11 @@ class PinchGesture: UIPinchGestureRecognizer {
 }
 
 class FLTextView: UITextView {
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        print("FLTextView layoutSubviews")
+    }
+    
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 //        if action == #selector(UIResponderStandardEditActions.paste(_:)) {
 //            return false

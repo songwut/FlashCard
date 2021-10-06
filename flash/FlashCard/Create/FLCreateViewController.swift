@@ -129,7 +129,7 @@ final class FLCreateViewController: UIViewController {
         
         self.prepareToolVC()
         self.view.alpha = 0.0
-        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlDetailResult?) in
+        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlFlashDetailResult?) in
             if let object = cardResult {
                 ConsoleLog.show("total:\(object.total)")
                 ConsoleLog.show("list:\(object.list)")
@@ -146,14 +146,16 @@ final class FLCreateViewController: UIViewController {
     }
     
     @objc func deletePressed(_ sender: UIButton) {
-        let stageView = self.getStageView(at: self.viewModel.pageIndex)
-        self.takeScreenshot(of: stageView)
+        self.saveCoverPage()
     }
     
     @objc func appLeftPressed(_ sender: UIButton) {
+        
+        self.saveCoverPage()
+        
         let index = self.viewModel.pageIndex
         let newIndex = index - 1
-        let page = FlashPageResult(JSON: ["index" : newIndex])!
+        let page = FLCardPageResult(JSON: ["index" : newIndex])!
         self.viewModel.pageList.insert(page, at: newIndex)
         
         guard let stackView = self.sliderView?.contentStackView else {return}
@@ -167,9 +169,12 @@ final class FLCreateViewController: UIViewController {
     }
     
     @objc func addRightPressed(_ sender: UIButton) {
+        
+        self.saveCoverPage()
+        
         let index = self.viewModel.pageIndex
         let newIndex = index + 1
-        let page = FlashPageResult(JSON: ["index" : newIndex])!
+        let page = FLCardPageResult(JSON: ["index" : newIndex])!
         self.viewModel.pageList.insert(page, at: newIndex)
         
         guard let stackView = self.sliderView?.contentStackView else {return}
@@ -262,8 +267,6 @@ final class FLCreateViewController: UIViewController {
             self.controlView = FLControlView.instanciateFromNib()
             self.controlView?.leftWidthButton.tag = FLTag.left.rawValue
             self.controlView?.rightWidthButton.tag = FLTag.right.rawValue
-            self.controlView?.leftWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
-            self.controlView?.rightWidthButton.addTarget(self, action: #selector(self.scaleWidthDraging(_:event:)), for: .touchDragInside)
             
             self.controlView?.isHidden = true
             
@@ -573,8 +576,6 @@ final class FLCreateViewController: UIViewController {
         }
     }
     
-    
-    
     func getStageView(at row: Int) -> FLStageView {
         //let stageView = self.sliderView?.contentStackView.arrangedSubviews[row]
         let stageView = self.stageViewList?[row]
@@ -582,6 +583,7 @@ final class FLCreateViewController: UIViewController {
     }
     
     func createElement(_ element: FlashElement, row: Int , media: FLMediaResult? = nil) {
+        self.selectedView?.isHiddenEditingTool = true
         if element.type == .text {
             self.createTextView(element, row: row)
             
@@ -663,7 +665,7 @@ final class FLCreateViewController: UIViewController {
                 self.openToolBar(tool: tool, iView: iView)
                 self.toolVC?.open(tool, isCreating: true)
             }
-            
+            self.selectedView = iView
             let size = iView.frame
             print("controlView width: \(size.width) ,controlView height: \(size.height)")
             
@@ -690,14 +692,13 @@ final class FLCreateViewController: UIViewController {
             iView.isCreateNew = true
             iView.textView?.isEditable = true
             iView.textView?.selectAll(self)//Auto select all test
-            iView.isSelected = true
             iView.textView?.delegate = self
             iView.textView?.becomeFirstResponder()
             iView.delegate = self
             
             self.openToolBar(tool: .text, iView: iView)
             self.toolVC?.open(.text, isCreating: true)
-            
+            self.selectedView = iView
             let size = iView.frame
             print("controlView width: \(size.width) ,controlView height: \(size.height)")
 //            if let controlView = self.controlView {
@@ -711,8 +712,8 @@ final class FLCreateViewController: UIViewController {
     }
     
     func mp4Convert(deviceVideoUrl: URL,  complete: @escaping (URL) -> Void) {
-        var videoConvertor = VideoConvertor(videoURL: deviceVideoUrl)
-        videoConvertor.encodeVideo { (progress) in
+        var videoCletertor = VideoConvertor(videoURL: deviceVideoUrl)
+        videoCletertor.encodeVideo { (progress) in
             DispatchQueue.main.async {
                 print("progress: \(progress)")
                 if progress == 1.0 {
@@ -767,86 +768,18 @@ final class FLCreateViewController: UIViewController {
         
     }
     
-    private var isScaleWidth = false
-    @objc func scaleWidthDraging(_ button:UIButton, event: UIEvent) {
-        
-        guard let touch = event.touches(for: button)?.first else { return }
-        let location = touch.location(in: button)
-        let previous = touch.previousLocation(in: button)
-        //scale X
-        //textViewDidChange
-        var deltaX:CGFloat
-        var deltaY:CGFloat
-        if button.tag == FLTag.left.rawValue {
-            deltaX = location.x - previous.x
-            deltaY = location.y - previous.y
-        } else {
-            deltaX = location.x + previous.x
-            deltaY = location.y + previous.y
-        }
-        print("******")
-        print("previous X: \(previous.x) Y:\(previous.y)")
-        print("location X: \(location.x) Y:\(location.y)")
-        print("deltaX: \(deltaX) Y:\(deltaY)")
-        //use only text
-        if let iView = self.selectedView, let textView = iView.textView {
-            //let textViewFrame = textView.frame
-            let iViewFrame = iView.frame
-            let deltaXConvert = deltaX * -1
-            //scale left+right
-            let newWidth = iViewFrame.width + (deltaXConvert * 2)
-            
-            let newX:CGFloat = iViewFrame.origin.x + deltaX
-            let iViewFrameUpdate = CGRect(x: newX, y: iViewFrame.origin.y, width: newWidth, height: iViewFrame.height)
-            
-            iView.frame = iViewFrameUpdate
-            
-            print("out iView:\(iView.frame)")
-            if !self.isScaleWidth {//for textview fix layout
-                self.isScaleWidth = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    UIView.animate(withDuration: 0.05, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations: {
-                        textView.frame = CGRect(x: 0, y: 0, width: iViewFrameUpdate.width, height: iViewFrameUpdate.height)
-                        //textView.frame = CGRect(x: 0, y: 0, width: iViewFrameUpdate.width, height: iViewFrameUpdate.width)
-                        //textView.contentSize.width
-                        
-                        self.updateTextviewHeight(iView)
-                    }, completion: { [weak self] (ended) in
-                        self?.isScaleWidth = false
-                        let factH = iView.frame.height - textView.frame.height
-                        print("factH:\(factH)")
-                        print("iView:\(iView.frame)")
-                        print("textView:\(textView.frame)")
-                        print("contentsize:\(textView.contentSize)")
-                    })
-                }
-                
-            }
-            //TODO: Do when touches end
-            //iView.textView?.contentSize = iViewFrameUpdate.size
-            //iView.textView?.frame.size = iViewFrameUpdate.size
-            //iView.textView?.textContainer
-            //button.center = CGPointMake(button.center.x + delta_x, button.center.y + delta_y);
-        }
-    }
-    
-    func updateTextviewHeight(_ iView:InteractView) {//frame vs bounds
+    func updateTextviewHeight(_ iView:InteractView) {
         guard let textView = iView.textView else { return }
-        let originalCenter = iView.center
+        let iViewFrame = iView.frame
         let textViewPoint = textView.frame.origin
-        let pading = FlashStyle.text.marginIView
-        let stageFrame = self.stageView?.frame ?? .zero
         
-        let textViewFrame = textView.frameFromContent()
+        let textViewFrame = textView.frameFromContent(fixWidth: iView.contentFixWidth)
         textView.bounds = textViewFrame
+        textView.setNeedsDisplay()
         
-        //let size =  textView.text.size(font: font!, maxWidth: stageFrame.width, maxHeight: stageFrame.height)
-        //print("size: \(size)")
-        
-        //let viewH = textView.systemLayoutSizeFitting(CGSize(width: textView.bounds.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
-        //textView.frame = CGRect(x: textViewPoint.x, y: textViewPoint.y, width: size.width, height: size.height)
-        //print("viewH:\(viewH)")
-        iView.bounds = CGRect(x: 0, y: 0, width: iView.bounds.width, height: textViewFrame.height + textViewPoint.y)
+        iView.bounds = CGRect(x: 0, y: 0, width: iView.bounds.width, height: textViewFrame.height + FlashStyle.text.marginIView)
+        iView.frame = CGRect(x: iViewFrame.origin.x, y: iViewFrame.origin.y, width: iView.bounds.width, height: textViewFrame.height + FlashStyle.text.marginIView)
+        iView.setNeedsDisplay()
         iView.setPosition(.topRight, for: .close)
         iView.setPosition(.topLeft, for: .none)
         iView.setPosition(.bottomLeft, for: .flip)
@@ -858,10 +791,10 @@ final class FLCreateViewController: UIViewController {
         iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
         iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
         
-        //TODO: some bug after \n
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            iView.setNeedsDisplay()
+        UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear) {
+            
+        } completion: { (done) in
+            
         }
         
         //let newSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
@@ -928,34 +861,26 @@ final class FLCreateViewController: UIViewController {
         present(picker, animated: true, completion: nil)
     }
     
-    func stageScreenShot(_ stage: UIView) -> UIImage? {
-        //Create the UIImage
-        UIGraphicsBeginImageContext(stage.frame.size)
-        view.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
+    func saveCoverPage() {
+        let stageView = self.getStageView(at: self.viewModel.pageIndex)
+        self.selectedView?.isHiddenEditingTool = true
+        
+        guard let screenshot = self.createScreenshot(of: stageView) else { return }
+        let coverImageBase64 = screenshot.jpegData(compressionQuality: 1)?.base64EncodedString()
+        self.viewModel.currentPageDetail?.coverImageBase64 = coverImageBase64
+        UIImageWriteToSavedPhotosAlbum(screenshot, self, #selector(self.imageWasSaved), nil)//TODO: remove when done
     }
     
-    @objc func actionButtonTapped() {
-        //TODO: save cover
-        if let stageView = self.stageView {
-            self.takeScreenshot(of: stageView)
-        }
-    }
-    
-    func takeScreenshot(of view: UIView) {
-        //TODO: clear select view
+    func createScreenshot(of view: FLStageView) -> UIImage? {
         let size = CGSize(width: view.bounds.width, height: view.bounds.height)
         UIGraphicsBeginImageContextWithOptions(size, false, 2)
-        
-        view.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let screenshot = UIGraphicsGetImageFromCurrentImageContext()!
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        view.layer.render(in: context)
+        guard let screenshot = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
         UIGraphicsEndImageContext()
-        
-        //send image(screenshot) to api save
-        UIImageWriteToSavedPhotosAlbum(screenshot, self, #selector(self.imageWasSaved), nil)
+        return screenshot
     }
+        
     
     @objc func imageWasSaved(_ image: UIImage, error: Error?, context: UnsafeMutableRawPointer) {
         if let error = error {
@@ -1037,7 +962,6 @@ extension FLCreateViewController: UINavigationControllerDelegate, UIImagePickerC
             if deviceSeconds > 60 {
                 PopupManager.showWarning("Your video is too powerful\n(Maximum length is 60 seconds)\nPlease upload again", at: self)
             } else {
-                let uuid = UUID().uuidString
                 self.mp4Convert(deviceVideoUrl: movieUrl) { [weak self] (mp4Url) in
                     DispatchQueue.main.async {
                         let asset = AVURLAsset(url: mp4Url)
@@ -1142,8 +1066,10 @@ extension FLCreateViewController: UIScrollViewDelegate {
 
 extension FLCreateViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
+        self.selectedView?.isHiddenEditingTool = true
+        
         if let iView = textView.superview as? InteractView {
-            iView.isSelected = true
+            iView.isHiddenEditingTool = false
             
             self.openToolBar(tool: .text, iView: iView)
             self.toolVC?.open(.text)
@@ -1158,6 +1084,11 @@ extension FLCreateViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         if let iView = textView.superview as? InteractView {
+            iView.updateLayout()
+            textView.updateLayout()
+            print("text: \(textView.text)")
+            textView.backgroundColor = .purple
+            iView.backgroundColor = .red
             self.updateTextviewHeight(iView)
         }
     }
@@ -1187,8 +1118,11 @@ extension FLCreateViewController: InteractViewDelegate {
 extension FLCreateViewController : CHTStickerViewDelegate {
     
     func stickerViewDidTap(_ stickerView: CHTStickerView!) {
+        self.selectedView?.isHiddenEditingTool = true
+        
         guard let iView = stickerView as? InteractView else { return }
         self.selectedView = iView
+        self.selectedView?.isHiddenEditingTool = false
         guard let element = iView.element else { return }
         if let textView = iView.textView {
             textView.isUserInteractionEnabled = true

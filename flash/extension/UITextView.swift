@@ -23,7 +23,7 @@ extension UITextView {
         //with from content
         var width = fixWidth ?? textViewSize.width
         let fix: CGFloat = 10
-        width = width + fix
+        //width = width + fix
         let height = self.systemLayoutSizeFitting(CGSize(width: width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
         print("textViewSize: \(textViewSize)")
         print("height: \(height)")

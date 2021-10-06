@@ -27,7 +27,7 @@ class FLQuizInfoViewController: UIViewController {
     
     private var quizInfoSheetView: FLQuizInfoProgressView?
     
-    var flashCardDetail: FlDetailResult?
+    var flashCardDetail: FlFlashDetailResult?
     var delegate: FLQuizInfoViewControllerDelegate?
     
     let userAnswerList = [
