@@ -785,10 +785,17 @@ class InteractTextView: UIView {
                 dict["src"] = imageSrc as AnyObject
             }
             
+        } else if element.type == .sticker {
+            if let stickerDict = element.createGraphicJSON() {
+                for (key, value) in stickerDict {
+                    dict[key] = value
+                }
+            }
         } else if element.type == .shape {
-            if let src = element.src { //TODO: get Graphic object after select
-                dict["src"] = src as AnyObject
-                dict["type"] = element.type.rawValue as AnyObject
+            if let shapeDict = element.createGraphicJSON() {
+                for (key, value) in shapeDict {
+                    dict[key] = value
+                }
             }
         } else if element.type == .video {
             if let videoSrc = element.mp4VideoUploade { //TODO: set after upload api

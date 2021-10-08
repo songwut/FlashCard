@@ -138,15 +138,32 @@ final class FLCreateViewController: UIViewController {
                 }
                 self?.manageStageFrame()
             }
+            self?.reloadNewCard(method: .get)
+        }
+    }
+    
+    func reloadNewCard(method: APIMethod, param:[String: AnyObject]? = nil) {
+        let card = self.viewModel.currentPage
+        self.viewModel.callAPICardDetail(card, method: method, param: param) { (cardDetail) in
             
-            self?.viewModel.callAPICurrentPageDetail(complete: {
-                ConsoleLog.show("callAPIPageDetail")
-            })
         }
     }
     
     @objc func deletePressed(_ sender: UIButton) {
         self.saveCoverPage()
+        let index = self.viewModel.pageIndex
+        guard let stage = getStageView(at: index) as? FLStageView else { return }
+        guard let cardPageJson = stage.createJSON() else { return }
+        ConsoleLog.show("cardPageJson:\(cardPageJson.json)")
+        self.reloadNewCard(method: .patch, param: cardPageJson)
+        
+        let tv = UITextView(frame: self.view.bounds)
+        tv.text = String(describing: cardPageJson)
+        self.view.addSubview(tv)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            tv.removeFromSuperview()
+        }
+        ConsoleLog.show("stage")
     }
     
     @objc func appLeftPressed(_ sender: UIButton) {
@@ -297,6 +314,9 @@ final class FLCreateViewController: UIViewController {
         swipeLeft.direction = .left
         stage.addGestureRecognizer(swipeLeft)
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapStage(_:)))
+        stage.addGestureRecognizer(tap)
+        
         return stage
     }
     
@@ -320,27 +340,42 @@ final class FLCreateViewController: UIViewController {
     
     func selectedViewIsHiddenTool(_ isHiddenEditingTool: Bool) {
         if let iView = self.selectedView as? InteractView {
-            iView.isHiddenEditingTool = true
+            iView.isHiddenEditingTool = isHiddenEditingTool
         } else if let iView = self.selectedView as? InteractTextView {
-            iView.isHiddenEditingTool = true
+            iView.isHiddenEditingTool = isHiddenEditingTool
         }
     }
     
-    @objc func swipeStage(_ gesture: UISwipeGestureRecognizer) {
+    var isReadyToSwipeStage = false {
+        didSet {
+            self.sliderView?.scrollView.isScrollEnabled = self.isReadyToSwipeStage
+        }
+    }
+    @objc func tapStage(_ gesture: UITapGestureRecognizer) {
         self.selectedViewIsHiddenTool(true)
-        self.saveCoverPage()
-        
-        switch gesture.direction {
-        case .right:
-            print("Swiped right")
+        self.isReadyToSwipeStage = true
+    }
+    
+    @objc func swipeStage(_ gesture: UISwipeGestureRecognizer) {
+        if self.isReadyToSwipeStage {
+            self.selectedViewIsHiddenTool(true)
+            self.saveCoverPage()
             
-            //TODO: go next page
-            break
-        case .left:
-            print("Swiped left")
-            break
-        default:
-            break
+            switch gesture.direction {
+            case .right:
+                print("Swiped right")
+                //TODO: go prv card
+                //check prv and go
+                
+                break
+            case .left:
+                print("Swiped left")
+                //TODO: go next card
+                //check next and go
+                break
+            default:
+                break
+            }
         }
     }
     
@@ -539,6 +574,7 @@ final class FLCreateViewController: UIViewController {
     
     func createNewGraphic(_ graphicType: FLGraphicMenu, graphic: FLGraphicResult) {
         let element = FlashElement.with(["type": graphicType.rawValue])!
+        element.graphic = graphic
         element.x = 50
         element.y = 50
         element.graphicType = graphicType
@@ -923,6 +959,7 @@ final class FLCreateViewController: UIViewController {
         
         guard let screenshot = self.createScreenshot(of: stageView) else { return }
         let coverImageBase64 = screenshot.jpegData(compressionQuality: 1)?.base64EncodedString()
+        stageView.coverImageBase64 = coverImageBase64
         self.viewModel.currentPageDetail?.coverImageBase64 = coverImageBase64
         //UIImageWriteToSavedPhotosAlbum(screenshot, self, #selector(self.imageWasSaved), nil)//TODO: remove when done
     }
@@ -1125,12 +1162,14 @@ extension FLCreateViewController: UITextViewDelegate {
         self.selectedViewIsHiddenTool(true)
         
         if let iView = textView.superview as? InteractView {
+            iView.element?.text = textView.text
             self.selectedView = iView
             iView.isHiddenEditingTool = false
             self.openToolBar(tool: .text, view: iView)
             self.toolVC?.open(.text)
             
         } else if let iView = textView.superview as? InteractTextView {
+            iView.element?.text = textView.text
             self.selectedView = iView
             iView.isHiddenEditingTool = false
             self.openToolBar(tool: .text, view: iView)
@@ -1156,9 +1195,11 @@ extension FLCreateViewController: UITextViewDelegate {
         if let iView = textView.superview as? InteractView {
             iView.updateLayout()
             textView.updateLayout()
-            print("text: \(textView.text)")
+            print("text: \(String(describing: textView.text))")
+            iView.element?.text = textView.text
             self.updateTextviewHeight(iView)
         } else if let iView = textView.superview as? InteractTextView {
+            iView.element?.text = textView.text
             //iView.updateLayout()
             //textView.updateLayout()
             /* TODO: solution for width from text */

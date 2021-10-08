@@ -102,6 +102,9 @@ class FlashElement: FLBaseResult {
     var type:FLType = .unknow
     var rawSize: CGSize?
     
+    //Graphic
+    var graphic: FLGraphicResult?
+    
     //text
     var text = ""
     var textColor = "000000"
@@ -134,6 +137,15 @@ class FlashElement: FLBaseResult {
         }
         
         return textStyle
+    }
+    
+    func createGraphicJSON() -> [String: AnyObject]? {
+        var dict = [String: AnyObject]()
+        guard let graphic = self.graphic else { return dict }
+        dict["type"] = self.type.rawValue as AnyObject
+        dict["code"] = graphic.code as AnyObject
+        dict["src"] = graphic.image as AnyObject
+        return dict
     }
     
     func createTextJSON() -> [String: AnyObject]? {

@@ -29,7 +29,7 @@ class FLRequest: APIRequest {
     var endPoint:EndPoint = .ugcFlashCreate
     var arguments = [String]()
     var selectList = [Int]()
-    var paramiter: [String: AnyObject]?
+    var parameter: [String: AnyObject]?
     var apiMethod: APIMethod = .get
     
     override var method: APIMethod {
@@ -45,7 +45,7 @@ class FLRequest: APIRequest {
     }
     
     override var params: [String: AnyObject]? {
-        if let param = self.paramiter {
+        if let param = self.parameter {
             return param
         }
         var dict = [String: AnyObject]()

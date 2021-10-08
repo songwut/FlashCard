@@ -116,7 +116,7 @@ struct FLCreator {
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
-        
+        iView.contentFixWidth = viewW
         iView.frame = frame
         iView.center = center
         textView.updateLayout()
@@ -168,6 +168,7 @@ struct FLCreator {
         let frame = CGRect(origin: CGPoint.zero, size: size)
         let iView = InteractView(contentView: imageview)!
         iView.type = .image
+        iView.element = element
         iView.frame = frame
         iView.center = center
         //iView.contentView = imageview

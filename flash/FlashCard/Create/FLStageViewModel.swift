@@ -41,30 +41,6 @@ class FLStageViewModel {
         return current?.first
     }
     
-    func prepareModel() {
-        //mock data
-        
-        if pageList.count == 0 {
-            //create new 1 + 1
-            let page0 = FLCardPageDetailResult(JSON: ["id" : 6])!
-            pageList.append(page0)
-            let page1 = FLCardPageDetailResult(JSON: ["id" : 2])!
-            pageList.append(page1)
-            
-            let page2 = FLCardPageDetailResult(JSON: ["id" : 3])!
-            pageList.append(page2)
-            let page3 = FLCardPageDetailResult(JSON: ["id" : 4])!
-            pageList.append(page3)
-            
-            self.currentPage = page0
-        } else {
-            //read api
-        }
-        
-    }
-    
-    
-    
     func callAPIMyFlashCard(method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
         let request = FLRequest()
         request.endPoint = .ugcFlashCreate
@@ -100,57 +76,31 @@ class FLStageViewModel {
 //        }
     }
     
-    func callAPICurrentPageDetail(complete: @escaping () -> ()) {
-        guard let page = self.currentPage else { return complete() }
+    func callAPICardDetail(_ currentCard: FLCardPageResult? ,
+                           method: APIMethod = .get ,
+                           param:[String: AnyObject]? = nil,
+                           complete: @escaping (_ page: FLCardPageDetailResult?) -> ()) {
+        
+        guard let card = currentCard else { return }
         let request = FLRequest()
+        request.apiMethod = method
+        request.parameter = param
         request.endPoint = .ugcCardListDetail
-        request.arguments = ["\(self.flashId)", "\(page.id)"]
+        request.arguments = ["\(self.flashId)", "\(card.id)"]
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLCardPageDetailResult?, isCache, error) in
             self?.currentPageDetail = result
-            complete()
+            complete(result)
         }
-//
-//        let fileName = "ugc-flash-card-id"
-//        JSON.read(fileName) { (object) in
-//            if let json = object as? [String : Any],
-//               let item = FLDetailResult(JSON: json) {
-//                detail = item
-//            }
-//            complete()
-//        }
-    }
-    
-    func callAPICardList(cardId: Int ,complete: @escaping (_ page: FLCardPageDetailResult) -> ()) {
-        //ugcCardIdDropbox
+
         
-        let request = FLRequest()
-        request.endPoint = .ugcCardListDetail
-        request.arguments = ["\(self.flashId)", "\(cardId)"]
-        // api array ??? bac need to fix
-        //https://develop.conicle.co/api/ugc/flash-card/16/card/72/?format=json
-//        API.requestForItems(request) { (body, list: [FLPageDetailResult]?, isCache, error) in
-//            if let l = list, let detail = l.first {
+//        let fileName = "ugc-flash-card-id-card-id"
+//        JSON.read(fileName) { (object) in
+//            if let dict = object as? [String : Any] {
+//                let detail = FLCardPageDetailResult(JSON: dict)!
 //                self.currentPageDetail = detail
 //                complete(detail)
 //            }
 //        }
-        
-        
-        // correct
-//        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLPageDetailResult?, isCache, error) in
-//            if let page = result {
-//                complete(page)
-//            }
-//        }
-        
-        let fileName = "ugc-flash-card-id-card-id"
-        JSON.read(fileName) { (object) in
-            if let dict = object as? [String : Any] {
-                let detail = FLCardPageDetailResult(JSON: dict)!
-                self.currentPageDetail = detail
-                complete(detail)
-            }
-        }
     }
     
     func save(element: FlashElement, at index: Int) {
@@ -184,7 +134,7 @@ class FLStageViewModel {
             //params["file"] = m.file as AnyObject
             params["filename"] = m.filename as AnyObject
         }
-        request.paramiter = params
+        request.parameter = params
         request.apiMethod = .post
         request.endPoint = .ugcCardIdDropbox
         request.arguments = ["\(self.flashId)", "\(card.id)"]

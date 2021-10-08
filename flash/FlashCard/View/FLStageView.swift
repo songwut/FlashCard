@@ -13,10 +13,10 @@ class FLStageView: UIView {
     var isEditor = false
     var viewModel: FLStageViewModel?
     var cover: UIImageView!
+    var coverImageBase64: String?
     
-    var flColor: FLColorResult? {
+    var flColor: FLColorResult = FLColorResult(JSON: ["code" : "color_01", "cl_code": "FFFFFF"])! {
         didSet {
-            guard let flColor = self.flColor else { return }
             self.backgroundColor = UIColor(flColor.hex)
         }
     }
@@ -45,14 +45,16 @@ class FLStageView: UIView {
            v.removeFromSuperview()
         }
         self.cover.imageUrl(page.image)
-        self.viewModel?.callAPICardList(cardId: page.id, complete: { (pageDetail: FLCardPageDetailResult) in
-            self.backgroundColor = UIColor(pageDetail.bgColor.hex)
-            for element in pageDetail.componentList {
+        self.viewModel?.callAPICardDetail(page) { [weak self] (cardDetail) in
+            guard let self = self else { return }
+            guard let cardDetail = cardDetail else { return }
+            self.flColor = cardDetail.bgColor
+            for element in cardDetail.componentList {
                 let v = self.createElement(element)
                 v?.tag = element.id
             }
             self.cover.isHidden = true
-        })
+        }
     }
     
     func createElement(_ element: FlashElement) -> UIView? {
@@ -121,6 +123,7 @@ class FLStageView: UIView {
     
     func createJSON() -> [String: AnyObject]? {
         var dict = [String: AnyObject]()
+        var data = [String: AnyObject]()
         
         var component = [[String: AnyObject]]()
         var sort = 1
@@ -144,14 +147,14 @@ class FLStageView: UIView {
             sort += 1
         }
         
-        var colorDict = [String: AnyObject]()
-        if let flColor = self.flColor {
-            colorDict["bg_color"] = flColor.createJSON() as AnyObject?
-        }
+        let colorDict = self.flColor.createJSON()
         
-        dict["bg_color"] = colorDict as AnyObject
-        dict["component"] = component as AnyObject?
+        data["bg_color"] = colorDict as AnyObject
+        data["component"] = component as AnyObject?
         
+        dict["data"] = data.json as AnyObject?
+        dict["image"] = self.coverImageBase64 as AnyObject?
+        dict["sort"] = 1 as AnyObject?
         return dict
     }
 }

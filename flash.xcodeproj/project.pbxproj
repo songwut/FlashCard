@@ -215,6 +215,7 @@
 		69763EF026FB79B500FE6490 /* MyNewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */; };
 		69763EF126FB79B500FE6490 /* MyNewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */; };
 		69763EF226FB79B500FE6490 /* MyNewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */; };
+		697694E52710A2C40051F003 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697694E42710A2C40051F003 /* Dictionary.swift */; };
 		697C0AB726CA30FB00CA1092 /* FLQuizView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 697C0AB626CA30FB00CA1092 /* FLQuizView.xib */; };
 		697C0AB826CA30FB00CA1092 /* FLQuizView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 697C0AB626CA30FB00CA1092 /* FLQuizView.xib */; };
 		697C0AB926CA30FB00CA1092 /* FLQuizView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 697C0AB626CA30FB00CA1092 /* FLQuizView.xib */; };
@@ -712,6 +713,7 @@
 		69763ED326FB184D00FE6490 /* CreatetFlashCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatetFlashCardView.swift; sourceTree = "<group>"; };
 		69763EDA26FB516A00FE6490 /* FLFlashEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLFlashEditorView.swift; sourceTree = "<group>"; };
 		69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNewMaterialView.swift; sourceTree = "<group>"; };
+		697694E42710A2C40051F003 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		697C0AB626CA30FB00CA1092 /* FLQuizView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLQuizView.xib; sourceTree = "<group>"; };
 		697C0ABD26CA310D00CA1092 /* FLQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLQuizView.swift; sourceTree = "<group>"; };
 		697C0ACE26CA336F00CA1092 /* FLChoiceResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLChoiceResult.swift; sourceTree = "<group>"; };
@@ -1313,6 +1315,7 @@
 			children = (
 				6968C7AA26A183FB00A712B0 /* UIFont.swift */,
 				698991AD26BA99CF008A41C1 /* Int.swift */,
+				697694E42710A2C40051F003 /* Dictionary.swift */,
 				6974C554270C5433009F60AA /* String.swift */,
 				695DDCB426EB533900B0194D /* Date.swift */,
 				695DDCBB26EB537800B0194D /* Formatter.swift */,
@@ -1856,6 +1859,7 @@
 				6974C5B1270D8E05009F60AA /* ImageLoaderService.swift in Sources */,
 				6985B1C526E5F1B000FEAD8F /* FLPostView.swift in Sources */,
 				696BBAEC26E8BE9A00E88B49 /* FLPostViewModel.swift in Sources */,
+				697694E52710A2C40051F003 /* Dictionary.swift in Sources */,
 				696ABCA626DFC496009527D3 /* FLSwipeView.swift in Sources */,
 				69B0FC3126A7F3230086E6C5 /* InteractView.swift in Sources */,
 				698990D226B81124008A41C1 /* FLItemResult.swift in Sources */,

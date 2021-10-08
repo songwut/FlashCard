@@ -68,7 +68,16 @@ class FLPlayerViewController: UIViewController {
             self?.hideLoading()
             guard let viewContainer = self?.viewContainer else { return }
             self?.manageStageFrame(viewContainer)
+            self?.loadCardPage()
         }
+    }
+    
+    func loadCardPage() {
+        guard let card = self.viewModel.currentPage else { return }
+        self.viewModel.callAPICardDetail(card) { (cardDetail) in
+            ConsoleLog.show("callAPICardDetail")
+        }
+        
     }
     
     func manageStageFrame(_ contentView: UIView) {

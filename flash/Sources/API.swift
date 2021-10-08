@@ -76,12 +76,13 @@ class API {
         if let data = responseData, data.count > 0 {
             do {
                 if let dict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    ConsoleLog.show("Response Body: \(String(describing: dict))")
                     let responseBody = ResponseBody(detail: dict["detail"] as? String, username: dict["username"] as? [String], password: dict["password"] as? [String], isRemember: dict["is_remember"] as? Bool, language: dict["language"] as? String, urlResponse: urlResponse, dict:dict, dictList:[])
                     //API.checkAuthorized(response: urlResponse, responseBody: responseBody)
                     return responseBody
                     
                 } else if let dictList = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] {
-                    print("Response Body: \(String(describing: dictList))")
+                    ConsoleLog.show("Response Body: \(String(describing: dictList))")
                     let responseBody = ResponseBody(detail: nil, username: nil, password: nil, isRemember: nil, language: nil, urlResponse: urlResponse, dict:nil, dictList:dictList)
                     //API.checkAuthorized(response: urlResponse, responseBody: responseBody)
                     return responseBody
