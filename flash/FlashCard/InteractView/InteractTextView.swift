@@ -81,8 +81,7 @@ class InteractTextView: UIView {
     }
     
     @objc func handleCloseGesture(recognizer: UITapGestureRecognizer) {
-        //self.delegate?.interacViewDidClose?(view: self)
-        self.removeFromSuperview()
+        self.delegate?.interacTextViewDidClose?(view: self)
     }
     
     var isEnableNone = false{
@@ -133,10 +132,10 @@ class InteractTextView: UIView {
         return tapGesture
     }()
     
-    lazy var rotateGesture: PanGesture = {
-        let tapGesture = PanGesture(target: self, action: #selector(handleRotateGesture))
+    lazy var rotateFrameGesture: PanGesture = {
+        let panGesture = PanGesture(target: self, action: #selector(handleRotateFrameGesture))
         //tapGesture.delegate = self
-        return tapGesture
+        return panGesture
     }()
     
     lazy var closeImageView: FLControlIcon = {
@@ -177,7 +176,7 @@ class InteractTextView: UIView {
         icon.contentMode = .center
         icon.backgroundColor = .clear
         icon.isUserInteractionEnabled = true
-        icon.addGestureRecognizer(self.rotateGesture)
+        icon.addGestureRecognizer(self.rotateFrameGesture)
         return icon
     }()
     
@@ -221,6 +220,10 @@ class InteractTextView: UIView {
         self.addGestureRecognizer(self.tapGesture)
         self.addGestureRecognizer(self.pinchGesture)
         
+        let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotationProcess(_:)))
+        //rotationGesture.delegate = self
+        self.addGestureRecognizer(rotationGesture)
+        
         self.setPosition(.topRight, handler: .close)
         self.setPosition(.bottomRight, handler: .rotate)
         self.setPosition(.bottomLeft, handler: .flip)
@@ -234,10 +237,6 @@ class InteractTextView: UIView {
         self.addSubview(self.noneImageView)
         self.addSubview(self.controlTextLeft)
         self.addSubview(self.controlTextRight)
-        
-        //let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotationProcess(_:)))
-        //rotationGesture.delegate = self
-        //self.addGestureRecognizer(rotationGesture)
 
         self.isHiddenEditingTool = false
         self.isEnableClose = true
@@ -428,7 +427,81 @@ class InteractTextView: UIView {
         return radians
     }
     
+    @objc func handleRotateFrameTextGesture(_ gesture: UIPanGestureRecognizer) {
+        let touchLocation = gesture.location(in: self.superview)
+        let center = self.center
+        let originalBounds = self.bounds
+        
+        switch gesture.state {
+        case .began:
+            deltaAngle = CGFloat(atan2f(Float(touchLocation.y - center.y), Float(touchLocation.x - center.x))) - CGAffineTransformGetAngle(self.transform)
+            initialBounds = self.bounds
+            initialDistance = getDistance(center, touchLocation)
+            break
+        case .changed:
+            /*
+            let angle = atan2f(Float(touchLocation.y - center.y), Float(touchLocation.x - center.x))
+              
+            let angleDiff = Float(deltaAngle) - angle
+            self.angle = CGFloat(-angleDiff)
+            self.transform = CGAffineTransform(rotationAngle: CGFloat(-angleDiff))
+            */
+            var scale = getDistance(center, touchLocation) / initialDistance
+            let min:CGFloat = [initialBounds.size.width, initialBounds.size.height].min() ?? 0.0
+            let minimumScale = CGFloat(self.minimumSize) / CGFloat(min)
+            let max: CGFloat = [scale, minimumScale].max() ?? 0
+            scale = max
+            
+            let scaledBounds = CGRectScale(initialBounds, scale, scale)
+            
+            self.hardScale = scale
+            
+            let tScale = CGAffineTransform(scaleX: scale, y: scale)
+            self.transform = tScale
+            self.closeImageView.transform = tScale.inverted()
+            self.flipImageView.transform = tScale.inverted()
+            self.rotateImageView.transform = tScale.inverted()
+            self.noneImageView.transform = tScale.inverted()
+            self.bounds = scaledBounds
+            self.setNeedsDisplay()
+            break
+        default:
+            break
+        }
+    }
+    
     @objc func rotationProcess(_ gesture: UIRotationGestureRecognizer) {
+            var originalRotation = CGFloat()
+            if gesture.state == .began {
+                print("sender.rotation: \(gesture.rotation)")
+                //gesture.rotation is radians
+                //view.rotation is degrees
+                let radians = self.getRadians(degrees: Double(self.rotation))
+                gesture.rotation = CGFloat(radians)
+                originalRotation = gesture.rotation
+                
+            } else if gesture.state == .changed {
+                let scale = CGAffineTransform(scaleX: self.currentScale.x, y: self.currentScale.y)
+                let newRotation = gesture.rotation + originalRotation
+                self.transform = scale.rotated(by: newRotation)
+                
+                
+                //let newRotation = gesture.rotation + originalRotation
+                //view.transform = CGAffineTransform(rotationAngle: newRotation)
+                
+                let degrees = self.getDegreesRotation()
+                print("changed degrees: \(degrees)")
+                
+            } else if gesture.state == .ended {
+                // Save the last rotation
+                let degrees = self.getDegreesRotation()
+                print("ended degrees: \(degrees)")
+                self.rotation = Float(degrees)
+                gesture.rotation = 0
+            }
+    }
+    
+    @objc func rotationProcess1(_ gesture: UIRotationGestureRecognizer) {
         let view = self
         var originalRotation = CGFloat()
         if gesture.state == .began {
@@ -466,7 +539,9 @@ class InteractTextView: UIView {
         }
     }
     
-    @objc func handleRotateGesture(_ gesture: UIPanGestureRecognizer) {
+    //rotationProcess use for TextView zoom/scale look good
+    //handleRotateFrameGesture not work for font scale
+    @objc func handleRotateFrameGesture(_ gesture: UIPanGestureRecognizer) {
         let touchLocation = gesture.location(in: self.superview)
         let center = self.center
         let originalBounds = self.bounds

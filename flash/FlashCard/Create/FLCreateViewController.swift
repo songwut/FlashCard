@@ -820,29 +820,36 @@ final class FLCreateViewController: UIViewController {
         let iViewFrame = iView.frame
         let textViewPoint = textView.frame.origin
         
-        let textViewFrame = textView.frameFromContent(fixWidth: iView.contentFixWidth)
-        textView.bounds = textViewFrame
-        //textView.setNeedsDisplay()
-        let iViewWidth = textViewFrame.width + FlashStyle.text.marginIView
-        let iViewHeight = textViewFrame.height + FlashStyle.text.marginIView
-        iView.bounds = CGRect(x: 0, y: 0, width: iViewWidth, height: iViewHeight)
-        iView.center = iViewCenter//if use set frame will get bug
-        //iView.frame = CGRect(x: iViewFrame.origin.x, y: iViewFrame.origin.y, width: iViewWidth, height: iViewHeight)
-        //iView.setNeedsDisplay()
-        iView.setPosition(.topRight, handler: .close)
-        iView.setPosition(.topLeft, handler: .none)
-        iView.setPosition(.bottomLeft, handler: .flip)
-        iView.setPosition(.bottomRight, handler: .rotate)
-        
-        //update icon tool after bounds change
-        iView.setImage(UIImage(named: "fl_delete"), handler: .close)
-        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .none)
-        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .flip)
-        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .rotate)
-        
         UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear) {
+            let textViewFrame = textView.frameFromContent(fixWidth: iView.contentFixWidth)
+            textView.bounds = textViewFrame
+            //textView.setNeedsDisplay()
+            let iViewWidth = textViewFrame.width + FlashStyle.text.marginIView
+            let iViewHeight = textViewFrame.height + FlashStyle.text.marginIView
+            iView.bounds = CGRect(x: 0, y: 0, width: iViewWidth, height: iViewHeight)
+            iView.center = iViewCenter//if use set frame will get bug
+            //iView.frame = CGRect(x: iViewFrame.origin.x, y: iViewFrame.origin.y, width: iViewWidth, height: iViewHeight)
+            //iView.setNeedsDisplay()
+            iView.updateLayout()
             
+            //Step 2 for update current frame
         } completion: { (done) in
+            
+            UIView.animate(withDuration: 0.1) {
+                iView.setPosition(.topRight, handler: .close)
+                iView.setPosition(.topLeft, handler: .none)
+                iView.setPosition(.bottomLeft, handler: .flip)
+                iView.setPosition(.bottomRight, handler: .rotate)
+                
+                //update icon tool after bounds change
+                iView.setImage(UIImage(named: "fl_delete"), handler: .close)
+                iView.setImage(UIImage(named: "ic-fl-frame"), handler: .none)
+                iView.setImage(UIImage(named: "ic-fl-frame"), handler: .flip)
+                iView.setImage(UIImage(named: "ic-fl-frame"), handler: .rotate)
+            } completion: { (done) in
+                
+            }
+
             
         }
         
@@ -1140,13 +1147,16 @@ extension FLCreateViewController: UITextViewDelegate {
         //self.selectedViewIsHiddenTool(true)
     }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        ConsoleLog.show("replacementText: \(text)")
+        return true
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         if let iView = textView.superview as? InteractView {
             iView.updateLayout()
             textView.updateLayout()
             print("text: \(textView.text)")
-            textView.backgroundColor = .purple
-            iView.backgroundColor = .red
             self.updateTextviewHeight(iView)
         } else if let iView = textView.superview as? InteractTextView {
             //iView.updateLayout()
@@ -1158,10 +1168,9 @@ extension FLCreateViewController: UITextViewDelegate {
 //            let width = string.size(font: font).width
 //            print("contentFixWidth: \(width)")
 //            iView.contentFixWidth = width//TODO: bug text growing
-            
-            textView.backgroundColor = .purple
-            iView.backgroundColor = .red
-            self.updateTextviewHeight(iView)
+            DispatchQueue.main.async {
+                self.updateTextviewHeight(iView)
+            }
         }
     }
     
@@ -1210,7 +1219,6 @@ extension FLCreateViewController: InteractTextViewDelegate {
         if self.toolVC?.viewModel.tool != .menu {
             self.toolVC?.closePressed(nil)
         }
-        self.controlView?.isHidden = true
     }
     
     func interacTextViewDidBeginRotating(view: InteractTextView) {

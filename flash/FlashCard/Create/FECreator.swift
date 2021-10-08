@@ -125,8 +125,8 @@ struct FLCreator {
         iView.scale = (scale == 1.0) ? 1.0 : scale
         iView.update(scale: scale)
         iView.update(rotation: element.rotation)
-        iView.backgroundColor = .red
-        textView.backgroundColor = .purple
+        iView.backgroundColor = UIColor.purple.withAlphaComponent(0.5)
+        textView.backgroundColor = UIColor.purple.withAlphaComponent(0.3)
         stage.addSubview(iView)
         return iView
     }
