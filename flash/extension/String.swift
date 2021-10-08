@@ -9,6 +9,10 @@ import Foundation
 
 extension String {
     
+    func size(font: UIFont) -> CGSize {
+        return (self as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
+    }
+    
     func size(font: UIFont, maxWidth: CGFloat, maxHeight: CGFloat) -> CGSize {
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font

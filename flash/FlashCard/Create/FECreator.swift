@@ -36,26 +36,35 @@ struct FLCreator {
         self.stageView = stage
     }
     
-    func createText(_ element:FlashElement ,in stage: FLStageView) -> InteractView {
+    func createText(_ element:FlashElement ,in stage: FLStageView) -> InteractTextView {
         let viewX = (stage.frame.width * CGFloat(element.x) / 100)
         let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
         var viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
         var viewH = ((stage.frame.height * CGFloat(element.width)) / 100)
         
         let font:UIFont = element.manageFont()
-        
         let scale = (element.scale + Float(stage.stageRatio)) - 1.0
         
-        let textView = FLTextView()
+        let iView = InteractTextView.instanciateFromNib()
+        iView.createTextIView()
+        iView.outlineBorderColor = .black
+        iView.setImage(UIImage(named: "fl_delete"), handler: .close)
+        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .none)
+        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .flip)
+        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .rotate)
+        iView.setHandlerSize(Int(FlashStyle.text.marginIView))
+        
+        let textView = iView.textView!
+        //let textView = FLTextView()
         textView.contentMode = .scaleAspectFill
-        textView.minimumZoomScale = 0.1
+        textView.minimumZoomScale = 1.0
         textView.text = element.text
         textView.textAlignment = element.flAlignment.alignment()
         textView.textColor = UIColor(element.textColor)
         textView.font = font
         textView.isEditable = true
         textView.isScrollEnabled = false
-        textView.sizeToFit()
+        //textView.sizeToFit()
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         var atb: [NSAttributedString.Key:Any] = [
@@ -63,7 +72,7 @@ struct FLCreator {
             .foregroundColor: textView.textColor ?? .black,
             .paragraphStyle: {
                 let paragraph = NSMutableParagraphStyle()
-                paragraph.lineSpacing = 0
+                paragraph.lineSpacing = FlashStyle.text.lineHeight
                 return paragraph
             }()
         ]
@@ -91,7 +100,8 @@ struct FLCreator {
         viewW = textViewSize.width + margin
         viewH = textViewSize.height + margin
         
-        let iView = InteractView(contentView: textView)!
+        
+        //let iView1 = InteractView(contentView: textView)!
         iView.type = .text
         //iView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: viewW, height: viewW))
         
@@ -109,11 +119,14 @@ struct FLCreator {
         
         iView.frame = frame
         iView.center = center
-        iView.textView = textView
+        textView.updateLayout()
+        //iView.textView = textView
         iView.element = element
         iView.scale = (scale == 1.0) ? 1.0 : scale
         iView.update(scale: scale)
         iView.update(rotation: element.rotation)
+        iView.backgroundColor = .red
+        textView.backgroundColor = .purple
         stage.addSubview(iView)
         return iView
     }

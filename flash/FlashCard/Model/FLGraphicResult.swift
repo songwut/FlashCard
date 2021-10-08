@@ -30,6 +30,13 @@ class FLGraphicResult: FLBaseResult {
     var imageBase64: String?
     var uiimage:UIImage?
     
+    func createJSON() -> [String: AnyObject]? {
+        var dict = [String: AnyObject]()
+        dict["code"] = code as AnyObject
+        dict["src"] = image as AnyObject
+        return dict
+    }
+    
     override func mapping(map: Map) {
         super.mapping(map: map)
         code           <- map["code"]
@@ -59,6 +66,13 @@ class FLColorPageResult: FLBaseResult {
 class FLColorResult: FLBaseResult {
     var code = ""
     var hex = "FFFFFF"
+    
+    func createJSON() -> [String: AnyObject]? {
+        var dict = [String: AnyObject]()
+        dict["code"] = code as AnyObject
+        dict["cl_code"] = hex as AnyObject
+        return dict
+    }
     
     override func mapping(map: Map) {
         super.mapping(map: map)

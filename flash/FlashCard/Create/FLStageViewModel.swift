@@ -32,7 +32,7 @@ class FLStageViewModel {
     var pageIndex = 0
     var currentPage: FLCardPageResult?
     var currentPageDetail: FLCardPageDetailResult?
-    var flashId = 16
+    var flashId = 6
     
     func getQuizContent() -> FlashElement? {
         let current = self.currentPageDetail?.componentList.filter({ (flash) -> Bool in
@@ -46,7 +46,7 @@ class FLStageViewModel {
         
         if pageList.count == 0 {
             //create new 1 + 1
-            let page0 = FLCardPageDetailResult(JSON: ["id" : 102])!
+            let page0 = FLCardPageDetailResult(JSON: ["id" : 6])!
             pageList.append(page0)
             let page1 = FLCardPageDetailResult(JSON: ["id" : 2])!
             pageList.append(page1)

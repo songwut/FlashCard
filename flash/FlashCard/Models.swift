@@ -56,8 +56,8 @@ enum FLTextAlignment: String {
     case left = "left"
     case center = "center"
     case right = "right"
-    case justified = "justified"
-    case natural = "natural"
+    case justified = "justify"
+    //case natural = "natural"
     
     func alignment() -> NSTextAlignment {
         switch self {
@@ -139,10 +139,10 @@ class FlashElement: FLBaseResult {
     func createTextJSON() -> [String: AnyObject]? {
         var dict = [String: AnyObject]()
         dict["text"] = self.text as AnyObject
-        dict["textColor"] = self.textColor as AnyObject
+        dict["text_color"] = self.textColor as AnyObject
         dict["font_size"] = self.fontSize as AnyObject
-        dict["text_alignment"] = self.flAlignment.rawValue as AnyObject//"left" center" "right" "justified"
-        dict["text_style"] = self.createStyleList() as AnyObject
+        dict["text_alignment"] = self.flAlignment.rawValue as AnyObject//["left", center", "right", "justified"]
+        dict["text_style"] = self.createStyleList() as AnyObject //["bold", "italic", "underline"]
         return dict
     }
     

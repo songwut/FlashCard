@@ -61,10 +61,21 @@ class FLToolViewController: UIViewController {
         return UIDevice.isIpad() ? .all : .portrait
     }
     
+    func getElement() -> FlashElement? {
+        if let v = self.viewModel.view as? InteractView {
+            return v.element
+            
+        } else if let v = self.viewModel.view as? InteractTextView {
+            return v.element
+        } else {
+            return nil
+        }
+    }
+    
     func setup(_ setup: FLToolViewSetup) {
         self.titleLabel.text = setup.tool.title()
         self.viewModel.tool = setup.tool
-        self.viewModel.iView = setup.iView
+        self.viewModel.view = setup.view
         
 //        if self.isToolReady {
 //            self.open(setup.tool)
@@ -227,14 +238,14 @@ class FLToolViewController: UIViewController {
     }
     
     func createTextTool(_ colorList: [FLColorResult]) {
-        self.textColorView.selectedColor = self.viewModel.iView?.element?.textColor ?? "ffffff"
+        self.textColorView.selectedColor = self.getElement()?.textColor ?? "ffffff"
         self.textColorView.didSelectedColor = self.didChangeTextColor
         self.textStackView.addArrangedSubview(self.textColorView)
         self.textColorView.isHidden = true
         self.textColorView.setup(colorList: colorList)
         self.updateViewLayout(self.textColorView)
         
-        self.textStyleView.styleList = self.viewModel.iView?.element?.flTextStyle ?? []
+        self.textStyleView.styleList = self.getElement()?.flTextStyle ?? []
         self.textStyleView.didChangeTextAlignment = self.didChangeTextAlignment
         self.textStyleView.didChangeTextStyle = self.didChangeTextStyle
         self.textStackView.addArrangedSubview(self.textStyleView)
@@ -269,7 +280,7 @@ class FLToolViewController: UIViewController {
     }
     
     func open(_ tool: FLTool, isCreating: Bool = false) {
-        let iView = self.viewModel.iView
+        let iView = self.viewModel.view
         self.viewModel.tool = tool
         self.titleLabel.text = tool.title()
         
@@ -369,38 +380,43 @@ class FLToolViewController: UIViewController {
         //resignFirstResponder > textViewDidEndEditing
         //make isSelected = false
         //need to set iView still selecting
-        if let textView = self.viewModel.iView?.textView {
-            self.viewModel.iView?.isCreateNew = false
-            if isActive, !textView.isFirstResponder {
-                // back to keyboard
-                if let text = textView.text, menu == .keyboard {
-                    //let range = NSRange(textView.text)
-                    let start = textView.beginningOfDocument
-                    let end = textView.endOfDocument
-                    textView.selectedTextRange = textView.textRange(from: start, to: end)!
-                    textView.becomeFirstResponder()
-                    print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
-                }
-                //
-            } else if isActive {
+        var textView: UITextView!
+        if let iViewText = self.viewModel.view as? InteractTextView {
+            textView = iViewText.textView
+            
+        } else if let iView = self.viewModel.view as? InteractView {
+            iView.isCreateNew = false
+            iView.isSelected = true
+            textView = iView.textView!
+        }
+        
+        if isActive, !textView.isFirstResponder {
+            // back to keyboard
+            if let text = textView.text, menu == .keyboard {
+                //let range = NSRange(textView.text)
+                let start = textView.beginningOfDocument
+                let end = textView.endOfDocument
+                textView.selectedTextRange = textView.textRange(from: start, to: end)!
+                textView.becomeFirstResponder()
                 print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
-                //ignore resignFirstResponder
-            } else {
-                //textView.selectedTextRange = nil
-                if textView.isFirstResponder {
-                    //case still editing and goto style, color
-                    //dismiss keyboard
-                    textView.resignFirstResponder()
-                    print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
-                    
-                } else {
-                    
-                    print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
-                }
+            }
+            //
+        } else if isActive {
+            print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
+            //ignore resignFirstResponder
+        } else {
+            //textView.selectedTextRange = nil
+            if textView.isFirstResponder {
+                //case still editing and goto style, color
+                //dismiss keyboard
+                textView.resignFirstResponder()
+                print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
                 
+            } else {
+                
+                print("resetTextView select view \(isActive) : isFirstResponder\(textView.isFirstResponder)")
             }
             
-            self.viewModel.iView?.isSelected = true
         }
     }
     

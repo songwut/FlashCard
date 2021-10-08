@@ -10,6 +10,7 @@ import SVGKit
 import AVKit
 
 enum FLInteractViewHandler: Int {
+    case none
     case close
     case rotate
     case flip
@@ -293,11 +294,11 @@ class InteractView: CHTStickerView {
         }
     }
     
-    func createJSON() -> [String: AnyObject]? {
+    func createJSON() -> [String: AnyObject] {
         
         var dict = [String: AnyObject]()
-        guard let stage = self.superview as? FLStageView else { return nil }
-        guard let element = self.element else { return nil }
+        guard let stage = self.superview as? FLStageView else { return dict }
+        guard let element = self.element else { return dict }
         let marginIView = FlashStyle.text.marginIView
         let size = self.bounds.size
         let contentSize = CGSize(width: size.width - marginIView, height: size.height - marginIView)
@@ -314,8 +315,8 @@ class InteractView: CHTStickerView {
         
         dict["width"] = percentWidth as AnyObject
         dict["height"] = percentHeight as AnyObject
-        dict["center_x"] = centerX as AnyObject
-        dict["center_x"] = centerY as AnyObject
+        dict["position_x"] = centerX as AnyObject
+        dict["position_y"] = centerY as AnyObject
         dict["rotation"] = angle as AnyObject
         dict["scale"] = scale as AnyObject
         dict["type"] = type as AnyObject
@@ -328,6 +329,7 @@ class InteractView: CHTStickerView {
         } else if element.type == .shape {
             if let src = element.src { //TODO: get Graphic object after select
                 dict["src"] = src as AnyObject
+                dict["type"] = element.type.rawValue as AnyObject
             }
         } else if element.type == .video {
             if let videoSrc = element.mp4VideoUploade { //TODO: set after upload api
@@ -512,9 +514,9 @@ class InteractView1: UIView, UIGestureRecognizerDelegate {
             self.addSubview(contentView)
             
             // Setup editing handlers
-            self.setPosition(position: .topRight, handler: .close)
-            self.setPosition(position: .bottomRight, handler: .rotate)
-            self.setPosition(position: .bottomLeft, handler: .flip)
+//            self.setPosition(position: .topRight, handler: .close)
+//            self.setPosition(position: .bottomRight, handler: .rotate)
+//            self.setPosition(position: .bottomLeft, handler: .flip)
             self.addSubview(self.closeImageView)
             self.addSubview(self.rotateImageView)
             self.addSubview(self.flipImageView)
@@ -602,118 +604,4 @@ class InteractView1: UIView, UIGestureRecognizerDelegate {
     var minimumSize: Int = 0//= [self.minimumSize, self.defaultMinimumSize].max() ?? 0
 }
 
-extension InteractView1 {
-    
-    var currentScale: CGPoint {
-        let a = transform.a
-        let b = transform.b
-        let c = transform.c
-        let d = transform.d
-        
-        let sx = sqrt(a * a + b * b)
-        let sy = sqrt(c * c + d * d)
-        
-        return CGPoint(x: sx, y: sy)
-    }
-    
-    func setIcon(_ image: UIImage?, handler: FLInteractViewHandler) {
-        guard let icon = image  else { return }
-        switch handler {
-        case .close:
-            self.closeImageView.image = icon
-            break
-        case .rotate:
-            self.rotateImageView.image = icon
-            break
-        case .flip:
-            self.flipImageView.image = icon
-            break
-        }
-    }
-    
-    func setPosition(position: FLInteractViewPosition, handler: FLInteractViewHandler) {
-        guard let contentView = self.contentView else { return }
-        let origin = contentView.frame.origin
-        let size = contentView.frame.size
-        var handlerView: FLControlIcon
-        
-        switch handler {
-        case .close:
-            handlerView = self.closeImageView
-            break
-            
-        case .rotate:
-            handlerView = self.rotateImageView
-            break
-            
-        case .flip:
-            handlerView = self.flipImageView
-            break
-        }
-        
-        switch position {
-        case .topLeft:
-            handlerView.center = origin
-            handlerView.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
-            break
-            
-        case .topRight:
-            handlerView.center = CGPoint(x: origin.x + size.width, y: origin.y)
-            handlerView.autoresizingMask = [.flexibleLeftMargin, .flexibleBottomMargin]
-            break
-            
-        case .bottomLeft:
-            handlerView.center = CGPoint(x: origin.x, y: origin.y + size.height)
-            handlerView.autoresizingMask = [.flexibleRightMargin, .flexibleTopMargin]
-            break
-            
-        case .bottomRight:
-            handlerView.center = CGPoint(x: origin.x + size.width, y: origin.y + size.height)
-            handlerView.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
-            break
-        default :
-        break
-        
-        }
-        
-        handlerView.position = position
-    }
-    
-    
-    
-    func setHandlerSize(size: Int) {
-        if (size <= 0) {
-            return
-        }
-        guard let contentView = self.contentView else { return }
-        defaultInset = Int(size / 2)
-        defaultMinimumSize = 4 * defaultInset
-        self.minimumSize = [self.minimumSize, defaultMinimumSize].max() ?? 0
-        
-        
-        let originalCenter = self.center
-        let originalTransform = self.transform
-        var frame = contentView.frame
-        frame = CGRect(x: 0, y: 0, width: Int(frame.size.width) + defaultInset * 2, height: Int(frame.size.height) + defaultInset * 2);
-        
-        self.contentView?.removeFromSuperview()
-        
-        self.transform = .identity
-        self.frame = frame
-        
-        contentView.center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-        addSubview(contentView)
-        self.sendSubviewToBack(contentView)
-        
-        let handlerFrame = CGRect(x: 0, y: 0, width: defaultInset * 2, height: defaultInset * 2);
-        self.closeImageView.frame = handlerFrame
-        self.setPosition(position: self.closeImageView.position, handler: .close)
-        self.rotateImageView.frame = handlerFrame
-        self.setPosition(position: self.rotateImageView.position, handler: .rotate)
-        self.flipImageView.frame = handlerFrame
-        self.setPosition(position: self.flipImageView.position, handler: .flip)
-        
-        self.center = originalCenter
-        self.transform = originalTransform
-    }
-}
+

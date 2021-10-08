@@ -25,6 +25,67 @@ class FLQuizView: UIView {
         return question.choiceList.count
     }
     
+    var question: FLQuestionResult? {
+        didSet {
+            self.titleLabel.text = "Question :"
+            self.questionTextView.font = FontHelper.getFontSystem(.paragraph, font: .text)
+            self.questionTextView.placeholder = "Write your question."
+            self.questionTextView.placeholderColor = .white
+            
+            self.questionTextView.maxLength = FlashStyle.maxCharQuestion
+            
+            guard let question = self.question else { return }
+            self.choiceStackView.removeAllArranged()
+            for index in 0..<question.choiceList.count {
+                let choice = question.choiceList[index]
+                let choiceView = self.createChoiceView(choice)
+                choiceView.checkButton.tag = index + 1
+                self.choiceStackView.addArrangedSubview(choiceView)
+            }
+        }
+    }
+    
+    func createJSON() -> [String: AnyObject] {
+        
+        var dict = [String: AnyObject]()
+        guard let stage = self.superview as? FLStageView else { return dict }
+        guard let question = self.question else { return dict }
+        let marginIView = FlashStyle.text.marginIView
+        let size = self.bounds.size
+        let contentSize = CGSize(width: size.width - marginIView, height: size.height - marginIView)
+        let percentWidth = (contentSize.width / stage.bounds.width) * 100
+        let percentHeight = (contentSize.height / stage.bounds.height) * 100
+        
+        let elementCenter = self.center
+        let centerX = (elementCenter.x / stage.bounds.width) * 100
+        let centerY = (elementCenter.y / stage.bounds.height) * 100
+        
+        dict["width"] = percentWidth as AnyObject
+        dict["height"] = percentHeight as AnyObject
+        dict["position_x"] = centerX as AnyObject
+        dict["position_y"] = centerY as AnyObject
+        dict["rotation"] = 0 as AnyObject
+        dict["scale"] = 1 as AnyObject
+        dict["type"] = "question" as AnyObject
+        
+        var detail = [String: AnyObject]()
+        var choiceListJson = [[String: AnyObject]]()
+        for choice in question.choiceList {
+            var choiceJson = [String: AnyObject]()
+            choiceJson["value"] = choice.value as AnyObject
+            choiceJson["is_answer"] = choice.isAnswer as AnyObject?
+            choiceListJson.append(choiceJson)
+        }
+        
+        //detail["id"] = question.id as AnyObject//back gen
+        detail["value"] = (self.questionTextView.text ?? "") as AnyObject
+        detail["choice"] = choiceListJson as AnyObject
+        
+        dict["detail"] = detail as AnyObject
+        
+        return dict
+    }
+    
     func createNewUI(question: FLQuestionResult?) {
         guard let q = question else { return }
         self.isCreate = true
@@ -50,26 +111,6 @@ class FLQuizView: UIView {
         })
         choiceView.checkButton.addTarget(self, action: #selector(self.choicePressed(_:)), for: .touchUpInside)
         return choiceView
-    }
-    
-    var question: FLQuestionResult? {
-        didSet {
-            self.titleLabel.text = "Question :"
-            self.questionTextView.font = FontHelper.getFontSystem(.paragraph, font: .text)
-            self.questionTextView.placeholder = "Write your question."
-            self.questionTextView.placeholderColor = .white
-            
-            self.questionTextView.maxLength = FlashStyle.maxCharQuestion
-            
-            guard let question = self.question else { return }
-            self.choiceStackView.removeAllArranged()
-            for index in 0..<question.choiceList.count {
-                let choice = question.choiceList[index]
-                let choiceView = self.createChoiceView(choice)
-                choiceView.checkButton.tag = index + 1
-                self.choiceStackView.addArrangedSubview(choiceView)
-            }
-        }
     }
     
     @objc func choicePressed(_ sender: UIButton) {

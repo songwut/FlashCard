@@ -14,6 +14,13 @@ class FLStageView: UIView {
     var viewModel: FLStageViewModel?
     var cover: UIImageView!
     
+    var flColor: FLColorResult? {
+        didSet {
+            guard let flColor = self.flColor else { return }
+            self.backgroundColor = UIColor(flColor.hex)
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.flCreator = FLCreator(stage: self)
@@ -103,12 +110,48 @@ class FLStageView: UIView {
         return iView
     }
     
-    func createTextView(_ element: FlashElement) -> InteractView {
+    func createTextView(_ element: FlashElement) -> InteractTextView {
         
         let stageView = self
         let textElement = self.flCreator.createText(element, in: stageView)
         
         textElement.textView?.isEditable = false
         return textElement
+    }
+    
+    func createJSON() -> [String: AnyObject]? {
+        var dict = [String: AnyObject]()
+        
+        var component = [[String: AnyObject]]()
+        var sort = 1
+        for view in self.subviews {
+            if let iView = view as? InteractView {
+                let dictElement = iView.createJSON()
+                ConsoleLog.show("iView: \(dictElement)")
+                component.append(dictElement)
+                
+            } else if let iViewText = view as? InteractTextView {
+                let dictElement = iViewText.createJSON()
+                component.append(dictElement)
+                ConsoleLog.show("iViewText: \(dictElement)")
+                
+            } else if let quizView = view as? FLQuizView {
+                let dictElement = quizView.createJSON()
+                component.append(dictElement)
+                ConsoleLog.show("quizView: \(dictElement)")
+            }
+            ConsoleLog.show("^^^component: \(sort)\n")
+            sort += 1
+        }
+        
+        var colorDict = [String: AnyObject]()
+        if let flColor = self.flColor {
+            colorDict["bg_color"] = flColor.createJSON() as AnyObject?
+        }
+        
+        dict["bg_color"] = colorDict as AnyObject
+        dict["component"] = component as AnyObject?
+        
+        return dict
     }
 }

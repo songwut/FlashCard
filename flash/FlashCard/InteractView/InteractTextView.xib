@@ -14,8 +14,8 @@
             <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="j7n-WZ-Pcy">
-                    <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="j7n-WZ-Pcy" customClass="FLTextView" customModule="flash" customModuleProvider="target">
+                    <rect key="frame" x="15" y="15" width="270" height="270"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                     <color key="textColor" systemColor="labelColor"/>
@@ -26,16 +26,16 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="j7n-WZ-Pcy" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="cKw-MJ-wTN"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="j7n-WZ-Pcy" secondAttribute="trailing" id="mTx-GW-CLm"/>
-                <constraint firstItem="j7n-WZ-Pcy" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="soA-Xn-77Z"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="j7n-WZ-Pcy" secondAttribute="bottom" id="ztB-eB-HEb"/>
+                <constraint firstItem="j7n-WZ-Pcy" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="cKw-MJ-wTN"/>
+                <constraint firstAttribute="trailing" secondItem="j7n-WZ-Pcy" secondAttribute="trailing" constant="15" id="mTx-GW-CLm"/>
+                <constraint firstItem="j7n-WZ-Pcy" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="soA-Xn-77Z"/>
+                <constraint firstAttribute="bottom" secondItem="j7n-WZ-Pcy" secondAttribute="bottom" constant="15" id="ztB-eB-HEb"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="textViewInSide" destination="j7n-WZ-Pcy" id="Pmo-8b-RhZ"/>
+                <outlet property="textView" destination="j7n-WZ-Pcy" id="uTT-fW-pyD"/>
             </connections>
             <point key="canvasLocation" x="32" y="40"/>
         </view>

@@ -10,13 +10,13 @@ import Foundation
 struct FLToolViewSetup {
     var title: String?
     var tool: FLTool
-    var iView: InteractView?
+    var view: UIView?
 }
 
 class FLToolViewModel {
     var tool: FLTool = FLTool.menu
     var graphicMenu: FLGraphicMenu = .shape
-    var iView: InteractView?
+    var view: UIView?
     var graphicList = [FLGraphicResult]()
     private var colorList = [FLColorResult]()
     
