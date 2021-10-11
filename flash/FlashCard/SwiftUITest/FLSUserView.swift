@@ -28,7 +28,7 @@ struct FLSUserView: View {
                     })
                 
                 Text(user.name)
-                    .font(.getFontSystem(13, font: .text))
+                    .font(.font(13, font: .text))
             })
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding([.leading], 16)

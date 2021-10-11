@@ -53,7 +53,7 @@ struct FLInfoView: View {
                 delegate?.didOpenInfo()
             }, label: {
                 Image("info")
-                    .foregroundColor(Color(UIColor.config.secondary50()))
+                    .foregroundColor(Color.config_secondary50())
             })
             .frame(width: 42, height: 42, alignment: .center)
         })

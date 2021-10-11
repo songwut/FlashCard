@@ -92,7 +92,7 @@ final class FLCreateViewController: UIViewController {
         
         self.addButton.updateLayout()
         self.addButton.cornerRadius = self.addButton.bounds.width / 2
-        self.addButton.backgroundColor = UIColor.config.primary()
+        self.addButton.backgroundColor = UIColor.config_primary()
         self.addButton.tintColor = .light()
         let edge = self.addButton.bounds.height * FlashStyle.iconEedge
         let iconPading = UIEdgeInsets(top: edge, left: edge, bottom: edge, right: edge)
@@ -154,12 +154,13 @@ final class FLCreateViewController: UIViewController {
         let index = self.viewModel.pageIndex
         guard let stage = getStageView(at: index) as? FLStageView else { return }
         guard let cardPageJson = stage.createJSON() else { return }
-        ConsoleLog.show("cardPageJson:\(cardPageJson.json)")
+        ConsoleLog.show("cardPageJson:\(cardPageJson)")
         self.reloadNewCard(method: .patch, param: cardPageJson)
         
         let tv = UITextView(frame: self.view.bounds)
         tv.text = String(describing: cardPageJson)
         self.view.addSubview(tv)
+        tv.selectAll(self)
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             tv.removeFromSuperview()
         }

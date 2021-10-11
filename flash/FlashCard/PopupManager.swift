@@ -54,8 +54,8 @@ class PopupManager: NSObject {
         icon.size = 75
         //popup = PopupContent(title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: "confirm".localized(),  closeButtonTitle: "cancel".localized(), isError: true)
         popup = PopupContent(atbTitle: nil, title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: nil, closeButtonTitle: "cancel".localized(), confirmAction: confirm)
-        popup.closeColor = .info75()
-        popup.confirmColor = .info75()
+        popup.closeColor = .info_75()
+        popup.confirmColor = .info_75()
         
         var vc = UIApplication.shared.keyWindow?.rootViewController
         if let current = mainVC {

@@ -66,7 +66,7 @@ struct UGCCatagoryListView: View {
                     .font(FontHelper.getFontSystem(16, font: .medium).font)
                     .frame(maxWidth: .infinity, maxHeight: 42, alignment: .center)
             })
-            .buttonStyle(ButtonFill(color: UIColor.config.primary().color))
+            .buttonStyle(ButtonFill(color: .config_primary()))
         })
         .padding(.all, 16)
     }

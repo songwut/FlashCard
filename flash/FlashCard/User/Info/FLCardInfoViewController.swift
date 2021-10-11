@@ -52,14 +52,14 @@ class FLCardInfoViewController: UIViewController {
         self.cardView.roundCorners([.topLeft, .topRight], radius: 16)
         self.view.updateLayout()
         
-        let titleFont = FontHelper.getFontSystem(14, font: .medium)
+        let titleFont = UIFont.font(14, font: .medium)
         self.titleLabel.font = titleFont
         self.nameLabel.font = titleFont
         self.countLabel.font = titleFont
         self.quizLabel.font = titleFont
         self.likeLabel.font = titleFont
         
-        let detailFont = FontHelper.getFontSystem(14, font: .medium)
+        let detailFont = UIFont.font(14, font: .medium)
         self.instructorLabel.font = detailFont
         self.providerLabel.font = detailFont
         self.categoryLabel.font = detailFont

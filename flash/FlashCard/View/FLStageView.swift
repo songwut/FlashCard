@@ -152,8 +152,9 @@ class FLStageView: UIView {
         data["bg_color"] = colorDict as AnyObject
         data["component"] = component as AnyObject?
         
+        let image = "\(self.coverImageBase64 ?? "")"
         dict["data"] = data.json as AnyObject?
-        dict["image"] = self.coverImageBase64 as AnyObject?
+        dict["image"] = image as AnyObject?
         dict["sort"] = 1 as AnyObject?
         return dict
     }

@@ -14,7 +14,7 @@ struct FLTagView: View {
 	@Binding var tags: [String]
 	
 	var body: some View {
-        let font = FontHelper.getFontSystem(10, font: .text)
+        let font = UIFont.font(10, font: .text)
 		HStack {
 			Text(tag.lowercased())
 				.padding(.leading, 2)
@@ -24,7 +24,7 @@ struct FLTagView: View {
 		}
 		.foregroundColor(UIColor.info().color)
         .font(font.font)
-        .background(UIColor.info10().color.cornerRadius(5))
+        .background(UIColor.info_10().color.cornerRadius(5))
 		.padding(2)
 		.onTapGesture {
 			tags = tags.filter({ $0 != tag })

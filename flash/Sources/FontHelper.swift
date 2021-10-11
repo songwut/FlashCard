@@ -1,6 +1,6 @@
 //
 //  FontHelper.swift
-//  flash
+//  flash 4.11
 //
 //  Created by Songwut Maneefun on 19/7/2564 BE.
 //
@@ -71,7 +71,7 @@ enum StyleName: CGFloat {
     
     case paragraph = 16.0
     case l = 14.0
-    case m = 13.0
+    case small = 13.0//= m
     case s = 12.0
     case xs = 10.0
 }
@@ -98,21 +98,21 @@ struct FontHelper {
 }
 
 extension UIFont {
-    static func getFontSystem(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> UIFont {
+    static func font(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> UIFont {
         return UIFont(name: font.fontName(isItalic), size: rawSize * fontScale)!
     }
     
-    static func getFontSystem(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> UIFont {
+    static func font(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> UIFont {
         return UIFont(name: font.fontName(isItalic), size: size.rawValue * fontScale)!
     }
 }
 
 extension Font {//SwiftUI
-    static func getFontSystem(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> Font {
+    static func font(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> Font {
         return UIFont(name: font.fontName(isItalic), size: rawSize * fontScale)!.font
     }
     
-    static func getFontSystem(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> Font {
+    static func font(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> Font {
         return UIFont(name: font.fontName(isItalic), size: size.rawValue * fontScale)!.font
     }
 }

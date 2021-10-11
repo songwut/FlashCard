@@ -37,12 +37,12 @@ struct FLQuizProgressBar: View {
                         .padding([.leading], 8)
                         
                         Text(choice.value)
-                            .font(.getFontSystem(12, font: .medium))
+                            .font(.font(12, font: .medium))
                             .foregroundColor(.white)
                     })
                 } else {
                     Text(choice.value)
-                        .font(.getFontSystem(12, font: .medium))
+                        .font(.font(12, font: .medium))
                         .foregroundColor(Color("222831"))
                         .padding([.leading], 16)
                 }
@@ -52,7 +52,7 @@ struct FLQuizProgressBar: View {
                     Text(text)
                         .frame(maxWidth:.infinity, maxHeight: .infinity, alignment: .trailing)
                         .padding(.trailing, 40)
-                        .font(.getFontSystem(12, font: .bold))
+                        .font(.font(12, font: .bold))
                         .foregroundColor(.black)
                 }
                 

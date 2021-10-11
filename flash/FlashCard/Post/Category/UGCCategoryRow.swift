@@ -40,7 +40,7 @@ struct UGCCategoryRow: View {
             ZStack {
                 if isFirst, isExpaned {
                     Rectangle()
-                        .fill(UIColor.config.secondary10().color)
+                        .fill(Color.config_secondary10())
                 }
                 self.contentView
                     .padding(.leading, 16)
@@ -77,7 +77,7 @@ struct UGCCategoryRow: View {
                     isExpaned.toggle()
                 }, label: {
                     Image(iconName)
-                        .foregroundColor(UIColor.config.secondary50().color)
+                        .foregroundColor(.config_secondary50())
                         .frame(width: 16, height: 16, alignment: .center)
                 })
             } else {

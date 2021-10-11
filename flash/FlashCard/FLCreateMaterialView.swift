@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FLCreateMaterialView: View {
     var body: some View {
-        let color = UIColor.config.primary().color
+        let color = UIColor.config_primary().color
         ZStack {
             let sStyle = StrokeStyle(lineWidth: 1, dash: [5])
             RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -28,7 +28,7 @@ struct FLCreateMaterialView: View {
             }
             
         }
-        .background(UIColor.config.primary10().color)
+        .background(UIColor.config_primary_10().color)
         
     }
     

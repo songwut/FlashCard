@@ -88,8 +88,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.footerView.setShadow(radius: 16, opacity: 0.09, color: .black, offset: CGSize(width: 0, height: -2))
-        let fontTitle = FontHelper.getFontSystem(16, font: .text)
-        let fontValue = FontHelper.getFontSystem(16, font: .text)
+        let fontTitle = UIFont.font(16, font: .text)
+        let fontValue = UIFont.font(16, font: .text)
         let maxChaTitle = FlashStyle.post.maxChaTitle
         self.titleTextField.delegate = self
         //self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
@@ -100,7 +100,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.idView.borderWidth = 1
         self.idView.cornerRadius = 9
         self.idLabel.font = fontTitle
-        self.idValueLabel.font = FontHelper.getFontSystem(14, font: .text)
+        self.idValueLabel.font = UIFont.font(14, font: .text)
         self.descLabel.font = fontTitle
         self.descTextView.borderWidth = 1
         self.descTextView.borderColor = UIColor("A9A9A9")
@@ -193,8 +193,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         timeValueLabel.textColor = isEnable ? textColor : disableColor
         plusButton.isEnabled = isEnable
         minusButton.isEnabled = isEnable
-        plusButton.tintColor = isEnable ? UIColor.config.primary() : disableColor
-        minusButton.tintColor = isEnable ? UIColor.config.primary() : disableColor
+        plusButton.tintColor = isEnable ? UIColor.config_primary() : disableColor
+        minusButton.tintColor = isEnable ? UIColor.config_primary() : disableColor
         categoryView.isUserInteractionEnabled = isEnable
         categoryValueLabel.textColor = isEnable ? .text25() : disableColor
         categoryButton.isEnabled = isEnable
@@ -351,7 +351,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             for tag in tags {
                 tagList.append(tag.name)
             }
-            self.tagView?.textFont = FontHelper.getFontSystem(13, font: .text)
+            self.tagView?.textFont = .font(13, font: .text)
             self.tagView?.addTags(tagList)
             DispatchQueue.main.async {
                 self.tagView.isHidden = false

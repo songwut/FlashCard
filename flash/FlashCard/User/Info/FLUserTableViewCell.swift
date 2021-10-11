@@ -33,8 +33,8 @@ class FLUserTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.userImageView.cornerRadius = 42 / 2
-        self.titleLabel.font = FontHelper.getFontSystem(12, font: .medium)
-        self.descLabel.font = FontHelper.getFontSystem(10, font: .text)
+        self.titleLabel.font = .font(12, font: .medium)
+        self.descLabel.font = .font(10, font: .text)
         self.titleLabel.textColor = UIColor("222831")
         self.descLabel.textColor = .text50()
     }

@@ -27,7 +27,7 @@ struct CustomSwiftUI: View {
                     .frame(width: 18, height: 18, alignment: .center)
                 
             })
-            .buttonStyle(ButtonBorder(color: UIColor.config.primary().color, cornerRadius: 4))
+            .buttonStyle(ButtonBorder(color: UIColor.config_primary().color, cornerRadius: 4))
             
             VStack(content: {
                 Text("Placeholder")
@@ -114,7 +114,7 @@ struct ButtonCheckBox: ButtonStyle {
                     cornerRadius: 4,
                     style: .continuous
                 )
-                .fill(isChecked ? UIColor.config.primary().color : Color.white)
+                .fill(isChecked ? UIColor.config_primary().color : Color.white)
             )
     }
 }

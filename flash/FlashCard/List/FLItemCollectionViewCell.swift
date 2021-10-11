@@ -50,7 +50,7 @@ class FLItemCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.addLabel.text = "+ Add Card"
-        self.addLabel.font = FontHelper.getFontSystem(18, font: .text)
+        self.addLabel.font = .font(18, font: .text)
         self.addLabel.textColor = .text75()
         self.imageView.cornerRadius = 8
         self.imageView.clipsToBounds = true

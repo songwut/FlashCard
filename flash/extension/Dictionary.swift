@@ -10,7 +10,7 @@ extension Dictionary {
     
     var json: String {
             do {
-                let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+                let jsonData = try JSONSerialization.data(withJSONObject: self, options: [])
                 return String(bytes: jsonData, encoding: .utf8) ?? ""
             } catch {
                 return ""

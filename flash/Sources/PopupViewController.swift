@@ -24,10 +24,10 @@ class PopupContent {
     var isError: Bool?
     
     var isDesignSystem = false
-    var titleColor = UIColor.config.primary()
+    var titleColor = UIColor.config_primary()
     var closeColor = UIColor.gray
     var closeColorBackground = UIColor.clear
-    var confirmColor = UIColor.config.primary()
+    var confirmColor = UIColor.config_primary()
     
     var countDown: Int?
     

@@ -29,13 +29,13 @@ enum FLStatus: Int {
     func color() -> UIColor {
         switch self {
         case .unpublish:
-            return UIColor.config.primary()
+            return UIColor.config_primary()
         case .waitForApprove:
             return .warning()
         case .approved:
             return .success()
         default:
-            return UIColor.config.primary()
+            return UIColor.config_primary()
         }
     }
 }

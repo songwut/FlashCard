@@ -30,7 +30,7 @@ class FLChoiceResult:Mappable {
         if let isAnswer = self.isAnswer, isAnswer {
             return UIColor.success()
         } else {
-            return UIColor.config.primary25()
+            return UIColor.config_primary_25()
         }
     }
     

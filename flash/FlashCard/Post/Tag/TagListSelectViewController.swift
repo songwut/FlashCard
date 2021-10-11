@@ -26,7 +26,7 @@ class TagListSelectViewController: UIViewController {
         let reset = UIBarButtonItem(title: "reset".localized(), style: .plain, target: self, action: #selector(self.resetPressed))
 
         self.navigationItem.rightBarButtonItems = [reset]
-        self.totalLabel.font = FontHelper.getFontSystem(14, font: .text)
+        self.totalLabel.font = UIFont.font(14, font: .text)
         self.totalLabel.textColor = .text75()
         self.tagView.delegate = self
         self.tagView.tagLineBreakMode = .byTruncatingTail
@@ -75,7 +75,7 @@ class TagListSelectViewController: UIViewController {
                 tagList.append(tag.name)
             }
             
-            self.tagView?.textFont = FontHelper.getFontSystem(13, font: .text)
+            self.tagView?.textFont = UIFont.font(13, font: .text)
             self.tagView?.addTags(tagList)
             DispatchQueue.main.async {
                 self.tagView.isHidden = false

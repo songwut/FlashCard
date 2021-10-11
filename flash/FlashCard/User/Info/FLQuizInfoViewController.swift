@@ -60,7 +60,7 @@ class FLQuizInfoViewController: UIViewController {
         self.userTableView.register(UINib(nibName: "FLUserTableViewCell", bundle: nil), forCellReuseIdentifier: FLUserTableViewCell.id)
         
         self.answerLabel.text = "answer".localized()
-        self.answerLabel.font = FontHelper.getFontSystem(14, font: .medium)
+        self.answerLabel.font = .font(14, font: .medium)
         let userAns = [["name" : "ฮอกไกโด"], ["name" : "เขาใหญ่"]]// ["user_answer_list" : ]
         let userAnswerPage = UserAnswerPageResult(JSON: ["value" : "quiz name", "choice" : [["value" : "ฮอกไกโด", "is_answer":true, "percent": 70], ["value" : "เขาใหญ่", "percent": 30]], "user_answer_list": userAns])!
         let infoSheetView = self.quizInfoSheetView ?? FLQuizInfoProgressView(userAnswerPage: userAnswerPage)
