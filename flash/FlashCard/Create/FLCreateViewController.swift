@@ -129,42 +129,46 @@ final class FLCreateViewController: UIViewController {
         
         self.prepareToolVC()
         self.view.alpha = 0.0
-        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlFlashDetailResult?) in
+        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FLFlashDetailResult?) in
             if let object = cardResult {
                 ConsoleLog.show("total:\(object.total)")
                 ConsoleLog.show("list:\(object.list)")
+                self?.updatePageNumber()
                 UIView.animate(withDuration: 0.3) {
                     self?.view.alpha = 1.0
                 }
                 self?.manageStageFrame()
             }
-            self?.reloadNewCard(method: .get)
         }
     }
     
-    func reloadNewCard(method: APIMethod, param:[String: AnyObject]? = nil) {
-        let card = self.viewModel.currentPage
+    func reloadNewCard(method: APIMethod, param:[String: Any]? = nil) {
+        let index = self.viewModel.pageIndex
+        let card = self.viewModel.pageList[index]
+        let stage = self.getStageView(at: index)
         self.viewModel.callAPICardDetail(card, method: method, param: param) { (cardDetail) in
-            
+            stage.cardDetail = cardDetail
         }
+    }
+    
+    func updatePageNumber() {
+        let max = self.viewModel.pageList.count
+        let index = self.viewModel.pageIndex
+        self.pageCountLabel.text = "\(index + 1)/\(max)"
     }
     
     @objc func deletePressed(_ sender: UIButton) {
-        self.saveCoverPage()
+        //TODO: Api delete
+        ConsoleLog.show("pageList before: \(self.viewModel.pageList.count)")
         let index = self.viewModel.pageIndex
-        guard let stage = getStageView(at: index) as? FLStageView else { return }
-        guard let cardPageJson = stage.createJSON() else { return }
-        ConsoleLog.show("cardPageJson:\(cardPageJson)")
-        self.reloadNewCard(method: .patch, param: cardPageJson)
-        
-        let tv = UITextView(frame: self.view.bounds)
-        tv.text = String(describing: cardPageJson)
-        self.view.addSubview(tv)
-        tv.selectAll(self)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            tv.removeFromSuperview()
+        let stage = self.getStageView(at: index)
+        if let card = stage.card {
+            self.viewModel.callAPICardDetail(card, method: .delete, param: nil) { (cardDetail) in
+                stage.card = nil
+                stage.removeFromSuperview()
+                ConsoleLog.show("pageList after delete: \(self.viewModel.pageList.count)")
+            }
         }
-        ConsoleLog.show("stage")
     }
     
     @objc func appLeftPressed(_ sender: UIButton) {
@@ -173,6 +177,7 @@ final class FLCreateViewController: UIViewController {
         
         let index = self.viewModel.pageIndex
         let newIndex = index - 1
+        /*
         let page = FLCardPageResult(JSON: ["index" : newIndex])!
         self.viewModel.pageList.insert(page, at: newIndex)
         
@@ -182,27 +187,47 @@ final class FLCreateViewController: UIViewController {
         stage.page = page
         stackView.insertArrangedSubview(stage, at: newIndex)
         self.stageViewList?.insert(stage, at: newIndex)
+        */
         
-        self.gotoPage(index: newIndex)
+        //for right
+        var newCardData = [String: Any]()
+        var data = [String: Any]()
+        data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
+        newCardData["data"] = data
+        self.viewModel.callAPIAddNewCard(param: newCardData) { (flashDetailResult) in
+            
+        }
+        //self.gotoPage(index: newIndex)
     }
     
     @objc func addRightPressed(_ sender: UIButton) {
-        
-        self.saveCoverPage()
-        
         let index = self.viewModel.pageIndex
+        let currentStage = self.getStageView(at: index)
+        //mock test
+        self.saveCoverPage()
+        guard let cardPageJson = currentStage.createJSON() else { return }
+        ConsoleLog.show("addRightPressed index:\(index)")
+        ConsoleLog.show("cardPageJson:\(cardPageJson.json)")
+        self.reloadNewCard(method: .patch, param: cardPageJson)
+        ConsoleLog.show("save currentStage")
+        
+        
+        
+        //TODO: Post new card
+        /*
         let newIndex = index + 1
         let page = FLCardPageResult(JSON: ["index" : newIndex])!
-        self.viewModel.pageList.insert(page, at: newIndex)
+        self.viewModel.pageList.append(page)
         
         guard let stackView = self.sliderView?.contentStackView else {return}
         let frame = self.stageView?.frame ?? .zero
-        let stage = self.createStageView(frame.size, creator: self.flCreator!)
-        stage.page = page
-        stackView.insertArrangedSubview(stage, at: newIndex)
-        self.stageViewList?.insert(stage, at: newIndex)
+        let newStage = self.createStageView(frame.size, creator: self.flCreator!)
+        newStage.card = page
+        stackView.addArrangedSubview(newStage)
+        self.stageViewList?.append(newStage)
         
         self.gotoPage(index: newIndex)
+        */
     }
     
     func gotoPage(index: Int) {
@@ -211,6 +236,7 @@ final class FLCreateViewController: UIViewController {
         self.manageAddLR()
         let max = self.viewModel.pageList.count
         self.pageCountLabel.text = "\(index + 1)/\(max)"
+        //TODO: slide to page index
     }
     
     func createAddButton() -> UIButton {
@@ -293,6 +319,7 @@ final class FLCreateViewController: UIViewController {
             
             if self.isCreatePage {
                 self.manageMultitleStage()
+                self.reloadNewCard(method: .get)//First card page
             }
             
             
@@ -317,11 +344,9 @@ final class FLCreateViewController: UIViewController {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapStage(_:)))
         stage.addGestureRecognizer(tap)
-        
+        //stage.addGestureRecognizer(TapGesture(target: self, action: #selector(self.stageTaped(_:))))
         return stage
     }
-    
-    
     
     func manageMultitleStage() {
         guard let stackView = self.sliderView?.contentStackView else {return}
@@ -329,7 +354,7 @@ final class FLCreateViewController: UIViewController {
         let frame = self.stageView?.frame ?? CGRect.zero
         for page in self.viewModel.pageList {
             let stage = self.createStageView(frame.size, creator: self.flCreator!)
-            stage.page = page
+            stage.card = page
             self.stageViewList?.append(stage)
             stackView.addArrangedSubview(stage)
         }
@@ -352,9 +377,11 @@ final class FLCreateViewController: UIViewController {
             self.sliderView?.scrollView.isScrollEnabled = self.isReadyToSwipeStage
         }
     }
+    
     @objc func tapStage(_ gesture: UITapGestureRecognizer) {
         self.selectedViewIsHiddenTool(true)
         self.isReadyToSwipeStage = true
+        self.view.endEditing(true)
     }
     
     @objc func swipeStage(_ gesture: UISwipeGestureRecognizer) {
@@ -384,17 +411,17 @@ final class FLCreateViewController: UIViewController {
     var cellSize = CGSize.zero
     
     func manageAddLR() {
-        if self.viewModel.pageIndex == 0 {
-            self.addLeftPageButton?.isHidden = true
+        //TODO: remove ads left just for test
+        self.addLeftPageButton?.isHidden = false
+        
+        if self.viewModel.pageIndex == 0, self.viewModel.pageList.count == 1 {
             self.addRightPageButton?.isHidden = false
             
         } else if self.viewModel.pageIndex == (self.viewModel.pageList.count - 1) {
-            self.addLeftPageButton?.isHidden = false
-            self.addRightPageButton?.isHidden = true
+            self.addRightPageButton?.isHidden = false
             
         } else {
-            self.addLeftPageButton?.isHidden = false
-            self.addRightPageButton?.isHidden = false
+            self.addRightPageButton?.isHidden = true
         }
     }
     
@@ -1140,10 +1167,8 @@ extension FLCreateViewController: UIScrollViewDelegate {
         let max = self.viewModel.pageList.count
         let index = self.indexOfMajorCell()
         self.viewModel.pageIndex = index
-        self.pageCountLabel.text = "\(index + 1)/\(max)"
-        
-        let stage = self.getStageView(at: index)
-        stage.addGestureRecognizer(TapGesture(target: self, action: #selector(self.stageTaped(_:))))
+        self.viewModel.currentPage = self.viewModel.pageList[index]
+        self.updatePageNumber()
         self.manageAddLR()
     }
     

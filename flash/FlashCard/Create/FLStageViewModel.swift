@@ -27,7 +27,7 @@ class FLStageViewModel {
     var myFlashCard: MaterialFlashPageResult?
     var detail: FLDetailResult?
     var pageList = [FLCardPageResult]()
-    var flashCardDetail: FlFlashDetailResult?
+    var flashCardDetail: FLFlashDetailResult?
     //var pageList: [FlashElement] = []()
     var pageIndex = 0
     var currentPage: FLCardPageResult?
@@ -52,11 +52,11 @@ class FLStageViewModel {
     }
     
     //Flash create get list
-    func callAPIFlashCard(complete: @escaping (_ result: FlFlashDetailResult?) -> ()) {
+    func callAPIFlashCard(complete: @escaping (_ result: FLFlashDetailResult?) -> ()) {
         let request = FLRequest()
         request.endPoint = .ugcCardList
         request.arguments = ["\(self.flashId)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FlFlashDetailResult?, isCache, error) in
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
             if let item = result {
                 self?.flashCardDetail = item
                 self?.pageList = item.list
@@ -76,9 +76,24 @@ class FLStageViewModel {
 //        }
     }
     
+    func callAPIAddNewCard( param:[String: Any]? = nil, complete: @escaping (_ result: FLFlashDetailResult?) -> ()) {
+        let request = FLRequest()
+        request.apiMethod = .post
+        request.endPoint = .ugcCardList
+        request.arguments = ["\(self.flashId)"]
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
+            if let item = result {
+                self?.flashCardDetail = item
+                self?.pageList = item.list
+                self?.currentPage = item.list.first
+                complete(self?.flashCardDetail)
+            }
+        }
+    }
+    
     func callAPICardDetail(_ currentCard: FLCardPageResult? ,
                            method: APIMethod = .get ,
-                           param:[String: AnyObject]? = nil,
+                           param:[String: Any]? = nil,
                            complete: @escaping (_ page: FLCardPageDetailResult?) -> ()) {
         
         guard let card = currentCard else { return }
@@ -87,12 +102,50 @@ class FLStageViewModel {
         request.parameter = param
         request.endPoint = .ugcCardListDetail
         request.arguments = ["\(self.flashId)", "\(card.id)"]
+        request.apiType = .json
+        
+        //JSON format error
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLCardPageDetailResult?, isCache, error) in
             self?.currentPageDetail = result
             complete(result)
         }
-
         
+        /*
+        
+        guard let url = URL(string: request.url) else { return }
+        var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        urlRequest.httpMethod = method.rawValue
+        if let json = param {
+            let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+            urlRequest.httpBody = jsonData
+        }
+        
+        //header
+        if let headers = request.headers {
+            for (key, value) in headers {
+                urlRequest.addValue(key, forHTTPHeaderField: value)
+            }
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            guard let self = self else { return }
+                guard let data = data, error == nil else { return }
+                DispatchQueue.main.async {
+                    let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                    print("HTTPURLResponse: \(String(describing: response)))")
+                    if let httpResponse = response as? HTTPURLResponse {
+                            print("statusCode: \(httpResponse.statusCode)")
+                    }
+                    if let responseJSON = responseJSON as? [String: Any] {
+                        print("API responseJSON:\n\(responseJSON)\n======")
+                        self.currentPageDetail = FLCardPageDetailResult(JSON: responseJSON)
+                        complete(self.currentPageDetail)
+                    }
+                }
+            }
+        task.resume()
+ 
+        */
 //        let fileName = "ugc-flash-card-id-card-id"
 //        JSON.read(fileName) { (object) in
 //            if let dict = object as? [String : Any] {

@@ -21,8 +21,9 @@ struct FLQuizInfoProgressView: View {
             let choiceList = userAnswerPage.choiceList
             ForEach(0..<choiceList.count) { i in
                 let c = choiceList[i]
+                
                 FLQuizProgressBar(choice:c)
-                    .frame(height: 36)
+                    .frame(height: FlashStyle.quiz.choiceMinHeight)
             }
             
             Spacer()

@@ -76,13 +76,13 @@ class API {
         if let data = responseData, data.count > 0 {
             do {
                 if let dict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                    ConsoleLog.show("Response Body: \(String(describing: dict))")
+                    ConsoleLog.show("Response Body object: \(String(describing: dict))")
                     let responseBody = ResponseBody(detail: dict["detail"] as? String, username: dict["username"] as? [String], password: dict["password"] as? [String], isRemember: dict["is_remember"] as? Bool, language: dict["language"] as? String, urlResponse: urlResponse, dict:dict, dictList:[])
                     //API.checkAuthorized(response: urlResponse, responseBody: responseBody)
                     return responseBody
                     
                 } else if let dictList = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] {
-                    ConsoleLog.show("Response Body: \(String(describing: dictList))")
+                    ConsoleLog.show("Response Body list: \(String(describing: dictList))")
                     let responseBody = ResponseBody(detail: nil, username: nil, password: nil, isRemember: nil, language: nil, urlResponse: urlResponse, dict:nil, dictList:dictList)
                     //API.checkAuthorized(response: urlResponse, responseBody: responseBody)
                     return responseBody
@@ -133,7 +133,7 @@ class API {
         
         let method = Alamofire.HTTPMethod(rawValue: request.method.rawValue)
         let urlString = request.urlStrWithFormat(request.url, method: method)
-        let params = request.params
+        let params = request.params ?? request.body
         let keyPath = request.responseKeyPath
         let headers = request.headers
         let encoding = getEncoding(request.paramsType)
@@ -158,7 +158,7 @@ class API {
         
         let method = Alamofire.HTTPMethod(rawValue: request.method.rawValue)
         let urlString = request.urlStrWithFormat(request.url, method: method)
-        let params = request.params
+        let params = request.params ?? request.body
         let keyPath = request.responseKeyPath
         let headers = request.headers
         let encoding = getEncoding(request.paramsType)
@@ -182,7 +182,7 @@ class API {
     class func requestForItems<T : Mappable>(_ request : APIRequest , completionHandler : @escaping (_ responseBody: ResponseBody?, _ items : [T]?, _ isCache : Bool, _ error : NSError?) -> Void) {
         let method = Alamofire.HTTPMethod(rawValue: request.method.rawValue)
         let urlString = request.urlStrWithFormat(request.url, method: method)
-        let params = request.params
+        let params = request.params ?? request.body
         let keyPath = request.responseKeyPath
         let headers = request.headers
         let encoding = getEncoding(request.paramsType)

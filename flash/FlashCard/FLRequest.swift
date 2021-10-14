@@ -29,11 +29,16 @@ class FLRequest: APIRequest {
     var endPoint:EndPoint = .ugcFlashCreate
     var arguments = [String]()
     var selectList = [Int]()
-    var parameter: [String: AnyObject]?
+    var parameter: [String: Any]?
     var apiMethod: APIMethod = .get
+    var apiType: APIParameterType = .url
     
     override var method: APIMethod {
         return self.apiMethod
+    }
+    
+    override var paramsType: APIParameterType {
+        return .json
     }
     
     override var url : String {
@@ -44,15 +49,16 @@ class FLRequest: APIRequest {
         return "\(apiURL)\(enpointStr)"
     }
     
-    override var params: [String: AnyObject]? {
+    override var body: [String: Any]? {
         if let param = self.parameter {
             return param
+        } else if self.selectList.count > 1  {
+            var dict = [String: Any]()
+            dict["id_list"] = self.selectList
+            return dict
+        } else {
+            return nil
         }
-        var dict = [String: AnyObject]()
-        if self.selectList.count > 1 {
-            dict["id_list"] = self.selectList as AnyObject?
-        }
-        return dict
     }
     
     override var headers: [String: String]? {

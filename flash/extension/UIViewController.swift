@@ -10,6 +10,13 @@ import MBProgressHUD
 
 extension UIViewController {
     
+    static func initFromNib() -> Self {
+        func instanceFromNib<T: UIViewController>() -> T {
+            return T(nibName: String(describing: self), bundle: nil)
+        }
+        return instanceFromNib()
+    }
+    
     var safeAreaTopHeight: CGFloat {
         if #available(iOS 13.0, *) {
             let window = UIApplication.shared.keyWindow
@@ -51,22 +58,22 @@ extension UIViewController {
         UIApplication.shared.statusBarView?.backgroundColor = barTintColor // for iOS 11 Large Titles
         UINavigationBar.appearance().titleTextAttributes = titleFontAttrs
         
-
+        
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.backgroundColor = barTintColor // If you want different nav background color other than white
-
+            
             appearance.titleTextAttributes = titleFontAttrs
             appearance.largeTitleTextAttributes = titleFontAttrs // If your app supports largeNavBarTitle
-
+            
             appearance.buttonAppearance.normal.titleTextAttributes = titleFontAttrs
             appearance.buttonAppearance.highlighted.titleTextAttributes = titleFontAttrs
-
+            
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().compactAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         } else {
-
+            
             UINavigationBar.appearance().titleTextAttributes = titleFontAttrs
             UIBarButtonItem.appearance().setTitleTextAttributes(titleFontAttrs, for: .normal)
             UIBarButtonItem.appearance().setTitleTextAttributes(titleFontAttrs, for: .highlighted)
@@ -84,7 +91,7 @@ extension UIViewController {
     
     class func with(_ storyboardName: String, storyboardId: String) -> UIViewController? {
         let vc = UIStoryboard(name: storyboardName,
-                            bundle: nil).instantiateViewController(withIdentifier: storyboardName)
+                              bundle: nil).instantiateViewController(withIdentifier: storyboardName)
         return vc
     }
     

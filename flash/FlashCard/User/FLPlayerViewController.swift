@@ -64,7 +64,7 @@ class FLPlayerViewController: UIViewController {
         self.infoView.rootView.delegate = self
         self.infoStackView.addArrangedSubview(self.infoView.view)
         self.showLoading(nil)
-        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FlFlashDetailResult?) in
+        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FLFlashDetailResult?) in
             self?.hideLoading()
             guard let viewContainer = self?.viewContainer else { return }
             self?.manageStageFrame(viewContainer)
@@ -135,7 +135,7 @@ class FLPlayerViewController: UIViewController {
             
             let stageView = FLStageView(frame: frame)
             stageView.viewModel = self.viewModel
-            stageView.page = pageResult
+            stageView.card = pageResult
             return stageView
         }
         
@@ -155,7 +155,7 @@ class FLPlayerViewController: UIViewController {
     
     @objc func stageViewButtonSelected(button:UIButton) {
         
-        if let customView = button.superview(of: FLStageView.self) , let userModel = customView.page {
+        if let customView = button.superview(of: FLStageView.self) , let userModel = customView.card {
             print("button selected for \(userModel.name)")
         }
         
@@ -197,14 +197,12 @@ extension FLPlayerViewController: FLUserProgressViewDelegate, FLInfoViewDelegate
         self.footerStackView.updateLayout()
         self.footerStackView.removeAllArranged()
         let quiz = FlashElement(JSON: ["type" : "question"]) //TODO: remove mock viewModel.getQuizContent()
-        let isQuiz = !(quiz == nil)
-        let pageInfoVC = self.pageInfoVC ?? FLInfoPageViewController()
+        let pageInfoVC = self.pageInfoVC ?? FLInfoPageViewController(frame: self.view.bounds, flashCardDetail: self.viewModel.flashCardDetail, quiz: quiz)
         //pageInfoVC.delegate = self
-        pageInfoVC.flashCardDetail = self.viewModel.flashCardDetail
-        pageInfoVC.quiz = quiz
+        pageInfoVC.view.frame = self.view.bounds
         pageInfoVC.modalPresentationStyle = .overCurrentContext
         pageInfoVC.modalTransitionStyle = .crossDissolve
-        present(pageInfoVC, animated: true, completion: nil)
+        self.present(pageInfoVC, animated: true, completion: nil)
     }
 }
 

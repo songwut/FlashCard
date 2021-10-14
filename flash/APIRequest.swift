@@ -79,7 +79,7 @@ class APIRequest {
     }
     
     var paramsType: APIParameterType {
-        return .url
+        return .json
     }
     
     var url: String {
@@ -87,6 +87,10 @@ class APIRequest {
     }
     
     var params: [String: AnyObject]? {
+        return nil
+    }
+    
+    var body: [String: Any]? {
         return nil
     }
     

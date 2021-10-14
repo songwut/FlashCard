@@ -14,7 +14,7 @@ class FLStageView: UIView {
     var viewModel: FLStageViewModel?
     var cover: UIImageView!
     var coverImageBase64: String?
-    
+    var cardDetail: FLCardPageDetailResult?
     var flColor: FLColorResult = FLColorResult(JSON: ["code" : "color_01", "cl_code": "FFFFFF"])! {
         didSet {
             self.backgroundColor = UIColor(flColor.hex)
@@ -33,19 +33,22 @@ class FLStageView: UIView {
         self.cover = UIImageView(frame: CGRect(origin: .zero, size: frame.size))
     }
     
-    var page: FLCardPageResult? {
+    var card: FLCardPageResult? {
         didSet {
             print("FLStageView frame: \(self.frame)")
         }
     }
     
     func loadElement() {
-        guard let page = self.page else { return }
+        guard let card = self.card else { return }
         for v in self.subviews {
            v.removeFromSuperview()
         }
-        self.cover.imageUrl(page.image)
-        self.viewModel?.callAPICardDetail(page) { [weak self] (cardDetail) in
+        self.cover.imageUrl(card.image)
+        
+        self.flCreator.isEditor = false
+        
+        self.viewModel?.callAPICardDetail(card) { [weak self] (cardDetail) in
             guard let self = self else { return }
             guard let cardDetail = cardDetail else { return }
             self.flColor = cardDetail.bgColor
@@ -121,8 +124,8 @@ class FLStageView: UIView {
         return textElement
     }
     
-    func createJSON() -> [String: AnyObject]? {
-        var dict = [String: AnyObject]()
+    func createJSON() -> [String: Any]? {
+        var dict = [String: Any]()
         var data = [String: AnyObject]()
         
         var component = [[String: AnyObject]]()
@@ -154,8 +157,10 @@ class FLStageView: UIView {
         
         let image = "\(self.coverImageBase64 ?? "")"
         dict["data"] = data.json as AnyObject?
-        dict["image"] = image as AnyObject?
-        dict["sort"] = 1 as AnyObject?
+        if let coverImageBase64 = self.coverImageBase64 {
+            dict["image"] = coverImageBase64 as AnyObject?
+        }
+        //dict["sort"] = nil as AnyObject?
         return dict
     }
 }

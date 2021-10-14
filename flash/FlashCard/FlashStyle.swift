@@ -124,7 +124,9 @@ struct FlashStyle {
         static let maxChoice = 4
         static let choiceMargin:CGFloat = UIDevice.isIpad() ? 28 : 16
         static let choiceMinHeight:CGFloat = UIDevice.isIpad() ? 75 : 36
-        static let choiceSpacing: CGFloat = UIDevice.isIpad() ? 16 : 8
+        static let choiceSpacing: CGFloat = UIDevice.isIpad() ? 29 : 8
+        static let userMinHeight:CGFloat = UIDevice.isIpad() ? 90 : 42
+        static let userSpacing: CGFloat = UIDevice.isIpad() ? 20 : 16
     }
     
     static let deleteSize: CGFloat = 25

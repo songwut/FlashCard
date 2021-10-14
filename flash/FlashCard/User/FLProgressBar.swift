@@ -9,40 +9,46 @@ import SwiftUI
 
 struct FLQuizProgressBar: View {
     @State var choice: FLChoiceResult
-    
+    private let titleFont: Font = .font(UIDevice.isIpad() ? 24 : 12, font: .medium)
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                Rectangle().frame(width: geometry.size.width , height: geometry.size.height)
+                Rectangle()
+                    .frame(width: geometry.size.width , height: geometry.size.height)
                     .opacity(0.3)
                     .foregroundColor(Color("F5F5F5"))
                 
                 Rectangle()
+                    .cornerRadius(8.0)
                     .frame(width: min(CGFloat(choice.progressValue)*geometry.size.width, geometry.size.width), height: geometry.size.height)
                     .foregroundColor(choice.infoProgressColor().color)
                     .animation(.linear)
                 
                 if let isAnswer = choice.isAnswer, isAnswer {
+                    let iconW = geometry.size.height * 0.6
+                    let imageW = iconW * 0.9
+                    let padding = (iconW - imageW) / 2
+                    let leading: CGFloat = UIDevice.isIpad() ? 16 : 8
                     HStack(spacing: nil, content: {
                         ZStack(alignment: .leading) {
                             Circle()
                                 .fill(Color.white)
                             Image("ic_v2_check")
                                 .resizable()
-                                .padding(.all, 2)
-                                .frame(width: 18, height: 18, alignment: .center)
+                                .padding([.leading], padding)
+                                .frame(width: imageW, height: imageW, alignment: .center)
                                 .foregroundColor(UIColor.success().color)
                         }
-                        .frame(width: 20, height: 20)
-                        .padding([.leading], 8)
+                        .frame(width: iconW, height: iconW)
+                        .padding([.leading], leading)
                         
                         Text(choice.value)
-                            .font(.font(12, font: .medium))
+                            .font(titleFont)
                             .foregroundColor(.white)
                     })
                 } else {
                     Text(choice.value)
-                        .font(.font(12, font: .medium))
+                        .font(titleFont)
                         .foregroundColor(Color("222831"))
                         .padding([.leading], 16)
                 }
@@ -52,12 +58,12 @@ struct FLQuizProgressBar: View {
                     Text(text)
                         .frame(maxWidth:.infinity, maxHeight: .infinity, alignment: .trailing)
                         .padding(.trailing, 40)
-                        .font(.font(12, font: .bold))
+                        .font(titleFont)
                         .foregroundColor(.black)
                 }
                 
                 
-            }.cornerRadius(45.0)
+            }.cornerRadius(8.0)
         }
     }
 }
@@ -101,6 +107,7 @@ struct FLProgressBar_Previews: PreviewProvider {
     static var previews: some View {
         let c = FLChoiceResult(JSON: ["value" : "ฮอกไกโด", "is_answer":true, "percent": 70])!
         FLProgressContentView(choice: c)
+            .previewDevice("iPad (8th generation)")
             .previewLayout(.fixed(width: 320, height: 300))
             .environment(\.sizeCategory, .small)
     }

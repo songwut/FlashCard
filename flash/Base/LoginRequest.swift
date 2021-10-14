@@ -26,16 +26,16 @@ class LoginRequest: APIRequest {
         return .post
     }
     
-    override var params: [String: AnyObject]? {
+    override var body: [String: Any]? {
         //var dict = APIRequest.getDefaultParam()
-        var dict = [String: AnyObject]()
-        dict["username"] = username as AnyObject?
-        dict["password"] = password as AnyObject?
-        dict["is_remember"] = isRemember as AnyObject?
-        dict["language"] = self.language as AnyObject?
+        var dict = [String: Any]()
+        dict["username"] = username
+        dict["password"] = password
+        dict["is_remember"] = isRemember
+        dict["language"] = self.language
         
         if isLoginConicle {
-            dict["is_conicle_login"] = true as AnyObject?
+            dict["is_conicle_login"] = true
             
         }
         return dict
@@ -55,10 +55,10 @@ class AccountValidate: APIRequest {
         return .post
     }
     
-    override var params: [String: AnyObject]? {
+    override var body: [String: Any]? {
         //var dict = APIRequest.getDefaultParam()
-        var dict = [String: AnyObject]()
-        dict["token"] = code as AnyObject?
+        var dict = [String: Any]()
+        dict["token"] = code
         return dict
     }
 }
@@ -75,9 +75,9 @@ class LoginQRCode: APIRequest {
         return .post
     }
     
-    override var params: [String: AnyObject]? {
-        var dict = [String: AnyObject]()
-        dict["code"] = code as AnyObject?
+    override var body: [String: Any]? {
+        var dict = [String: Any]()
+        dict["code"] = code
         return dict
     }
 }

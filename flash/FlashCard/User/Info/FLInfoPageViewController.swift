@@ -16,34 +16,58 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
     var pageVC: UIPageViewController!
     var pages = [UIViewController]()
     
-    var flashCardDetail: FlFlashDetailResult?
+    var flashCardDetail: FLFlashDetailResult?
     var quiz: FlashElement?
+    
+    var selfFrame: CGRect = .zero
+    
+    init(frame: CGRect, flashCardDetail: FLFlashDetailResult?, quiz: FlashElement?) {
+        self.selfFrame = frame
+        self.flashCardDetail = flashCardDetail
+        self.quiz = quiz
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.selfFrame = .zero
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.bounds = self.selfFrame
         self.view.isOpaque = false
         self.view.backgroundColor = .clear
         self.view.updateLayout()
+        
         //self.footerHeight.constant = self.safeAreaBottomHeight
         
         let isQuiz = !(self.quiz == nil)
-        self.cardInfoVC = FLCardInfoViewController()
+        self.cardInfoVC = FLCardInfoViewController(frame: self.view.bounds, flashCardDetail: self.flashCardDetail, isQuiz: isQuiz)
+        self.cardInfoVC.view.frame = self.view.bounds
+        self.cardInfoVC.view.setNeedsDisplay()
+        self.cardInfoVC.cardView.updateLayout()
+        self.cardInfoVC.cardView.roundCorners([.topLeft, .topRight], radius: 16)
         self.cardInfoVC.flashCardDetail = self.flashCardDetail
+        print(self.cardInfoVC.view.frame)
         self.cardInfoVC.delegate = self
         self.cardInfoVC.isQuiz = isQuiz
         self.pages.append(self.cardInfoVC)
         
         if isQuiz {
-            self.quizInfoVC = FLQuizInfoViewController()
+            self.quizInfoVC = FLQuizInfoViewController(frame: self.view.bounds, flashCardDetail: self.flashCardDetail)
+            self.quizInfoVC.view.frame = self.view.bounds
+            self.quizInfoVC.cardView.updateLayout()
+            self.quizInfoVC.cardView.roundCorners([.topLeft, .topRight], radius: 16)
             self.quizInfoVC.flashCardDetail = self.flashCardDetail
             self.quizInfoVC.delegate = self
             self.pages.append(self.cardInfoVC)
         }
         
         self.pageVC = UIPageViewController(transitionStyle: UIPageViewController.TransitionStyle.scroll, navigationOrientation: .horizontal)
+        self.pageVC.view.frame = self.view.bounds
         self.addChild(self.pageVC)
         self.pageVC.view.backgroundColor = .clear
-        self.pageVC.view.bounds = self.view.bounds
         self.contentStackView.addArrangedSubview(self.pageVC.view)
         self.pageVC.delegate = self
         self.pageVC.dataSource = self
@@ -54,6 +78,13 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
             self.pageScrollEnabled(false)
         }
         
+        let tap = TapGesture(target: self, action: #selector(self.viewTap(_:)))
+        self.view.addGestureRecognizer(tap)
+        
+    }
+    
+    @objc func viewTap(_ gesture: UITapGestureRecognizer) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     private func pageScrollEnabled(_ isScrollEnabled: Bool){

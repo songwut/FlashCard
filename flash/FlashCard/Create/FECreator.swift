@@ -29,7 +29,7 @@ extension UIImageView {
 */
 
 struct FLCreator {
-    
+    var isEditor = true
     var stageView: FLStageView!
     
     init(stage: FLStageView) {
@@ -37,10 +37,10 @@ struct FLCreator {
     }
     
     func createText(_ element:FlashElement ,in stage: FLStageView) -> InteractTextView {
-        let viewX = (stage.frame.width * CGFloat(element.x) / 100)
-        let viewY = ((stage.frame.height * CGFloat(element.y)) / 100)
-        var viewW = ((stage.frame.width * CGFloat(element.width)) / 100)
-        var viewH = ((stage.frame.height * CGFloat(element.width)) / 100)
+        let viewX = (stage.frame.width * CGFloat(truncating: element.x) / 100)
+        let viewY = ((stage.frame.height * CGFloat(truncating: element.y)) / 100)
+        var viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
+        var viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
         
         let font:UIFont = element.manageFont()
         let scale = (element.scale + Float(stage.stageRatio)) - 1.0
@@ -54,6 +54,10 @@ struct FLCreator {
         iView.setImage(UIImage(named: "ic-fl-frame"), handler: .rotate)
         iView.setHandlerSize(Int(FlashStyle.text.marginIView))
         
+        iView.isHiddenEditingTool = !self.isEditor
+        iView.isUserInteractionEnabled = self.isEditor
+        
+        
         let textView = iView.textView!
         //let textView = FLTextView()
         textView.contentMode = .scaleAspectFill
@@ -62,7 +66,7 @@ struct FLCreator {
         textView.textAlignment = element.flAlignment.alignment()
         textView.textColor = UIColor(element.textColor)
         textView.font = font
-        textView.isEditable = true
+        textView.isEditable = self.isEditor
         textView.isScrollEnabled = false
         //textView.sizeToFit()
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -96,9 +100,16 @@ struct FLCreator {
         }
         */
         //let textViewSize = element.text.size(font: font, maxWidth: stage.frame.width, maxHeight: stage.frame.height)
-        let textViewSize = textView.frameFromContent()
-        viewW = textViewSize.width + margin
-        viewH = textViewSize.height + margin
+        if self.isEditor {//case new text
+            let textViewSize = textView.frameFromContent()
+            viewW = textViewSize.width + margin
+            viewH = textViewSize.height + margin
+        } else {
+            let textViewSize = textView.frameFromContent(fixWidth: viewW)
+            viewW = textViewSize.width + margin
+            viewH = textViewSize.height + margin
+        }
+        
         
         
         //let iView1 = InteractView(contentView: textView)!

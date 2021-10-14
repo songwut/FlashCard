@@ -16,9 +16,9 @@ protocol FLCardInfoViewControllerDelegate {
 class FLCardInfoViewController: UIViewController {
     
     @IBOutlet private weak var closeButton: UIButton!
-    @IBOutlet private weak var cardView: UIView!
+    @IBOutlet weak var cardView: UIView!
     @IBOutlet private weak var footerHeight: NSLayoutConstraint!
-    
+    @IBOutlet private weak var titleHeight: NSLayoutConstraint!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var instructorLabel: UILabel!
@@ -41,19 +41,33 @@ class FLCardInfoViewController: UIViewController {
     @IBOutlet private weak var quizView: UIView!
     
     var delegate: FLCardInfoViewControllerDelegate?
-    var flashCardDetail: FlFlashDetailResult?
+    var flashCardDetail: FLFlashDetailResult?
     var isQuiz = false
+    
+    var selfFrame: CGRect = .zero
+    
+    init(frame: CGRect, flashCardDetail: FLFlashDetailResult?, isQuiz: Bool) {
+        self.selfFrame = frame
+        self.flashCardDetail = flashCardDetail
+        self.isQuiz = isQuiz
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.selfFrame = .zero
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.bounds = self.selfFrame
         self.view.isOpaque = false
         self.view.backgroundColor = .clear
-        self.cardView.updateLayout()
-        self.cardView.roundCorners([.topLeft, .topRight], radius: 16)
         self.view.updateLayout()
+        self.titleHeight.constant = UIDevice.isIpad() ? 80 : 60
+        self.titleLabel.font = .font(UIDevice.isIpad() ? 24 : 14, font: .medium)
         
         let titleFont = UIFont.font(14, font: .medium)
-        self.titleLabel.font = titleFont
         self.nameLabel.font = titleFont
         self.countLabel.font = titleFont
         self.quizLabel.font = titleFont

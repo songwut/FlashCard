@@ -100,7 +100,7 @@ class OwnerResult: BaseResult {
 }
 
 
-class FlFlashDetailResult: FLBaseResult {
+class FLFlashDetailResult: FLBaseResult {
     var bgColor = "FFFFFF"
     var list = [FLCardPageResult]()
     var total = 0
@@ -116,8 +116,8 @@ class FlFlashDetailResult: FLBaseResult {
         list          <- map["results"]
     }
     
-    class func with(_ dict: [String : Any]) -> FlFlashDetailResult? {
-        let item = Mapper<FlFlashDetailResult>().map(JSON: dict)
+    class func with(_ dict: [String : Any]) -> FLFlashDetailResult? {
+        let item = Mapper<FLFlashDetailResult>().map(JSON: dict)
         return item
     }
 }

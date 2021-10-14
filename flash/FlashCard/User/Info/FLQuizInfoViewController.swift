@@ -15,8 +15,9 @@ protocol FLQuizInfoViewControllerDelegate {
 class FLQuizInfoViewController: UIViewController {
     
     @IBOutlet private weak var titleLabel: UILabel!
-
-    @IBOutlet private weak var cardView: UIView!
+    @IBOutlet private weak var titleHeight: NSLayoutConstraint!
+    @IBOutlet weak var cardView: UIView!
+    @IBOutlet private weak var ansTextHeight: NSLayoutConstraint!
     @IBOutlet private weak var footerHeight: NSLayoutConstraint!
     @IBOutlet private weak var progressStackView: UIStackView!
     
@@ -27,7 +28,7 @@ class FLQuizInfoViewController: UIViewController {
     
     private var quizInfoSheetView: FLQuizInfoProgressView?
     
-    var flashCardDetail: FlFlashDetailResult?
+    var flashCardDetail: FLFlashDetailResult?
     var delegate: FLQuizInfoViewControllerDelegate?
     
     let userAnswerList = [
@@ -43,44 +44,60 @@ class FLQuizInfoViewController: UIViewController {
         UserAnswerResult(JSON: ["name" : "ukyk"])!
     ]
     
+    var selfFrame: CGRect = .zero
+    
+    init(frame: CGRect, flashCardDetail: FLFlashDetailResult?) {
+        self.selfFrame = frame
+        self.flashCardDetail = flashCardDetail
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.selfFrame = .zero
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.bounds = self.selfFrame
         self.view.isOpaque = false
         self.view.backgroundColor = .clear
+        self.titleHeight.constant = UIDevice.isIpad() ? 80 : 60
+        self.ansTextHeight.constant = UIDevice.isIpad() ? 90 : 50
         self.titleLabel.textColor = .black
         self.answerLabel.textColor = .black
+        self.titleLabel.font = .font(UIDevice.isIpad() ? 24 : 14, font: .medium)
         self.titleLabel.text = "quiz".localized()
         self.answerLabel.text = "Answer".localized()
         self.userTableView.backgroundColor = .white
-        self.cardView.updateLayout()
         self.userTableView.updateLayout()
-        self.cardView.roundCorners([.topLeft, .topRight], radius: 16)
         self.progressStackView.updateLayout()
         
         self.userTableView.register(UINib(nibName: "FLUserTableViewCell", bundle: nil), forCellReuseIdentifier: FLUserTableViewCell.id)
         
         self.answerLabel.text = "answer".localized()
-        self.answerLabel.font = .font(14, font: .medium)
+        self.answerLabel.font = .font( UIDevice.isIpad() ? 28 : 14, font: .medium)
         let userAns = [["name" : "ฮอกไกโด"], ["name" : "เขาใหญ่"]]// ["user_answer_list" : ]
         let userAnswerPage = UserAnswerPageResult(JSON: ["value" : "quiz name", "choice" : [["value" : "ฮอกไกโด", "is_answer":true, "percent": 70], ["value" : "เขาใหญ่", "percent": 30]], "user_answer_list": userAns])!
         let infoSheetView = self.quizInfoSheetView ?? FLQuizInfoProgressView(userAnswerPage: userAnswerPage)
         let infoVC = UIHostingController(rootView: infoSheetView)
         
         let width = self.progressStackView.frame.width
-        let pading: CGFloat = CGFloat(8 * userAnswerPage.choiceList.count)
-        let allChoice: CGFloat = CGFloat(36 * userAnswerPage.choiceList.count)
+        let pading: CGFloat = FlashStyle.quiz.choiceSpacing * CGFloat(userAnswerPage.choiceList.count)
+        let allChoice: CGFloat = FlashStyle.quiz.choiceMinHeight * CGFloat(userAnswerPage.choiceList.count)
         let height: CGFloat = 50 + allChoice + pading
         infoVC.view.frame = CGRect(x: 0, y: 0, width: width, height: height)
         self.progressStackView.addArrangedSubview(infoVC.view)
         
         let maxHeight: CGFloat = 358
-        let allH: CGFloat = CGFloat(userAnswerList.count * 60)
+        let allH: CGFloat = CGFloat(userAnswerList.count) * FlashStyle.quiz.userMinHeight
         let userH = allH >= maxHeight ? maxHeight : allH
         self.userListHeight.constant = userH
         
         self.userTableView.separatorStyle = .none
         self.userTableView.delegate = self
         self.userTableView.dataSource = self
+        self.userTableView.reloadData()
         self.userTableView.reloadData()
     }
     
