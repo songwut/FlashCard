@@ -1,18 +1,23 @@
 {
   "id": 1,
-  "value": "question",
-  "choice": [
-    {
+  "type": "question",
+  "detail": {
       "id": 1,
-      "value": "Option 1",
-      "is_hidden": false,
-      "is_answer": true
-    },
-    {
-      "id": 2,
-      "value": "Option 2",
-      "is_hidden": false,
-      "is_answer": false
+      "value": "",
+      "choice": [
+        {
+          "id": 1,
+          "value": "Option 1",
+          "is_hidden": false,
+          "is_answer": true
+        },
+        {
+          "id": 2,
+          "value": "Option 2",
+          "is_hidden": false,
+          "is_answer": false
+        }
+      ]
     }
-  ]
 }
+

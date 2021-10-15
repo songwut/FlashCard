@@ -159,6 +159,7 @@ final class FLCreateViewController: UIViewController {
     
     @objc func deletePressed(_ sender: UIButton) {
         //TODO: Api delete
+        /*
         ConsoleLog.show("pageList before: \(self.viewModel.pageList.count)")
         let index = self.viewModel.pageIndex
         let stage = self.getStageView(at: index)
@@ -169,6 +170,24 @@ final class FLCreateViewController: UIViewController {
                 ConsoleLog.show("pageList after delete: \(self.viewModel.pageList.count)")
             }
         }
+        */
+        
+        //TODO: recheck 500
+        
+        var newCardData = [String: Any]()
+        var data = [String: Any]()
+        data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
+        newCardData["data"] = data.json
+        newCardData["sort"] = ""
+        let fakeImage = UIImage(named: "image")
+        let coverImageBase64 = fakeImage?.jpegData(compressionQuality: 1)?.base64EncodedString()
+        if let base64 = coverImageBase64 {
+            newCardData["image"] = base64
+        }
+        self.viewModel.callAPIAddNewCard(param: newCardData) { (flashDetailResult) in
+            
+        }
+        
     }
     
     @objc func appLeftPressed(_ sender: UIButton) {
@@ -190,6 +209,7 @@ final class FLCreateViewController: UIViewController {
         */
         
         //for right
+        /*
         var newCardData = [String: Any]()
         var data = [String: Any]()
         data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
@@ -197,20 +217,26 @@ final class FLCreateViewController: UIViewController {
         self.viewModel.callAPIAddNewCard(param: newCardData) { (flashDetailResult) in
             
         }
+        */
         //self.gotoPage(index: newIndex)
+        
+        
+        
+        //TODO: Delete
+        self.addRightPressed(sender)
     }
     
     @objc func addRightPressed(_ sender: UIButton) {
         let index = self.viewModel.pageIndex
         let currentStage = self.getStageView(at: index)
         //mock test
+        
         self.saveCoverPage()
         guard let cardPageJson = currentStage.createJSON() else { return }
         ConsoleLog.show("addRightPressed index:\(index)")
         ConsoleLog.show("cardPageJson:\(cardPageJson.json)")
         self.reloadNewCard(method: .patch, param: cardPageJson)
         ConsoleLog.show("save currentStage")
-        
         
         
         //TODO: Post new card
@@ -354,6 +380,7 @@ final class FLCreateViewController: UIViewController {
         let frame = self.stageView?.frame ?? CGRect.zero
         for page in self.viewModel.pageList {
             let stage = self.createStageView(frame.size, creator: self.flCreator!)
+            stage.isEditor = true
             stage.card = page
             self.stageViewList?.append(stage)
             stackView.addArrangedSubview(stage)
@@ -543,7 +570,7 @@ final class FLCreateViewController: UIViewController {
                 guard let self = self else { return }
                 self.viewModel.createNewQuiz { [weak self] (question) in
                     guard let q = question else { return }
-                    self?.createNewQuiz(question: q)
+                    self?.createNewQuiz(element: q)
                 }
             })
             self.toolVC?.didClose = Action(handler: { [weak self] (sender) in
@@ -583,9 +610,9 @@ final class FLCreateViewController: UIViewController {
         }
     }
     
-    func createNewQuiz(question: FLQuestionResult) {
-        let element = FlashElement.with(["type": FLType.quiz.rawValue])!
-        element.question = question
+    func createNewQuiz(element: FlashElement) {
+        //let element = FlashElement.with(["type": FLType.quiz.rawValue])!
+        //element.question = question
         let row = self.indexOfMajorCell()
         self.createElement(element, row: row)
     }
@@ -723,11 +750,8 @@ final class FLCreateViewController: UIViewController {
         
         let stageView = self.getStageView(at: row)
         if let quizView = stageView.createElement(element) as? FLQuizView {
-            quizView.createNewUI(question: element.question)
             quizView.isUserInteractionEnabled = true
             quizView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.moveVertical(_:))))
-            quizView.alpha = 0.0
-            //quizView.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
             quizView.didDelete = Action(handler: { (sender) in
                 UIView.animateKeyframes(withDuration: 0.2, delay: 0, options:[]) {
                     quizView.alpha = 0.0
@@ -737,6 +761,13 @@ final class FLCreateViewController: UIViewController {
                 self.toolVC?.quizMenu?.setQuizButtonEnable(true)
             })
             self.toolVC?.quizMenu?.setQuizButtonEnable(false)
+            
+            stageView.quizManageSize(quizView)
+            
+            //let scaleUI = quizView.scaleUI
+            //quizView.transform = CGAffineTransform(scaleX: CGFloat(scaleUI), y: CGFloat(scaleUI))
+            
+            
         }
         
     }
@@ -984,6 +1015,8 @@ final class FLCreateViewController: UIViewController {
     func saveCoverPage() {
         let stageView = self.getStageView(at: self.viewModel.pageIndex)
         self.selectedViewIsHiddenTool(true)
+        
+        stageView.prepareBeforeSaveView()
         
         guard let screenshot = self.createScreenshot(of: stageView) else { return }
         let coverImageBase64 = screenshot.jpegData(compressionQuality: 1)?.base64EncodedString()

@@ -243,9 +243,6 @@
 		697C0BF626CD169200CA1092 /* flash-card-new-quiz.json in Resources */ = {isa = PBXBuildFile; fileRef = 697C0BF526CD169000CA1092 /* flash-card-new-quiz.json */; };
 		697C0BF726CD169300CA1092 /* flash-card-new-quiz.json in Resources */ = {isa = PBXBuildFile; fileRef = 697C0BF526CD169000CA1092 /* flash-card-new-quiz.json */; };
 		697C0BF826CD169300CA1092 /* flash-card-new-quiz.json in Resources */ = {isa = PBXBuildFile; fileRef = 697C0BF526CD169000CA1092 /* flash-card-new-quiz.json */; };
-		697C0C0026CD207D00CA1092 /* flash-card-quiz-1.json in Resources */ = {isa = PBXBuildFile; fileRef = 697C0BFF26CD207D00CA1092 /* flash-card-quiz-1.json */; };
-		697C0C0126CD207D00CA1092 /* flash-card-quiz-1.json in Resources */ = {isa = PBXBuildFile; fileRef = 697C0BFF26CD207D00CA1092 /* flash-card-quiz-1.json */; };
-		697C0C0226CD207D00CA1092 /* flash-card-quiz-1.json in Resources */ = {isa = PBXBuildFile; fileRef = 697C0BFF26CD207D00CA1092 /* flash-card-quiz-1.json */; };
 		697D19E926945ED60082783E /* HalfNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697D19E226945ED50082783E /* HalfNavController.swift */; };
 		697D19EA26945ED60082783E /* HalfNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697D19E226945ED50082783E /* HalfNavController.swift */; };
 		697D19EB26945ED60082783E /* HalfNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697D19E226945ED50082783E /* HalfNavController.swift */; };
@@ -723,7 +720,6 @@
 		697C0AF326CA6CBD00CA1092 /* FLQuiz.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FLQuiz.storyboard; sourceTree = "<group>"; };
 		697C0AFD26CA6D0900CA1092 /* FLQuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLQuizViewController.swift; sourceTree = "<group>"; };
 		697C0BF526CD169000CA1092 /* flash-card-new-quiz.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "flash-card-new-quiz.json"; sourceTree = "<group>"; };
-		697C0BFF26CD207D00CA1092 /* flash-card-quiz-1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "flash-card-quiz-1.json"; sourceTree = "<group>"; };
 		697D19E226945ED50082783E /* HalfNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfNavController.swift; sourceTree = "<group>"; };
 		697D19E426945ED50082783E /* HalfModalInteractiveTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfModalInteractiveTransition.swift; sourceTree = "<group>"; };
 		697D19E526945ED50082783E /* HalfModalTransitionAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfModalTransitionAnimator.swift; sourceTree = "<group>"; };
@@ -1177,7 +1173,6 @@
 				6985B1B926E270D800FEAD8F /* ugc-flash-card-id.json */,
 				698991B426BAA246008A41C1 /* ugc-flash-card-id-card.json */,
 				6985B1AE26E23E5A00FEAD8F /* ugc-flash-card-id-card-id.json */,
-				697C0BFF26CD207D00CA1092 /* flash-card-quiz-1.json */,
 				697C0BF526CD169000CA1092 /* flash-card-new-quiz.json */,
 				6989922B26BCF54B008A41C1 /* flash-card-shape.json */,
 				6989922126BCF51E008A41C1 /* flash-card-sticker.json */,
@@ -1565,7 +1560,6 @@
 				6989920026BCF28C008A41C1 /* FLGraphicView.xib in Resources */,
 				696ABCAC26DFC496009527D3 /* overlay_like@3x.png in Resources */,
 				69720537268E29D4002E3149 /* FlashCard.storyboard in Resources */,
-				697C0C0026CD207D00CA1092 /* flash-card-quiz-1.json in Resources */,
 				69B0FBE526A6F6F60086E6C5 /* DB HeaventRounded Med v3.2.1.ttf in Resources */,
 				6985B1AF26E23E5A00FEAD8F /* ugc-flash-card-id-card-id.json in Resources */,
 				698490632695E93D00B5FEF6 /* FLColorView.xib in Resources */,
@@ -1648,7 +1642,6 @@
 				6989920126BCF28C008A41C1 /* FLGraphicView.xib in Resources */,
 				696BBAC226E8760600E88B49 /* FLPostViewController.xib in Resources */,
 				6985B1BB26E270D900FEAD8F /* ugc-flash-card-id.json in Resources */,
-				697C0C0126CD207D00CA1092 /* flash-card-quiz-1.json in Resources */,
 				696ABCAA26DFC496009527D3 /* overlay_skip@3x.png in Resources */,
 				696BBAC926E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */,
 				697C0AB826CA30FB00CA1092 /* FLQuizView.xib in Resources */,
@@ -1706,7 +1699,6 @@
 				6989920226BCF28C008A41C1 /* FLGraphicView.xib in Resources */,
 				696BBAC326E8760600E88B49 /* FLPostViewController.xib in Resources */,
 				6985B1BC26E270D900FEAD8F /* ugc-flash-card-id.json in Resources */,
-				697C0C0226CD207D00CA1092 /* flash-card-quiz-1.json in Resources */,
 				696ABCAB26DFC496009527D3 /* overlay_skip@3x.png in Resources */,
 				696BBACA26E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */,
 				697C0AB926CA30FB00CA1092 /* FLQuizView.xib in Resources */,

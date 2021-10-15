@@ -12,7 +12,7 @@ class FLChoiceResult:Mappable {
 
     var id = 0
     var value = ""
-    var isAnswer: Bool?
+    var isAnswer: Bool = false
     var percent: NSNumber?
     var isHidden = false
     
@@ -27,7 +27,7 @@ class FLChoiceResult:Mappable {
     }
     
     func infoProgressColor() -> UIColor {
-        if let isAnswer = self.isAnswer, isAnswer {
+        if self.isAnswer {
             return UIColor.success()
         } else {
             return UIColor.config_primary_25()

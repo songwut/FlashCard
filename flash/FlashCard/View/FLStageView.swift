@@ -39,13 +39,13 @@ class FLStageView: UIView {
         }
     }
     
-    func loadElement() {
+    func loadElement() {//User Player
         guard let card = self.card else { return }
         for v in self.subviews {
            v.removeFromSuperview()
         }
         self.cover.imageUrl(card.image)
-        
+        self.isEditor = false
         self.flCreator.isEditor = false
         
         self.viewModel?.callAPICardDetail(card) { [weak self] (cardDetail) in
@@ -55,8 +55,28 @@ class FLStageView: UIView {
             for element in cardDetail.componentList {
                 let v = self.createElement(element)
                 v?.tag = element.id
+                if let quizView = v as? FLQuizView {
+                    self.quizManageSize(quizView)
+                }
             }
+            
+            //Manage size
             self.cover.isHidden = true
+            
+            
+        }
+    }
+    
+    func quizManageSize(_ quizView: FLQuizView) {
+        quizView.alpha = 0.0
+        let originalCenter = quizView.center
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            quizView.bounds = CGRect(x: 0, y: 0, width: quizView.bounds.width, height: self.frame.height)
+            quizView.center = originalCenter
+            quizView.alpha = 1.0
+            quizView.popIn(fromScale: 0.5, toScale: quizView.scaleUI, duration: 0.5, delay: 0) { (done) in
+                print("popIn quizView: \(quizView.frame)")
+            }
         }
     }
     
@@ -90,14 +110,7 @@ class FLStageView: UIView {
         
         let stageView = self
         let quizView = self.flCreator.createQuiz(element, in: stageView)
-        quizView.alpha = 0.0
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            quizView.alpha = 1.0
-//            quizView.popIn(fromScale: 0.5, toScale: quizView.scale, duration: 0.5, delay: 0) { (done) in
-//                print("popIn quizView: \(quizView.frame)")
-//            }
-            
-        }
+        quizView.isEditor = self.flCreator.isEditor
         return quizView
     }
     
@@ -155,12 +168,19 @@ class FLStageView: UIView {
         data["bg_color"] = colorDict as AnyObject
         data["component"] = component as AnyObject?
         
-        let image = "\(self.coverImageBase64 ?? "")"
         dict["data"] = data.json as AnyObject?
         if let coverImageBase64 = self.coverImageBase64 {
             dict["image"] = coverImageBase64 as AnyObject?
         }
         //dict["sort"] = nil as AnyObject?
         return dict
+    }
+    
+    func prepareBeforeSaveView() {
+        for v in self.subviews {
+            if let quizView = v as? FLQuizView {
+                quizView.endEditing(true)
+            }
+        }
     }
 }

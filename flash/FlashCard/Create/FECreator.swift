@@ -189,22 +189,24 @@ struct FLCreator {
     }
     
     func createQuiz(_ element: FlashElement ,in stage: FLStageView) -> FLQuizView {
-        let originalFrame = CGRect(x: 0, y: 0, width: 325, height: 200)
-        let stageW = stage.frame.width
+        //let originalFrame = CGRect(x: 0, y: 0, width: 325, height: 200)
+        //let stageW = stage.frame.width
         let quizW: CGFloat = 293
-        let scale: CGFloat = quizW / FlashStyle.baseStageWidth
-        let viewW: CGFloat = FlashStyle.baseStageWidth
+        let scaleUI: CGFloat = quizW / FlashStyle.baseStageWidth//0.9
+        let expectQuizW: CGFloat = stage.bounds.width * scaleUI//370 / 0.9 = 334
         let quizView = FLQuizView.instanciateFromNib()
-        quizView.scale = scale
+        quizView.scaleUI = expectQuizW / quizW//1.139
         let viewX = ((stage.frame.width * 50) / 100)
         let viewY = ((stage.frame.height * 50) / 100)
         //use stage width and scale down
-        let size = CGSize(width: stageW, height: stageW)
+        let size = CGSize(width: quizW, height: stage.frame.height)//let auto height
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(origin: CGPoint.zero, size: size)
         quizView.frame = frame
         quizView.center = center
+        quizView.isEditor = self.isEditor
+        quizView.createNewUI(element)
         return quizView
     }
     

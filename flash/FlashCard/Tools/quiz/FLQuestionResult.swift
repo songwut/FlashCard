@@ -8,18 +8,13 @@
 import Foundation
 import ObjectMapper
 
-class FLQuestionResult:Mappable {
-
-    var id = 0
+class FLQuestionResult:FlashElement {
     var value = ""
     var choiceList = [FLChoiceResult]()
     var answer: FLAnswerResult?
     
-    required init?(map: Map) {
-        
-    }
-    
-    func mapping(map: Map) {
+    override func mapping(map: Map) {
+        super.mapping(map: map)
         id           <- map["id"]
         value        <- map["value"]
         choiceList   <- map["choice"]

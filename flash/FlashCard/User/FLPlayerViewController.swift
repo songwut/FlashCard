@@ -148,6 +148,7 @@ class FLPlayerViewController: UIViewController {
         self.swipeView.showTinderCards(with: self.viewModel.pageList ,isDummyShow: true)
         if let firstCard = self.swipeView.loadedCards.first?.overlay as? FLStageView {
             firstCard.loadElement()
+            
         }
         
         self.viewContainer.alpha = 1.0

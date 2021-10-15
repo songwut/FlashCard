@@ -13,10 +13,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L0v-Mh-bLM">
-                    <rect key="frame" x="0.0" y="0.0" width="282" height="36"/>
+                    <rect key="frame" x="0.0" y="0.0" width="292" height="36"/>
                     <subviews>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="Option 1" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="OQx-1n-Bn3" customClass="GrowingTextView" customModule="GrowingTextView">
-                            <rect key="frame" x="0.0" y="0.0" width="282" height="36"/>
+                            <rect key="frame" x="0.0" y="0.0" width="292" height="33"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -39,28 +39,35 @@
                         <constraint firstItem="OQx-1n-Bn3" firstAttribute="leading" secondItem="L0v-Mh-bLM" secondAttribute="leading" id="rI9-gm-0tp"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LQZ-QQ-qid">
-                    <rect key="frame" x="282" y="3" width="30" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LQZ-QQ-qid" customClass="FLChoiceButton" customModule="flash" customModuleProvider="target">
+                    <rect key="frame" x="292" y="8" width="20" height="20"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="30" id="flr-Ks-7jz"/>
-                        <constraint firstAttribute="height" constant="30" id="oV4-fJ-MjH"/>
+                        <constraint firstAttribute="width" constant="20" id="flr-Ks-7jz"/>
+                        <constraint firstAttribute="height" constant="20" id="oV4-fJ-MjH"/>
                     </constraints>
                     <color key="tintColor" red="0.0" green="0.85882352941176465" blue="0.52156862745098043" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
                     <inset key="imageEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                     <state key="normal" image="ic_v2_check"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <real key="value" value="15"/>
+                            <real key="value" value="10"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bUa-Ae-4Co" customClass="FLChoiceButton" customModule="flash" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="36"/>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="L0v-Mh-bLM" secondAttribute="bottom" id="1i9-vf-8f8"/>
+                <constraint firstItem="bUa-Ae-4Co" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="CY9-tL-6yw"/>
+                <constraint firstItem="bUa-Ae-4Co" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="K7o-8A-hHR"/>
                 <constraint firstItem="L0v-Mh-bLM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="OPM-OF-Vt6"/>
                 <constraint firstItem="LQZ-QQ-qid" firstAttribute="leading" secondItem="L0v-Mh-bLM" secondAttribute="trailing" id="RcI-Pq-pTR"/>
                 <constraint firstItem="L0v-Mh-bLM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="aWf-bd-7PA"/>
+                <constraint firstItem="bUa-Ae-4Co" firstAttribute="height" secondItem="L0v-Mh-bLM" secondAttribute="height" id="bib-4f-cI3"/>
+                <constraint firstAttribute="trailing" secondItem="bUa-Ae-4Co" secondAttribute="trailing" id="ilc-TU-fFw"/>
                 <constraint firstAttribute="trailing" secondItem="LQZ-QQ-qid" secondAttribute="trailing" constant="8" id="s74-Pw-KNa"/>
                 <constraint firstItem="LQZ-QQ-qid" firstAttribute="centerY" secondItem="L0v-Mh-bLM" secondAttribute="centerY" id="xzg-Ey-pHl"/>
             </constraints>
@@ -68,8 +75,9 @@
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="checkButton" destination="LQZ-QQ-qid" id="cJ7-IV-3Nk"/>
+                <outlet property="checkButton" destination="LQZ-QQ-qid" id="etZ-Er-DZp"/>
                 <outlet property="contentHeight" destination="K6t-EK-nN3" id="bGL-eg-mSS"/>
+                <outlet property="fieldButton" destination="bUa-Ae-4Co" id="uLJ-Th-Vcu"/>
                 <outlet property="textView" destination="OQx-1n-Bn3" id="qKO-20-ts7"/>
             </connections>
             <point key="canvasLocation" x="8.6956521739130448" y="83.035714285714278"/>
@@ -77,7 +85,7 @@
     </objects>
     <designables>
         <designable name="OQx-1n-Bn3">
-            <size key="intrinsicContentSize" width="-1" height="30"/>
+            <size key="intrinsicContentSize" width="64" height="33"/>
         </designable>
     </designables>
     <resources>

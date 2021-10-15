@@ -16,33 +16,51 @@ class FLQuizView: UIView {
     @IBOutlet weak var choiceStackView: UIStackView!
     @IBOutlet weak var addStackView: UIStackView!
     @IBOutlet weak var addButton: FLDashButton?
+    @IBOutlet weak var deleteButton: UIButton?
     
     var didDelete: Action?
-    var isCreate = false
-    var scale:CGFloat = 1.0
+    var isEditor = false
+    var scaleUI:CGFloat = 1.0
     var choiceCount: Int {
         guard let question = self.question else { return 0 }
         return question.choiceList.count
+    }
+    var correctChoiceView: FLChoiceView?
+    var element: FlashElement? {
+        didSet {
+            self.question = self.element?.question
+        }
+        
     }
     
     var question: FLQuestionResult? {
         didSet {
             self.titleLabel.text = "Question :"
             self.questionTextView.font = .font(.paragraph, font: .text)
-            self.questionTextView.placeholder = "Write your question."
-            self.questionTextView.placeholderColor = .white
+            if self.isEditor {
+                self.questionTextView.placeholder = "Write your question."
+                self.questionTextView.placeholderColor = .white
+            }
             
             self.questionTextView.maxLength = FlashStyle.maxCharQuestion
+            self.questionTextView.text = self.question?.value ?? ""
+            self.addStackView.isHidden = !self.isEditor
+            self.deleteButton?.isHidden = !self.isEditor
             
             guard let question = self.question else { return }
             self.choiceStackView.removeAllArranged()
             for index in 0..<question.choiceList.count {
                 let choice = question.choiceList[index]
-                let choiceView = self.createChoiceView(choice)
-                choiceView.checkButton.tag = index + 1
+                let choiceView = self.createChoiceView(choice, question: question)
                 self.choiceStackView.addArrangedSubview(choiceView)
             }
         }
+    }
+    
+    func createNewUI(_ element: FlashElement?) {
+        guard let e = element else { return }
+        self.element = e
+        self.addButton?.updateLayout()
     }
     
     func createJSON() -> [String: AnyObject] {
@@ -64,56 +82,89 @@ class FLQuizView: UIView {
         dict["height"] = percentHeight as AnyObject
         dict["position_x"] = centerX as AnyObject
         dict["position_y"] = centerY as AnyObject
-        dict["rotation"] = 0 as AnyObject
-        dict["scale"] = 1 as AnyObject
+        //dict["rotation"] = 0 as AnyObject
+        //dict["scale"] = 1 as AnyObject
         dict["type"] = "question" as AnyObject
         
         var detail = [String: AnyObject]()
         var choiceListJson = [[String: AnyObject]]()
         for choice in question.choiceList {
             var choiceJson = [String: AnyObject]()
+            choiceJson["id"] = choice.id as AnyObject
             choiceJson["value"] = choice.value as AnyObject
             choiceJson["is_answer"] = choice.isAnswer as AnyObject?
             choiceListJson.append(choiceJson)
         }
         
         //detail["id"] = question.id as AnyObject//back gen
-        detail["value"] = (self.questionTextView.text ?? "") as AnyObject
+        detail["value"] = question.value as AnyObject
         detail["choice"] = choiceListJson as AnyObject
-        
         dict["detail"] = detail as AnyObject
         
         return dict
     }
     
-    func createNewUI(question: FLQuestionResult?) {
-        guard let q = question else { return }
-        self.isCreate = true
-        self.question = q
-        
-        self.addButton?.updateLayout()
+    func updateHeight(_ complete: @escaping () -> ()) {
+        self.updateLayout()
+        self.cardView.updateLayout()
+        self.choiceStackView.updateLayout()
+        let originalCenter = self.center
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            print("self.frame.height: \(self.frame.height)")
+            print("self.cardView.frame.height: \(self.cardView.frame.height)")
+            self.bounds = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
+            self.center = originalCenter
+            complete()
+        }
     }
     
-    private func createChoiceView(_ choice: FLChoiceResult) -> FLChoiceView {
+    private func createChoiceView(_ choice: FLChoiceResult, question: FLQuestionResult) -> FLChoiceView {
         let choiceView = FLChoiceView.instanciateFromNib()
-        choiceView.isCreate = self.isCreate
-        
+        choiceView.isEditor = self.isEditor
+        choiceView.answer = question.answer
         choiceView.choice = choice
         choiceView.didDelete = Action(handler: { [weak self] (sender) in
-            guard let question = self?.question else { return }
-            if question.choiceList.count > 1 {
-                let index = choiceView.checkButton.tag - 1
-                question.choiceList.remove(at: index)
+            let index = question.choiceList.firstIndex { (c) -> Bool in
+                return c.id == choice.id
+            }
+            if let removeIndex = index {
+                question.choiceList.remove(at: removeIndex)
                 choiceView.removeFromSuperview()
-                
                 self?.addStackView.isHidden = question.choiceList.count == FlashStyle.maxChoice
             }
         })
-        choiceView.checkButton.addTarget(self, action: #selector(self.choicePressed(_:)), for: .touchUpInside)
+        if self.isEditor {
+            choiceView.checkButton.addTarget(self, action: #selector(self.choicePressed(_:)), for: .touchUpInside)
+        } else {
+            choiceView.fieldButton.addTarget(self, action: #selector(self.answerSelected(_:)), for: .touchUpInside)
+            //let tap = TapGesture(target: self, action: #selector(self.answerSelected(_:)))
+            //choiceView.isUserInteractionEnabled = true
+            //choiceView.addGestureRecognizer(tap)
+            choiceView.textView.isEditable = false
+            choiceView.textView.isSelectable = false
+        }
+        
         return choiceView
     }
     
-    @objc func choicePressed(_ sender: UIButton) {
+    @objc func answerSelected(_ sender: FLChoiceButton) {//Player
+        guard let question = self.question else { return }
+        guard let choice = sender.choice else { return }
+        if question.answer == nil {
+            let answer = FLAnswerResult(JSON: ["choice_id" : choice.id])
+            question.answer = answer
+            for v in self.choiceStackView.arrangedSubviews {
+                if let choiceView = v as? FLChoiceView {
+                    choiceView.answer = answer
+                    choiceView.updateUI()
+                    choiceView.isUserInteractionEnabled = false
+                }
+            }
+        }
+        
+    }
+    
+    @objc func choicePressed(_ sender: FLChoiceButton) {//Edit
         guard let question = self.question else { return }
         //reset select
         for i in 0..<question.choiceList.count {
@@ -124,13 +175,10 @@ class FLQuizView: UIView {
             }
         }
         
-        //update select
-        let selectedIndex = sender.tag - 1
-        let choice = question.choiceList[selectedIndex]
-        choice.isAnswer = true
-        if let choiceView = self.choiceStackView.arrangedSubviews[selectedIndex] as? FLChoiceView {
-            choiceView.choice = choice
-        }
+        //update select and reupdate content
+        let choice = sender.choice
+        choice?.isAnswer = true
+        sender.choiceView?.choice = choice
     }
     
     @IBAction func addChoicePressed(_ sender: UIButton) {
@@ -138,14 +186,14 @@ class FLQuizView: UIView {
         //create new choice
         let order = self.choiceCount + 1
         let title = "Option \(order)"
-        let choice = FLChoiceResult(JSON: ["id" : -1, "value" : title])!
-        let choiceView = self.createChoiceView(choice)
-        choiceView.checkButton.tag = order
+        let choice = FLChoiceResult(JSON: ["id" : order, "value" : title])!
+        let choiceView = self.createChoiceView(choice, question: question)
         self.choiceStackView.addArrangedSubview(choiceView)
         question.choiceList.append(choice)
         
         print("question.choiceList.count: \(question.choiceList.count)")
         self.addStackView.isHidden = question.choiceList.count == FlashStyle.maxChoice
+        
     }
     
     @IBAction func deletePressed(_ sender: UIButton) {
@@ -153,6 +201,7 @@ class FLQuizView: UIView {
     }
     
     override func awakeFromNib() {
+        self.deleteButton?.tintColor = .white
         self.titleLabel.textColor = .white
         self.questionTextView.delegate = self
         self.questionTextView.backgroundColor = .clear
@@ -181,6 +230,9 @@ extension FLQuizView: GrowingTextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         ConsoleLog.show("question textViewDidBeginEditing")
+        if textView.text.hasPrefix("Option") {
+            textView.selectAll(self)
+        }
     }
     
     func textViewDidChange(_ textView: UITextView) {

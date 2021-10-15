@@ -170,6 +170,7 @@ class FlashElement: FLBaseResult {
     var mp4VideoUploade: String?
     
     //Quiz
+    var scaleUI: Float = 1.0//default
     var question: FLQuestionResult?
     
     //maybe next
