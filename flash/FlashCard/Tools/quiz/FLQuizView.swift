@@ -18,6 +18,7 @@ class FLQuizView: UIView {
     @IBOutlet weak var addButton: FLDashButton?
     @IBOutlet weak var deleteButton: UIButton?
     
+    var didSelectChoice: Action?
     var didDelete: Action?
     var isEditor = false
     var scaleUI:CGFloat = 1.0
@@ -152,6 +153,7 @@ class FLQuizView: UIView {
         guard let choice = sender.choice else { return }
         if question.answer == nil {
             let answer = FLAnswerResult(JSON: ["choice_id" : choice.id])
+            answer?.value = choice.value
             question.answer = answer
             for v in self.choiceStackView.arrangedSubviews {
                 if let choiceView = v as? FLChoiceView {
@@ -160,6 +162,7 @@ class FLQuizView: UIView {
                     choiceView.isUserInteractionEnabled = false
                 }
             }
+            self.didSelectChoice?.handler(answer)
         }
         
     }

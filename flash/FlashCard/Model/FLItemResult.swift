@@ -123,11 +123,12 @@ class FLFlashDetailResult: FLBaseResult {
 }
 
 class FLCardPageResult: FLBaseResult {
-    
+    var sort:Int?
     var dropboxPage: FLDropboxPageResult?
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        sort               <- map["image"]
         image              <- map["image"]
     }
     

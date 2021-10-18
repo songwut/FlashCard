@@ -90,7 +90,7 @@ class FLStageViewModel {
             }
         }
     }
-    
+    //ugcCardDetailAnswer
     func callAPICardDetail(_ currentCard: FLCardPageResult? ,
                            method: APIMethod = .get ,
                            param:[String: Any]? = nil,
@@ -154,6 +154,24 @@ class FLStageViewModel {
 //                complete(detail)
 //            }
 //        }
+    }
+    
+    func callAPICardDetailAnswer(_ currentCard: FLCardPageResult? ,
+                           method: APIMethod = .get ,
+                           param:[String: Any]? = nil,
+                           complete: @escaping (_ ans: FLAnswerResult?) -> ()) {
+        
+        guard let card = currentCard else { return }
+        let request = FLRequest()
+        request.apiMethod = method
+        request.parameter = param
+        request.endPoint = .ugcCardDetailUserAnswer
+        request.arguments = ["\(self.flashId)", "\(card.id)"]
+        request.apiType = .json
+        
+        API.request(request) { (responseBody: ResponseBody?, result: FLAnswerResult?, isCache, error) in
+            complete(result)
+        }
     }
     
     func save(element: FlashElement, at index: Int) {

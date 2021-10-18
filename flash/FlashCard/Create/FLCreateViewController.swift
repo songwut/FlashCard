@@ -177,7 +177,7 @@ final class FLCreateViewController: UIViewController {
         var newCardData = [String: Any]()
         var data = [String: Any]()
         data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
-        newCardData["data"] = data.json
+        newCardData["data"] = data
         newCardData["sort"] = ""
         let fakeImage = UIImage(named: "image")
         let coverImageBase64 = fakeImage?.jpegData(compressionQuality: 1)?.base64EncodedString()
@@ -234,7 +234,7 @@ final class FLCreateViewController: UIViewController {
         self.saveCoverPage()
         guard let cardPageJson = currentStage.createJSON() else { return }
         ConsoleLog.show("addRightPressed index:\(index)")
-        ConsoleLog.show("cardPageJson:\(cardPageJson.json)")
+        ConsoleLog.show("cardPageJson:\(cardPageJson.jsonString)")
         self.reloadNewCard(method: .patch, param: cardPageJson)
         ConsoleLog.show("save currentStage")
         
@@ -775,6 +775,7 @@ final class FLCreateViewController: UIViewController {
     func createIView(_ element: FlashElement, row: Int, media: FLMediaResult? = nil) {
         
         let stageView = self.getStageView(at: row)
+        element.sort = stageView.subviews.count + 1
         if let iView = stageView.createElement(element) as? InteractView {
             iView.outlineBorderColor = .black
             iView.setImage(UIImage(named: "fl_delete"), for: .close)
@@ -820,6 +821,7 @@ final class FLCreateViewController: UIViewController {
     func createTextView(_ element: FlashElement, row: Int) {
         
         let stageView = self.getStageView(at: row)
+        element.sort = stageView.subviews.count + 1
         if let iView = stageView.createElement(element) as? InteractTextView {
 //            iView.enableClose = true
 //            iView.enableFlip = false

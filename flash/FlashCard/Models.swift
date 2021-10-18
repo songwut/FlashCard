@@ -92,6 +92,7 @@ enum FLTextAlignment: String {
 
 class FlashElement: FLBaseResult {
     //Base
+    var sort: Int?
     var rotation: Float?
     var scale: Float = 1.0//default
     var tool: FLTool?
@@ -181,6 +182,7 @@ class FlashElement: FLBaseResult {
     override func mapping(map: Map) {
         super.mapping(map: map)
         //scale           <- map["scale"] not confirm
+        sort            <- map["sort"]
         type            <- map["type"]
         height          <- map["height"]
         width           <- map["width"]

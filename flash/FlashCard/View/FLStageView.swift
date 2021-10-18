@@ -14,7 +14,13 @@ class FLStageView: UIView {
     var viewModel: FLStageViewModel?
     var cover: UIImageView!
     var coverImageBase64: String?
-    var cardDetail: FLCardPageDetailResult?
+    var cardDetail: FLCardPageDetailResult? {
+        didSet {
+            guard let cardDetail = self.cardDetail else { return }
+            self.sort = cardDetail.sort
+        }
+    }
+    var sort:Int?
     var flColor: FLColorResult = FLColorResult(JSON: ["code" : "color_01", "cl_code": "FFFFFF"])! {
         didSet {
             self.backgroundColor = UIColor(flColor.hex)
@@ -106,10 +112,22 @@ class FLStageView: UIView {
         return view
     }
     
+    func sendAnswer(_ answer: Any?) {
+        guard let card = self.card else { return }
+        guard let a = answer as? FLAnswerResult else { return }
+        let parame = a.createJSON()
+        self.viewModel?.callAPICardDetailAnswer(card, method: .post, param: parame, complete: { (answer) in
+            
+        })
+    }
+    
     func createQuizView(_ element: FlashElement) -> FLQuizView {
         
         let stageView = self
         let quizView = self.flCreator.createQuiz(element, in: stageView)
+        quizView.didSelectChoice = Action(handler: { [weak self] (sender) in
+            self?.sendAnswer(sender)
+        })
         quizView.isEditor = self.flCreator.isEditor
         return quizView
     }
@@ -142,25 +160,27 @@ class FLStageView: UIView {
         var data = [String: AnyObject]()
         
         var component = [[String: AnyObject]]()
-        var sort = 1
+        var eSort = 1
         for view in self.subviews {
             if let iView = view as? InteractView {
-                let dictElement = iView.createJSON()
+                var dictElement = iView.createJSON()
+                dictElement["sort"] = eSort as AnyObject
                 ConsoleLog.show("iView: \(dictElement)")
                 component.append(dictElement)
                 
             } else if let iViewText = view as? InteractTextView {
-                let dictElement = iViewText.createJSON()
+                var dictElement = iViewText.createJSON()
+                dictElement["sort"] = eSort as AnyObject
                 component.append(dictElement)
                 ConsoleLog.show("iViewText: \(dictElement)")
                 
             } else if let quizView = view as? FLQuizView {
-                let dictElement = quizView.createJSON()
+                var dictElement = quizView.createJSON()
+                dictElement["sort"] = eSort as AnyObject
                 component.append(dictElement)
                 ConsoleLog.show("quizView: \(dictElement)")
             }
-            ConsoleLog.show("^^^component: \(sort)\n")
-            sort += 1
+            eSort += 1
         }
         
         let colorDict = self.flColor.createJSON()
@@ -168,11 +188,15 @@ class FLStageView: UIView {
         data["bg_color"] = colorDict as AnyObject
         data["component"] = component as AnyObject?
         
-        dict["data"] = data.json as AnyObject?
+        dict["data"] = data as AnyObject?
         if let coverImageBase64 = self.coverImageBase64 {
             dict["image"] = coverImageBase64 as AnyObject?
         }
-        //dict["sort"] = nil as AnyObject?
+        
+        if let sort = self.sort {
+            dict["sort"] = sort as AnyObject?
+        }
+        
         return dict
     }
     

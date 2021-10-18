@@ -16,6 +16,7 @@ enum EndPoint:String {
     case ugcFlashCardDetail = "ugc/flash-card/%@/"
     case ugcCardIdDropbox = "ugc/flash-card/%@/card/%@/dropbox/"
     case ugcCardList = "ugc/flash-card/%@/card/"
+    case ugcCardDetailUserAnswer = "ugc/flash-card/%@/card/%@/answer/"
     case ugcCardListDetail = "ugc/flash-card/%@/card/%@/"
     case ugcFlashCreate = "ugc/flash-card/"
     case ugcFlashColor = "ugc/flash-card/color/"
