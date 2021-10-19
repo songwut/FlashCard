@@ -21,17 +21,22 @@ protocol FLStageViewModelProtocol: BaseViewProtocol {
     func hideProgressLoading()
 }
 
-class FLStageViewModel {
+class FLFlashCardViewModel {
     
     var stageVC: FLCreateViewController?
     var myFlashCard: MaterialFlashPageResult?
     var detail: FLDetailResult?
     var pageList = [FLCardPageResult]()
-    var flashCardDetail: FLFlashDetailResult?
+    var flashCardDetail: FLFlashDetailResult? {
+      didSet {
+        self.newCard.total = self.flashCardDetail?.total ?? 0
+      }
+    }
     //var pageList: [FlashElement] = []()
     var pageIndex = 0
     var currentPage: FLCardPageResult?
     var currentPageDetail: FLCardPageDetailResult?
+    var newCard = FLNewResult(JSON: ["total" : 0])!
     var flashId = 6
     
     func getQuizContent() -> FlashElement? {
@@ -76,17 +81,18 @@ class FLStageViewModel {
 //        }
     }
     
-    func callAPIAddNewCard( param:[String: Any]? = nil, complete: @escaping (_ result: FLFlashDetailResult?) -> ()) {
+    func callAPIAddNewCard( param:[String: Any]? = nil, complete: @escaping (_ result: FLCardPageResult?) -> ()) {
         let request = FLRequest()
         request.apiMethod = .post
         request.endPoint = .ugcCardList
         request.arguments = ["\(self.flashId)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
+        request.parameter = param
+        request.apiType = .json
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLCardPageResult?, isCache, error) in
             if let item = result {
-                self?.flashCardDetail = item
-                self?.pageList = item.list
-                self?.currentPage = item.list.first
-                complete(self?.flashCardDetail)
+                self?.pageList.append(item)
+                self?.currentPage = item
+                complete(item)
             }
         }
     }
@@ -192,38 +198,29 @@ class FLStageViewModel {
         }
     }
     
-    func callAPIDropboxUpload(type: FLType ,row: Int, media: FLMediaResult?, iView: InteractView ,complete: @escaping () -> ()) {
-        
-        let card = self.pageList[row]
+    func callAPIDropboxUpload(_ currentCard:FLCardPageResult? ,media: FLMediaResult?, iView: InteractView ,complete: @escaping () -> ()) {
+        guard let card = currentCard else { return }
         
         let request = FLRequest()
-        var params = [String: AnyObject]()
-        if let m = media {
-            //params["image"] = m.imageData as AnyObject
-            //params["uuid"] = m.uuid as AnyObject
-            //params["card_id"] = "\(card.id)" as AnyObject
-            //params["file"] = m.file as AnyObject
-            params["filename"] = m.filename as AnyObject
-        }
-        request.parameter = params
         request.apiMethod = .post
         request.endPoint = .ugcCardIdDropbox
         request.arguments = ["\(self.flashId)", "\(card.id)"]
-        
+        request.apiType = .json
         let headers = request.headers
         ConsoleLog.show("URL:\(request.url)")
         AF.upload(multipartFormData: { (multipartFormData) in
             
             if let m = media {
-                multipartFormData.append(m.filename.data(using: String.Encoding.utf8)!, withName: "filename")
+                multipartFormData.append("\(card.id)".data(using: .utf8)!, withName: "card_id")
+                multipartFormData.append(m.filename.data(using: .utf8)!, withName: "filename")
+                multipartFormData.append("\(m.uuid)".data(using: .utf8)!, withName: "uuid")
                 
-                if let imageData = m.imageData {
+                if let mp4VideoUrl = media?.mp4VideoUrl {
+                    multipartFormData.append(mp4VideoUrl, withName: "file")
+                    
+                } else if let imageData = m.imageData {
                     let fileType = URL(string: m.filename)?.pathExtension ?? "jpeg"
                     multipartFormData.append(imageData, withName: "image", fileName: m.filename, mimeType: "image/\(fileType)")
-                }
-                
-                if let mp4VideoUrl = iView.element?.mp4VideoUrl {
-                    multipartFormData.append(mp4VideoUrl, withName: "file")
                 }
             }
         }, to: request.url, headers: HTTPHeaders(headers!))
@@ -264,6 +261,48 @@ class FLStageViewModel {
                 
             }
         }
+    }
+    
+    func callApiDeleteList(_ selectList:[Int], apiMethod:APIMethod,completion: @escaping () -> ()) {
+        var idList = [String]()
+        for id in selectList {
+            idList.append("\(id)")
+        }
+        print("selected id: \(idList)")
+        let request = FLRequest()
+        request.endPoint = .ugcCardList
+        request.parameter = ["id_list": idList]
+        request.apiMethod = apiMethod
+        request.arguments = ["\(self.flashId)"]
+        API.request(request) { (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
+            self.flashCardDetail = result
+            if let listResult = result {
+                self.pageList = listResult.list
+            }
+            completion()
+        }
+        
+    }
+    
+    func callApiDuplicateList(_ selectList:[Int], apiMethod:APIMethod,completion: @escaping () -> ()) {
+        var idList = [String]()
+        for id in selectList {
+            idList.append("\(id)")
+        }
+        print("selected id: \(idList)")
+        let request = FLRequest()
+        request.endPoint = .ugcCardListDuplicate
+        request.parameter = ["id_list": idList]
+        request.apiMethod = apiMethod
+        request.arguments = ["\(self.flashId)"]
+        API.request(request) { (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
+            self.flashCardDetail = result
+            if let listResult = result {
+                self.pageList = listResult.list
+            }
+            completion()
+        }
+        
     }
     
     

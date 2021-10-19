@@ -181,10 +181,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="3Rk-Mw-0IO">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="always" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="3Rk-Mw-0IO">
                                 <rect key="frame" x="0.0" y="44" width="414" height="734"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jFI-W8-SgC">
+                                <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" sectionInsetReference="layoutMargins" id="jFI-W8-SgC">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -198,8 +199,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="6TK-p8-BAh" id="FWX-IQ-xLh"/>
+                                    <outlet property="delegate" destination="6TK-p8-BAh" id="rn4-O4-i1h"/>
+                                </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CA1-g0-XEU">
                                 <rect key="frame" x="0.0" y="778" width="414" height="84"/>
@@ -260,10 +266,10 @@
                             <constraint firstItem="CA1-g0-XEU" firstAttribute="bottom" secondItem="KFo-GJ-blT" secondAttribute="bottom" id="8rb-aN-cDy"/>
                             <constraint firstItem="KFo-GJ-blT" firstAttribute="trailing" secondItem="CA1-g0-XEU" secondAttribute="trailing" id="Bim-Oo-AgF"/>
                             <constraint firstItem="CA1-g0-XEU" firstAttribute="leading" secondItem="KFo-GJ-blT" secondAttribute="leading" id="JB3-pk-n4C"/>
-                            <constraint firstItem="KFo-GJ-blT" firstAttribute="trailing" secondItem="3Rk-Mw-0IO" secondAttribute="trailing" id="d7e-F6-nHK"/>
+                            <constraint firstAttribute="trailing" secondItem="3Rk-Mw-0IO" secondAttribute="trailing" id="d7e-F6-nHK"/>
                             <constraint firstItem="CA1-g0-XEU" firstAttribute="top" secondItem="3Rk-Mw-0IO" secondAttribute="bottom" id="fM1-38-7av"/>
                             <constraint firstItem="3Rk-Mw-0IO" firstAttribute="top" secondItem="KFo-GJ-blT" secondAttribute="top" id="lmz-Dt-btz"/>
-                            <constraint firstItem="3Rk-Mw-0IO" firstAttribute="leading" secondItem="KFo-GJ-blT" secondAttribute="leading" id="xPj-6B-VYa"/>
+                            <constraint firstItem="3Rk-Mw-0IO" firstAttribute="leading" secondItem="zCy-MC-cAC" secondAttribute="leading" id="xPj-6B-VYa"/>
                         </constraints>
                     </view>
                     <connections>

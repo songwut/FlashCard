@@ -46,6 +46,8 @@ struct FLCreator {
         let scale = (element.scale + Float(stage.stageRatio)) - 1.0
         
         let iView = InteractTextView.instanciateFromNib()
+        //iView.setContentView(iView.textView)
+        iView.type = element.type
         iView.createTextIView()
         iView.outlineBorderColor = .black
         iView.setImage(UIImage(named: "fl_delete"), handler: .close)
@@ -132,6 +134,7 @@ struct FLCreator {
         iView.center = center
         textView.updateLayout()
         //iView.textView = textView
+        iView.type = element.type
         iView.element = element
         iView.scale = (scale == 1.0) ? 1.0 : scale
         iView.update(scale: scale)

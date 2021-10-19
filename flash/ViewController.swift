@@ -52,7 +52,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func myMaterialPressed(_ sender: UIButton) {
-        let vm = FLStageViewModel()
+        let vm = FLFlashCardViewModel()
         self.showLoading(nil)
         vm.callAPIMyFlashCard(method: .get) { (myFlash: MaterialFlashPageResult?) in
             self.hideLoading()

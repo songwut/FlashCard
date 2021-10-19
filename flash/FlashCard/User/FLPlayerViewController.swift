@@ -10,7 +10,7 @@ import SwiftUI
 
 class FLPlayerViewController: UIViewController {
 
-    var viewModel = FLStageViewModel()
+    var viewModel = FLFlashCardViewModel()
     
     private var swipeView: FLSwipeView<FLCardPageResult>!{
         didSet{
@@ -145,7 +145,8 @@ class FLPlayerViewController: UIViewController {
         self.swipeView = FLSwipeView<FLCardPageResult>(frame: self.viewContainer.bounds, contentView: contentView)
         self.swipeView.cardFrame = cardFrame
         self.viewContainer.addSubview(self.swipeView)
-        self.swipeView.showTinderCards(with: self.viewModel.pageList ,isDummyShow: true)
+        let list = self.viewModel.pageList as! [FLCardPageResult]
+        self.swipeView.showTinderCards(with: list ,isDummyShow: true)
         if let firstCard = self.swipeView.loadedCards.first?.overlay as? FLStageView {
             firstCard.loadElement()
             

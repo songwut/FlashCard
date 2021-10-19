@@ -161,7 +161,6 @@ class FlashElement: FLBaseResult {
     
     //image
     var src: String?//image,video.sticker,shape
-    var imageUploaded: String?
     var uiimage: UIImage?
     var graphicType: FLGraphicMenu?
     

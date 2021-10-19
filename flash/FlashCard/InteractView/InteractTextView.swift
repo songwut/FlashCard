@@ -24,7 +24,7 @@ class InteractTextView: UIView {
         didSet {
             guard let flColor = self.flColorText else { return }
             self.element?.textColor = flColor.hex
-            self.textView.textColor = UIColor(flColor.hex)
+            self.textView?.textColor = UIColor(flColor.hex)
         }
     }
     var element: FlashElement?
@@ -48,6 +48,16 @@ class InteractTextView: UIView {
             self.contentView.layer.borderColor = self.outlineBorderColor.cgColor
         }
     }
+    /*
+    func setContentView(_ view: UIView!) {//use next phase
+        if let textView = view as? FLTextView {
+            self.contentView = textView
+        } else if let v = view as? UIView {
+            self.contentView = v
+            self.textView.removeFromSuperview()
+        }
+    }
+    */
     var contentView: UIView {
         get {
             return self.textView
@@ -187,7 +197,6 @@ class InteractTextView: UIView {
         icon.contentMode = .center
         icon.backgroundColor = .clear
         icon.isUserInteractionEnabled = true
-        //imageView.addGestureRecognizer(self.closeGesture)
         return icon
     }()
     
@@ -198,7 +207,6 @@ class InteractTextView: UIView {
         icon.contentMode = .center
         icon.backgroundColor = .clear
         icon.isUserInteractionEnabled = true
-        //imageView.addGestureRecognizer(self.closeGesture)
         return icon
     }()
     
@@ -211,7 +219,7 @@ class InteractTextView: UIView {
             self.controlTextLeft.isHidden = self.isHiddenEditingTool
             self.controlTextRight.isHidden = self.isHiddenEditingTool
             //self.contentView.layer.borderWidth = self.isHiddenEditingTool ? 0 : 2
-            self.textView.layer.borderWidth = self.isHiddenEditingTool ? 0 : 2
+            self.textView?.layer.borderWidth = self.isHiddenEditingTool ? 0 : 2
         }
     }
     
@@ -398,17 +406,33 @@ class InteractTextView: UIView {
     @objc func handlePinchGesture(_ gesture: UIPinchGestureRecognizer) {
         print("x:\(gesture.scale)")
         print("y:\(gesture.scale)")
-        
+        //let scale = CGAffineTransform(scaleX: self.currentScale.x, y: self.currentScale.y)
         let scale = self.transform.scaledBy(x: gesture.scale, y: gesture.scale)
-        self.transform = scale
-        gesture.scale = 1
         
-        self.closeImageView.transform = scale.inverted()
-        self.flipImageView.transform = scale.inverted()
-        self.rotateImageView.transform = scale.inverted()
-        self.noneImageView.transform = scale.inverted()
+        
+        switch gesture.state {
+        case .began: break
+            
+        case .changed:
+            self.transform = scale
+            gesture.scale = 1
+            self.closeImageView.transform = scale.inverted()
+            self.flipImageView.transform = scale.inverted()
+            self.rotateImageView.transform = scale.inverted()
+            self.noneImageView.transform = scale.inverted()
+            break
+        case .ended:
+//            self.closeImageView.transform = .identity
+//            self.flipImageView.transform = .identity
+//            self.rotateImageView.transform = .identity
+//            self.noneImageView.transform = .identity
+            
+            break
+        default:
+            break
+        }
         //limit scale
-        self.setNeedsDisplay()
+        //self.setNeedsDisplay()
         if scale.a > 1, scale.d > 1 {
             
         }
@@ -465,6 +489,11 @@ class InteractTextView: UIView {
             self.bounds = scaledBounds
             self.setNeedsDisplay()
             break
+        case .ended:
+            self.closeImageView.transform = .identity
+            self.flipImageView.transform = .identity
+            self.rotateImageView.transform = .identity
+            self.noneImageView.transform = .identity
         default:
             break
         }
@@ -484,10 +513,6 @@ class InteractTextView: UIView {
                 let scale = CGAffineTransform(scaleX: self.currentScale.x, y: self.currentScale.y)
                 let newRotation = gesture.rotation + originalRotation
                 self.transform = scale.rotated(by: newRotation)
-                
-                
-                //let newRotation = gesture.rotation + originalRotation
-                //view.transform = CGAffineTransform(rotationAngle: newRotation)
                 
                 let degrees = self.getDegreesRotation()
                 print("changed degrees: \(degrees)")
@@ -577,6 +602,9 @@ class InteractTextView: UIView {
             self.rotateImageView.transform = tScale.inverted()
             self.noneImageView.transform = tScale.inverted()
             self.bounds = scaledBounds
+            if type != .text {
+                self.contentView.bounds = CGRect(origin: .zero, size: scaledBounds.size)
+            }
             self.setNeedsDisplay()
             break
         default:
@@ -718,14 +746,17 @@ class InteractTextView: UIView {
         var frame = contentView.frame
         frame = CGRect(x: 0, y: 0, width: Int(frame.size.width) + defaultInset * 2, height: Int(frame.size.height) + defaultInset * 2);
         
-        //self.contentView.removeFromSuperview()
+        if self.type != .text {
+            self.contentView.removeFromSuperview()
+            
+            self.transform = .identity
+            self.frame = frame
+            
+            contentView.center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
+            addSubview(contentView)
+            self.sendSubviewToBack(contentView)
+        }
         
-        //self.transform = .identity
-        //self.frame = frame
-        
-        //contentView.center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-        //addSubview(contentView)
-        //self.sendSubviewToBack(contentView)
         
         let handlerFrame = CGRect(x: 0, y: 0, width: defaultInset * 2, height: defaultInset * 2);
         self.closeImageView.frame = handlerFrame
@@ -781,7 +812,7 @@ class InteractTextView: UIView {
         dict["type"] = type as AnyObject
         
         if element.type == .image {
-            if let imageSrc = element.imageUploaded { //TODO: set after upload api
+            if let imageSrc = element.src { //TODO: set after upload api
                 dict["src"] = imageSrc as AnyObject
             }
             

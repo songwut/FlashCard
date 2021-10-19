@@ -12,7 +12,7 @@ class DashBorderView: UIView {
 
     @IBInspectable var dashColor:UIColor = UIColor.purple
     @IBInspectable var dashBorderWidth:CGFloat = 3
-    
+    var lineDash: [NSNumber] = [4, 4]
     private let border = CAShapeLayer()
 
     override func draw(_ rect: CGRect) {
@@ -24,7 +24,7 @@ class DashBorderView: UIView {
         self.layer.cornerRadius = cornerRadius
         self.layer.masksToBounds = true
         
-        border.lineDashPattern = [4, 4]
+        border.lineDashPattern = self.lineDash
         border.strokeColor = dashColor.cgColor
     }
 }

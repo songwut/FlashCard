@@ -57,8 +57,7 @@ class FLListViewController: UIViewController {
     @IBOutlet private weak var menuStackView: UIStackView!
     @IBOutlet private weak var menuHeight: NSLayoutConstraint!
     
-    private var viewModel = FLListViewModel()
-    private var sectionEdge = UIEdgeInsets.zero
+    var viewModel = FLFlashCardViewModel()
     private var cellSize = CGSize.zero
     private let edgeMargin:CGFloat = 16
     
@@ -68,20 +67,44 @@ class FLListViewController: UIViewController {
     private var menuSelect:FLItemView!
     private var userAction = ""
     private var selectSortList = [Int]()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.updateLayout()
-        self.createMenu()
-        self.collectionViewConfig()
+    var list = [FLBaseResult]()
         
-        self.collectionView.reloadData()
-        self.viewModel.callApiList {
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            self.collectionViewConfig()
+            self.createMenu()
+            self.collectionView.reloadData()
+            
+            if self.viewModel.flashCardDetail == nil {
+                let index = self.viewModel.pageIndex
+                let card = self.viewModel.pageList[index]
+                self.viewModel.callAPICardDetail(card, method: .get) { [weak self] (cardDetail) in
+                    self?.orderingItem()
+                    self?.reloadCollectionView()
+                }
+            } else {
+                self.orderingItem()
+                self.reloadCollectionView()
+            }
+            // Do any additional setup after loading the view.
+        }
+        
+        func orderingItem() {
+            self.list.removeAll()
+            var i = 0
+            for card in self.viewModel.pageList {
+                card.index = i
+                self.list.append(card)
+                i += 1
+            }
+            let newCard = FLNewResult(JSON: ["total" : self.viewModel.pageList.count])!
+            self.list.append(newCard)
+        }
+        
+        func reloadCollectionView() {
             self.collectionView.alpha = 1.0
             self.collectionView.reloadData()
         }
-        // Do any additional setup after loading the view.
-    }
     
     private func createMenu(_ menu: FLMenuList) -> FLItemView {
         let menuHeight = FlashStyle.listMenuHeight
@@ -149,29 +172,36 @@ class FLListViewController: UIViewController {
             }
             
         } else if btn.actionMenu == .duplicate {
-            for sort in self.selectSortList {
-                if let index = self.selectSortList.firstIndex(of: sort) {
-                    self.selectSortList.remove(at: index)
-                }
+            self.showLoading(nil)
+            self.viewModel.callApiDuplicateList(self.selectSortList, apiMethod: .post) { [weak self] in
+                self?.hideLoading()
+                self?.orderingItem()
+                self?.selectSortList.removeAll()
+                self?.collectionView.reloadData()
+                self?.updateSelectCount()
+                
             }
-            self.collectionView.reloadData()
+            
             
         } else if btn.actionMenu == .delete {
-            for sort in self.selectSortList {
-                if let index = self.selectSortList.firstIndex(of: sort) {
-                    self.selectSortList.remove(at: index)
-                }
-            }
-            self.collectionView.reloadData()
-            
-            //TODO: check delete API
-            self.viewModel.callApiDelete(self.selectSortList) {
-                
+            self.showLoading(nil)
+            self.viewModel.callApiDeleteList(self.selectSortList, apiMethod: .delete) { [weak self] in
+                ConsoleLog.show("done for delete")
+                self?.hideLoading()
+                self?.orderingItem()
+                self?.selectSortList.removeAll()
+                self?.collectionView.reloadData()
+                self?.updateSelectCount()
             }
             
         } else {
             
         }
+    }
+    
+    private func updateSelectCount() {
+        let count = self.selectSortList.count
+        self.menuSelect.setColor(UIColor.config_primary(), count: count, menu: .select)
     }
     
     private func setColor(_ color: UIColor, count: Int?, menu: FLItemView) {
@@ -182,51 +212,47 @@ class FLListViewController: UIViewController {
     private func collectionViewConfig() {
         self.collectionView?.register(UINib(nibName: TitleCollectionViewCell.id, bundle: nil), forCellWithReuseIdentifier: TitleCollectionViewCell.id)
         self.collectionView.register(UINib(nibName: FLItemCollectionViewCell.id, bundle: nil), forCellWithReuseIdentifier: FLItemCollectionViewCell.id)
+        
         self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.backgroundColor = UIColor("E5E5E5")
+        self.collectionView.backgroundColor = UIColor("F5F5F5")
         self.collectionView.isPagingEnabled = false
         self.collectionView.alwaysBounceVertical = true
         
         self.collectionView.updateLayout()
         
-        self.sectionEdge = UIEdgeInsets(top: 0, left: edgeMargin, bottom: edgeMargin, right: edgeMargin)
-        self.layout.sectionInset = self.sectionEdge
         let column:CGFloat = UIDevice.isIpad() ? 3 : 2
+        let allEdge = edgeMargin * CGFloat(column + 1)
         let allwidth = self.collectionView.frame.width
-        let itemMargin:CGFloat = edgeMargin * (column - 1)
-        let edgeLRMargin:CGFloat = edgeMargin * 2
-        let allItemWidth = allwidth - (itemMargin + edgeLRMargin)
-        let cellWidth = (allItemWidth / column) - 1//some device over width
+        let allItemWidth = allwidth - allEdge
+        let cellWidth = (allItemWidth / column) - 1
         let cellHeight = cellWidth * FlashStyle.pageCardRatio
         self.cellSize = CGSize(width: cellWidth, height: cellHeight)
         self.layout.itemSize = self.cellSize
         self.layout.minimumInteritemSpacing = edgeMargin
-        self.layout.minimumLineSpacing = itemMargin
-        self.collectionView.dataSource = self
-        self.collectionView.delegate = self
+        self.layout.minimumLineSpacing = edgeMargin
         self.collectionView.alpha = 0.0
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     func createNewPage() {
-        let page = FLItemResult(JSON: ["name" : "some"])!
-        let lastItemIndex = self.viewModel.lastItemIndex
-        if let item = self.viewModel.list[lastItemIndex] as? FLItemResult {
-            page.sort = item.sort + 1
+        var newCardData = [String: Any]()
+        var data = [String: Any]()
+        data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
+        newCardData["data"] = data
+        self.showLoading(nil)
+        self.viewModel.callAPIAddNewCard(param: newCardData) { [weak self] (cardPage) in
+            guard let self = self else { return }
+            guard let page = cardPage else { return }
+            self.hideLoading()
+            let lastItemIndex = self.viewModel.pageList.count - 1
+            page.index = lastItemIndex + 1
+            self.list.insert(page, at: lastItemIndex)
+            self.collectionView.reloadData()
+            self.slideToNewPage()
         }
-        self.viewModel.list.insert(page, at: lastItemIndex)
-        self.collectionView.reloadData()
-        
-        let lastRow = self.viewModel.list.count - 1
+    }
+    
+    func slideToNewPage() {
+        let lastRow = self.list.count - 1
         let lastIndex = IndexPath(row: lastRow, section: self.sectionContentItem)
         self.collectionView.scrollToItem(at: lastIndex, at: .bottom, animated: true)
     }
@@ -243,14 +269,14 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
         if self.sectionList[section] == .total {
             return 1
         } else {
-            return self.viewModel.list.count
+            return self.list.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if sectionList[indexPath.section] == .total {
-            let total = self.viewModel.listResult?.total ?? 0
+            let total = self.viewModel.flashCardDetail?.total ?? 0
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionViewCell.id, for: indexPath) as! TitleCollectionViewCell
             let countContentText = "total".localized() + " " + total.textNumber(many: "pages".localized())
             cell.totalText = countContentText
@@ -259,7 +285,8 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
             return cell
             
         } else {
-            let item = self.viewModel.list[indexPath.row]
+            let item = self.list[indexPath.row]
+            ConsoleLog.show("flItem: \(item.id)")
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FLItemCollectionViewCell.id, for: indexPath) as! FLItemCollectionViewCell
             if let _ = self.selectSortList.firstIndex(of: item.id) {
                 cell.isSelected = true
@@ -273,7 +300,6 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if sectionList[indexPath.section] == .total {
-            let margin = edgeMargin * 2
             return CGSize(width: collectionView.frame.width, height: 40)
         } else {
             return self.cellSize
@@ -284,7 +310,7 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
         if sectionList[section] == .total {
             return UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         } else {
-            return self.sectionEdge
+            return UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         }
     }
     
@@ -292,11 +318,11 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
         
         if sectionList[indexPath.section] == .contentItem {
             if self.userAction == "select" {
-                guard let item = self.viewModel.list[indexPath.row] as? FLItemResult else { return }
-                if let index = self.selectSortList.firstIndex(of: item.sort) {
+                guard let item = self.list[indexPath.row] as? FLCardPageResult else { return }
+                if let index = self.selectSortList.firstIndex(of: item.index) {
                     self.selectSortList.remove(at: index)
                 } else {
-                    self.selectSortList.append(item.sort)
+                    self.selectSortList.append(item.id)
                 }
                 
                 let count = self.selectSortList.count
@@ -305,7 +331,7 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
                 self.collectionView.reloadData()
                 
             } else {
-                guard let _ = self.viewModel.list[indexPath.row] as? FLNewResult else { return }
+                guard let _ = self.list[indexPath.row] as? FLNewResult else { return }
                 self.createNewPage()
                 
             }
@@ -313,7 +339,6 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
             
             
         }
-        //TODO: multiple select
         //TODO: select to open
     }
     

@@ -128,7 +128,7 @@ class FLCardPageResult: FLBaseResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
-        sort               <- map["image"]
+        sort               <- map["sort"]
         image              <- map["image"]
     }
     
@@ -194,7 +194,7 @@ class FLCardPageDetailResult: FLCardPageResult {
     }
 }
 
-class FLNewResult: FLBaseItemResult {
+class FLNewResult: FLCardPageResult {
     var total = 0
     
     override func mapping(map: Map) {
@@ -202,7 +202,7 @@ class FLNewResult: FLBaseItemResult {
         total        <- map["total"]
     }
 }
-
+/*
 class FLItemResult: FLBaseItemResult {
     var pageList = [FLCardPageResult]()
     var dictPageList = [[String : AnyObject]]()
@@ -229,7 +229,7 @@ class FLListResult: FLBaseResult {
         total        <- map["total"]
         list         <- map["results"]
     }
-}
+}*/
 
 class FLBaseItemResult: FLBaseResult {
     
@@ -249,6 +249,8 @@ class FLBaseResult:Mappable {
     var desc = ""
     var image = ""
     var imageURL: URL?
+    
+    var index = 0//selected in grid
     
     required init?(map: Map) {
         

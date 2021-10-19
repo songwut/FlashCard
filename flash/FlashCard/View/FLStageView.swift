@@ -11,7 +11,7 @@ class FLStageView: UIView {
     var stageRatio:CGFloat = 1
     var flCreator: FLCreator!
     var isEditor = false
-    var viewModel: FLStageViewModel?
+    var viewModel: FLFlashCardViewModel?
     var cover: UIImageView!
     var coverImageBase64: String?
     var cardDetail: FLCardPageDetailResult? {

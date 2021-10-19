@@ -16,6 +16,7 @@ enum EndPoint:String {
     case ugcFlashCardDetail = "ugc/flash-card/%@/"
     case ugcCardIdDropbox = "ugc/flash-card/%@/card/%@/dropbox/"
     case ugcCardList = "ugc/flash-card/%@/card/"
+    case ugcCardListDuplicate = "ugc/flash-card/%@/card/duplicate/"
     case ugcCardDetailUserAnswer = "ugc/flash-card/%@/card/%@/answer/"
     case ugcCardListDetail = "ugc/flash-card/%@/card/%@/"
     case ugcFlashCreate = "ugc/flash-card/"
@@ -29,7 +30,6 @@ class FLRequest: APIRequest {
     var flashId:Int = 0
     var endPoint:EndPoint = .ugcFlashCreate
     var arguments = [String]()
-    var selectList = [Int]()
     var parameter: [String: Any]?
     var apiMethod: APIMethod = .get
     var apiType: APIParameterType = .url
@@ -53,10 +53,6 @@ class FLRequest: APIRequest {
     override var body: [String: Any]? {
         if let param = self.parameter {
             return param
-        } else if self.selectList.count > 1  {
-            var dict = [String: Any]()
-            dict["id_list"] = self.selectList
-            return dict
         } else {
             return nil
         }

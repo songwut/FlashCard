@@ -57,7 +57,7 @@ class FLAnswerResult:Mappable {
     
     func createJSON() -> [String: Any]? {
         var dict = [String: Any]()
-        dict["choice_id"] = self.choiceId
+        //dict["choice_id"] = self.choiceId
         dict["value"] = self.value
         return dict
     }

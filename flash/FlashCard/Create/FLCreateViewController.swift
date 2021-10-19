@@ -41,7 +41,7 @@ final class FLCreateViewController: UIViewController {
     
     var toolVC: FLToolViewController?
     var viewModelDelegate: FLStageViewModelProtocol!
-    var viewModel = FLStageViewModel()
+    var viewModel = FLFlashCardViewModel()
     
     lazy var deletePageButton: UIButton? = {
         let b = UIButton(type: .custom)
@@ -73,7 +73,7 @@ final class FLCreateViewController: UIViewController {
     }
     
     func setUp(input: FLStageSetUp) {
-        viewModel = FLStageViewModel()
+        viewModel = FLFlashCardViewModel()
         viewModel.stageVC = self
     }
     
@@ -142,10 +142,10 @@ final class FLCreateViewController: UIViewController {
         }
     }
     
-    func reloadNewCard(method: APIMethod, param:[String: Any]? = nil) {
+    func reloadCardPage(method: APIMethod, param:[String: Any]? = nil) {
         let index = self.viewModel.pageIndex
-        let card = self.viewModel.pageList[index]
         let stage = self.getStageView(at: index)
+        let card = self.viewModel.pageList[index]
         self.viewModel.callAPICardDetail(card, method: method, param: param) { (cardDetail) in
             stage.cardDetail = cardDetail
         }
@@ -184,7 +184,7 @@ final class FLCreateViewController: UIViewController {
         if let base64 = coverImageBase64 {
             newCardData["image"] = base64
         }
-        self.viewModel.callAPIAddNewCard(param: newCardData) { (flashDetailResult) in
+        self.viewModel.callAPIAddNewCard(param: newCardData) { (cardPage) in
             
         }
         
@@ -201,7 +201,7 @@ final class FLCreateViewController: UIViewController {
         self.viewModel.pageList.insert(page, at: newIndex)
         
         guard let stackView = self.sliderView?.contentStackView else {return}
-        let frame = self.stageView?.frame ?? .zero
+        let frame = self.stagxeView?.frame ?? .zero
         let stage = self.createStageView(frame.size, creator: self.flCreator!)
         stage.page = page
         stackView.insertArrangedSubview(stage, at: newIndex)
@@ -214,7 +214,7 @@ final class FLCreateViewController: UIViewController {
         var data = [String: Any]()
         data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
         newCardData["data"] = data
-        self.viewModel.callAPIAddNewCard(param: newCardData) { (flashDetailResult) in
+        self.viewModel.callAPIAddNewCard(param: newCardData) { (cardPage) in
             
         }
         */
@@ -227,41 +227,54 @@ final class FLCreateViewController: UIViewController {
     }
     
     @objc func addRightPressed(_ sender: UIButton) {
+        self.saveCurrentCardPage()
+        
+        var newCardData = [String: Any]()
+        var data = [String: Any]()
+        data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
+        newCardData["data"] = data
+        self.showLoading(nil)
+        self.viewModel.callAPIAddNewCard(param: newCardData) { [weak self] (cardPage) in
+            guard let self = self else { return }
+            guard let card = cardPage else { return }
+            self.hideLoading()
+            let lastItemIndex = self.viewModel.pageList.count - 1
+            card.index = lastItemIndex
+            self.createNewCardView(card)
+            self.gotoPage(index: lastItemIndex)
+        }
+        
+        
+    }
+    
+    func saveCurrentCardPage() {
         let index = self.viewModel.pageIndex
         let currentStage = self.getStageView(at: index)
-        //mock test
         
         self.saveCoverPage()
         guard let cardPageJson = currentStage.createJSON() else { return }
         ConsoleLog.show("addRightPressed index:\(index)")
-        ConsoleLog.show("cardPageJson:\(cardPageJson.jsonString)")
-        self.reloadNewCard(method: .patch, param: cardPageJson)
+        self.reloadCardPage(method: .patch, param: cardPageJson)
         ConsoleLog.show("save currentStage")
-        
-        
-        //TODO: Post new card
-        /*
-        let newIndex = index + 1
-        let page = FLCardPageResult(JSON: ["index" : newIndex])!
-        self.viewModel.pageList.append(page)
-        
-        guard let stackView = self.sliderView?.contentStackView else {return}
+    }
+    
+    func createNewCardView(_ card: FLCardPageResult) {
         let frame = self.stageView?.frame ?? .zero
         let newStage = self.createStageView(frame.size, creator: self.flCreator!)
-        newStage.card = page
-        stackView.addArrangedSubview(newStage)
+        newStage.card = card
+        self.sliderView?.contentStackView.addArrangedSubview(newStage)
         self.stageViewList?.append(newStage)
-        
-        self.gotoPage(index: newIndex)
-        */
     }
     
     func gotoPage(index: Int) {
         let indexPath = IndexPath(row: index, section: 0)
+        let stageWidth: CGFloat = self.stageView?.bounds.width ?? 0
+        let newOfset = CGFloat(self.viewModel.pageList.count) * stageWidth
         self.viewModel.pageIndex = index
         self.manageAddLR()
         let max = self.viewModel.pageList.count
         self.pageCountLabel.text = "\(index + 1)/\(max)"
+        
         //TODO: slide to page index
     }
     
@@ -345,7 +358,7 @@ final class FLCreateViewController: UIViewController {
             
             if self.isCreatePage {
                 self.manageMultitleStage()
-                self.reloadNewCard(method: .get)//First card page
+                self.reloadCardPage(method: .get)//First card page
             }
             
             
@@ -381,7 +394,7 @@ final class FLCreateViewController: UIViewController {
         for page in self.viewModel.pageList {
             let stage = self.createStageView(frame.size, creator: self.flCreator!)
             stage.isEditor = true
-            stage.card = page
+            stage.card = page as? FLCardPageResult
             self.stageViewList?.append(stage)
             stackView.addArrangedSubview(stage)
         }
@@ -459,7 +472,7 @@ final class FLCreateViewController: UIViewController {
     @objc func listButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         if let vc = s.instantiateViewController(withIdentifier: "FLListViewController") as? FLListViewController {
-            
+            vc.viewModel = self.viewModel
             if let nav = self.navigationController {
                 nav.pushViewController(vc, animated: true)
             } else {
@@ -783,28 +796,33 @@ final class FLCreateViewController: UIViewController {
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
             iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
             iView.setHandlerSize(Int(FlashStyle.text.marginIView))
-//            iView.enableClose = true
-//            iView.enableFlip = false
-//            iView.enableRotate = false
-//            iView.enableNone = false
+            iView.enableClose = true
+            iView.enableFlip = false
+            iView.enableRotate = true
+            iView.enableNone = false
+            
+            //TODO: add gesture pinch
             
             //iView.gesture = SnapGesture(view: iView)
-            
             iView.isCreateNew = true
+            iView.isSelected = true
             //Auto select all test
             iView.textView?.selectAll(self)
             iView.textView?.becomeFirstResponder()
-            iView.isSelected = true
+            
             iView.textView?.delegate = self
             iView.delegate = self
             
             if element.type == .image {
-                
-            } else if element.type == .video {
-                if let deviceVideoUrl = element.deviceVideoUrl {
-                    
+                let page = self.viewModel.currentPageDetail
+                self.viewModel.callAPIDropboxUpload(page, media: media, iView: iView) {
+                    ConsoleLog.show("callAPIDropboxUpload")
                 }
-
+            } else if element.type == .video {
+                let page = self.viewModel.currentPageDetail
+                    self.viewModel.callAPIDropboxUpload(page, media: media, iView: iView) {
+                        ConsoleLog.show("callAPIDropboxUpload")
+                    }
             }
             
             if let tool = element.tool {
@@ -842,12 +860,6 @@ final class FLCreateViewController: UIViewController {
             self.selectedView = iView
             let size = iView.frame
             print("controlView width: \(size.width) ,controlView height: \(size.height)")
-//            if let controlView = self.controlView {
-//                textElement.update(controlView: controlView)
-//                stageView.addSubview(controlView)
-//                //stageView.addSubview(controlView.deleteButton)
-//                controlView.updateRelateView(textElement)
-//            }
             
         }
     }
@@ -870,9 +882,6 @@ final class FLCreateViewController: UIViewController {
             } else if let urlMP4 = url {
                 print("encodeVideo:\(urlMP4.absoluteString)")
                 complete(urlMP4)
-//                            self.viewModel.callAPIDropboxUpload(type: element.type, row: row, media: media, iView: iView) {
-//
-//                            }
             }
         }
     }
@@ -1133,6 +1142,7 @@ extension FLCreateViewController: UINavigationControllerDelegate, UIImagePickerC
                             let filename = movieUrl.lastPathComponent
                             let JSON:[String : Any] = ["filename" : filename]
                             let media = FLMediaResult(JSON: JSON)
+                            media?.mp4VideoUrl = mp4Url
                             print("video mp4 size: width \(size.width) height: \(size.height)")
                             self?.createNewVideo(movieUrl, size: size, media: media)
                         } catch {
@@ -1199,10 +1209,11 @@ extension FLCreateViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         print("scrollViewDidEndDragging")
-        let max = self.viewModel.pageList.count
         let index = self.indexOfMajorCell()
+        guard let currentPage = self.viewModel.pageList[index] as? FLCardPageResult else { return }
+        let max = self.viewModel.pageList.count
         self.viewModel.pageIndex = index
-        self.viewModel.currentPage = self.viewModel.pageList[index]
+        self.viewModel.currentPage = currentPage
         self.updatePageNumber()
         self.manageAddLR()
     }

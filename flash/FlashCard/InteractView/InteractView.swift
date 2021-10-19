@@ -67,9 +67,22 @@ class FLPlaverView: UIView {
         playerLayer?.frame = self.bounds
         layer.addSublayer(playerLayer!)
         
+        
+        
         playerItem = AVPlayerItem(url: mediaUrl)
         player.replaceCurrentItem(with: playerItem)
         player.play()
+        
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+                                               object: self.player.currentItem,
+                                               queue: .main) { [weak self] _ in
+            self?.player.seek(to: CMTime.zero)
+            self?.player.play()
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     func updateUrl(url: URL) {
@@ -322,7 +335,7 @@ class InteractView: CHTStickerView {
         dict["type"] = type as AnyObject
         
         if element.type == .image {
-            if let imageSrc = element.imageUploaded { //TODO: set after upload api
+            if let imageSrc = element.src { //TODO: set after upload api
                 dict["src"] = imageSrc as AnyObject
             }
             

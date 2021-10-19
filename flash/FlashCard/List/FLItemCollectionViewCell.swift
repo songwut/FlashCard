@@ -20,18 +20,18 @@ class FLItemCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var item: FLBaseResult? {
+    var item: Any? {
         didSet {
-            if let flItem = self.item as? FLItemResult {
-                self.imageView.imageUrl(flItem.image)
+            if let _ = self.item as? FLNewResult  {
+                self.addNewUI()
+                
+            } else if let flItem = self.item as? FLCardPageResult {
+                self.imageView.imageUrl(flItem.image, placeholderImage: defaultImage)
                 self.imageView.isHidden = false
                 self.cardView.isHidden = true
-                
+                print("self.imageView:\(self.imageView.frame.size)")
                 self.selectView.isHidden = !self.isSelected
-            } else if let _ = self.item as? FLNewResult  {
-                self.addNewUI()
             }
-            
         }
     }
     
@@ -44,13 +44,13 @@ class FLItemCollectionViewCell: UICollectionViewCell {
     }
     
     override func layoutSubviews() {
-        self.cardView.updateLayout()
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.imageView.image = defaultImage
         self.addLabel.text = "+ Add Card"
-        self.addLabel.font = .font(18, font: .text)
+        self.addLabel.font = .font(14, font: .medium)
         self.addLabel.textColor = .text75()
         self.imageView.cornerRadius = 8
         self.imageView.clipsToBounds = true
@@ -60,6 +60,7 @@ class FLItemCollectionViewCell: UICollectionViewCell {
         self.cardView.clipsToBounds = true
         self.cardView.backgroundColor = .clear
         self.cardView.dashColor = UIColor("7D7D7D")
+        self.cardView.lineDash = [8, 8]
         self.cardView.dashBorderWidth = 1
         
         self.selectView.borderColor = UIColor("E7000A")
