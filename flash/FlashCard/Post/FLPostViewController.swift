@@ -57,7 +57,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var submitButton: UIButton!
     @IBOutlet private weak var myLibraryButton: UIButton!
     
-    var viewModel: FLPostViewModel! {
+    var viewModel: FLFlashCardViewModel! {
         didSet {
             let detail = self.viewModel.detail
             //detail.status = .waitForApprove //mock
@@ -154,7 +154,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.loadDetail(self.viewModel.detail)
     }
     
-    func loadDetail(_ detail: FLDetailResult) {
+    func loadDetail(_ detail: FLDetailResult?) {
+        guard let detail = detail else { return }
         self.time = detail.estimateTime ?? 5 //TODO: get real time
         self.titleTextField.text = detail.name
         self.descTextView.text = detail.desc
@@ -301,7 +302,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     func openPopupWith(newStatus: FLStatus) {
         let detail = self.viewModel.detail
         var desc = "Do you confirm to submit this material?"
-        if detail.status == .waitForApprove {
+        if detail?.status == .waitForApprove {
             desc = "Do you confirm to cancel the request?"
         }
         
@@ -316,7 +317,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     func callApiPost(_ status: FLStatus) {
         //mock
-        self.viewModel.detail.status = status
+        self.viewModel.detail?.status = status
         self.loadDetail(self.viewModel.detail)
         
         //api

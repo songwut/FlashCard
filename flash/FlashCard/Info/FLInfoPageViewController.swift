@@ -16,15 +16,16 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
     var pageVC: UIPageViewController!
     var pages = [UIViewController]()
     
-    var flashCardDetail: FLFlashDetailResult?
+    var viewModel: FLFlashCardViewModel!
+    var detail: FLDetailResult?
     var quiz: FlashElement?
     
     var selfFrame: CGRect = .zero
     
-    init(frame: CGRect, flashCardDetail: FLFlashDetailResult?, quiz: FlashElement?) {
+    init(frame: CGRect, viewModel: FLFlashCardViewModel) {
+        self.viewModel = viewModel
         self.selfFrame = frame
-        self.flashCardDetail = flashCardDetail
-        self.quiz = quiz
+        self.detail = viewModel.detail
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,25 +44,30 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
         //self.footerHeight.constant = self.safeAreaBottomHeight
         
         let isQuiz = !(self.quiz == nil)
-        self.cardInfoVC = FLCardInfoViewController(frame: self.view.bounds, flashCardDetail: self.flashCardDetail, isQuiz: isQuiz)
+        self.cardInfoVC = FLCardInfoViewController(frame: self.view.bounds, detail: self.detail, isQuiz: isQuiz)
         self.cardInfoVC.view.frame = self.view.bounds
         self.cardInfoVC.view.setNeedsDisplay()
         self.cardInfoVC.cardView.updateLayout()
         self.cardInfoVC.cardView.roundCorners([.topLeft, .topRight], radius: 16)
-        self.cardInfoVC.flashCardDetail = self.flashCardDetail
+        self.cardInfoVC.detail = self.detail
         print(self.cardInfoVC.view.frame)
         self.cardInfoVC.delegate = self
         self.cardInfoVC.isQuiz = isQuiz
         self.pages.append(self.cardInfoVC)
         
+        let tap = TapGesture(target: self, action: #selector(self.viewTap(_:)))
+        self.cardInfoVC.emptyView.addGestureRecognizer(tap)
+        
         if isQuiz {
-            self.quizInfoVC = FLQuizInfoViewController(frame: self.view.bounds, flashCardDetail: self.flashCardDetail)
+            self.quizInfoVC = FLQuizInfoViewController(frame: self.view.bounds, viewModel: self.viewModel)
             self.quizInfoVC.view.frame = self.view.bounds
             self.quizInfoVC.cardView.updateLayout()
             self.quizInfoVC.cardView.roundCorners([.topLeft, .topRight], radius: 16)
-            self.quizInfoVC.flashCardDetail = self.flashCardDetail
             self.quizInfoVC.delegate = self
             self.pages.append(self.cardInfoVC)
+            
+            let tap = TapGesture(target: self, action: #selector(self.viewTap(_:)))
+            self.quizInfoVC.emptyView.addGestureRecognizer(tap)
         }
         
         self.pageVC = UIPageViewController(transitionStyle: UIPageViewController.TransitionStyle.scroll, navigationOrientation: .horizontal)
@@ -77,10 +83,6 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
             print("pageVC.setViewControllers")
             self.pageScrollEnabled(false)
         }
-        
-        let tap = TapGesture(target: self, action: #selector(self.viewTap(_:)))
-        self.view.addGestureRecognizer(tap)
-        
     }
     
     @objc func viewTap(_ gesture: UITapGestureRecognizer) {

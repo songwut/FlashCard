@@ -17,17 +17,17 @@ class FLUserTableViewCell: UITableViewCell {
         return FlashStyle.quiz.userMinHeight + FlashStyle.quiz.userSpacing
     }
 
-    var user: UserAnswerResult? {
+    var answer: FLAnswerResult? {
         didSet {
             self.cellHeight.constant = FlashStyle.quiz.userMinHeight
             self.userImageView.updateLayout()
             self.userImageView.cornerRadius = self.userImageView.frame.width / 2
             self.userImageView.clipsToBounds = true
             self.userImageView.layer.masksToBounds = true
-            guard let user = self.user else {  return }
-            self.userImageView.setImage(user.image, placeholderImage: defaultUserImage)
-            self.titleLabel.text = user.name
-            if let ans = user.answer {
+            guard let account = answer?.account else {  return }
+            self.userImageView.setImage(account.image, placeholderImage: defaultUserImage)
+            self.titleLabel.text = account.name
+            if let ans = answer {
                 self.descLabel.text = ans.value
             } else {
                 self.descLabel.text = ""

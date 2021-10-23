@@ -128,11 +128,9 @@ final class FLChoiceView: UIView {
 extension FLChoiceView: GrowingTextViewDelegate {
     func textViewDidChangeHeight(_ textView: GrowingTextView, height: CGFloat) {
         ConsoleLog.show("FLChoiceView GrowingTextView height:\(height)")
-        //self.textView.superview?.layoutIfNeeded()
         self.contentHeight.constant = height
         self.height = height
         self.checkButton.updateLayout()
-        //ConsoleLog.show("GrowingTextView height:\(self.vie)")
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -152,9 +150,17 @@ extension FLChoiceView: GrowingTextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
+        if self.textView.isPastingContent {
+            self.textView.isPastingContent = false
+            ConsoleLog.show("paste")
+            DispatchQueue.main.async {
+                self.textView.updateLayout()
+            }
+            return true
+        } else if text == "\n" {
             textView.resignFirstResponder()
             return false
+            
         } else if text == "", textView.text.isEmpty {
             textView.resignFirstResponder()
             self.didDelete?.handler(self)

@@ -20,10 +20,6 @@ final class FLSliderView: UIView {
     
     @IBOutlet weak var contentStackView: UIStackView!
     
-    override func awakeFromNib() {
-        
-    }
-    
     class func instanciateFromNib() -> FLSliderView {
         return Bundle.main.loadNibNamed("FLSliderView", owner: nil, options: nil)![0] as! FLSliderView
     }

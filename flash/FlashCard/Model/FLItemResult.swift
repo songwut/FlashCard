@@ -41,7 +41,14 @@ enum FLStatus: Int {
 }
 
 class FLDetailResult: MaterialFlashResult {
+    var countView = 0
+    var provider: BaseResult?
+    var category: CategoryResult?
+    var instructor: BaseResult?
+    var tagList = [UGCTagResult]()
+    
     var estimateTime: Int?//only min
+    
     //var contentCode: ContentCode?
 //    "datetime_create": "2021-08-04T09:55:45.443966",
 //            "datetime_update": "2021-08-04T09:55:45.444002",
@@ -62,6 +69,8 @@ class FLDetailResult: MaterialFlashResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        
+        countView            <- map["count_view"]
         code                 <- map["code"]
         progress             <- map["progress"]
         owner                <- map["created_by"]
@@ -104,11 +113,6 @@ class FLFlashDetailResult: FLBaseResult {
     var bgColor = "FFFFFF"
     var list = [FLCardPageResult]()
     var total = 0
-    
-    var provider: BaseResult?
-    var category: CategoryResult?
-    var instructor: BaseResult?
-    var tagList = [UGCTagResult]()
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -263,6 +267,7 @@ class FLBaseResult:Mappable {
         desc      <- map["desc"]
         image     <- map["image"]
         imageURL  <- (map["image"], URLTransform())
+        index     <- map["index"]
     }
 }
 
@@ -286,27 +291,21 @@ class MaterialFlashPageResult: BaseResult {
     }
 }
 
-
-class UserAnswerResult: BaseResult {
-    var page: Int = 0
-    var index: Int = 0
-    var answer: FLAnswerResult?
-
-    override func mapping(map: Map) {
-        super.mapping(map: map)
-        answer            <- map["answer"]
-        page              <- map["page"]
-        index              <- map["index"]
-    }
-}
-
 class UserAnswerPageResult: BaseResult {
+    var previous = ""
+    var next: Int?
+    var count = 0
+    var pageSize = 24
     var choiceList = [FLChoiceResult]()
-    var userAnswerList = [UserAnswerResult]()
+    var userAnswerList = [FLAnswerResult]()
 
     override func mapping(map: Map) {
         super.mapping(map: map)
+        self.next         <- map["next"]
+        self.previous     <- map["previous"]
+        self.count        <- map["count"]
+        self.pageSize     <- map["page_size"]
         choiceList        <- map["choice"]
-        userAnswerList    <- map["user_answer_list"]
+        userAnswerList    <- map["results"]
     }
 }

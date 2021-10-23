@@ -15,7 +15,9 @@
                 <outlet property="closeButton" destination="v4m-9h-tNb" id="DY2-81-PNt"/>
                 <outlet property="countLabel" destination="s7l-pp-YKr" id="Oe2-GA-LCK"/>
                 <outlet property="countView" destination="rVe-SZ-Hht" id="kGb-x0-Nnm"/>
+                <outlet property="coverImage" destination="era-fQ-ncu" id="bfb-za-uuH"/>
                 <outlet property="descLabel" destination="BUx-5T-HTv" id="aev-b6-JMZ"/>
+                <outlet property="emptyView" destination="Zux-RA-Xav" id="wSo-Km-xyR"/>
                 <outlet property="footerHeight" destination="Wte-bU-2QB" id="DtQ-a6-b3t"/>
                 <outlet property="iconCount" destination="s9a-EM-wHb" id="jxO-LJ-Ox6"/>
                 <outlet property="iconLike" destination="keM-4c-wbP" id="R4W-rF-YYc"/>
@@ -40,10 +42,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="QQ2-26-MEt">
-                    <rect key="frame" x="0.0" y="392.66666666666669" width="428" height="533.33333333333326"/>
+                    <rect key="frame" x="0.0" y="44" width="428" height="882"/>
                     <subviews>
+                        <view tag="99" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zux-RA-Xav">
+                            <rect key="frame" x="0.0" y="0.0" width="428" height="348.66666666666669"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tom-Ph-NvJ">
-                            <rect key="frame" x="0.0" y="0.0" width="428" height="533.33333333333337"/>
+                            <rect key="frame" x="0.0" y="348.66666666666669" width="428" height="533.33333333333326"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="NyJ-HU-49k">
                                     <rect key="frame" x="16" y="0.0" width="396" height="533.33333333333337"/>
@@ -313,7 +319,7 @@
                                                     </constraints>
                                                 </stackView>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="8Fg-Zd-kpw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="na0-rg-xJs" secondAttribute="leading" id="0Sn-FQ-g2a"/>
                                                 <constraint firstAttribute="bottom" secondItem="8Fg-Zd-kpw" secondAttribute="bottom" id="ERl-IV-Zj0"/>
@@ -342,6 +348,7 @@
                 <constraint firstAttribute="trailing" secondItem="QQ2-26-MEt" secondAttribute="trailing" id="5wc-gJ-MkP"/>
                 <constraint firstItem="QQ2-26-MEt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="LJe-gX-jFs"/>
                 <constraint firstItem="QQ2-26-MEt" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="pDo-Ob-CkZ"/>
+                <constraint firstItem="QQ2-26-MEt" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="s40-9d-221"/>
             </constraints>
             <point key="canvasLocation" x="-186.95652173913044" y="94.419642857142847"/>
         </view>

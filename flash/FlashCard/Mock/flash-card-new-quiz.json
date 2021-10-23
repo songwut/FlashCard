@@ -1,6 +1,6 @@
 {
   "id": 1,
-  "type": "question",
+  "type": "questionnaire",
   "detail": {
       "id": 1,
       "value": "",

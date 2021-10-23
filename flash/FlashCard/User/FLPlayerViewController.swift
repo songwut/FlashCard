@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-class FLPlayerViewController: UIViewController {
+class FLPlayerViewController: FLBaseViewController {
 
     var viewModel = FLFlashCardViewModel()
     
@@ -33,13 +33,12 @@ class FLPlayerViewController: UIViewController {
         }
     }
     
-    //use SwiftUI
     private let sgProgress = UIHostingController(rootView: FLUserProgressView())
-    private let infoView = UIHostingController(rootView: FLInfoView())
-    
+    private var infoView: UIHostingController<FLInfoView>!
     private var cardSize = CGSize.zero
     private var cardFrame = CGRect.zero
     private var stageRatio: CGFloat = 1.0
+    private let creator = FLCreator(isEditor: false)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,13 +58,19 @@ class FLPlayerViewController: UIViewController {
         self.progressStackView.addArrangedSubview(self.sgProgress.view)
         self.sgProgress.rootView.delegate = self
         
-        self.infoView.view.frame = CGRect(x: 0, y: 0, width: self.infoStackView.frame.width, height: 60)
-        self.infoView.view.backgroundColor = .clear
-        self.infoView.rootView.delegate = self
-        self.infoStackView.addArrangedSubview(self.infoView.view)
-        self.showLoading(nil)
+        
+        self.viewModel.callAPIFlashDetail(.get) { (flashDetail) in
+            guard let detail = flashDetail else { return }
+            self.title = detail.name
+            self.infoView = UIHostingController(rootView: FLInfoView(detail: detail))
+            self.infoView.view.frame = CGRect(x: 0, y: 0, width: self.infoStackView.frame.width, height: 60)
+            self.infoView.view.backgroundColor = UIColor.clear
+            self.infoView.rootView.delegate = self
+            self.infoStackView.addArrangedSubview(self.infoView.view)
+            
+        }
+        
         self.viewModel.callAPIFlashCard { [weak self] (cardResult: FLFlashDetailResult?) in
-            self?.hideLoading()
             guard let viewContainer = self?.viewContainer else { return }
             self?.manageStageFrame(viewContainer)
             self?.loadCardPage()
@@ -134,7 +139,7 @@ class FLPlayerViewController: UIViewController {
         let contentView: (Int, CGRect, FLCardPageResult) -> (UIView) = { (index: Int ,frame: CGRect , pageResult: FLCardPageResult) -> (UIView) in
             
             let stageView = FLStageView(frame: frame)
-            stageView.viewModel = self.viewModel
+            stageView.flCreator = self.creator
             stageView.card = pageResult
             return stageView
         }
@@ -145,11 +150,12 @@ class FLPlayerViewController: UIViewController {
         self.swipeView = FLSwipeView<FLCardPageResult>(frame: self.viewContainer.bounds, contentView: contentView)
         self.swipeView.cardFrame = cardFrame
         self.viewContainer.addSubview(self.swipeView)
-        let list = self.viewModel.pageList as! [FLCardPageResult]
+        let list = self.viewModel.pageList
         self.swipeView.showTinderCards(with: list ,isDummyShow: true)
         if let firstCard = self.swipeView.loadedCards.first?.overlay as? FLStageView {
-            firstCard.loadElement()
-            
+            firstCard.loadElement(viewModel: self.viewModel) { (anyView) in
+                // if need to custom more anyView
+            }
         }
         
         self.viewContainer.alpha = 1.0
@@ -198,9 +204,9 @@ extension FLPlayerViewController: FLUserProgressViewDelegate, FLInfoViewDelegate
     func didOpenInfo() {
         self.footerStackView.updateLayout()
         self.footerStackView.removeAllArranged()
-        let quiz = FlashElement(JSON: ["type" : "question"]) //TODO: remove mock viewModel.getQuizContent()
-        let pageInfoVC = self.pageInfoVC ?? FLInfoPageViewController(frame: self.view.bounds, flashCardDetail: self.viewModel.flashCardDetail, quiz: quiz)
+        let pageInfoVC = self.pageInfoVC ?? FLInfoPageViewController(frame: self.view.bounds, viewModel: self.viewModel)
         //pageInfoVC.delegate = self
+        pageInfoVC.quiz = self.viewModel.getQuizContent()
         pageInfoVC.view.frame = self.view.bounds
         pageInfoVC.modalPresentationStyle = .overCurrentContext
         pageInfoVC.modalTransitionStyle = .crossDissolve
@@ -234,7 +240,9 @@ extension FLPlayerViewController : FLSwipeViewDelegate {
         let nextIndex = self.swipeView.index + 1
         print("nextIndex \(nextIndex)")
         if let firstCard = self.swipeView.loadedCards.first?.overlay as? FLStageView {
-            firstCard.loadElement()
+            firstCard.loadElement(viewModel: self.viewModel) { (anyView) in
+                // if need to custom more anyView
+            }
         }
         
     }

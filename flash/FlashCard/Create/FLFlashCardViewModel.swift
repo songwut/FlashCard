@@ -8,6 +8,12 @@
 import UIKit
 import Alamofire
 
+protocol BasePagingProtocol {
+    var nextPage: Int? { get set }
+    var isFirstPage: Bool { get set }
+    var isLoadNextPage: Bool { get set }
+}
+
 protocol BaseViewProtocol {
     func showProgressLoading()
     func hideProgressLoading()
@@ -21,7 +27,10 @@ protocol FLStageViewModelProtocol: BaseViewProtocol {
     func hideProgressLoading()
 }
 
-class FLFlashCardViewModel {
+class FLFlashCardViewModel: BasePagingProtocol {
+    var isFirstPage = true
+    var isLoadNextPage = false
+    var nextPage: Int?
     
     var stageVC: FLCreateViewController?
     var myFlashCard: MaterialFlashPageResult?
@@ -46,9 +55,44 @@ class FLFlashCardViewModel {
         return current?.first
     }
     
+    func callAPIFlash(_ method:APIMethod, complete: @escaping (_ result: FLFlashDetailResult?) -> ()) {
+        
+        let request = FLRequest()
+        request.apiMethod = method
+        request.endPoint = .ugcFlashCard
+        API.request(request) { (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+            //self.detail = result
+            //complete(result)
+        }
+    }
+    
+    func callAPIFlashDetail(_ method:APIMethod ,status: FLStatus? = nil, complete: @escaping (_ result: FLDetailResult?) -> ()) {
+        let request = FLRequest()
+        request.apiMethod = method
+        request.endPoint = .ugcFlashCardDetail
+        request.arguments = ["\(self.flashId)"]
+        API.request(request) { (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+            self.detail = result
+            complete(result)
+        }
+        
+        //TODO: param for submit, calcle
+        print("callAPIDetail\n\(request.url)")
+        /*
+        let fileName = "ugc-flash-card-id"
+        JSON.read(fileName) { (object) in
+            if let json = object as? [String : Any],
+               let detail = FLDetailResult(JSON: json) {
+                self.detail = detail
+            }
+            complete()
+        }
+        */
+    }
+    
     func callAPIMyFlashCard(method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
         let request = FLRequest()
-        request.endPoint = .ugcFlashCreate
+        request.endPoint = .ugcFlashCard
         request.apiMethod = method
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: MaterialFlashPageResult?, isCache, error) in
             self?.myFlashCard = result
@@ -56,7 +100,6 @@ class FLFlashCardViewModel {
         }
     }
     
-    //Flash create get list
     func callAPIFlashCard(complete: @escaping (_ result: FLFlashDetailResult?) -> ()) {
         let request = FLRequest()
         request.endPoint = .ugcCardList
@@ -180,10 +223,43 @@ class FLFlashCardViewModel {
         }
     }
     
-    func save(element: FlashElement, at index: Int) {
-        //TODO: save API by page
-        // convert element to dict -> save api
-        currentPageDetail?.componentList.append(element)
+    var answerPageResult: UserAnswerPageResult?
+    
+    func callAPICardDetailAnswerDetail(_ currentCard: FLCardPageResult? ,
+                           method: APIMethod = .get ,
+                           param:[String: Any]? = nil,
+                           complete: @escaping (_ result: UserAnswerPageResult?) -> ()) {
+        
+        guard let card = currentCard else { return }
+        
+        if !self.isFirstPage, self.nextPage == nil {
+            //max of items in page
+            complete(self.answerPageResult)
+        } else {
+            let request = FLRequest()
+            request.apiMethod = method
+            request.parameter = param
+            request.endPoint = .ugcCardDetailUserAnswer
+            request.arguments = ["\(self.flashId)", "\(card.id)"]
+            request.apiType = .json
+            
+            API.request(request) { (responseBody: ResponseBody?, pageResult: UserAnswerPageResult?, isCache, error) in
+                if let page = pageResult {
+                    self.nextPage = page.next
+                    if self.isFirstPage {
+                        self.answerPageResult?.userAnswerList = page.userAnswerList
+                    } else {
+                        for item in page.userAnswerList {
+                            self.answerPageResult?.userAnswerList.append(item)
+                        }
+                    }
+                    
+                    self.isFirstPage = false
+                    
+                    complete(pageResult)
+                }
+            }
+        }
     }
     
     func createNewQuiz(completion: @escaping (_ q: FlashElement?) -> ()) {
@@ -191,6 +267,7 @@ class FLFlashCardViewModel {
         JSON.read(fileName) { (object) in
             if let json = object as? [String : Any],
                let question = FlashElement(JSON: json) {
+                question.type = .quiz
                 completion(question)
             } else {
                 completion(nil)

@@ -8,15 +8,21 @@
 import SwiftUI
 
 struct FLFlashEditorView: View {
+    
+    var createStatus:FLCreateStatus = .new
+    
     var body: some View {
-        StageViewController()
+        FLCreateViewControllerRep(createStatus: createStatus)
     }
 }
 
-struct StageViewController: UIViewControllerRepresentable {
+struct FLCreateViewControllerRep: UIViewControllerRepresentable {
+    var createStatus:FLCreateStatus = .new
+    
     func makeUIViewController(context: Context) -> some UIViewController {
         let storyboard = UIStoryboard(name: "FlashCard", bundle: Bundle.main)
-        let controller = storyboard.instantiateViewController(identifier: "FLCreateViewController")
+        let controller = storyboard.instantiateViewController(identifier: "FLCreateViewController") as! FLCreateViewController
+        controller.createStatus = createStatus
         return controller
     }
     

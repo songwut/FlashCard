@@ -91,7 +91,9 @@ enum FLTextAlignment: String {
 }
 
 class FlashElement: FLBaseResult {
+    var isCreating = false
     //Base
+    var media: FLMediaResult?
     var sort: Int?
     var rotation: Float?
     var scale: Float = 1.0//default
@@ -103,9 +105,6 @@ class FlashElement: FLBaseResult {
     var type:FLType = .unknow
     var rawSize: CGSize?
     
-    //Graphic
-    var graphic: FLGraphicResult?
-    
     //text
     var text = ""
     var textColor = "000000"
@@ -113,6 +112,29 @@ class FlashElement: FLBaseResult {
     var flAlignment = FLTextAlignment.center
     var flTextStyle:[FLTextStyle] = [FLTextStyle]()//["bold", "italic", "underline"]
     var fontScale:CGFloat = 1.0
+    
+    //Graphic
+    var graphic: FLGraphicResult?
+    var code = ""
+    
+    //image
+    var src: String?//image,video.sticker,shape
+    var uiimage: UIImage?
+    var graphicType: FLGraphicMenu?
+    
+    //video
+    var deviceVideoUrl: URL?
+    var mp4VideoUrl: URL?
+    var mp4VideoUploade: String?
+    
+    //Quiz
+    var scaleUI: Float = 1.0//default
+    var question: FLQuestionResult?
+    
+    //maybe next
+    var fill: String?
+    //var stroke = "#000000"
+    var strokeWidth:Float?
     
     func updateNewFontSize() {
         let newSize = self.fontSize * self.fontScale
@@ -142,10 +164,15 @@ class FlashElement: FLBaseResult {
     
     func createGraphicJSON() -> [String: AnyObject]? {
         var dict = [String: AnyObject]()
-        guard let graphic = self.graphic else { return dict }
         dict["type"] = self.type.rawValue as AnyObject
-        dict["code"] = graphic.code as AnyObject
-        dict["src"] = graphic.image as AnyObject
+        
+        if let graphic = self.graphic {
+            dict["code"] = graphic.code as AnyObject
+            dict["src"] = graphic.image as AnyObject
+        } else {
+            dict["code"] = self.code as AnyObject
+            dict["src"] = self.src as AnyObject
+        }
         return dict
     }
     
@@ -158,25 +185,6 @@ class FlashElement: FLBaseResult {
         dict["text_style"] = self.createStyleList() as AnyObject //["bold", "italic", "underline"]
         return dict
     }
-    
-    //image
-    var src: String?//image,video.sticker,shape
-    var uiimage: UIImage?
-    var graphicType: FLGraphicMenu?
-    
-    //video
-    var deviceVideoUrl: URL?
-    var mp4VideoUrl: URL?
-    var mp4VideoUploade: String?
-    
-    //Quiz
-    var scaleUI: Float = 1.0//default
-    var question: FLQuestionResult?
-    
-    //maybe next
-    var fill: String?
-    //var stroke = "#000000"
-    var strokeWidth:Float?
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -197,6 +205,7 @@ class FlashElement: FLBaseResult {
         
         graphicType     <- map["type"]
         src             <- map["src"]
+        code            <- map["code"]
         
         question        <- map["detail"]
         

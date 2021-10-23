@@ -44,7 +44,7 @@ enum FLType: String {
     case video = "video"
     case shape = "shape"
     case sticker = "sticker"
-    case quiz = "question"
+    case quiz = "questionnaire"
 }
 
 class FLControlIcon: UIImageView {
@@ -315,8 +315,8 @@ class InteractView: CHTStickerView {
         let marginIView = FlashStyle.text.marginIView
         let size = self.bounds.size
         let contentSize = CGSize(width: size.width - marginIView, height: size.height - marginIView)
-        let percentWidth = (contentSize.width / stage.bounds.width) * 100
-        let percentHeight = (contentSize.height / stage.bounds.height) * 100
+        var percentWidth = (contentSize.width / stage.bounds.width) * 100
+        var percentHeight = (contentSize.height / stage.bounds.height) * 100
         
         let rotationDegree = self.getDegreesRotation()
         let angle = self.angle
@@ -326,12 +326,16 @@ class InteractView: CHTStickerView {
         let centerY = (elementCenter.y / stage.bounds.height) * 100
         let type = element.type.rawValue
         
+        if element.type == .shape || element.type == .sticker {//if need to custom size
+            
+        }
+        
         dict["width"] = percentWidth as AnyObject
         dict["height"] = percentHeight as AnyObject
         dict["position_x"] = centerX as AnyObject
         dict["position_y"] = centerY as AnyObject
         dict["rotation"] = angle as AnyObject
-        dict["scale"] = scale as AnyObject
+        //dict["scale"] = scale as AnyObject
         dict["type"] = type as AnyObject
         
         if element.type == .image {

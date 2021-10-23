@@ -9,18 +9,7 @@ import SwiftUI
 import Combine
 
 struct FLQuizUserListView: View {
-    @State var items = [
-        UserAnswerResult(JSON: ["name" : "wrrwer"])!,
-        UserAnswerResult(JSON: ["name" : "ererwre"])!,
-        UserAnswerResult(JSON: ["name" : "rgrggefsfs"])!,
-        UserAnswerResult(JSON: ["name" : "ukyk"])!,
-        UserAnswerResult(JSON: ["name" : "prgrto"])!,
-        UserAnswerResult(JSON: ["name" : "trterm,"])!,
-        UserAnswerResult(JSON: ["name" : "wrrwer"])!,
-        UserAnswerResult(JSON: ["name" : "ererwre"])!,
-        UserAnswerResult(JSON: ["name" : "rgrggefsfs"])!,
-        UserAnswerResult(JSON: ["name" : "ukyk"])!
-    ]
+    @State var items: [FLAnswerResult]
     @State var currentSize: Int = 5
     @State var isLoading: Bool = true
     @State var maxSize: Int
@@ -85,15 +74,19 @@ struct FLQuizUserListView: View {
 
 struct FLQuizUserList_Previews: PreviewProvider {
     static var previews: some View {
-        let items = [
-            UserAnswerResult(JSON: ["name" : "wrrwer"])!,
-            UserAnswerResult(JSON: ["name" : "ererwre"])!,
-            UserAnswerResult(JSON: ["name" : "rgrggefsfs"])!,
-            UserAnswerResult(JSON: ["name" : "ukyk"])!,
-            UserAnswerResult(JSON: ["name" : "prgrto"])!,
-            UserAnswerResult(JSON: ["name" : "trterm,"])!
+        var items = [
+            FLAnswerResult(JSON: ["name" : "wrrwer"])!,
+            FLAnswerResult(JSON: ["name" : "ererwre"])!,
+            FLAnswerResult(JSON: ["name" : "rgrggefsfs"])!,
+            FLAnswerResult(JSON: ["name" : "ukyk"])!,
+            FLAnswerResult(JSON: ["name" : "prgrto"])!,
+            FLAnswerResult(JSON: ["name" : "trterm,"])!,
+            FLAnswerResult(JSON: ["name" : "wrrwer"])!,
+            FLAnswerResult(JSON: ["name" : "ererwre"])!,
+            FLAnswerResult(JSON: ["name" : "rgrggefsfs"])!,
+            FLAnswerResult(JSON: ["name" : "ukyk"])!
         ]
-        FLQuizUserListView(maxSize: 50)
+        FLQuizUserListView(items: items, maxSize: 50)
             .previewLayout(.fixed(width: 375, height: 300))
             .environment(\.sizeCategory, .small)
     }

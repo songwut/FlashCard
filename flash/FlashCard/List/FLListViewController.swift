@@ -68,43 +68,44 @@ class FLListViewController: UIViewController {
     private var userAction = ""
     private var selectSortList = [Int]()
     var list = [FLBaseResult]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .white
+        self.collectionViewConfig()
+        self.createMenu()
+        self.collectionView.reloadData()
         
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            self.collectionViewConfig()
-            self.createMenu()
-            self.collectionView.reloadData()
-            
-            if self.viewModel.flashCardDetail == nil {
-                let index = self.viewModel.pageIndex
-                let card = self.viewModel.pageList[index]
-                self.viewModel.callAPICardDetail(card, method: .get) { [weak self] (cardDetail) in
-                    self?.orderingItem()
-                    self?.reloadCollectionView()
-                }
-            } else {
-                self.orderingItem()
-                self.reloadCollectionView()
+        if self.viewModel.flashCardDetail == nil {
+            let index = self.viewModel.pageIndex
+            let card = self.viewModel.pageList[index]
+            self.viewModel.callAPICardDetail(card, method: .get) { [weak self] (cardDetail) in
+                self?.orderingItem()
+                self?.reloadCollectionView()
             }
-            // Do any additional setup after loading the view.
+        } else {
+            self.orderingItem()
+            self.reloadCollectionView()
         }
-        
-        func orderingItem() {
-            self.list.removeAll()
-            var i = 0
-            for card in self.viewModel.pageList {
-                card.index = i
-                self.list.append(card)
-                i += 1
-            }
-            let newCard = FLNewResult(JSON: ["total" : self.viewModel.pageList.count])!
-            self.list.append(newCard)
+        // Do any additional setup after loading the view.
+    }
+    
+    func orderingItem() {
+        self.list.removeAll()
+        var i = 0
+        for card in self.viewModel.pageList {
+            card.index = i
+            self.list.append(card)
+            i += 1
         }
-        
-        func reloadCollectionView() {
-            self.collectionView.alpha = 1.0
-            self.collectionView.reloadData()
-        }
+        let newCard = FLNewResult(JSON: ["total" : self.viewModel.pageList.count])!
+        self.list.append(newCard)
+    }
+    
+    func reloadCollectionView() {
+        self.collectionView.alpha = 1.0
+        self.collectionView.reloadData()
+    }
     
     private func createMenu(_ menu: FLMenuList) -> FLItemView {
         let menuHeight = FlashStyle.listMenuHeight
@@ -256,7 +257,7 @@ class FLListViewController: UIViewController {
         let lastIndex = IndexPath(row: lastRow, section: self.sectionContentItem)
         self.collectionView.scrollToItem(at: lastIndex, at: .bottom, animated: true)
     }
-
+    
 }
 
 extension FLListViewController: UICollectionViewDataSource,UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -319,7 +320,7 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
         if sectionList[indexPath.section] == .contentItem {
             if self.userAction == "select" {
                 guard let item = self.list[indexPath.row] as? FLCardPageResult else { return }
-                if let index = self.selectSortList.firstIndex(of: item.index) {
+                if let index = self.selectSortList.firstIndex(of: item.id) {
                     self.selectSortList.remove(at: index)
                 } else {
                     self.selectSortList.append(item.id)

@@ -15,8 +15,13 @@ struct FLStageSetUp {
     var eventId: Int
 }
 
+enum FLCreateStatus {
+    case new
+    case edit
+}
 
-final class FLCreateViewController: UIViewController {
+
+final class FLCreateViewController: FLBaseViewController {
     @IBOutlet private weak var topView: UIView!
     @IBOutlet private weak var topViewHeight: NSLayoutConstraint!
     @IBOutlet private weak var contentPageView: UIView!
@@ -34,11 +39,14 @@ final class FLCreateViewController: UIViewController {
     private var stageViewList: [FLStageView]?
     private var flCreator: FLCreator?
     private var didScrollCollectionViewToMiddle = false
-    private var isCreatePage = true
+    private var isEditorPageReady = false
     private var controlView: FLControlView?
+    private var titleLabel: UILabel!
+    private var isManageScrolling = false
     var selectedView: UIView?
     var widthChange:CGFloat = 0.0
     
+    var createStatus:FLCreateStatus = .new
     var toolVC: FLToolViewController?
     var viewModelDelegate: FLStageViewModelProtocol!
     var viewModel = FLFlashCardViewModel()
@@ -87,6 +95,13 @@ final class FLCreateViewController: UIViewController {
         self.topViewHeight.constant = UIDevice.isIpad() ? 58 : 40
         self.stageViewList = [FLStageView]()
         
+        self.titleLabel = UILabel()
+        self.titleLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width / 2, height: 40)
+        self.titleLabel.font = .font(16, font: .text)
+        self.titleLabel.textColor = .white
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.titleLabel)
+        self.navigationItem.leftItemsSupplementBackButton = true
+        
         self.view.backgroundColor = FlashStyle.screenColor
         self.contentToolHeight.constant = FlashStyle.contentToolHeight
         
@@ -119,7 +134,7 @@ final class FLCreateViewController: UIViewController {
         self.contentPageView.addSubview(self.addRightPageButton!)
         self.deletePageButton?.addTarget(self, action: #selector(self.deletePressed(_:)), for: .touchUpInside)
         
-        self.flCreator = FLCreator(stage: self.stageView!)
+        self.flCreator = FLCreator(isEditor: true)
         
         self.listButton.addTarget(self, action: #selector(self.listButtonPressed(_:)), for: .touchUpInside)
         
@@ -128,16 +143,46 @@ final class FLCreateViewController: UIViewController {
         self.addRightPageButton?.addTarget(self, action: #selector(self.addRightPressed(_:)), for: .touchUpInside)
         
         self.prepareToolVC()
-        self.view.alpha = 0.0
-        self.viewModel.callAPIFlashCard { [weak self] (cardResult: FLFlashDetailResult?) in
-            if let object = cardResult {
-                ConsoleLog.show("total:\(object.total)")
-                ConsoleLog.show("list:\(object.list)")
-                self?.updatePageNumber()
-                UIView.animate(withDuration: 0.3) {
-                    self?.view.alpha = 1.0
+        self.contentPageView.alpha = 0.0
+        
+        self.viewModel.callAPIFlashDetail(.get) { (flashDetail) in
+            guard let detail = flashDetail else { return }
+            self.titleLabel.text = detail.name
+        }
+        
+        if self.createStatus == .new {
+            //mock
+            self.viewModel.callAPIFlashCard { (cardResult: FLFlashDetailResult?) in
+                if let object = cardResult {
+                    ConsoleLog.show("total:\(object.total)")
+                    ConsoleLog.show("list:\(object.list)")
+                    self.manageStageFrame(pageList: self.viewModel.pageList)
                 }
-                self?.manageStageFrame()
+            }
+            /* //create and load
+            self.showLoading(nil)
+            self.viewModel.callAPIFlash(.post) { (return) in
+                self.viewModel.flashId = 6
+                self.viewModel.pageList = [//mock
+                    FLCardPageResult(JSON: ["index" : 0])!
+                ]
+                self.viewModel.callAPIFlashCard { (cardResult: FLFlashDetailResult?) in
+                    if let object = cardResult {
+                        ConsoleLog.show("total:\(object.total)")
+                        ConsoleLog.show("list:\(object.list)")
+             self.manageStageFrame(pageList: self.viewModel.pageList)
+                    }
+                }
+            }
+            */
+        } else {
+            self.viewModel.callAPIFlashCard { (cardResult: FLFlashDetailResult?) in
+                self.titleLabel.text = self.viewModel.detail?.name ?? ""
+                if let object = cardResult {
+                    ConsoleLog.show("total:\(object.total)")
+                    ConsoleLog.show("list:\(object.list)")
+                    self.manageStageFrame(pageList: self.viewModel.pageList)
+                }
             }
         }
     }
@@ -148,6 +193,7 @@ final class FLCreateViewController: UIViewController {
         let card = self.viewModel.pageList[index]
         self.viewModel.callAPICardDetail(card, method: method, param: param) { (cardDetail) in
             stage.cardDetail = cardDetail
+            self.checkQuizIn(cardDetail: cardDetail)
         }
     }
     
@@ -157,9 +203,25 @@ final class FLCreateViewController: UIViewController {
         self.pageCountLabel.text = "\(index + 1)/\(max)"
     }
     
+    func checkQuizIn(cardDetail: FLCardPageDetailResult?) {
+        guard let cardDetail = cardDetail else { return }
+        let isQuizView = self.isQuizViewInStageView(cardDetail: cardDetail)
+        self.toolVC?.quizMenu?.setQuizButtonEnable(!isQuizView)
+    }
+    
+    private func isQuizViewInStageView(cardDetail: FLCardPageDetailResult) -> Bool {
+        let quizElement = cardDetail.componentList.first { (card) -> Bool in
+            return card.type == .quiz
+        }
+        if let _ = quizElement {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     @objc func deletePressed(_ sender: UIButton) {
         //TODO: Api delete
-        /*
         ConsoleLog.show("pageList before: \(self.viewModel.pageList.count)")
         let index = self.viewModel.pageIndex
         let stage = self.getStageView(at: index)
@@ -168,62 +230,13 @@ final class FLCreateViewController: UIViewController {
                 stage.card = nil
                 stage.removeFromSuperview()
                 ConsoleLog.show("pageList after delete: \(self.viewModel.pageList.count)")
+                self.updatePageNumber()
             }
         }
-        */
-        
-        //TODO: recheck 500
-        
-        var newCardData = [String: Any]()
-        var data = [String: Any]()
-        data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
-        newCardData["data"] = data
-        newCardData["sort"] = ""
-        let fakeImage = UIImage(named: "image")
-        let coverImageBase64 = fakeImage?.jpegData(compressionQuality: 1)?.base64EncodedString()
-        if let base64 = coverImageBase64 {
-            newCardData["image"] = base64
-        }
-        self.viewModel.callAPIAddNewCard(param: newCardData) { (cardPage) in
-            
-        }
-        
     }
     
     @objc func appLeftPressed(_ sender: UIButton) {
-        
-        self.saveCoverPage()
-        
-        let index = self.viewModel.pageIndex
-        let newIndex = index - 1
-        /*
-        let page = FLCardPageResult(JSON: ["index" : newIndex])!
-        self.viewModel.pageList.insert(page, at: newIndex)
-        
-        guard let stackView = self.sliderView?.contentStackView else {return}
-        let frame = self.stagxeView?.frame ?? .zero
-        let stage = self.createStageView(frame.size, creator: self.flCreator!)
-        stage.page = page
-        stackView.insertArrangedSubview(stage, at: newIndex)
-        self.stageViewList?.insert(stage, at: newIndex)
-        */
-        
-        //for right
-        /*
-        var newCardData = [String: Any]()
-        var data = [String: Any]()
-        data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
-        newCardData["data"] = data
-        self.viewModel.callAPIAddNewCard(param: newCardData) { (cardPage) in
-            
-        }
-        */
-        //self.gotoPage(index: newIndex)
-        
-        
-        
-        //TODO: Delete
-        self.addRightPressed(sender)
+        self.saveCurrentCardPage()
     }
     
     @objc func addRightPressed(_ sender: UIButton) {
@@ -297,7 +310,7 @@ final class FLCreateViewController: UIViewController {
         self.toolVC?.closePressed(nil)
     }
     
-    func manageStageFrame() {
+    func manageStageFrame(pageList: [FLCardPageResult]) {
         self.contentPageView.updateLayout()
         DispatchQueue.main.async {
             print("self.view:\(self.view.frame)")
@@ -346,6 +359,8 @@ final class FLCreateViewController: UIViewController {
             self.sliderView?.stackHeight.constant = stageFrame.height
             self.sliderView?.leftWidth.constant = self.sectionEdge.left
             self.sliderView?.rightWidth.constant = self.sectionEdge.right
+            //self.sliderView?.scrollView.isPagingEnabled = true
+            //self.sliderView?.scrollView.alwaysBounceHorizontal = false
             
             self.controlView = FLControlView.instanciateFromNib()
             self.controlView?.leftWidthButton.tag = FLTag.left.rawValue
@@ -353,21 +368,92 @@ final class FLCreateViewController: UIViewController {
             
             self.controlView?.isHidden = true
             
-            
             stageView.isHidden = true
             
-            if self.isCreatePage {
-                self.manageMultitleStage()
-                self.reloadCardPage(method: .get)//First card page
+            if !self.isEditorPageReady {
+                self.manageMultitleStage(pageList: pageList)
+                DispatchQueue.main.async {
+                    let stage = self.getStageView(at: self.viewModel.pageIndex)
+                    self.updateAfterAllStageReady(stage: stage)
+                }
             }
+        }
+    }
+    
+    private func updateAfterAllStageReady(stage: FLStageView) {
+        self.updatePageNumber()
+        
+        if self.createStatus == .new {
+            self.reloadCardPage(method: .get)//First card page
+            self.isEditorPageReady = true
+            UIView.animate(withDuration: 0.3) {
+                self.contentPageView.alpha = 1.0
+            }
+            //TODO: recheck case come from case new page
             
+        } else {
+            //need prepare element in first card
             
+            stage.isEditor = true
+            stage.loadElement(viewModel: self.viewModel) { [] (anyView) in
+                stage.isRequireToLoadElement = false //skip load element in first stage
+                // all element in stage ready
+                //then custom for editor
+                if let iView = anyView as? InteractView {
+                    self.manageIView(in: iView, stageView: stage)
+                    iView.isHiddenEditingTool = true
+                    
+                } else if let iView = anyView as? InteractTextView {
+                    self.manageTextView(in: iView, stageView: stage)
+                    iView.isHiddenEditingTool = true
+                    
+                } else if let quizView = anyView as? FLQuizView {
+                    self.manageQuizView(in: quizView, stageView: stage)
+                    //iView.isHiddenEditingTool = true
+                }
+                
+                self.checkQuizIn(cardDetail: stage.cardDetail)
+                
+                self.isEditorPageReady = true
+                UIView.animate(withDuration: 0.3) {
+                    self.contentPageView.alpha = 1.0
+                }
+                
+                //prepare element in other stage
+                guard let stageList = self.stageViewList else { return }
+                for stage in stageList {
+                    if stage.isRequireToLoadElement {
+                        self.loadElement(in: stage)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func loadElement(in stage: FLStageView) {
+        stage.isEditor = true
+        stage.loadElement(viewModel: self.viewModel) { [] (anyView) in
+            // all element in stage ready
+            //then custom for editor
+            if let iView = anyView as? InteractView {
+                self.manageIView(in: iView, stageView: stage)
+                iView.isHiddenEditingTool = true
+                
+            } else if let iView = anyView as? InteractTextView {
+                self.manageTextView(in: iView, stageView: stage)
+                iView.isHiddenEditingTool = true
+                
+            } else if let quizView = anyView as? FLQuizView {
+                self.manageQuizView(in: quizView, stageView: stage)
+                //iView.isHiddenEditingTool = true
+            }
         }
     }
     
     func createStageView(_ size: CGSize, creator: FLCreator) -> FLStageView {
         let f = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         let stage = FLStageView(frame: f)
+        stage.flCreator = creator
         stage.backgroundColor = .white
         stage.cornerRadius = 16
         stage.heightAnchor.constraint(equalToConstant: size.height).isActive = true
@@ -387,21 +473,20 @@ final class FLCreateViewController: UIViewController {
         return stage
     }
     
-    func manageMultitleStage() {
+    func manageMultitleStage(pageList: [FLCardPageResult]) {
         guard let stackView = self.sliderView?.contentStackView else {return}
         stackView.removeAllArranged()
         let frame = self.stageView?.frame ?? CGRect.zero
-        for page in self.viewModel.pageList {
+        for page in pageList {
             let stage = self.createStageView(frame.size, creator: self.flCreator!)
             stage.isEditor = true
-            stage.card = page as? FLCardPageResult
+            stage.card = page
             self.stageViewList?.append(stage)
             stackView.addArrangedSubview(stage)
         }
         stackView.layoutIfNeeded()
         self.sliderView?.scrollView.delegate = self
-        self.sliderView?.scrollView.isScrollEnabled = false//TODO: detech active
-        self.isCreatePage = false
+        self.sliderView?.scrollView.isScrollEnabled = false
     }
     
     func selectedViewIsHiddenTool(_ isHiddenEditingTool: Bool) {
@@ -492,25 +577,7 @@ final class FLCreateViewController: UIViewController {
         return safeIndex
     }
     
-    var halfModalDelegate: HalfModalTransitioningDelegate!
-    
-    func openQuizStatVC() {
-        let s = UIStoryboard(name: "FlashCard", bundle: nil)
-        if #available(iOS 13.0, *) {
-            if let vc = s.instantiateViewController(identifier: "FLQuizInfoViewController") as? FLQuizInfoViewController {
-                // toolHelper = FLToolHelper(vc: self, toolBar: vc)
-                //tool parameter
-                
-                self.halfModalDelegate.startHeight = 150 + vc.safeAreaTopHeight
-                self.halfModalDelegate.backgroundColor = .clear
-                vc.modalPresentationStyle = .custom
-                vc.transitioningDelegate = self.halfModalDelegate
-                self.present(vc, animated: true, completion: nil)
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-    }
+    //var halfModalDelegate: HalfModalTransitioningDelegate!
     
     func prepareToolVC() {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
@@ -627,21 +694,49 @@ final class FLCreateViewController: UIViewController {
         //let element = FlashElement.with(["type": FLType.quiz.rawValue])!
         //element.question = question
         let row = self.indexOfMajorCell()
-        self.createElement(element, row: row)
+        
+        self.selectedViewIsHiddenTool(true)
+        
+        let stageView = self.getStageView(at: row)
+        if let quizView = stageView.createElement(element) as? FLQuizView {
+            element.sort = stageView.subviews.count + 1
+            self.manageQuizView(in: quizView, stageView: stageView)
+        }
     }
     
     func createNewText() {
         let element = FlashElement.with(["type": FLType.text.rawValue])!
+        element.isCreating = true
         element.width = 0
         element.x = 50
         element.y = 50
         element.text = FlashStyle.text.placeholder
         let row = self.indexOfMajorCell()
-        self.createElement(element, row: row)
+        
+        self.selectedViewIsHiddenTool(true)
+        
+        let stageView = self.getStageView(at: row)
+        if let iView = stageView.createElement(element) as? InteractTextView {
+            element.sort = stageView.subviews.count + 1
+            self.manageTextView(in: iView, stageView: stageView)
+            //Auto select all test
+            iView.textView?.selectAll(self)
+            iView.textView?.becomeFirstResponder()
+            
+            //Auto open text tool
+            self.openToolBar(tool: .text, view: iView)
+            self.toolVC?.open(.text, isCreating: true)
+            self.selectedView = iView
+            let size = iView.frame
+            print("controlView width: \(size.width) ,controlView height: \(size.height)")
+            
+            iView.isHiddenEditingTool = false
+        }
     }
     
     func createNewGraphic(_ graphicType: FLGraphicMenu, graphic: FLGraphicResult) {
         let element = FlashElement.with(["type": graphicType.rawValue])!
+        element.isCreating = true
         element.graphic = graphic
         element.x = 50
         element.y = 50
@@ -649,30 +744,58 @@ final class FLCreateViewController: UIViewController {
         //element.image = graphic.uiimage//bug
         element.src = graphic.image
         let row = self.indexOfMajorCell()
-        self.createElement(element, row: row)
+        
+        self.selectedViewIsHiddenTool(true)
+        
+        let stageView = self.getStageView(at: row)
+        if let iView = stageView.createElement(element) as? InteractView {
+            element.sort = stageView.subviews.count + 1
+            self.manageIView(in: iView, stageView: stageView)
+            iView.isHiddenEditingTool = false
+        }
     }
     
     func createNewImage(_ image: UIImage, media: FLMediaResult?) {
         let type = FLType.image
         let element = FlashElement.with(["type": type.rawValue])!
+        element.isCreating = true
         element.x = 50
         element.y = 50
         element.uiimage = image
         element.rawSize = image.size
         let row = self.indexOfMajorCell()
-        self.createElement(element, row: row, media: media)
+        element.media = media
+        
+        self.selectedViewIsHiddenTool(true)
+        
+        let stageView = self.getStageView(at: row)
+        if let iView = stageView.createElement(element) as? InteractView {
+            element.sort = stageView.subviews.count + 1
+            self.manageIView(in: iView, stageView: stageView)
+            iView.isHiddenEditingTool = false
+        }
     }
     
     func createNewVideo(_ url: URL, size: CGSize, media: FLMediaResult?) {
         let type = FLType.video
         let element = FlashElement.with(["type": type.rawValue])!
+        element.isCreating = true
         element.x = 50
         element.y = 50
         element.deviceVideoUrl = url
         element.rawSize = size
         let row = self.indexOfMajorCell()
         media?.deviceVideoUrl = url
-        self.createElement(element, row: row, media: media)
+        element.media = media
+        
+        self.selectedViewIsHiddenTool(true)
+        
+        let stageView = self.getStageView(at: row)
+        if let iView = stageView.createElement(element) as? InteractView {
+            element.sort = stageView.subviews.count + 1
+            self.manageIView(in: iView, stageView: stageView)
+            iView.isHiddenEditingTool = false
+        }
     }
     
     func updateTextAlignment(_ alignment: FLTextAlignment) {
@@ -735,133 +858,79 @@ final class FLCreateViewController: UIViewController {
         return stageView ?? FLStageView()
     }
     
-    func createElement(_ element: FlashElement, row: Int , media: FLMediaResult? = nil) {
-        self.selectedViewIsHiddenTool(true)
+    func manageQuizView(in quizView:FLQuizView, stageView: FLStageView) {
+        quizView.cardView.isUserInteractionEnabled = true
+        quizView.cardView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.moveVertical(_:))))
+        quizView.didDelete = Action(handler: { (sender) in
+            UIView.animateKeyframes(withDuration: 0.2, delay: 0, options:[]) {
+                quizView.alpha = 0.0
+            } completion: { (done) in
+                quizView.removeFromSuperview()
+            }
+            self.toolVC?.quizMenu?.setQuizButtonEnable(true)
+        })
         
-        if element.type == .text {
-            self.createTextView(element, row: row)
-            
-        } else if element.type == .image {
-            self.createIView(element, row: row, media: media)
-            
-        } else if element.type == .sticker {
-            self.createIView(element, row: row)
-            
-        } else if element.type == .shape {
-            self.createIView(element, row: row)
-            
-        }  else if element.type == .video {
-            self.createIView(element, row: row,  media: media)
-            
-        }  else if element.type == .quiz {
-            self.createQuizView(element, row: row)
-        }
-        self.viewModel.save(element: element, at: row)
-    }
-    
-    func createQuizView(_ element: FlashElement, row: Int) {
-        
-        let stageView = self.getStageView(at: row)
-        if let quizView = stageView.createElement(element) as? FLQuizView {
-            quizView.isUserInteractionEnabled = true
-            quizView.addGestureRecognizer(PanGesture(target: self, action: #selector(self.moveVertical(_:))))
-            quizView.didDelete = Action(handler: { (sender) in
-                UIView.animateKeyframes(withDuration: 0.2, delay: 0, options:[]) {
-                    quizView.alpha = 0.0
-                } completion: { (done) in
-                    quizView.removeFromSuperview()
-                }
-                self.toolVC?.quizMenu?.setQuizButtonEnable(true)
-            })
-            self.toolVC?.quizMenu?.setQuizButtonEnable(false)
-            
-            stageView.quizManageSize(quizView)
-            
-            //let scaleUI = quizView.scaleUI
-            //quizView.transform = CGAffineTransform(scaleX: CGFloat(scaleUI), y: CGFloat(scaleUI))
-            
-            
-        }
+        let scaleUI = quizView.scaleUI
+        quizView.transform = CGAffineTransform(scaleX: CGFloat(scaleUI), y: CGFloat(scaleUI))
         
     }
     
-    func createIView(_ element: FlashElement, row: Int, media: FLMediaResult? = nil) {
+    func manageIView(in iView:InteractView, stageView: FLStageView) {
+        iView.outlineBorderColor = .black
+        iView.setImage(UIImage(named: "fl_delete"), for: .close)
+        iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
+        iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
+        iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
+        iView.setHandlerSize(Int(FlashStyle.text.marginIView))
+        iView.enableClose = true
+        iView.enableFlip = false
+        iView.enableRotate = true
+        iView.enableNone = false
         
-        let stageView = self.getStageView(at: row)
-        element.sort = stageView.subviews.count + 1
-        if let iView = stageView.createElement(element) as? InteractView {
-            iView.outlineBorderColor = .black
-            iView.setImage(UIImage(named: "fl_delete"), for: .close)
-            iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
-            iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
-            iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
-            iView.setHandlerSize(Int(FlashStyle.text.marginIView))
-            iView.enableClose = true
-            iView.enableFlip = false
-            iView.enableRotate = true
-            iView.enableNone = false
-            
-            //TODO: add gesture pinch
-            
-            //iView.gesture = SnapGesture(view: iView)
-            iView.isCreateNew = true
-            iView.isSelected = true
-            //Auto select all test
-            iView.textView?.selectAll(self)
-            iView.textView?.becomeFirstResponder()
-            
-            iView.textView?.delegate = self
-            iView.delegate = self
-            
-            if element.type == .image {
-                let page = self.viewModel.currentPageDetail
-                self.viewModel.callAPIDropboxUpload(page, media: media, iView: iView) {
+        //TODO: add gesture pinch
+        
+        //iView.gesture = SnapGesture(view: iView)
+        iView.isCreateNew = true
+        iView.isSelected = true
+        
+        iView.textView?.delegate = self
+        iView.delegate = self
+        
+        let type = iView.element?.type ?? .unknow
+        if type == .image {
+            let page = self.viewModel.currentPageDetail
+            self.viewModel.callAPIDropboxUpload(page, media: iView.element?.media, iView: iView) {
+                ConsoleLog.show("callAPIDropboxUpload")
+            }
+        } else if type == .video {
+            let page = self.viewModel.currentPageDetail
+            self.viewModel.callAPIDropboxUpload(page, media: iView.element?.media, iView: iView) {
                     ConsoleLog.show("callAPIDropboxUpload")
                 }
-            } else if element.type == .video {
-                let page = self.viewModel.currentPageDetail
-                    self.viewModel.callAPIDropboxUpload(page, media: media, iView: iView) {
-                        ConsoleLog.show("callAPIDropboxUpload")
-                    }
-            }
-            
-            if let tool = element.tool {
-                self.openToolBar(tool: tool, view: iView)
-                self.toolVC?.open(tool, isCreating: true)
-            }
-            self.selectedView = iView
-            let size = iView.frame
-            print("controlView width: \(size.width) ,controlView height: \(size.height)")
-            
         }
+        
+        if let tool = iView.element?.tool {
+            self.openToolBar(tool: tool, view: iView)
+            self.toolVC?.open(tool, isCreating: true)
+        }
+        self.selectedView = iView
+        let size = iView.frame
+        print("controlView width: \(size.width) ,controlView height: \(size.height)")
     }
     
-    func createTextView(_ element: FlashElement, row: Int) {
+    func manageTextView(in iView:InteractTextView, stageView: FLStageView) {
         
-        let stageView = self.getStageView(at: row)
-        element.sort = stageView.subviews.count + 1
-        if let iView = stageView.createElement(element) as? InteractTextView {
-//            iView.enableClose = true
-//            iView.enableFlip = false
-//            iView.enableRotate = false
-//            iView.enableNone = false
-            
-            //iView.gesture = SnapGesture(view: iView)
-            
-            //iView.isCreateNew = true
-            iView.textView?.isEditable = true
-            iView.textView?.selectAll(self)//Auto select all test
-            iView.textView?.delegate = self
-            iView.textView?.becomeFirstResponder()
-            iView.delegate = self
-            
-            self.openToolBar(tool: .text, view: iView)
-            self.toolVC?.open(.text, isCreating: true)
-            self.selectedView = iView
-            let size = iView.frame
-            print("controlView width: \(size.width) ,controlView height: \(size.height)")
-            
-        }
+        //            iView.enableClose = true
+        //            iView.enableFlip = false
+        //            iView.enableRotate = false
+        //            iView.enableNone = false
+                    
+                    //iView.gesture = SnapGesture(view: iView)
+                    
+                    //iView.isCreateNew = true
+        iView.textView?.isEditable = true
+        iView.textView?.delegate = self
+        iView.delegate = self
     }
     
     func mp4Convert(deviceVideoUrl: URL,  complete: @escaping (URL) -> Void) {
@@ -984,7 +1053,7 @@ final class FLCreateViewController: UIViewController {
     //Screen Rotation
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        self.manageStageFrame()
+        self.manageStageFrame(pageList: self.viewModel.pageList)
         
         if UIDevice.current.orientation.isLandscape {
             print("horizontal")
@@ -1166,6 +1235,27 @@ extension FLCreateViewController: UINavigationControllerDelegate, UIImagePickerC
         picker.dismiss(animated: true, completion: nil)
     }
     
+    func manageScrollCenter(index:Int, scrollView: UIScrollView) {
+        if !self.isManageScrolling {
+            self.isManageScrolling = true
+            print(index)
+            let stageWidth = self.cellSize.width
+            guard let sliderView = self.sliderView else { return }
+            let leftWidth = sliderView.leftWidth.constant
+            let rightWidth = sliderView.rightWidth.constant
+            
+            let allSpace = CGFloat(FlashStyle.stage.cellSpacing * CGFloat(index))
+            let allWidth = stageWidth  * CGFloat(index)
+            let removeWidth = allWidth + allSpace
+            let w = (removeWidth) - (scrollView.contentSize.width)
+            let centerOffsetX = (scrollView.contentSize.width + w)
+            let centerOffsetY = scrollView.contentOffset.y
+            let newX = centerOffsetX// - (leftWidth)
+            let offSet = CGPoint(x: newX, y: centerOffsetY)
+            scrollView.setContentOffset(offSet, animated: true)
+            self.isManageScrolling = false
+        }
+    }
 }
 
 extension FLCreateViewController: UIScrollViewDelegate {
@@ -1176,11 +1266,13 @@ extension FLCreateViewController: UIScrollViewDelegate {
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
         // Stop scrollView sliding:
         targetContentOffset.pointee = scrollView.contentOffset
         
         // calculate where scrollView should snap to:
         let indexOfMajorCell = self.indexOfMajorCell()
+        print(indexOfMajorCell)
         
         // calculate conditions:
         let swipeVelocityThreshold: CGFloat = 0.5 // after some trail and error
@@ -1201,26 +1293,43 @@ extension FLCreateViewController: UIScrollViewDelegate {
             }, completion: nil)
             
         } else {
+            //self.isManageScrolling = false
+            self.manageScrollCenter(index: indexOfMajorCell, scrollView: scrollView)
             // This is a much better way to scroll to a cell:
             let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
             //self.layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
+        
+        print("scrollViewWillEndDragging")
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         print("scrollViewDidEndDragging")
         let index = self.indexOfMajorCell()
-        guard let currentPage = self.viewModel.pageList[index] as? FLCardPageResult else { return }
+        let currentPage = self.viewModel.pageList[index]
         let max = self.viewModel.pageList.count
         self.viewModel.pageIndex = index
         self.viewModel.currentPage = currentPage
         self.updatePageNumber()
         self.manageAddLR()
+        
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         print("scrollViewDidEndDecelerating")
-        
+        //self.isManageScrolling = false
+        /*
+        var closestCell : UICollectionViewCell = collectionView.visibleCells()[0];
+        for cell in collectionView!.visibleCells() as [UICollectionViewCell] {
+            let closestCellDelta = abs(closestCell.center.x - collectionView.bounds.size.width/2.0 - collectionView.contentOffset.x)
+            let cellDelta = abs(cell.center.x - collectionView.bounds.size.width/2.0 - collectionView.contentOffset.x)
+            if (cellDelta < closestCellDelta){
+                closestCell = cell
+            }
+        }
+        let indexPath = collectionView.indexPathForCell(closestCell)
+        collectionView.scrollToItemAtIndexPath(indexPath!, atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: true)
+        */
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {

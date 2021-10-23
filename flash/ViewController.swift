@@ -69,7 +69,19 @@ class ViewController: UIViewController {
     
     @objc func stageButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
-        let vc = s.instantiateViewController(withIdentifier: "FLCreateViewController")
+        let vc = s.instantiateViewController(withIdentifier: "FLCreateViewController") as! FLCreateViewController
+        vc.createStatus = .new
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func editFlashButtonPressed(_ sender: UIButton) {
+        let s = UIStoryboard(name: "FlashCard", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "FLCreateViewController") as! FLCreateViewController
+        vc.createStatus = .edit
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
         } else {
@@ -79,7 +91,8 @@ class ViewController: UIViewController {
     
     @IBAction func openFlashPlayer(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
-        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController")
+        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
+        vc.viewModel.flashId = 6
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
         } else {
@@ -132,10 +145,24 @@ class ViewController: UIViewController {
     }
     
     @IBAction func flPostPressed(_ sender: UIButton) {
+        self.showLoading(nil)
+        let model = FLFlashCardViewModel()
+        model.callAPIFlashDetail(.get) { (detail) in
+            self.hideLoading()
+            let flPostVC = FLPostViewController.instantiate(viewModel: model)
+            if let nav = self.navigationController {
+                nav.pushViewController(flPostVC, animated: true)
+            } else {
+                self.present(flPostVC, animated: true, completion: nil)
+            }
+        }
+        
+        /*
         JSON.read("ugc-flash-card-detail") { (object) in
             if let dict = object as? [String : Any],
                let detail = FLDetailResult(JSON: dict) {
-                let model = FLPostViewModel(detail)
+                let model = FLFlashCardViewModel()
+                model.detail = detail
                 let flPostVC = FLPostViewController.instantiate(viewModel: model)
                 if let nav = self.navigationController {
                     nav.pushViewController(flPostVC, animated: true)
@@ -144,6 +171,7 @@ class ViewController: UIViewController {
                 }
             }
         }
+        */
     }
     
     @IBAction func popupImageLimitPressed(_ sender: UIButton) {

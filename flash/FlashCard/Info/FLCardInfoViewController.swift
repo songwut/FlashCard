@@ -15,7 +15,9 @@ protocol FLCardInfoViewControllerDelegate {
 
 class FLCardInfoViewController: UIViewController {
     
+    @IBOutlet weak var emptyView: UIView!
     @IBOutlet private weak var closeButton: UIButton!
+    @IBOutlet private weak var coverImage: UIImageView!
     @IBOutlet weak var cardView: UIView!
     @IBOutlet private weak var footerHeight: NSLayoutConstraint!
     @IBOutlet private weak var titleHeight: NSLayoutConstraint!
@@ -41,14 +43,16 @@ class FLCardInfoViewController: UIViewController {
     @IBOutlet private weak var quizView: UIView!
     
     var delegate: FLCardInfoViewControllerDelegate?
-    var flashCardDetail: FLFlashDetailResult?
+    var detail: FLDetailResult?
     var isQuiz = false
     
     var selfFrame: CGRect = .zero
     
-    init(frame: CGRect, flashCardDetail: FLFlashDetailResult?, isQuiz: Bool) {
+    let formatter = NumberFormatter()
+    
+    init(frame: CGRect, detail: FLDetailResult?, isQuiz: Bool) {
         self.selfFrame = frame
-        self.flashCardDetail = flashCardDetail
+        self.detail = detail
         self.isQuiz = isQuiz
         super.init(nibName: nil, bundle: nil)
     }
@@ -64,6 +68,11 @@ class FLCardInfoViewController: UIViewController {
         self.view.isOpaque = false
         self.view.backgroundColor = .clear
         self.view.updateLayout()
+        
+        formatter.groupingSeparator = ","
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.numberStyle = .decimal
+        
         self.titleHeight.constant = UIDevice.isIpad() ? 80 : 60
         self.titleLabel.font = .font(UIDevice.isIpad() ? 24 : 14, font: .medium)
         
@@ -107,11 +116,13 @@ class FLCardInfoViewController: UIViewController {
         self.tagView.tagLineBreakMode = .byTruncatingTail
         
         self.footerHeight.constant = self.safeAreaBottomHeight
-        
+        self.updateUI()
     }
     
     func updateUI() {
-        guard let detail = self.flashCardDetail else { return }
+        guard let detail = self.detail else { return }
+        self.coverImage.setImage(detail.image, placeholderImage: UIImage(named: "card-info-cover"))
+        self.countLabel.text = formatter.string(from: NSNumber(value: detail.countView))
         self.nameLabel.text = detail.name
         self.instructorLabel.text = "instructor".localized() + " : " + (detail.instructor?.name ?? "")
         self.providerLabel.text = "content_provider".localized() + " : " + (detail.provider?.name ?? "")

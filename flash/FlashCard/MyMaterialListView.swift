@@ -29,7 +29,7 @@ struct MyMaterialListView: View {
                 .frame(height: 40)
                 .foregroundColor(UIColor.text75().color)
                 .font(FontHelper.getFontSystem(.l, font: .text).font)
-            
+            //TODO: change image cover
             let createList = [
                 FLCreateItem(coverName: "flash-create-cover", title: "Flash Card", isReady: true),
                 FLCreateItem(coverName: "flash-create-cover", title: "Flash Card", isReady: true),FLCreateItem(coverName: "flash-create-cover", title: "Flash Card", isReady: true),

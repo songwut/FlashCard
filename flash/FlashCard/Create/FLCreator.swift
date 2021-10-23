@@ -30,10 +30,10 @@ extension UIImageView {
 
 struct FLCreator {
     var isEditor = true
-    var stageView: FLStageView!
+    //var stageView: FLStageView!//visual stage
     
-    init(stage: FLStageView) {
-        self.stageView = stage
+    init(isEditor:Bool) {
+        self.isEditor = isEditor
     }
     
     func createText(_ element:FlashElement ,in stage: FLStageView) -> InteractTextView {
@@ -70,7 +70,6 @@ struct FLCreator {
         textView.font = font
         textView.isEditable = self.isEditor
         textView.isScrollEnabled = false
-        //textView.sizeToFit()
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         var atb: [NSAttributedString.Key:Any] = [
@@ -104,16 +103,13 @@ struct FLCreator {
         //let textViewSize = element.text.size(font: font, maxWidth: stage.frame.width, maxHeight: stage.frame.height)
         if self.isEditor {//case new text
             let textViewSize = textView.frameFromContent()
-            viewW = textViewSize.width + margin
-            viewH = textViewSize.height + margin
+            viewW = textViewSize.width
+            viewH = textViewSize.height
         } else {
             let textViewSize = textView.frameFromContent(fixWidth: viewW)
-            viewW = textViewSize.width + margin
-            viewH = textViewSize.height + margin
+            viewW = textViewSize.width
+            viewH = textViewSize.height
         }
-        
-        
-        
         //let iView1 = InteractView(contentView: textView)!
         iView.type = .text
         //iView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: viewW, height: viewW))
@@ -128,7 +124,7 @@ struct FLCreator {
         }
         
         let center = CGPoint(x: viewX, y: viewY)
-        let frame = CGRect(x: 0, y: 0, width: viewW, height: viewH)
+        let frame = CGRect(x: 0, y: 0, width: viewW + margin, height: viewH + margin)
         iView.contentFixWidth = viewW
         iView.frame = frame
         iView.center = center
@@ -151,13 +147,14 @@ struct FLCreator {
         var viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
         var viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
         
-        if let _ = element.graphicType {//fix size
+        //fix size olly case create New
+        if let _ = element.graphicType, element.isCreating {
             viewW = stage.frame.width * FlashStyle.graphic.displayRatio
-            viewH = viewW
+            viewH = viewW//square
         }
         
         var size = CGSize(width: viewW, height: viewH)
-        if let rawSize = element.rawSize {
+        if let rawSize = element.rawSize {//image has rawSize
             let ratio = rawSize.height / rawSize.width
             let w = stage.frame.width * 0.8//80% of stage
             let h = w * ratio//height by ratio
@@ -166,7 +163,7 @@ struct FLCreator {
         
         let margin = FlashStyle.text.marginIView
         let marginXY = margin / 2
-        let imageviewFrame = CGRect(x: marginXY, y: marginXY, width: size.width - margin, height: size.height - margin)
+        let imageviewFrame = CGRect(x: marginXY, y: marginXY, width: size.width, height: size.height)
         
         let imageview = UIImageView()
         imageview.frame = imageviewFrame
@@ -179,7 +176,7 @@ struct FLCreator {
         }
         
         let center = CGPoint(x: viewX, y: viewY)
-        let frame = CGRect(origin: CGPoint.zero, size: size)
+        let frame = CGRect(origin: CGPoint.zero, size: CGSize(width: size.width + margin, height: size.height + margin) )
         let iView = InteractView(contentView: imageview)!
         iView.type = .image
         iView.element = element
@@ -213,9 +210,9 @@ struct FLCreator {
         return quizView
     }
     
-    func sizeFromRaw(_ rawSize: CGSize) -> CGSize {
+    func sizeFromRaw(_ rawSize: CGSize, stage: FLStageView) -> CGSize {
         let ratio = rawSize.height / rawSize.width
-        let w = stageView.frame.width * 0.8//80% of stage
+        let w = stage.frame.width * 0.8//80% of stage
         let h = w * ratio//height by ratio
         return CGSize(width: w, height: h)
     }
@@ -237,18 +234,18 @@ struct FLCreator {
         
         var size = CGSize(width: viewW, height: viewH)
         if let rawSize = element.rawSize {
-            size = self.sizeFromRaw(rawSize)
+            size = self.sizeFromRaw(rawSize, stage: stage)
         }
         let margin = FlashStyle.text.marginIView
         let marginXY = margin / 2
-        let playerViewFrame = CGRect(x: marginXY, y: marginXY, width: size.width - margin, height: size.height - margin)
+        let playerViewFrame = CGRect(x: marginXY, y: marginXY, width: size.width, height: size.height)
         
         if let mediaUrl = url {
             let playerView = FLPlaverView(frame: playerViewFrame)
             playerView.createVideo(url: mediaUrl)
             
             let center = CGPoint(x: viewX, y: viewY)
-            let frame = CGRect(x: viewX, y: viewY, width: size.width, height: size.height)
+            let frame = CGRect(x: viewX, y: viewY, width: size.width + margin, height: size.height + margin)
             let iView = InteractView(contentView: playerView)!
             iView.playerView = playerView
             iView.frame = frame

@@ -19,7 +19,7 @@ enum EndPoint:String {
     case ugcCardListDuplicate = "ugc/flash-card/%@/card/duplicate/"
     case ugcCardDetailUserAnswer = "ugc/flash-card/%@/card/%@/answer/"
     case ugcCardListDetail = "ugc/flash-card/%@/card/%@/"
-    case ugcFlashCreate = "ugc/flash-card/"
+    case ugcFlashCard = "ugc/flash-card/"
     case ugcFlashColor = "ugc/flash-card/color/"
     case ugcFlashSticker = "ugc/flash-card/sticker/"
     case ugcFlashShape = "ugc/flash-card/shape/"
@@ -28,7 +28,7 @@ enum EndPoint:String {
 class FLRequest: APIRequest {
     
     var flashId:Int = 0
-    var endPoint:EndPoint = .ugcFlashCreate
+    var endPoint:EndPoint = .ugcFlashCard
     var arguments = [String]()
     var parameter: [String: Any]?
     var apiMethod: APIMethod = .get

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FLUserView: View {
-    @State var user: UserAnswerResult
+    @State var user: FLAnswerResult
     
     var body: some View {
         HStack {
@@ -23,7 +23,7 @@ struct FLUserView: View {
 
 struct FLUserView_Previews: PreviewProvider {
     static var previews: some View {
-        FLUserView(user: UserAnswerResult(JSON: ["name" : "efefew fff"])!)
+        FLUserView(user: FLAnswerResult(JSON: ["name" : "efefew fff"])!)
             .previewLayout(.fixed(width: 375, height: 200))
             .environment(\.sizeCategory, .small)
     }

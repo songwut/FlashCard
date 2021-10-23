@@ -12,7 +12,7 @@ protocol FLInfoViewDelegate {
 }
 
 struct FLInfoView: View {
-    
+    @State var detail: FLDetailResult
     var delegate: FLInfoViewDelegate?
     
     var body: some View {
@@ -41,10 +41,11 @@ struct FLInfoView: View {
             .cornerRadius(8)
             
             VStack(alignment: .center, spacing: 0, content: {
-                Text("10 Figma Tricks I WishI Knew...")
+                Text(detail.name)
                     .foregroundColor(Color("222831"))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text("by username")
+                let name:String = detail.owner?.name ?? "-"
+                    Text("by \(name)")
                     .foregroundColor(Color("979797"))
                     .frame(maxWidth: .infinity, alignment: .leading)
             })
@@ -62,7 +63,8 @@ struct FLInfoView: View {
 
 struct FLInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        FLInfoView()
+        let detail = FLDetailResult(JSON: ["name" : "10 Figma Tricks I WishI Knew..."])!
+        FLInfoView(detail: detail)
             .previewLayout(.fixed(width: 343, height: 60))
     }
 }

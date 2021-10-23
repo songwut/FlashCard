@@ -30,7 +30,7 @@ class FLChoiceResult:Mappable {
         if self.isAnswer {
             return UIColor.success()
         } else {
-            return UIColor.config_primary_25()
+            return UIColor("F59293")
         }
     }
     
@@ -54,6 +54,7 @@ class FLAnswerResult:Mappable {
     var id = 0
     var value = ""
     var choiceId = 0
+    var account: OwnerResult?
     
     func createJSON() -> [String: Any]? {
         var dict = [String: Any]()
@@ -70,5 +71,6 @@ class FLAnswerResult:Mappable {
         id        <- map["id"]
         choiceId  <- map["choice_id"]
         value     <- map["value"]
+        account   <- map["account"]
     }
 }

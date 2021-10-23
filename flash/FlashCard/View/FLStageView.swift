@@ -11,15 +11,10 @@ class FLStageView: UIView {
     var stageRatio:CGFloat = 1
     var flCreator: FLCreator!
     var isEditor = false
+    var isRequireToLoadElement = true
     var viewModel: FLFlashCardViewModel?
     var cover: UIImageView!
     var coverImageBase64: String?
-    var cardDetail: FLCardPageDetailResult? {
-        didSet {
-            guard let cardDetail = self.cardDetail else { return }
-            self.sort = cardDetail.sort
-        }
-    }
     var sort:Int?
     var flColor: FLColorResult = FLColorResult(JSON: ["code" : "color_01", "cl_code": "FFFFFF"])! {
         didSet {
@@ -29,12 +24,10 @@ class FLStageView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.flCreator = FLCreator(stage: self)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.flCreator = FLCreator(stage: self)
         self.cornerRadius = FlashStyle.cardCornerRadius
         self.cover = UIImageView(frame: CGRect(origin: .zero, size: frame.size))
     }
@@ -45,14 +38,20 @@ class FLStageView: UIView {
         }
     }
     
-    func loadElement() {//User Player
+    var cardDetail: FLCardPageDetailResult? {
+        didSet {
+            guard let cardDetail = self.cardDetail else { return }
+            self.sort = cardDetail.sort
+        }
+    }
+    /*
+    func loadElement(viewModel:FLFlashCardViewModel) {//User Player
+        self.viewModel = viewModel
         guard let card = self.card else { return }
         for v in self.subviews {
            v.removeFromSuperview()
         }
         self.cover.imageUrl(card.image)
-        self.isEditor = false
-        self.flCreator.isEditor = false
         
         self.viewModel?.callAPICardDetail(card) { [weak self] (cardDetail) in
             guard let self = self else { return }
@@ -68,8 +67,36 @@ class FLStageView: UIView {
             
             //Manage size
             self.cover.isHidden = true
-            
-            
+        }
+    }
+    */
+    
+    func loadElement(viewModel:FLFlashCardViewModel,
+                     complete: @escaping (_ content: Any?) -> ()) {
+        self.viewModel = viewModel
+        guard let card = self.card else { return }
+        for v in self.subviews {
+           v.removeFromSuperview()
+        }
+        self.cover.imageUrl(card.image)
+        
+        self.viewModel?.callAPICardDetail(card) { [weak self] (cardDetail) in
+            guard let self = self else { return }
+            guard let cardDetail = cardDetail else { return }
+            self.cardDetail = cardDetail
+            self.flColor = cardDetail.bgColor
+            for element in cardDetail.componentList {
+                let v = self.createElement(element)
+                v?.tag = element.id
+                if !self.isEditor {//animate in player
+                    if let quizView = v as? FLQuizView {
+                        self.quizManageSize(quizView)
+                    }
+                }
+                
+                complete(v)
+            }
+            self.cover.isHidden = true
         }
     }
     
@@ -116,8 +143,9 @@ class FLStageView: UIView {
         guard let card = self.card else { return }
         guard let a = answer as? FLAnswerResult else { return }
         let parame = a.createJSON()
+        print("sendAnswer param:\(parame?.jsonString ?? "")")
         self.viewModel?.callAPICardDetailAnswer(card, method: .post, param: parame, complete: { (answer) in
-            
+            print("sendAnswer:\(String(describing: answer))")
         })
     }
     
@@ -125,10 +153,10 @@ class FLStageView: UIView {
         
         let stageView = self
         let quizView = self.flCreator.createQuiz(element, in: stageView)
+        quizView.isEditor = self.isEditor
         quizView.didSelectChoice = Action(handler: { [weak self] (sender) in
             self?.sendAnswer(sender)
         })
-        quizView.isEditor = self.flCreator.isEditor
         return quizView
     }
     

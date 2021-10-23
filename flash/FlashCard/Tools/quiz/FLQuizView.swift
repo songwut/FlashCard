@@ -45,7 +45,6 @@ class FLQuizView: UIView {
             
             self.questionTextView.maxLength = FlashStyle.maxCharQuestion
             self.questionTextView.text = self.question?.value ?? ""
-            self.addStackView.isHidden = !self.isEditor
             self.deleteButton?.isHidden = !self.isEditor
             
             guard let question = self.question else { return }
@@ -54,6 +53,12 @@ class FLQuizView: UIView {
                 let choice = question.choiceList[index]
                 let choiceView = self.createChoiceView(choice, question: question)
                 self.choiceStackView.addArrangedSubview(choiceView)
+            }
+            
+            if self.isEditor {
+                self.addStackView.isHidden = question.choiceList.count >= FlashStyle.maxChoice
+            } else {
+                self.addStackView.isHidden = true
             }
         }
     }
@@ -83,9 +88,7 @@ class FLQuizView: UIView {
         dict["height"] = percentHeight as AnyObject
         dict["position_x"] = centerX as AnyObject
         dict["position_y"] = centerY as AnyObject
-        //dict["rotation"] = 0 as AnyObject
-        //dict["scale"] = 1 as AnyObject
-        dict["type"] = "question" as AnyObject
+        dict["type"] = FLType.quiz.rawValue as AnyObject
         
         var detail = [String: AnyObject]()
         var choiceListJson = [[String: AnyObject]]()
@@ -134,7 +137,8 @@ class FLQuizView: UIView {
                 self?.addStackView.isHidden = question.choiceList.count == FlashStyle.maxChoice
             }
         })
-        if self.isEditor {
+        if self.isEditor {//fieldButton hover all area
+            choiceView.fieldButton.isHidden = true
             choiceView.checkButton.addTarget(self, action: #selector(self.choicePressed(_:)), for: .touchUpInside)
         } else {
             choiceView.fieldButton.addTarget(self, action: #selector(self.answerSelected(_:)), for: .touchUpInside)
@@ -248,7 +252,14 @@ extension FLQuizView: GrowingTextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text.contains("\n") {
+        if self.questionTextView.isPastingContent {
+            self.questionTextView.isPastingContent = false
+            ConsoleLog.show("paste")
+            DispatchQueue.main.async {
+                self.questionTextView.updateLayout()
+            }
+            return true
+        } else if text == "\n" {
             textView.resignFirstResponder()
             return false
         }
