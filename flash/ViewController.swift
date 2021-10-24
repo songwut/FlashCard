@@ -52,24 +52,23 @@ class ViewController: UIViewController {
     }
     
     @IBAction func myMaterialPressed(_ sender: UIButton) {
-        let vm = FLFlashCardViewModel()
+        let viewModel = FLFlashCardViewModel()
         self.showLoading(nil)
-        vm.callAPIMyFlashCard(method: .get) { (myFlash: MaterialFlashPageResult?) in
+        viewModel.callAPIMyFlashCard(.get) { (myFlashDetail) in
             self.hideLoading()
-            guard let item = myFlash else { return }
-            let vc = UIHostingController(rootView: MyMaterialListView(myMaterialFlash: item))
+            guard let myFlashDetail = myFlashDetail else { return }
+            let vc = UIHostingController(rootView: MyMaterialListView(myMaterialFlash: myFlashDetail))
             if let nav = self.navigationController {
                 nav.pushViewController(vc, animated: true)
             } else {
                 self.present(vc, animated: true, completion: nil)
             }
         }
-        
     }
     
     @objc func stageButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
-        let vc = s.instantiateViewController(withIdentifier: "FLCreateViewController") as! FLCreateViewController
+        let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
         vc.createStatus = .new
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
@@ -80,7 +79,7 @@ class ViewController: UIViewController {
     
     @IBAction func editFlashButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
-        let vc = s.instantiateViewController(withIdentifier: "FLCreateViewController") as! FLCreateViewController
+        let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
         vc.createStatus = .edit
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
@@ -202,8 +201,12 @@ class ViewController: UIViewController {
     }
     
     func loginAPI() {
-        let username = "wnios"
-        let password = "adminadmin"
+        //sysadmin@conicle.com
+        let username = "sysadmin@conicle.com"
+        let password = "sysadminConicle"
+        
+//        let username = "wnios"
+//        let password = "adminadmin"
         
         self.showLoading(nil)
         let request = LoginRequest()

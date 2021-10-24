@@ -6,15 +6,22 @@
 //
 
 import SwiftUI
+import SwURL
 
 struct FLMaterialView: View {
     @State var isEditor: Bool
     @State var flash: MaterialFlashResult
+    @State var image: UIImage?
+    @ObservedObject var imageLoader = ImageLoaderService()
     
     var body: some View {
         VStack(alignment: .leading, spacing: nil, content: {
             HStack(spacing:8) {
-                coverView
+                
+                FLCoverView(url: flash.image)
+                    .frame(width: FlashStyle.flashItemHeight)
+                    .clipped()
+                
                 infoView
                 Spacer()
                 VStack(spacing: 0) {
@@ -30,20 +37,6 @@ struct FLMaterialView: View {
             .background(Color.clear)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-    }
-    
-    var coverView: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                let img = UIImage(named: "coverItem")
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(img?.averageColor?.color ?? .black)
-                    .aspectRatio(1.0, contentMode: .fit)
-                Image(uiImage: img ?? UIImage())
-                    //.frame(height: .infinity, alignment: .center)
-            }
-        }
-        .clipped()
     }
     
     var infoView: some View {

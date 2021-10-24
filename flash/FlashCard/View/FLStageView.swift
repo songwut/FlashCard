@@ -15,7 +15,7 @@ class FLStageView: UIView {
     var viewModel: FLFlashCardViewModel?
     var cover: UIImageView!
     var coverImageBase64: String?
-    var sort:Int?
+    //var sort:Int?
     var flColor: FLColorResult = FLColorResult(JSON: ["code" : "color_01", "cl_code": "FFFFFF"])! {
         didSet {
             self.backgroundColor = UIColor(flColor.hex)
@@ -34,6 +34,9 @@ class FLStageView: UIView {
     
     var card: FLCardPageResult? {
         didSet {
+            if let card = self.card {
+                card.stage = self
+            }
             print("FLStageView frame: \(self.frame)")
         }
     }
@@ -41,7 +44,7 @@ class FLStageView: UIView {
     var cardDetail: FLCardPageDetailResult? {
         didSet {
             guard let cardDetail = self.cardDetail else { return }
-            self.sort = cardDetail.sort
+            //self.sort = cardDetail.sort
         }
     }
     /*
@@ -221,8 +224,8 @@ class FLStageView: UIView {
             dict["image"] = coverImageBase64 as AnyObject?
         }
         
-        if let sort = self.sort {
-            dict["sort"] = sort as AnyObject?
+        if let card = self.card {//sort by array order
+            dict["sort"] = card.order as AnyObject?
         }
         
         return dict

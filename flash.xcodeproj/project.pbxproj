@@ -3,10 +3,50 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		692805E927244FC70026274A /* CardSwipeLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805E827244FC70026274A /* CardSwipeLoopView.swift */; };
+		692805EA27244FC70026274A /* CardSwipeLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805E827244FC70026274A /* CardSwipeLoopView.swift */; };
+		692805EB27244FC70026274A /* CardSwipeLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805E827244FC70026274A /* CardSwipeLoopView.swift */; };
+		692805FE2724C25C0026274A /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FB2724C25B0026274A /* ImageCache.swift */; };
+		692805FF2724C25C0026274A /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FB2724C25B0026274A /* ImageCache.swift */; };
+		692806002724C25C0026274A /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FB2724C25B0026274A /* ImageCache.swift */; };
+		692806012724C25C0026274A /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FC2724C25C0026274A /* EnvironmentValues+ImageCache.swift */; };
+		692806022724C25C0026274A /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FC2724C25C0026274A /* EnvironmentValues+ImageCache.swift */; };
+		692806032724C25C0026274A /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FC2724C25C0026274A /* EnvironmentValues+ImageCache.swift */; };
+		692806042724C25C0026274A /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FD2724C25C0026274A /* ImageLoader.swift */; };
+		692806052724C25C0026274A /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FD2724C25C0026274A /* ImageLoader.swift */; };
+		692806062724C25C0026274A /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692805FD2724C25C0026274A /* ImageLoader.swift */; };
+		692806112724C26E0026274A /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806102724C26E0026274A /* AsyncImage.swift */; };
+		692806122724C26E0026274A /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806102724C26E0026274A /* AsyncImage.swift */; };
+		692806132724C26E0026274A /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806102724C26E0026274A /* AsyncImage.swift */; };
+		692806282724C7980026274A /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806272724C7980026274A /* ImageView.swift */; };
+		692806292724C7980026274A /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806272724C7980026274A /* ImageView.swift */; };
+		6928062A2724C7980026274A /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806272724C7980026274A /* ImageView.swift */; };
+		6928063D27253CDD0026274A /* SwURL in Frameworks */ = {isa = PBXBuildFile; productRef = 6928063C27253CDD0026274A /* SwURL */; };
+		6928064227253FED0026274A /* LoadingCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928064127253FED0026274A /* LoadingCircleView.swift */; };
+		6928064327253FED0026274A /* LoadingCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928064127253FED0026274A /* LoadingCircleView.swift */; };
+		6928064427253FED0026274A /* LoadingCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928064127253FED0026274A /* LoadingCircleView.swift */; };
+		6928064C272542060026274A /* FLCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928064B272542060026274A /* FLCoverView.swift */; };
+		6928064D272542060026274A /* FLCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928064B272542060026274A /* FLCoverView.swift */; };
+		6928064E272542060026274A /* FLCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928064B272542060026274A /* FLCoverView.swift */; };
+		6928065A272583840026274A /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69280659272583840026274A /* MockData.swift */; };
+		6928065B272583840026274A /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69280659272583840026274A /* MockData.swift */; };
+		6928065C272583840026274A /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69280659272583840026274A /* MockData.swift */; };
+		6928066A272585900026274A /* ugc-flash.json in Resources */ = {isa = PBXBuildFile; fileRef = 69280669272585900026274A /* ugc-flash.json */; };
+		6928066B272585900026274A /* ugc-flash.json in Resources */ = {isa = PBXBuildFile; fileRef = 69280669272585900026274A /* ugc-flash.json */; };
+		6928066C272585900026274A /* ugc-flash.json in Resources */ = {isa = PBXBuildFile; fileRef = 69280669272585900026274A /* ugc-flash.json */; };
+		692806742725A1860026274A /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806732725A1860026274A /* ActivityIndicator.swift */; };
+		692806752725A1860026274A /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806732725A1860026274A /* ActivityIndicator.swift */; };
+		692806762725A1860026274A /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806732725A1860026274A /* ActivityIndicator.swift */; };
+		6928067B2725A26D0026274A /* MyMaterialListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928067A2725A26D0026274A /* MyMaterialListViewModel.swift */; };
+		6928067C2725A26D0026274A /* MyMaterialListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928067A2725A26D0026274A /* MyMaterialListViewModel.swift */; };
+		6928067D2725A26D0026274A /* MyMaterialListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6928067A2725A26D0026274A /* MyMaterialListViewModel.swift */; };
+		692806882725C0320026274A /* RandomAccessCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806872725C0320026274A /* RandomAccessCollection.swift */; };
+		692806892725C0320026274A /* RandomAccessCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806872725C0320026274A /* RandomAccessCollection.swift */; };
+		6928068A2725C0320026274A /* RandomAccessCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806872725C0320026274A /* RandomAccessCollection.swift */; };
 		6940231A26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
 		6940231B26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
 		6940231C26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
@@ -170,9 +210,9 @@
 		69720525268E1B55002E3149 /* FLMenuBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69720524268E1B55002E3149 /* FLMenuBarView.xib */; };
 		69720526268E1B55002E3149 /* FLMenuBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69720524268E1B55002E3149 /* FLMenuBarView.xib */; };
 		69720527268E1B55002E3149 /* FLMenuBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69720524268E1B55002E3149 /* FLMenuBarView.xib */; };
-		6972052F268E298F002E3149 /* FLCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6972052E268E298F002E3149 /* FLCreateViewController.swift */; };
-		69720530268E298F002E3149 /* FLCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6972052E268E298F002E3149 /* FLCreateViewController.swift */; };
-		69720531268E298F002E3149 /* FLCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6972052E268E298F002E3149 /* FLCreateViewController.swift */; };
+		6972052F268E298F002E3149 /* FLEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6972052E268E298F002E3149 /* FLEditorViewController.swift */; };
+		69720530268E298F002E3149 /* FLEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6972052E268E298F002E3149 /* FLEditorViewController.swift */; };
+		69720531268E298F002E3149 /* FLEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6972052E268E298F002E3149 /* FLEditorViewController.swift */; };
 		69720537268E29D4002E3149 /* FlashCard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69720536268E29D4002E3149 /* FlashCard.storyboard */; };
 		69720538268E29D4002E3149 /* FlashCard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69720536268E29D4002E3149 /* FlashCard.storyboard */; };
 		69720539268E29D4002E3149 /* FlashCard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69720536268E29D4002E3149 /* FlashCard.storyboard */; };
@@ -632,6 +672,19 @@
 
 /* Begin PBXFileReference section */
 		3E75378541223F35D75C68FB /* Pods-flash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-flash.debug.xcconfig"; path = "Target Support Files/Pods-flash/Pods-flash.debug.xcconfig"; sourceTree = "<group>"; };
+		692805E827244FC70026274A /* CardSwipeLoopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardSwipeLoopView.swift; sourceTree = "<group>"; };
+		692805FB2724C25B0026274A /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		692805FC2724C25C0026274A /* EnvironmentValues+ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+ImageCache.swift"; sourceTree = "<group>"; };
+		692805FD2724C25C0026274A /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		692806102724C26E0026274A /* AsyncImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		692806272724C7980026274A /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		6928064127253FED0026274A /* LoadingCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCircleView.swift; sourceTree = "<group>"; };
+		6928064B272542060026274A /* FLCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLCoverView.swift; sourceTree = "<group>"; };
+		69280659272583840026274A /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		69280669272585900026274A /* ugc-flash.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "ugc-flash.json"; sourceTree = "<group>"; };
+		692806732725A1860026274A /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		6928067A2725A26D0026274A /* MyMaterialListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMaterialListViewModel.swift; sourceTree = "<group>"; };
+		692806872725C0320026274A /* RandomAccessCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAccessCollection.swift; sourceTree = "<group>"; };
 		6940231826FDBDD0002C7508 /* FLTagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLTagListView.swift; sourceTree = "<group>"; };
 		6940231926FDBDD0002C7508 /* FLTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLTagView.swift; sourceTree = "<group>"; };
 		6940233C26FDC47A002C7508 /* FLQuizInfoProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLQuizInfoProgressView.swift; sourceTree = "<group>"; };
@@ -699,7 +752,7 @@
 		69720513268E0EA8002E3149 /* FLItemView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLItemView.xib; sourceTree = "<group>"; };
 		6972051D268E1B3C002E3149 /* FLMenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLMenuBarView.swift; sourceTree = "<group>"; };
 		69720524268E1B55002E3149 /* FLMenuBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLMenuBarView.xib; sourceTree = "<group>"; };
-		6972052E268E298F002E3149 /* FLCreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLCreateViewController.swift; sourceTree = "<group>"; };
+		6972052E268E298F002E3149 /* FLEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLEditorViewController.swift; sourceTree = "<group>"; };
 		69720536268E29D4002E3149 /* FlashCard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FlashCard.storyboard; sourceTree = "<group>"; };
 		697328DF26A5938F001BFC67 /* fonts.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = fonts.css; sourceTree = "<group>"; };
 		6973290626A59C38001BFC67 /* PublicSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicSetting.swift; sourceTree = "<group>"; };
@@ -860,6 +913,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6928063D27253CDD0026274A /* SwURL in Frameworks */,
 				B24F57C5F6AFBD68DA6FCE37 /* Pods_flash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -896,6 +950,16 @@
 				BA56B03BAD88EB213393BDAD /* Pods_flash.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		692805FA2724C2480026274A /* AsyncImage */ = {
+			isa = PBXGroup;
+			children = (
+				692806102724C26E0026274A /* AsyncImage.swift */,
+				692805FC2724C25C0026274A /* EnvironmentValues+ImageCache.swift */,
+				692805FB2724C25B0026274A /* ImageCache.swift */,
+			);
+			path = AsyncImage;
 			sourceTree = "<group>";
 		};
 		6958999A2669F0710012B032 = {
@@ -993,6 +1057,7 @@
 				696ABC7E26DF93AE009527D3 /* FLProgressUIController.swift */,
 				6940234326FDC5BE002C7508 /* FLProgressBar.swift */,
 				69D1762B27217A68000D9AAD /* AutoTextView.swift */,
+				692805E827244FC70026274A /* CardSwipeLoopView.swift */,
 				696ABCCD26DFCCE4009527D3 /* FLPlayerViewController.swift */,
 				696ABB3726D75692009527D3 /* FlashUserDisplay.storyboard */,
 				696ABCD726DFD990009527D3 /* FLInfoView.swift */,
@@ -1082,12 +1147,15 @@
 				6985B1CB26E5F37500FEAD8F /* Post */,
 				699012862696FA180059ACE4 /* SlideSheetPresentationController.swift */,
 				697D1A032694833B0082783E /* SheetCardViewController.swift */,
-				69BA875C26F9D89B00954E40 /* FLMaterialView.swift */,
-				6974C5A9270D8DEC009F60AA /* SwiftUITest */,
+				6974C5A9270D8DEC009F60AA /* SwiftUIUtility */,
 				695C9B3A26FE1BC200C242B4 /* APISwiftUIView.swift */,
 				695C9B4426FE2F2000C242B4 /* ContentView.swift */,
 				69BA876326F9E92600954E40 /* FLCreateMaterialView.swift */,
 				69BA876A26F9EE5A00954E40 /* MyMaterialListView.swift */,
+				6928067A2725A26D0026274A /* MyMaterialListViewModel.swift */,
+				69BA875C26F9D89B00954E40 /* FLMaterialView.swift */,
+				69280659272583840026274A /* MockData.swift */,
+				6928064B272542060026274A /* FLCoverView.swift */,
 				69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */,
 				69763ECC26FB165000FE6490 /* FLCreateMaterialListView.swift */,
 				69763ED326FB184D00FE6490 /* CreatetFlashCardView.swift */,
@@ -1102,14 +1170,20 @@
 			path = FlashCard;
 			sourceTree = "<group>";
 		};
-		6974C5A9270D8DEC009F60AA /* SwiftUITest */ = {
+		6974C5A9270D8DEC009F60AA /* SwiftUIUtility */ = {
 			isa = PBXGroup;
 			children = (
+				692805FA2724C2480026274A /* AsyncImage */,
 				6974C5B0270D8E05009F60AA /* ImageLoaderService.swift */,
+				692806732725A1860026274A /* ActivityIndicator.swift */,
+				692806872725C0320026274A /* RandomAccessCollection.swift */,
+				692805FD2724C25C0026274A /* ImageLoader.swift */,
+				692806272724C7980026274A /* ImageView.swift */,
 				6974C59B270D8049009F60AA /* FLSUserView.swift */,
 				6974C5A2270D8373009F60AA /* FLSUserListView.swift */,
+				6928064127253FED0026274A /* LoadingCircleView.swift */,
 			);
-			path = SwiftUITest;
+			path = SwiftUIUtility;
 			sourceTree = "<group>";
 		};
 		697C0AC426CA311400CA1092 /* quiz */ = {
@@ -1164,7 +1238,7 @@
 				6968C78926A0257400A712B0 /* FLControlView.xib */,
 				69EC5204269D90AA00A23790 /* FLSliderView.xib */,
 				69EC520B269D90B900A23790 /* FLSliderView.swift */,
-				6972052E268E298F002E3149 /* FLCreateViewController.swift */,
+				6972052E268E298F002E3149 /* FLEditorViewController.swift */,
 				6984901C2695A66A00B5FEF6 /* FLFlashCardViewModel.swift */,
 				69BA86FD26F89F9F00954E40 /* VideoConvertor.swift */,
 			);
@@ -1174,6 +1248,7 @@
 		6985B1B826E270AC00FEAD8F /* Mock */ = {
 			isa = PBXGroup;
 			children = (
+				69280669272585900026274A /* ugc-flash.json */,
 				695C9B3026FE10FE00C242B4 /* ugc-flash-card-quiz-user.json */,
 				696BBAC726E8A54600E88B49 /* ugc-flash-card-detail.json */,
 				6985B21226E65FB400FEAD8F /* ugc-flash-card-tag-list.json */,
@@ -1455,6 +1530,9 @@
 			dependencies = (
 			);
 			name = flash;
+			packageProductDependencies = (
+				6928063C27253CDD0026274A /* SwURL */,
+			);
 			productName = flash;
 			productReference = 695899A32669F0710012B032 /* flash.app */;
 			productType = "com.apple.product-type.application";
@@ -1526,6 +1604,9 @@
 				Base,
 			);
 			mainGroup = 6958999A2669F0710012B032;
+			packageReferences = (
+				6928063B27253CDD0026274A /* XCRemoteSwiftPackageReference "SwURL" */,
+			);
 			productRefGroup = 695899A42669F0710012B032 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1545,6 +1626,7 @@
 				696ABB3826D75692009527D3 /* FlashUserDisplay.storyboard in Resources */,
 				697328EE26A59391001BFC67 /* fonts.css in Resources */,
 				696ABCAF26DFC496009527D3 /* ic_skip@2x.png in Resources */,
+				6928066A272585900026274A /* ugc-flash.json in Resources */,
 				696ABCB526DFC496009527D3 /* ic_like@2x.png in Resources */,
 				69720525268E1B55002E3149 /* FLMenuBarView.xib in Resources */,
 				695C9B3126FE10FE00C242B4 /* ugc-flash-card-quiz-user.json in Resources */,
@@ -1609,6 +1691,7 @@
 				69B0FBEC26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */,
 				696ABCB026DFC496009527D3 /* ic_skip@2x.png in Resources */,
 				696ABCBC26DFC496009527D3 /* overlay_like.png in Resources */,
+				6928066B272585900026274A /* ugc-flash.json in Resources */,
 				69720538268E29D4002E3149 /* FlashCard.storyboard in Resources */,
 				697328EF26A59391001BFC67 /* fonts.css in Resources */,
 				6989919B26BA905F008A41C1 /* TitleCollectionViewCell.xib in Resources */,
@@ -1666,6 +1749,7 @@
 				69B0FBED26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */,
 				696ABCB126DFC496009527D3 /* ic_skip@2x.png in Resources */,
 				696ABCBD26DFC496009527D3 /* overlay_like.png in Resources */,
+				6928066C272585900026274A /* ugc-flash.json in Resources */,
 				69720539268E29D4002E3149 /* FlashCard.storyboard in Resources */,
 				697328F026A59391001BFC67 /* fonts.css in Resources */,
 				6989919C26BA905F008A41C1 /* TitleCollectionViewCell.xib in Resources */,
@@ -1764,6 +1848,7 @@
 			files = (
 				698490442695C8C100B5FEF6 /* UIView.swift in Sources */,
 				696ABB7E26D95CB4009527D3 /* UIImage.swift in Sources */,
+				6928065A272583840026274A /* MockData.swift in Sources */,
 				6940234426FDC5BE002C7508 /* FLProgressBar.swift in Sources */,
 				699012872696FA180059ACE4 /* SlideSheetPresentationController.swift in Sources */,
 				697D19F226945ED60082783E /* HalfModalTransitioningDelegate.swift in Sources */,
@@ -1773,9 +1858,13 @@
 				698991AE26BA99CF008A41C1 /* Int.swift in Sources */,
 				698990A626B7EB33008A41C1 /* BaseViewController.swift in Sources */,
 				695005FB267A8B33009BBEC4 /* Models.swift in Sources */,
+				692806882725C0320026274A /* RandomAccessCollection.swift in Sources */,
 				69B0FC1426A71F6C0086E6C5 /* UIImageView.swift in Sources */,
 				6985B20626E6302A00FEAD8F /* UGCCategory.swift in Sources */,
 				69B0FBBE26A6CBE40086E6C5 /* Units.swift in Sources */,
+				6928064C272542060026274A /* FLCoverView.swift in Sources */,
+				692806742725A1860026274A /* ActivityIndicator.swift in Sources */,
+				692806012724C25C0026274A /* EnvironmentValues+ImageCache.swift in Sources */,
 				695899B12669F0710012B032 /* flash.xcdatamodeld in Sources */,
 				69B0FCA226A97EFA0086E6C5 /* UIButton.swift in Sources */,
 				695DDCBC26EB537800B0194D /* Formatter.swift in Sources */,
@@ -1792,18 +1881,24 @@
 				695899AB2669F0710012B032 /* ViewController.swift in Sources */,
 				69B0FC9B26A97EB00086E6C5 /* ResponseBody.swift in Sources */,
 				698991C626BC0A16008A41C1 /* LoginRequest.swift in Sources */,
+				6928067B2725A26D0026274A /* MyMaterialListViewModel.swift in Sources */,
+				692805E927244FC70026274A /* CardSwipeLoopView.swift in Sources */,
 				69B9D3A627046654009CE4A7 /* SwiftUIInfiniteList.swift in Sources */,
 				695DDCB526EB533900B0194D /* Date.swift in Sources */,
 				6989908726B7C364008A41C1 /* FLRequest.swift in Sources */,
+				692806042724C25C0026274A /* ImageLoader.swift in Sources */,
+				692805FE2724C25C0026274A /* ImageCache.swift in Sources */,
 				69DD4CD526EB94AC000BA9B8 /* CustomSwiftUI.swift in Sources */,
 				6985B1EE26E61EF100FEAD8F /* ContentResult.swift in Sources */,
 				69D64AFF270379DE00FEBDD4 /* FLCardInfoViewController.swift in Sources */,
+				692806282724C7980026274A /* ImageView.swift in Sources */,
 				6985B1E726E61EB400FEAD8F /* CategoryResult.swift in Sources */,
 				69D64B0D27038B0B00FEBDD4 /* FLQuizInfoViewController.swift in Sources */,
 				696ABCA026DFC496009527D3 /* FLCard.swift in Sources */,
 				695899A72669F0710012B032 /* AppDelegate.swift in Sources */,
 				695005AD267A65B3009BBEC4 /* exAll.swift in Sources */,
 				69EC5216269D9D6D00A23790 /* FLTextStyleView.swift in Sources */,
+				692806112724C26E0026274A /* AsyncImage.swift in Sources */,
 				6974C59C270D8049009F60AA /* FLSUserView.swift in Sources */,
 				6984904B2695DD3700B5FEF6 /* FLToolHelper.swift in Sources */,
 				6989909826B7E9A5008A41C1 /* ConsoleLog.swift in Sources */,
@@ -1821,6 +1916,7 @@
 				6984905C2695E92100B5FEF6 /* FLColorView.swift in Sources */,
 				69D1765327228E14000D9AAD /* PageViewController.swift in Sources */,
 				69B0FC1B26A7356B0086E6C5 /* SnapGesture.swift in Sources */,
+				6928064227253FED0026274A /* LoadingCircleView.swift in Sources */,
 				69B9D3C227046BEF009CE4A7 /* BlinkingLoading.swift in Sources */,
 				696ABB6D26D7BE54009527D3 /* FLDashButton.swift in Sources */,
 				69D1764C27228D3F000D9AAD /* LoadingPageView.swift in Sources */,
@@ -1840,7 +1936,7 @@
 				6985B3A426E7C00800FEAD8F /* TagListView.swift in Sources */,
 				69B9D3B1270466DE009CE4A7 /* SwiftUIPullToRefresh.swift in Sources */,
 				696ABC8026DF93AF009527D3 /* FLProgressUIController.swift in Sources */,
-				6972052F268E298F002E3149 /* FLCreateViewController.swift in Sources */,
+				6972052F268E298F002E3149 /* FLEditorViewController.swift in Sources */,
 				696ABB7726D7EADF009527D3 /* DashBorderView.swift in Sources */,
 				69B0FCBD26A9835B0086E6C5 /* Utility.swift in Sources */,
 				6973290E26A59C5B001BFC67 /* FontHelper.swift in Sources */,
@@ -1931,11 +2027,13 @@
 				69DD4CD626EB94AD000BA9B8 /* CustomSwiftUI.swift in Sources */,
 				6940231B26FDBDD0002C7508 /* FLTagListView.swift in Sources */,
 				695005AE267A65B3009BBEC4 /* exAll.swift in Sources */,
+				6928064D272542060026274A /* FLCoverView.swift in Sources */,
 				6989909926B7E9A5008A41C1 /* ConsoleLog.swift in Sources */,
 				695C9B3C26FE1BC200C242B4 /* APISwiftUIView.swift in Sources */,
 				696ABCCF26DFCCE4009527D3 /* FLPlayerViewController.swift in Sources */,
 				6985B1D126E5F7C900FEAD8F /* UGCCategoryRow.swift in Sources */,
 				69763ED526FB184D00FE6490 /* CreatetFlashCardView.swift in Sources */,
+				6928064327253FED0026274A /* LoadingCircleView.swift in Sources */,
 				69B9D3D52704A37D009CE4A7 /* FLUserTableViewCell.swift in Sources */,
 				69B0FC8E26A97A550086E6C5 /* CourseDetailViewController.swift in Sources */,
 				698490132695A19000B5FEF6 /* JSON.swift in Sources */,
@@ -1943,12 +2041,14 @@
 				6985B1EF26E61EF100FEAD8F /* ContentResult.swift in Sources */,
 				6974C59D270D8049009F60AA /* FLSUserView.swift in Sources */,
 				69B9D3B2270466DE009CE4A7 /* SwiftUIPullToRefresh.swift in Sources */,
+				692806892725C0320026274A /* RandomAccessCollection.swift in Sources */,
 				696ABB6E26D7BE54009527D3 /* FLDashButton.swift in Sources */,
 				697C0ADA26CA365B00CA1092 /* FLQuestionResult.swift in Sources */,
 				6988081A26FDA7B400687F65 /* FLCardInfoSheetView.swift in Sources */,
 				698490562695E13D00B5FEF6 /* FLToolViewModel.swift in Sources */,
 				69B0FCCC26A98D8D0086E6C5 /* PopupManager.swift in Sources */,
 				695C9B4D26FE53E000C242B4 /* ViewDidLoadModifier.swift in Sources */,
+				692806292724C7980026274A /* ImageView.swift in Sources */,
 				695899C12669F07B0012B032 /* flashTests.swift in Sources */,
 				69B9D3A727046654009CE4A7 /* SwiftUIInfiniteList.swift in Sources */,
 				697D19F626945ED60082783E /* HalfModalPresentationController.swift in Sources */,
@@ -1960,6 +2060,7 @@
 				6985B20726E6302A00FEAD8F /* UGCCategory.swift in Sources */,
 				697C0AD026CA336F00CA1092 /* FLChoiceResult.swift in Sources */,
 				69EC520D269D90B900A23790 /* FLSliderView.swift in Sources */,
+				692806122724C26E0026274A /* AsyncImage.swift in Sources */,
 				6984904C2695DD3700B5FEF6 /* FLToolHelper.swift in Sources */,
 				69D64B00270379DE00FEBDD4 /* FLCardInfoViewController.swift in Sources */,
 				6989906A26B7BB39008A41C1 /* BaseViewModel.swift in Sources */,
@@ -1984,7 +2085,7 @@
 				6972051F268E1B3C002E3149 /* FLMenuBarView.swift in Sources */,
 				69D53B462692F7090020E024 /* FlashStyle.swift in Sources */,
 				6940233E26FDC47A002C7508 /* FLQuizInfoProgressView.swift in Sources */,
-				69720530268E298F002E3149 /* FLCreateViewController.swift in Sources */,
+				69720530268E298F002E3149 /* FLEditorViewController.swift in Sources */,
 				69BA86E226F63B3D00954E40 /* CHTStickerView.m in Sources */,
 				696D034C268F9EBD002B3500 /* FLItemCollectionViewCell.swift in Sources */,
 				6968C77726A0233800A712B0 /* FLControlView.swift in Sources */,
@@ -2010,9 +2111,12 @@
 				69BA86FF26F89FA000954E40 /* VideoConvertor.swift in Sources */,
 				699012882696FA180059ACE4 /* SlideSheetPresentationController.swift in Sources */,
 				69B0FBC626A6D0930086E6C5 /* UITextView.swift in Sources */,
+				6928067C2725A26D0026274A /* MyMaterialListViewModel.swift in Sources */,
 				696ABCA726DFC496009527D3 /* FLSwipeView.swift in Sources */,
 				696ABCA126DFC496009527D3 /* FLCard.swift in Sources */,
 				69EC5217269D9D6D00A23790 /* FLTextStyleView.swift in Sources */,
+				692805FF2724C25C0026274A /* ImageCache.swift in Sources */,
+				692805EA27244FC70026274A /* CardSwipeLoopView.swift in Sources */,
 				695005FC267A8B33009BBEC4 /* Models.swift in Sources */,
 				698990A726B7EB33008A41C1 /* BaseViewController.swift in Sources */,
 				69C0A23D266E1EA7001C6F32 /* Arrow.swift in Sources */,
@@ -2027,6 +2131,7 @@
 				69B9D3C327046BEF009CE4A7 /* BlinkingLoading.swift in Sources */,
 				698990A026B7EA3A008A41C1 /* Reachability.swift in Sources */,
 				69B0FC0E26A6FB3A0086E6C5 /* ColorHelper.swift in Sources */,
+				6928065B272583840026274A /* MockData.swift in Sources */,
 				6989907126B7BB63008A41C1 /* APIRequest.swift in Sources */,
 				6989911326B92C55008A41C1 /* Optional.swift in Sources */,
 				6940231E26FDBDD0002C7508 /* FLTagView.swift in Sources */,
@@ -2034,6 +2139,7 @@
 				695899EE266A819F0012B032 /* Gif-CALayer.swift in Sources */,
 				695DDCBD26EB537800B0194D /* Formatter.swift in Sources */,
 				69B0FC3226A7F3230086E6C5 /* InteractView.swift in Sources */,
+				692806052724C25C0026274A /* ImageLoader.swift in Sources */,
 				697D19EA26945ED60082783E /* HalfNavController.swift in Sources */,
 				6989908826B7C364008A41C1 /* FLRequest.swift in Sources */,
 				695DDCB626EB533900B0194D /* Date.swift in Sources */,
@@ -2045,6 +2151,7 @@
 				69B0FCBE26A9835B0086E6C5 /* Utility.swift in Sources */,
 				6959287C2690D49D00AEEAEA /* FLTypeButton.swift in Sources */,
 				69B9D3BC27046898009CE4A7 /* FLQuizUserListView.swift in Sources */,
+				692806022724C25C0026274A /* EnvironmentValues+ImageCache.swift in Sources */,
 				69B0FC9C26A97EB00086E6C5 /* ResponseBody.swift in Sources */,
 				698490342695BD2E00B5FEF6 /* UIStackView.swift in Sources */,
 				69B0FC8126A979480086E6C5 /* PopupViewController.swift in Sources */,
@@ -2054,6 +2161,7 @@
 				696D0344268F9B0D002B3500 /* FLPageControlView.swift in Sources */,
 				69B0FC1526A71F6C0086E6C5 /* UIImageView.swift in Sources */,
 				69D176352721B610000D9AAD /* FLBaseViewController.swift in Sources */,
+				692806752725A1860026274A /* ActivityIndicator.swift in Sources */,
 				6985B1F626E61F2000FEAD8F /* BaseResult.swift in Sources */,
 				697D1A052694833B0082783E /* SheetCardViewController.swift in Sources */,
 				69D1764D27228D3F000D9AAD /* LoadingPageView.swift in Sources */,
@@ -2083,6 +2191,7 @@
 				695005AF267A65B3009BBEC4 /* exAll.swift in Sources */,
 				69BA86E326F63B3D00954E40 /* CHTStickerView.m in Sources */,
 				6989906B26B7BB39008A41C1 /* BaseViewModel.swift in Sources */,
+				6928064E272542060026274A /* FLCoverView.swift in Sources */,
 				6989920B26BCF28C008A41C1 /* FLImageCell.swift in Sources */,
 				6985B3C426E7C7E800FEAD8F /* UGCTag.swift in Sources */,
 				6989905726B7B8B4008A41C1 /* FLListViewController.swift in Sources */,
@@ -2094,6 +2203,7 @@
 				69B9D32F270447C1009CE4A7 /* FLInfoPageViewController.swift in Sources */,
 				696ABB6F26D7BE54009527D3 /* FLDashButton.swift in Sources */,
 				6985B3B126E7C37700FEAD8F /* TagListSelectViewController.swift in Sources */,
+				692806762725A1860026274A /* ActivityIndicator.swift in Sources */,
 				698490572695E13D00B5FEF6 /* FLToolViewModel.swift in Sources */,
 				695899CC2669F07B0012B032 /* flashUITests.swift in Sources */,
 				697D19F726945ED60082783E /* HalfModalPresentationController.swift in Sources */,
@@ -2120,6 +2230,7 @@
 				696ABCD026DFCCE4009527D3 /* FLPlayerViewController.swift in Sources */,
 				69B9D3B3270466DE009CE4A7 /* SwiftUIPullToRefresh.swift in Sources */,
 				69EC520E269D90B900A23790 /* FLSliderView.swift in Sources */,
+				692806032724C25C0026274A /* EnvironmentValues+ImageCache.swift in Sources */,
 				6940231F26FDBDD0002C7508 /* FLTagView.swift in Sources */,
 				69B0FCC626A9871E0086E6C5 /* Localized.swift in Sources */,
 				69DD4CD726EB94AD000BA9B8 /* CustomSwiftUI.swift in Sources */,
@@ -2128,6 +2239,7 @@
 				697C0AC026CA310D00CA1092 /* FLQuizView.swift in Sources */,
 				69BA876D26F9EE5A00954E40 /* MyMaterialListView.swift in Sources */,
 				6984901F2695A66A00B5FEF6 /* FLFlashCardViewModel.swift in Sources */,
+				6928064427253FED0026274A /* LoadingCircleView.swift in Sources */,
 				69B0FBC026A6CBE40086E6C5 /* Units.swift in Sources */,
 				698990CD26B7F8A7008A41C1 /* BaseNavigationController.swift in Sources */,
 				6985B1E926E61EB400FEAD8F /* CategoryResult.swift in Sources */,
@@ -2138,13 +2250,14 @@
 				6972050E268E098C002E3149 /* FLItemView.swift in Sources */,
 				695928722690746000AEEAEA /* UIColor.swift in Sources */,
 				695005F6267A8AE0009BBEC4 /* FLCreator.swift in Sources */,
+				692806002724C25C0026274A /* ImageCache.swift in Sources */,
 				69720520268E1B3C002E3149 /* FLMenuBarView.swift in Sources */,
 				698991B026BA99CF008A41C1 /* Int.swift in Sources */,
 				6940233F26FDC47A002C7508 /* FLQuizInfoProgressView.swift in Sources */,
 				69D53B472692F7090020E024 /* FlashStyle.swift in Sources */,
 				697C0AD126CA336F00CA1092 /* FLChoiceResult.swift in Sources */,
 				6985B1D226E5F7C900FEAD8F /* UGCCategoryRow.swift in Sources */,
-				69720531268E298F002E3149 /* FLCreateViewController.swift in Sources */,
+				69720531268E298F002E3149 /* FLEditorViewController.swift in Sources */,
 				69BA876626F9E92600954E40 /* FLCreateMaterialView.swift in Sources */,
 				696D034D268F9EBD002B3500 /* FLItemCollectionViewCell.swift in Sources */,
 				6968C77826A0233800A712B0 /* FLControlView.swift in Sources */,
@@ -2181,12 +2294,14 @@
 				695899EF266A819F0012B032 /* Gif-CALayer.swift in Sources */,
 				698990F626B90496008A41C1 /* NibBased.swift in Sources */,
 				6974C5B3270D8E05009F60AA /* ImageLoaderService.swift in Sources */,
+				6928062A2724C7980026274A /* ImageView.swift in Sources */,
 				6985B1F726E61F2000FEAD8F /* BaseResult.swift in Sources */,
 				697C0ADB26CA365B00CA1092 /* FLQuestionResult.swift in Sources */,
 				69B0FC3326A7F3230086E6C5 /* InteractView.swift in Sources */,
 				697D19EB26945ED60082783E /* HalfNavController.swift in Sources */,
 				6989919926BA905F008A41C1 /* TitleCollectionViewCell.swift in Sources */,
 				69B0FC8826A97A130086E6C5 /* NewPopUpViewController.swift in Sources */,
+				692805EB27244FC70026274A /* CardSwipeLoopView.swift in Sources */,
 				695899DF2669F35E0012B032 /* AVAssetTrim.swift in Sources */,
 				695C9B4E26FE53E000C242B4 /* ViewDidLoadModifier.swift in Sources */,
 				698990D426B81124008A41C1 /* FLItemResult.swift in Sources */,
@@ -2205,6 +2320,7 @@
 				695DDCBE26EB537800B0194D /* Formatter.swift in Sources */,
 				6974C59E270D8049009F60AA /* FLSUserView.swift in Sources */,
 				69B0FC9626A97B1B0086E6C5 /* ImageTint.swift in Sources */,
+				6928065C272583840026274A /* MockData.swift in Sources */,
 				698490352695BD2E00B5FEF6 /* UIStackView.swift in Sources */,
 				695005A8267A5756009BBEC4 /* TestVideoViewController.swift in Sources */,
 				69D1764E27228D40000D9AAD /* LoadingPageView.swift in Sources */,
@@ -2216,13 +2332,17 @@
 				698991CF26BC13A0008A41C1 /* UserManager.swift in Sources */,
 				696ABCA826DFC496009527D3 /* FLSwipeView.swift in Sources */,
 				698990EF26B90469008A41C1 /* ViewModelBased.swift in Sources */,
+				692806062724C25C0026274A /* ImageLoader.swift in Sources */,
 				69B0FC1626A71F6C0086E6C5 /* UIImageView.swift in Sources */,
 				697D1A062694833C0082783E /* SheetCardViewController.swift in Sources */,
 				6973291A26A5A41E001BFC67 /* MediaManager.swift in Sources */,
 				698990A126B7EA3A008A41C1 /* Reachability.swift in Sources */,
 				6989909326B7CB40008A41C1 /* API.swift in Sources */,
 				696BBAC026E8760600E88B49 /* FLPostViewController.swift in Sources */,
+				692806132724C26E0026274A /* AsyncImage.swift in Sources */,
 				69B9D3A827046654009CE4A7 /* SwiftUIInfiniteList.swift in Sources */,
+				6928067D2725A26D0026274A /* MyMaterialListViewModel.swift in Sources */,
+				6928068A2725C0320026274A /* RandomAccessCollection.swift in Sources */,
 				697D19F126945ED60082783E /* HalfModalTransitionAnimator.swift in Sources */,
 				69B9D3BD27046898009CE4A7 /* FLQuizUserListView.swift in Sources */,
 			);
@@ -2553,6 +2673,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6928063B27253CDD0026274A /* XCRemoteSwiftPackageReference "SwURL" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cmtrounce/SwURL";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6928063C27253CDD0026274A /* SwURL */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6928063B27253CDD0026274A /* XCRemoteSwiftPackageReference "SwURL" */;
+			productName = SwURL;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		695899AF2669F0710012B032 /* flash.xcdatamodeld */ = {

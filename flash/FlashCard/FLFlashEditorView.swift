@@ -9,20 +9,26 @@ import SwiftUI
 
 struct FLFlashEditorView: View {
     
-    var createStatus:FLCreateStatus = .new
+    var flashId: Int? = nil
     
     var body: some View {
-        FLCreateViewControllerRep(createStatus: createStatus)
+        FLEditorViewControllerRep(flashId: flashId)
     }
 }
 
-struct FLCreateViewControllerRep: UIViewControllerRepresentable {
-    var createStatus:FLCreateStatus = .new
+struct FLEditorViewControllerRep: UIViewControllerRepresentable {
+    var flashId: Int?
     
     func makeUIViewController(context: Context) -> some UIViewController {
         let storyboard = UIStoryboard(name: "FlashCard", bundle: Bundle.main)
-        let controller = storyboard.instantiateViewController(identifier: "FLCreateViewController") as! FLCreateViewController
-        controller.createStatus = createStatus
+        let controller = storyboard.instantiateViewController(identifier: "FLEditorViewController") as! FLEditorViewController
+        
+        if let flashId = self.flashId {
+            controller.viewModel.flashId = flashId
+            controller.createStatus = .edit
+        } else {
+            controller.createStatus = .new
+        }
         return controller
     }
     

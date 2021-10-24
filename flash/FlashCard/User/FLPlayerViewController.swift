@@ -73,11 +73,11 @@ class FLPlayerViewController: FLBaseViewController {
         self.viewModel.callAPIFlashCard { [weak self] (cardResult: FLFlashDetailResult?) in
             guard let viewContainer = self?.viewContainer else { return }
             self?.manageStageFrame(viewContainer)
-            self?.loadCardPage()
+            //self?.loadCardPage()
         }
     }
     
-    func loadCardPage() {
+    func loadCardPage() {//may remove
         guard let card = self.viewModel.currentPage else { return }
         self.viewModel.callAPICardDetail(card) { (cardDetail) in
             ConsoleLog.show("callAPICardDetail")
@@ -135,7 +135,8 @@ class FLPlayerViewController: FLBaseViewController {
     }
     
     func createStageAnimate(cardFrame: CGRect) {
-        // Dynamically create view for each card
+        //Can change lib CardView here
+        //Dynamically create view for each card
         let contentView: (Int, CGRect, FLCardPageResult) -> (UIView) = { (index: Int ,frame: CGRect , pageResult: FLCardPageResult) -> (UIView) in
             
             let stageView = FLStageView(frame: frame)

@@ -39,7 +39,7 @@ struct FLCreateMaterialListView: View {
                         HStack(alignment: .center, spacing: margin, content: {
                             ForEach(0..<column) { j in
                                 let item = list[j]
-                                NavigationLink(destination: FLFlashEditorView(createStatus: .new)) {
+                                NavigationLink(destination: FLFlashEditorView()) {
                                     CreatetFlashCardView(item: item)
                                         .frame(maxWidth: cellWidth, maxHeight: cellHeight)
                                 }

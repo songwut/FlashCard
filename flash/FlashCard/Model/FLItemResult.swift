@@ -83,16 +83,19 @@ class FLDetailResult: MaterialFlashResult {
     }
 }
 
-class MaterialFlashResult: BaseResult {
+class MaterialFlashResult: BaseResult, Identifiable {
+    let uuid = UUID()
     var progress: Any?
     var status: FLStatus = .unpublish
     var owner: OwnerResult?
     var code: String?
     var datetimePublish: String?
+    var contentCode:Any? //ContentCode = .flash
     
     override func mapping(map: Map) {
         super.mapping(map: map)
         code                 <- map["code"]
+        contentCode          <- map["content_type.code"]
         progress             <- map["progress"]
         owner                <- map["created_by"]
         datetimePublish      <- map["datetime_publish"]
@@ -127,8 +130,10 @@ class FLFlashDetailResult: FLBaseResult {
 }
 
 class FLCardPageResult: FLBaseResult {
-    var sort:Int?
+    var order = 0
+    var sort:Int? //not order in api
     var dropboxPage: FLDropboxPageResult?
+    var stage: FLStageView?//ref for delete
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -272,7 +277,10 @@ class FLBaseResult:Mappable {
 }
 
 class MaterialFlashPageResult: BaseResult {
+    var previous: Int?
+    var next: Int?
     var count = 0
+    var pageSize = 24
     var list = [MaterialFlashResult]()
     
     required init?(map: Map) {
@@ -281,8 +289,12 @@ class MaterialFlashPageResult: BaseResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        next             <- map["next"]
+        previous         <- map["previous"]
         count            <- map["count"]
+        pageSize         <- map["page_size"]
         list             <- map["results"]
+        
     }
     
     class func with(_ dict: [String : Any]) -> MaterialFlashPageResult? {
@@ -292,7 +304,7 @@ class MaterialFlashPageResult: BaseResult {
 }
 
 class UserAnswerPageResult: BaseResult {
-    var previous = ""
+    var previous: Int?
     var next: Int?
     var count = 0
     var pageSize = 24

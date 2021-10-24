@@ -55,6 +55,7 @@ enum FLGraphicMenu: String {
 }
 
 struct FlashStyle {
+    static let flashItemHeight: CGFloat = 124
     static let cardCornerRadius:CGFloat = 16
     static let imageMaxSize:CGFloat = 2048
     static let imageQuality:CGFloat = 0.8

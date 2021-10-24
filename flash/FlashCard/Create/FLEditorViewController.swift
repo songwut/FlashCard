@@ -1,5 +1,5 @@
 //
-//  FLCreateViewController.swift
+//  FLEditorViewController.swift
 //  flash
 //
 //  Created by Songwut Maneefun on 1/7/2564 BE.
@@ -21,7 +21,7 @@ enum FLCreateStatus {
 }
 
 
-final class FLCreateViewController: FLBaseViewController {
+final class FLEditorViewController: FLBaseViewController {
     @IBOutlet private weak var topView: UIView!
     @IBOutlet private weak var topViewHeight: NSLayoutConstraint!
     @IBOutlet private weak var contentPageView: UIView!
@@ -382,6 +382,7 @@ final class FLCreateViewController: FLBaseViewController {
     
     private func updateAfterAllStageReady(stage: FLStageView) {
         self.updatePageNumber()
+        self.manageAddLR()
         
         if self.createStatus == .new {
             self.reloadCardPage(method: .get)//First card page
@@ -477,12 +478,15 @@ final class FLCreateViewController: FLBaseViewController {
         guard let stackView = self.sliderView?.contentStackView else {return}
         stackView.removeAllArranged()
         let frame = self.stageView?.frame ?? CGRect.zero
+        var order = 0
         for page in pageList {
             let stage = self.createStageView(frame.size, creator: self.flCreator!)
+            page.order = order
             stage.isEditor = true
             stage.card = page
             self.stageViewList?.append(stage)
             stackView.addArrangedSubview(stage)
+            order += 1
         }
         stackView.layoutIfNeeded()
         self.sliderView?.scrollView.delegate = self
@@ -1148,7 +1152,7 @@ extension UIImage {
     var png: Data? { pngData() }
 }
 
-extension FLCreateViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         if let originalImage = info[.originalImage] as? UIImage {
@@ -1258,7 +1262,7 @@ extension FLCreateViewController: UINavigationControllerDelegate, UIImagePickerC
     }
 }
 
-extension FLCreateViewController: UIScrollViewDelegate {
+extension FLEditorViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.viewModel.pageIndex = self.indexOfMajorCell()
@@ -1338,7 +1342,7 @@ extension FLCreateViewController: UIScrollViewDelegate {
 }
 
 
-extension FLCreateViewController: UITextViewDelegate {
+extension FLEditorViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         self.selectedViewIsHiddenTool(true)
         
@@ -1398,7 +1402,7 @@ extension FLCreateViewController: UITextViewDelegate {
     
 }
 
-extension FLCreateViewController: InteractViewDelegate {
+extension FLEditorViewController: InteractViewDelegate {
     func interacViewDidTap(view: InteractView) {
     }
     
@@ -1417,7 +1421,7 @@ extension FLCreateViewController: InteractViewDelegate {
     }
 }
 
-extension FLCreateViewController: InteractTextViewDelegate {
+extension FLEditorViewController: InteractTextViewDelegate {
     func interacTextViewDidTap(view: InteractTextView) {
         self.selectedViewIsHiddenTool(true)
         
@@ -1470,7 +1474,7 @@ extension FLCreateViewController: InteractTextViewDelegate {
 }
 
 
-extension FLCreateViewController : CHTStickerViewDelegate {
+extension FLEditorViewController : CHTStickerViewDelegate {
     
     func stickerViewDidTap(_ stickerView: CHTStickerView!) {
         self.selectedViewIsHiddenTool(true)

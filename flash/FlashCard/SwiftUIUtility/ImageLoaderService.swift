@@ -10,13 +10,13 @@ import SwiftUI
 class ImageLoaderService: ObservableObject {
     @Published var image = UIImage()
 
-    convenience init(url: String) {
+    convenience init(urlSring: String) {
         self.init()
-        loadImage(for: url)
+        loadImage(for: urlSring)
     }
 
-    func loadImage(for urlString: String) {
-        guard let url = URL(string: urlString) else { return }
+    func loadImage(for urlSring: String) {
+        guard let url = URL(string: urlSring) else { return }
         let task = URLSession.shared.dataTask(with: url) { data, _, _ in
             guard let data = data else { return }
             DispatchQueue.main.async {

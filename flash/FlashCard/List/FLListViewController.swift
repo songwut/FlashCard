@@ -58,16 +58,16 @@ class FLListViewController: UIViewController {
     @IBOutlet private weak var menuHeight: NSLayoutConstraint!
     
     var viewModel = FLFlashCardViewModel()
+    var list = [FLBaseResult]()
+    
     private var cellSize = CGSize.zero
     private let edgeMargin:CGFloat = 16
-    
     private var menuDelete:FLItemView!
     private var menuDuplicate:FLItemView!
     private var menuAdd:FLItemView!
     private var menuSelect:FLItemView!
     private var userAction = ""
     private var selectSortList = [Int]()
-    var list = [FLBaseResult]()
     
     override func viewDidLoad() {
         super.viewDidLoad()

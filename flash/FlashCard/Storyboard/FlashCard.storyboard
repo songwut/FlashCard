@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Create View Controller-->
+        <!--Editor View Controller-->
         <scene sceneID="4t4-Ra-bXz">
             <objects>
-                <viewController storyboardIdentifier="FLCreateViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ghl-9r-MWv" customClass="FLCreateViewController" customModule="flash" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FLEditorViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ghl-9r-MWv" customClass="FLEditorViewController" customModule="flash" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Civ-fJ-RPp">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

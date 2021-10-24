@@ -21,7 +21,7 @@ protocol BaseViewProtocol {
 
 protocol FLStageViewModelProtocol: BaseViewProtocol {
     func stageUploading()
-    var stageVC: FLCreateViewController? { get set }
+    var stageVC: FLEditorViewController? { get set }
     
     func showProgressLoading()
     func hideProgressLoading()
@@ -32,7 +32,7 @@ class FLFlashCardViewModel: BasePagingProtocol {
     var isLoadNextPage = false
     var nextPage: Int?
     
-    var stageVC: FLCreateViewController?
+    var stageVC: FLEditorViewController?
     var myFlashCard: MaterialFlashPageResult?
     var detail: FLDetailResult?
     var pageList = [FLCardPageResult]()
@@ -55,17 +55,27 @@ class FLFlashCardViewModel: BasePagingProtocol {
         return current?.first
     }
     
-    func callAPIFlash(_ method:APIMethod, complete: @escaping (_ result: FLFlashDetailResult?) -> ()) {
+    func callAPIMyFlashCard(_ method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
+        let request = FLRequest()
+        request.endPoint = .ugcFlashCard
+        request.apiMethod = method
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: MaterialFlashPageResult?, isCache, error) in
+            self?.myFlashCard = result
+            complete(result)
+        }
+    }
+    /*
+    func callAPIFlash(_ method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
         
         let request = FLRequest()
         request.apiMethod = method
         request.endPoint = .ugcFlashCard
-        API.request(request) { (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+        API.request(request) { (responseBody: ResponseBody?, result: MaterialFlashPageResult?, isCache, error) in
             //self.detail = result
-            //complete(result)
+            complete(result)
         }
     }
-    
+    */
     func callAPIFlashDetail(_ method:APIMethod ,status: FLStatus? = nil, complete: @escaping (_ result: FLDetailResult?) -> ()) {
         let request = FLRequest()
         request.apiMethod = method
@@ -88,16 +98,6 @@ class FLFlashCardViewModel: BasePagingProtocol {
             complete()
         }
         */
-    }
-    
-    func callAPIMyFlashCard(method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
-        let request = FLRequest()
-        request.endPoint = .ugcFlashCard
-        request.apiMethod = method
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: MaterialFlashPageResult?, isCache, error) in
-            self?.myFlashCard = result
-            complete(result)
-        }
     }
     
     func callAPIFlashCard(complete: @escaping (_ result: FLFlashDetailResult?) -> ()) {
@@ -341,6 +341,9 @@ class FLFlashCardViewModel: BasePagingProtocol {
     }
     
     func callApiDeleteList(_ selectList:[Int], apiMethod:APIMethod,completion: @escaping () -> ()) {
+        
+        self.removeCardView(idList: selectList)
+        
         var idList = [String]()
         for id in selectList {
             idList.append("\(id)")
@@ -362,6 +365,7 @@ class FLFlashCardViewModel: BasePagingProtocol {
     }
     
     func callApiDuplicateList(_ selectList:[Int], apiMethod:APIMethod,completion: @escaping () -> ()) {
+        
         var idList = [String]()
         for id in selectList {
             idList.append("\(id)")
@@ -378,6 +382,18 @@ class FLFlashCardViewModel: BasePagingProtocol {
                 self.pageList = listResult.list
             }
             completion()
+        }
+        
+    }
+    
+    private func removeCardView(idList:[Int]) {
+        for id in idList {
+            let card = self.pageList.first { (pageResult) -> Bool in
+                return pageResult.id == id
+            }
+            if let c = card {
+                c.stage?.removeFromSuperview()
+            }
         }
         
     }
