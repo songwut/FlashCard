@@ -101,8 +101,12 @@ struct FLCreator {
         }
         */
         //let textViewSize = element.text.size(font: font, maxWidth: stage.frame.width, maxHeight: stage.frame.height)
-        if self.isEditor {//case new text
+        if element.isCreating {//case new text
             let textViewSize = textView.frameFromContent()
+            viewW = textViewSize.width
+            viewH = textViewSize.height
+        } else if self.isEditor {
+            let textViewSize = textView.frameFromContent(fixWidth: viewW)
             viewW = textViewSize.width
             viewH = textViewSize.height
         } else {
@@ -135,8 +139,8 @@ struct FLCreator {
         iView.scale = (scale == 1.0) ? 1.0 : scale
         iView.update(scale: scale)
         iView.update(rotation: element.rotation)
-        iView.backgroundColor = UIColor.purple.withAlphaComponent(0.5)
-        textView.backgroundColor = UIColor.purple.withAlphaComponent(0.3)
+        //iView.backgroundColor = UIColor.purple.withAlphaComponent(0.5)
+        //textView.backgroundColor = UIColor.purple.withAlphaComponent(0.3)
         stage.addSubview(iView)
         return iView
     }
@@ -178,6 +182,9 @@ struct FLCreator {
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(origin: CGPoint.zero, size: CGSize(width: size.width + margin, height: size.height + margin) )
         let iView = InteractView(contentView: imageview)!
+        
+        iView.updateEditUI()
+        
         iView.type = .image
         iView.element = element
         iView.frame = frame
@@ -247,6 +254,9 @@ struct FLCreator {
             let center = CGPoint(x: viewX, y: viewY)
             let frame = CGRect(x: viewX, y: viewY, width: size.width + margin, height: size.height + margin)
             let iView = InteractView(contentView: playerView)!
+            
+            iView.updateEditUI()
+            
             iView.playerView = playerView
             iView.frame = frame
             iView.center = center

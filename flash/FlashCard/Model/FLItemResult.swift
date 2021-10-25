@@ -279,6 +279,7 @@ class FLBaseResult:Mappable {
 class MaterialFlashPageResult: BaseResult {
     var previous: Int?
     var next: Int?
+    var nextUrl: String?
     var count = 0
     var pageSize = 24
     var list = [MaterialFlashResult]()
@@ -289,6 +290,7 @@ class MaterialFlashPageResult: BaseResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        nextUrl          <- map["next_url"]
         next             <- map["next"]
         previous         <- map["previous"]
         count            <- map["count"]

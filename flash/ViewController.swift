@@ -11,7 +11,9 @@ import SwiftUI
 class ViewController: UIViewController {
     
     @IBOutlet private weak var stageButton: UIButton!
-    
+    @IBOutlet private weak var usernameTextField: UITextField!
+    @IBOutlet private weak var passTextField: UITextField!
+    @IBOutlet private weak var loginButton: UIButton!
     
     
     func getCenter(_ view: UIView) -> CGPoint {
@@ -44,11 +46,18 @@ class ViewController: UIViewController {
         //calculate for ipad stageFrame
         
         
-        
         // Do any additional setup after loading the view.
         self.stageButton.addTarget(self, action: #selector(self.stageButtonPressed(_:)), for: .touchUpInside)
         
-        self.loginPressed(nil)
+        self.passTextField.isSecureTextEntry = true
+        if let user = UserDefaults.standard.string(forKey: "user_key") {
+            self.usernameTextField.text = user
+            self.passTextField.text = UserDefaults.standard.string(forKey: "pass_key")
+        } else {
+            UserDefaults.standard.setValue("sysadmin@conicle.com", forKey: "user_key")
+            UserDefaults.standard.setValue("sysadminConicle", forKey: "pass_key")
+            UserDefaults.standard.synchronize()
+        }
     }
     
     @IBAction func myMaterialPressed(_ sender: UIButton) {
@@ -57,7 +66,7 @@ class ViewController: UIViewController {
         viewModel.callAPIMyFlashCard(.get) { (myFlashDetail) in
             self.hideLoading()
             guard let myFlashDetail = myFlashDetail else { return }
-            let vc = UIHostingController(rootView: MyMaterialListView(myMaterialFlash: myFlashDetail))
+            let vc = UIHostingController(rootView: MyMaterialListView(myMaterialFlash: myFlashDetail, list: myFlashDetail.list))
             if let nav = self.navigationController {
                 nav.pushViewController(vc, animated: true)
             } else {
@@ -202,8 +211,13 @@ class ViewController: UIViewController {
     
     func loginAPI() {
         //sysadmin@conicle.com
-        let username = "sysadmin@conicle.com"
-        let password = "sysadminConicle"
+        
+        let username = self.usernameTextField.text ?? "sysadmin@conicle.com"
+        let password = self.passTextField.text ?? "sysadminConicle"
+        
+        UserDefaults.standard.setValue(username, forKey: "user_key")
+        UserDefaults.standard.setValue(password, forKey: "pass_key")
+        UserDefaults.standard.synchronize()
         
 //        let username = "wnios"
 //        let password = "adminadmin"

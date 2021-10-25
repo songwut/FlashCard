@@ -10,7 +10,9 @@ import SwiftUI
 struct MyMaterialListView: View {
     @ObservedObject var viewModel = MyMaterialListViewModel()
     
-    var myMaterialFlash: MaterialFlashPageResult
+    @State var myMaterialFlash: MaterialFlashPageResult
+    @State var list: [MaterialFlashResult]
+    @State private var isLoading = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,19 +33,13 @@ struct MyMaterialListView: View {
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
                 
-                let items = myMaterialFlash.list
+                let items = list
+                let next = myMaterialFlash.next
                 ForEach(items) { item in
                     ZStack {
                         FLMaterialView(isEditor: true, flash: item)
                             .background(Color.white)
-                            .onAppear {
-                                if items.isLastItem(item) {
-                                    //TODO: fix pagination
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                        viewModel.callAPIMyFlashCard(next: myMaterialFlash.next)
-                                    }
-                                }
-                            }
+                        
                         NavigationLink(destination: FLFlashEditorView(flashId:item.id)) {
                             Rectangle()
                         }
@@ -52,13 +48,18 @@ struct MyMaterialListView: View {
                     }
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
-                    .frame(width: .infinity, height: FlashStyle.flashItemHeight)
+                    .frame(height: FlashStyle.flashItemHeight)
+                    .onAppear {
+                        if !isLoading {
+                            self.manageLastItem(item: item)
+                        }
+                    }
                 }
             }
             
             if viewModel.isListFull == false {
                 //ActivityIndicator(isAnimating: $viewModel.isLoading)
-                ActivityIndicator(isAnimating: .constant(viewModel.isLoading))
+                ActivityIndicator(isAnimating: .constant(isLoading))
 //                    .onAppear {
 //                        viewModel.callAPIMyFlashCard(next: myMaterialFlash.next)
 //                    }
@@ -71,11 +72,14 @@ struct MyMaterialListView: View {
         .navigationBarTitle("My Material", displayMode: .automatic)
         .onAppear(perform: {
             viewModel.next = myMaterialFlash.next
+            viewModel.nextUrl = myMaterialFlash.nextUrl
             viewModel.previous = myMaterialFlash.previous
             viewModel.pageSize = myMaterialFlash.pageSize
         })
         
     }
+    
+    
     
     var CreateView: some View {
         VStack(alignment: .leading, spacing: nil, content: {
@@ -105,9 +109,37 @@ struct MyMaterialListView: View {
     }
 }
 
+extension MyMaterialListView {
+    func manageLastItem(item: MaterialFlashResult) {
+        let items = list
+        let next = myMaterialFlash.next
+        let nextUrl = myMaterialFlash.nextUrl
+        
+        if items.isLastItem(item) {
+            isLoading = true
+            //TODO: fix pagination
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                if !viewModel.isListFull {
+                    viewModel.callAPIMyFlashCard(
+                        nextUrl: nextUrl) { (newPage) in
+                        if let page = newPage {
+                            self.myMaterialFlash = page
+                            self.list.append(contentsOf: page.list)
+                        } else {
+                            //HTTPURLResponse: nil
+                        }
+                        
+                        isLoading = false
+                    }
+                }
+            }
+        }
+    }
+}
+
 struct MyMaterialListView_Previews: PreviewProvider {
     
     static var previews: some View {
-        MyMaterialListView(myMaterialFlash: MockObject.myMaterialFlash)
+        MyMaterialListView(myMaterialFlash: MockObject.myMaterialFlash, list: MockObject.myMaterialFlash.list)
     }
 }

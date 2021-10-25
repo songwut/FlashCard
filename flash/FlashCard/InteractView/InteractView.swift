@@ -126,7 +126,22 @@ class InteractView: CHTStickerView {
             self.controlTextLeft.isHidden = self.isHiddenEditingTool
             self.controlTextRight.isHidden = self.isHiddenEditingTool
             self.contentView.layer.borderWidth = self.isHiddenEditingTool ? 0 : 2
+            
+            self.closeImageView.isUserInteractionEnabled = true
         }
+    }
+    
+    func updateEditUI() {
+        self.outlineBorderColor = .black
+        self.setImage(UIImage(named: "fl_delete"), for: .close)
+        self.setImage(UIImage(named: "ic-fl-frame"), for: .none)
+        self.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
+        self.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
+        self.setHandlerSize(Int(FlashStyle.text.marginIView))
+        self.enableClose = true
+        self.enableFlip = false
+        self.enableRotate = true
+        self.enableNone = false
     }
     
     private let controlWidthIcon = UIImage(named: "controll_width")

@@ -33,6 +33,7 @@ class FLRequest: APIRequest {
     var parameter: [String: Any]?
     var apiMethod: APIMethod = .get
     var apiType: APIParameterType = .url
+    var nextUrl : String?
     
     override var method: APIMethod {
         return self.apiMethod
@@ -43,6 +44,9 @@ class FLRequest: APIRequest {
     }
     
     override var url : String {
+        if let nextUrl = self.nextUrl {//pagination
+            return nextUrl
+        }
         if self.flashId != 0 {
             self.arguments.insert("\(self.flashId)", at: 0)
         }

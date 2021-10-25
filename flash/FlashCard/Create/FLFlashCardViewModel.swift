@@ -55,10 +55,15 @@ class FLFlashCardViewModel: BasePagingProtocol {
         return current?.first
     }
     
-    func callAPIMyFlashCard(_ method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
+    func callAPIMyFlashCard(_ method:APIMethod, nextUrl: String? = nil, param:[String: Any]? = nil, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
         let request = FLRequest()
+        if let nextUrl = nextUrl {
+            request.nextUrl = nextUrl
+        }
         request.endPoint = .ugcFlashCard
         request.apiMethod = method
+        request.parameter = param
+        request.apiType = .json
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: MaterialFlashPageResult?, isCache, error) in
             self?.myFlashCard = result
             complete(result)

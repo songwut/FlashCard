@@ -10,21 +10,21 @@ import Combine
 
 class MyMaterialListViewModel: ObservableObject {
     @Published var myMaterialFlash: MaterialFlashPageResult?
-    @Published var list = [MaterialFlashResult]()
+    //@Published var list = [MaterialFlashResult]()
     
     var previous: Int?
     var next: Int?
+    var nextUrl: String?
     var count = 0
     var pageSize = 24
-    var isLoading = false
     
     // Tracks last page loaded. Used to load next page (current + 1)
-    var currentPage: Int?
+    var currentPage = 0
     var isListFull = false
     
     private var cancellable: AnyCancellable?
     
-    func callAPIMyFlashCard(next: Int?) {
+    func callAPIMyFlashCard(nextUrl: String?, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
         
         /*
         cancellable = URLSession.shared.dataTaskPublisher(for: url)
@@ -41,30 +41,18 @@ class MyMaterialListViewModel: ObservableObject {
                 }
         }
         */
-        guard let currentPage = self.currentPage else {
-            self.currentPage = 0
-            print("currentPage:\(self.currentPage)")
-            return
-        }
-        if let nextId = next  {
-            isLoading = true
+        if let nextUrl = nextUrl {
             let viewModel = FLFlashCardViewModel()
             //param next id
-            viewModel.callAPIMyFlashCard(.get) { [self] (myFlashDetail) in
-                guard let myFlashDetail = myFlashDetail else { return }
-                if currentPage == 0 {
-                    self.list = myFlashDetail.list
-                } else {
-                    if !self.isListFull {
-                        for flash in myFlashDetail.list {
-                            self.list.append(flash)
-                        }
-                    }
-                }
-                self.isListFull = myFlashDetail.next == nil
-                isLoading = false
-                self.currentPage! += 1
-                print("currentPage:\(currentPage)")
+            //let param = ["page" : nextId, "page_size": pageSize]
+            //TODO: ask Backend with api new patern
+            viewModel.callAPIMyFlashCard(.get, nextUrl: nextUrl) { [self] (pageResult) in
+                guard let page = pageResult else { return complete(nil) }
+                self.isListFull = page.next == nil
+                self.currentPage += 1
+                self.myMaterialFlash = page
+                print("currentPage:\(self.currentPage)")
+                complete(page)
             }
         }
         

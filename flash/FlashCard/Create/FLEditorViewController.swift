@@ -880,16 +880,6 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     func manageIView(in iView:InteractView, stageView: FLStageView) {
-        iView.outlineBorderColor = .black
-        iView.setImage(UIImage(named: "fl_delete"), for: .close)
-        iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
-        iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
-        iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
-        iView.setHandlerSize(Int(FlashStyle.text.marginIView))
-        iView.enableClose = true
-        iView.enableFlip = false
-        iView.enableRotate = true
-        iView.enableNone = false
         
         //TODO: add gesture pinch
         
@@ -978,10 +968,11 @@ final class FLEditorViewController: FLBaseViewController {
         iView.setPosition(.bottomRight, for: .rotate)
         
         //update icon tool after bounds change
-        iView.setImage(UIImage(named: "fl_delete"), for: .close)
-        iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
-        iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
-        iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
+//        iView.setImage(UIImage(named: "fl_delete"), for: .close)
+//        iView.setImage(UIImage(named: "ic-fl-frame"), for: .none)
+//        iView.setImage(UIImage(named: "ic-fl-frame"), for: .flip)
+//        iView.setImage(UIImage(named: "ic-fl-frame"), for: .rotate)
+        iView.updateEditUI()
         
         UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear) {
             
@@ -1317,6 +1308,8 @@ extension FLEditorViewController: UIScrollViewDelegate {
         self.updatePageNumber()
         self.manageAddLR()
         
+        let stage = self.getStageView(at: index)
+        self.checkQuizIn(cardDetail: stage.cardDetail)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -1482,6 +1475,8 @@ extension FLEditorViewController : CHTStickerViewDelegate {
         guard let iView = stickerView as? InteractView else { return }
         self.selectedView = iView
         self.selectedViewIsHiddenTool(false)
+        
+        //below need to update when CHTStickerView remove
         guard let element = iView.element else { return }
         if let textView = iView.textView {
             textView.isUserInteractionEnabled = true
