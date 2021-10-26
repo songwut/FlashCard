@@ -16,15 +16,9 @@ struct FLInfoView: View {
     var delegate: FLInfoViewDelegate?
     
     var body: some View {
-        self.box
-            .background(UIColor.white.color)
-            .cornerRadius(8)
-            .border(UIColor("D0D3D6").color, width: 1)
-    }
-    
-    var box: some View {
         self.contentView
             .padding(8)
+            .background(UIColor.white.color)
     }
     
     private var contentView: some View {

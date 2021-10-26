@@ -40,7 +40,7 @@ struct MyMaterialListView: View {
                         FLMaterialView(isEditor: true, flash: item)
                             .background(Color.white)
                         
-                        NavigationLink(destination: FLFlashEditorView(flashId:item.id)) {
+                        NavigationLink(destination: FLFlashPostView(flashId:item.id)) {
                             Rectangle()
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -55,15 +55,14 @@ struct MyMaterialListView: View {
                         }
                     }
                 }
+                
+                if viewModel.isListFull == false {
+                    //ActivityIndicator(isAnimating: $viewModel.isLoading)
+                    ActivityIndicator(isAnimating: .constant(isLoading))
+                }
             }
             
-            if viewModel.isListFull == false {
-                //ActivityIndicator(isAnimating: $viewModel.isLoading)
-                ActivityIndicator(isAnimating: .constant(isLoading))
-//                    .onAppear {
-//                        viewModel.callAPIMyFlashCard(next: myMaterialFlash.next)
-//                    }
-            }
+            
         }
         //.listStyle(SidebarListStyle()) //ios 14
         .padding(.leading, 16)
@@ -112,12 +111,11 @@ struct MyMaterialListView: View {
 extension MyMaterialListView {
     func manageLastItem(item: MaterialFlashResult) {
         let items = list
-        let next = myMaterialFlash.next
+        let next = myMaterialFlash.next//TODO:wait back
         let nextUrl = myMaterialFlash.nextUrl
         
         if items.isLastItem(item) {
             isLoading = true
-            //TODO: fix pagination
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 if !viewModel.isListFull {
                     viewModel.callAPIMyFlashCard(

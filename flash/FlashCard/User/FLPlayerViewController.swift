@@ -8,8 +8,22 @@
 import UIKit
 import SwiftUI
 
+enum FLPlayerState {
+    case preview
+    case user
+    
+    func backgeoundColor() -> UIColor {
+        if self == .preview {
+            return .background()
+        } else {
+            return .white
+        }
+    }
+}
+
 class FLPlayerViewController: FLBaseViewController {
 
+    var playerState: FLPlayerState = .user
     var viewModel = FLFlashCardViewModel()
     
     private var swipeView: FLSwipeView<FLCardPageResult>!{
@@ -23,7 +37,10 @@ class FLPlayerViewController: FLBaseViewController {
     @IBOutlet weak var viewContainer: UIView!
     @IBOutlet weak var footerStackView: UIStackView!
     
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var leftButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet weak var pageLabel: UILabel!
     
@@ -42,6 +59,9 @@ class FLPlayerViewController: FLBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = self.playerState.backgeoundColor()
+        self.topView.isHidden = self.playerState == .preview
+        self.closeButton.addTarget(self, action: #selector(self.didPressedClose(_:)), for: .touchUpInside)
         self.footerMargin.constant = UIDevice.isIpad() ? 60.0 : 16.0
         self.leftButton.tintColor = UIColor.config_secondary()
         self.rightButton.tintColor = UIColor.config_secondary()
@@ -62,9 +82,13 @@ class FLPlayerViewController: FLBaseViewController {
         self.viewModel.callAPIFlashDetail(.get) { (flashDetail) in
             guard let detail = flashDetail else { return }
             self.title = detail.name
+            self.titleLabel.text = detail.name
             self.infoView = UIHostingController(rootView: FLInfoView(detail: detail))
             self.infoView.view.frame = CGRect(x: 0, y: 0, width: self.infoStackView.frame.width, height: 60)
             self.infoView.view.backgroundColor = UIColor.clear
+            self.infoView.view.cornerRadius = 8
+            self.infoView.view.borderWidth = 1
+            self.infoView.view.borderColor = UIColor("D0D3D6")
             self.infoView.rootView.delegate = self
             self.infoStackView.addArrangedSubview(self.infoView.view)
             
@@ -74,6 +98,14 @@ class FLPlayerViewController: FLBaseViewController {
             guard let viewContainer = self?.viewContainer else { return }
             self?.manageStageFrame(viewContainer)
             //self?.loadCardPage()
+        }
+    }
+    
+    @objc func didPressedClose(_ sender: Any) {
+        if let nav = self.navigationController {
+            nav.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true, completion: nil)
         }
     }
     

@@ -44,35 +44,9 @@ class FLStageView: UIView {
     var cardDetail: FLCardPageDetailResult? {
         didSet {
             guard let cardDetail = self.cardDetail else { return }
-            //self.sort = cardDetail.sort
+            //self.sort = cardDetail.sort // sort manual is worked
         }
     }
-    /*
-    func loadElement(viewModel:FLFlashCardViewModel) {//User Player
-        self.viewModel = viewModel
-        guard let card = self.card else { return }
-        for v in self.subviews {
-           v.removeFromSuperview()
-        }
-        self.cover.imageUrl(card.image)
-        
-        self.viewModel?.callAPICardDetail(card) { [weak self] (cardDetail) in
-            guard let self = self else { return }
-            guard let cardDetail = cardDetail else { return }
-            self.flColor = cardDetail.bgColor
-            for element in cardDetail.componentList {
-                let v = self.createElement(element)
-                v?.tag = element.id
-                if let quizView = v as? FLQuizView {
-                    self.quizManageSize(quizView)
-                }
-            }
-            
-            //Manage size
-            self.cover.isHidden = true
-        }
-    }
-    */
     
     func loadElement(viewModel:FLFlashCardViewModel,
                      complete: @escaping (_ content: Any?) -> ()) {
@@ -89,21 +63,27 @@ class FLStageView: UIView {
             self.cardDetail = cardDetail
             self.flColor = cardDetail.bgColor
             for element in cardDetail.componentList {
-                let v = self.createElement(element)
-                v?.tag = element.id
-                if !self.isEditor {//animate in player
-                    if let quizView = v as? FLQuizView {
-                        self.quizManageSize(quizView)
+                let anyView = self.createElement(element)
+                anyView?.tag = element.id
+                if let iView = anyView as? InteractView {
+                    iView.isHiddenEditingTool = true
+                    
+                } else if let iView = anyView as? InteractTextView {
+                    iView.isHiddenEditingTool = true
+                    
+                } else if let quizView = anyView as? FLQuizView {
+                    if !self.isEditor {//animate in player
+                        self.quizManageSizeAnimate(quizView)
                     }
                 }
                 
-                complete(v)
+                complete(anyView)
             }
             self.cover.isHidden = true
         }
     }
     
-    func quizManageSize(_ quizView: FLQuizView) {
+    func quizManageSizeAnimate(_ quizView: FLQuizView) {
         quizView.alpha = 0.0
         let originalCenter = quizView.center
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

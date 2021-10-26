@@ -49,7 +49,6 @@ class FLDetailResult: MaterialFlashResult {
     
     var estimateTime: Int?//only min
     
-    //var contentCode: ContentCode?
 //    "datetime_create": "2021-08-04T09:55:45.443966",
 //            "datetime_update": "2021-08-04T09:55:45.444002",
 //            "is_display": 0,
@@ -69,7 +68,7 @@ class FLDetailResult: MaterialFlashResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
-        
+        contentCode          <- map["content_type.code"]
         countView            <- map["count_view"]
         code                 <- map["code"]
         progress             <- map["progress"]
@@ -90,7 +89,7 @@ class MaterialFlashResult: BaseResult, Identifiable {
     var owner: OwnerResult?
     var code: String?
     var datetimePublish: String?
-    var contentCode:Any? //ContentCode = .flash
+    var contentCode: ContentCode = .flash
     
     override func mapping(map: Map) {
         super.mapping(map: map)

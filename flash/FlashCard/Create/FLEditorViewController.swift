@@ -414,18 +414,19 @@ final class FLEditorViewController: FLBaseViewController {
                 }
                 
                 self.checkQuizIn(cardDetail: stage.cardDetail)
-                
-                self.isEditorPageReady = true
-                UIView.animate(withDuration: 0.3) {
-                    self.contentPageView.alpha = 1.0
-                }
-                
-                //prepare element in other stage
-                guard let stageList = self.stageViewList else { return }
-                for stage in stageList {
-                    if stage.isRequireToLoadElement {
-                        self.loadElement(in: stage)
-                    }
+            }
+            
+            self.isEditorPageReady = true
+            UIView.animate(withDuration: 0.3) {
+                self.contentPageView.alpha = 1.0
+                self.isReadyToSwipeStage = true
+            }
+            
+            //prepare element in other stage
+            guard let stageList = self.stageViewList else { return }
+            for stage in stageList {
+                if stage.isRequireToLoadElement {
+                    self.loadElement(in: stage)
                 }
             }
         }

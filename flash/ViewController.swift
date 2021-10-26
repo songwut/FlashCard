@@ -101,6 +101,19 @@ class ViewController: UIViewController {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
         vc.viewModel.flashId = 6
+        vc.playerState = .user
+        vc.modalTransitionStyle = .crossDissolve
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true) {
+            
+        }
+    }
+    
+    @IBAction func openFlashPlayerPreview(_ sender: UIButton) {
+        let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
+        vc.viewModel.flashId = 6
+        vc.playerState = .preview
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
         } else {

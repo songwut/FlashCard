@@ -57,6 +57,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var submitButton: UIButton!
     @IBOutlet private weak var myLibraryButton: UIButton!
     
+    var createStatus:FLCreateStatus = .new
+    
     var viewModel: FLFlashCardViewModel! {
         didSet {
             let detail = self.viewModel.detail
@@ -132,10 +134,6 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.categoryView.isUserInteractionEnabled = true
         self.tagContentView.isUserInteractionEnabled = true
         
-        let previewBtn = UIBarButtonItem(title: "preview".localized(), style: .plain, target: self, action: #selector(self.previewPressed))
-
-        self.navigationItem.rightBarButtonItems = [previewBtn]
-        
         let tapCategory = UITapGestureRecognizer(target: self, action: #selector(self.categoryPressed))
         self.categoryView.addGestureRecognizer(tapCategory)
         
@@ -151,10 +149,45 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.cancelButton.isHidden = true
         self.coverImageView.image = UIImage(named: "flash-cover")
         self.imageButton.backgroundColor = UIColor.elementBackground()
-        self.loadDetail(self.viewModel.detail)
+        
+        self.serDefaultUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let editBtn = UIBarButtonItem(image: UIImage(named: "edit"), style: .plain, target: self, action: #selector(self.editPressed))
+        let previewBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_preview"), style: .plain, target: self, action: #selector(self.previewPressed))
+        editBtn.tintColor = .white
+        previewBtn.tintColor = .white
+        
+        self.navigationController?.navigationBar.topItem?.rightBarButtonItems = [previewBtn, editBtn]
+        //let buttonItems = [ UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(self.onAdd(_:)))
+        
+        self.showLoading(nil)
+        if let detail = self.viewModel.detail {
+            self.loadDetail(detail)
+        } else {
+            self.viewModel.callAPIFlashDetail(.get) { [weak self] (detail) in
+                DispatchQueue.main.async {
+                    self?.loadDetail(detail)
+                }
+            }
+        }
+    }
+    
+    
+    func serDefaultUI() {
+        self.titleTextField.text = ""
+        self.descTextView.text = ""
+        self.updateValueLabel.text = ""
+        self.categoryValueLabel.text = ""
+        self.updateValueLabel.text = ""//TODO: show
+        self.idView.isHidden = true
     }
     
     func loadDetail(_ detail: FLDetailResult?) {
+        self.hideLoading()
         guard let detail = detail else { return }
         self.time = detail.estimateTime ?? 5 //TODO: get real time
         self.titleTextField.text = detail.name
@@ -169,6 +202,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             self.updateValueLabel.text = "now"
         }
         self.timeValueLabel.text = "\(self.time)"
+        self.idValueLabel.isHidden = detail.code == ""
         self.idValueLabel.text = detail.code
         self.idValueLabel.textColor = UIColor("52BCFF")//TODO: Content code color
         self.idView.borderColor = UIColor("52BCFF")//TODO: Content code color
@@ -220,15 +254,35 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.timeValueLabel.text = "\(self.time)"
         ConsoleLog.show("timeNumber: \(self.time)")
     }
-    
-    @objc func previewPressed() {
-        let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
-        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController")
+    @objc func editPressed() {
+        let s = UIStoryboard(name: "FlashCard", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
+        vc.createStatus = .edit
+        vc.viewModel =  self.viewModel
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
         } else {
             self.present(vc, animated: true, completion: nil)
         }
+    }
+    
+    @objc func previewPressed() {
+        let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
+        vc.playerState = .user
+        vc.viewModel =  self.viewModel
+        
+        vc.modalTransitionStyle = .crossDissolve
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true) {
+            
+        }
+        
+//        if let nav = self.navigationController {
+//            nav.pushViewController(vc, animated: true)
+//        } else {
+//            self.present(vc, animated: true, completion: nil)
+//        }
     }
     
     @IBAction func imagePressed(_ sender: UIButton) {

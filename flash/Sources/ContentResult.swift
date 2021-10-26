@@ -18,7 +18,7 @@ class ContentResult: BaseResult {
     var linkShare = ""
     var datetimeEnd = "" //2017-10-30T08:00:00+07:00"
     var datetimeStart = "" //2018-01-31T06:00:00+07:00"
-    //var code = ContentCode.none
+    var code = ContentCode.none
     var newCode = ""
     //var contentTypeCode = ContentCode.none
     var isDependency = false
