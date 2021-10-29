@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import MBProgressHUD
 
 extension UIViewController {
     
@@ -19,11 +18,11 @@ extension UIViewController {
     
     var safeAreaTopHeight: CGFloat {
         if #available(iOS 13.0, *) {
-            let window = UIApplication.shared.keyWindow
+            let window = UIApplication.shared.window
             let topPadding = window?.safeAreaInsets.top ?? 0
             return topPadding
         } else {
-            let window = UIApplication.shared.keyWindow
+            let window = UIApplication.shared.window
             let topPadding = window?.safeAreaInsets.top ?? 0
             return topPadding
         }
@@ -31,11 +30,11 @@ extension UIViewController {
     
     var safeAreaBottomHeight: CGFloat {
         if #available(iOS 13.0, *) {
-            let window = UIApplication.shared.keyWindow
+            let window = UIApplication.shared.window
             let topPadding = window?.safeAreaInsets.bottom ?? 0
             return topPadding
         } else {
-            let window = UIApplication.shared.keyWindow
+            let window = UIApplication.shared.window
             let topPadding = window?.safeAreaInsets.bottom ?? 0
             return topPadding
         }
@@ -131,7 +130,7 @@ extension UIViewController {
     }
     
     func topViewController() -> UIViewController? {
-        return self.topViewControllerWithRootViewController(UIApplication.shared.keyWindow?.rootViewController)
+        return self.topViewControllerWithRootViewController(UIApplication.shared.window?.rootViewController)
     }
     
     func topViewControllerWithRootViewController(_ rootViewController:UIViewController?) -> UIViewController? {
@@ -152,63 +151,24 @@ extension UIViewController {
         
     }
     
-    func getView() -> UIView {
-        guard let nav = self.navigationController else {
-            return self.view
-        }
-        return nav.view
-    }
-    
     func showLoading(_ text: String?) {
-        
-        let view = getView()
-        var hud = MBProgressHUD(for: view)
-        if let hud = hud {
-            hud.show(animated: false)
-        } else {
-            hud = MBProgressHUD.showAdded(to: view, animated: false)
-        }
-        
-        if let textStr = text {
-            hud?.label.text = textStr
-        }
+        UIApplication.shared.window?.showLoading(text)
     }
     
     func showText(_ text: String?) {
-        let view = getView()
-        var hud = MBProgressHUD(for: view)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.hideLoading))
-        hud?.addGestureRecognizer(tap)
-        if let hud = hud {
-            hud.show(animated: false)
-        } else {
-            hud = MBProgressHUD.showAdded(to: view, animated: false)
-        }
-        
-        if let textStr = text {
-            hud?.label.text = textStr
-        }
-        hud?.mode = MBProgressHUDMode.text
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            self.hideLoading()
-        }
+        UIApplication.shared.window?.showText(text)
     }
     
     func alertHUD(_ errorType:ErrorType){
-        self.alertHUD(errorType.domain().localized())
+        let error = errorType.domain().localized()
+        UIApplication.shared.window?.alertHUD(error)
     }
     
-    func alertHUD(_ msg:String){
-        let view = getView()
-        let hud = MBProgressHUD(for: view)
-        hud?.label.text = msg
-        hud?.hide(animated: true, afterDelay: 1.0)
+    func alertHUD(_ msg:String) {
+        UIApplication.shared.window?.alertHUD(msg)
     }
     
     @objc func hideLoading() {
-        let view = getView()
-        let hud = MBProgressHUD(for: view)
-        hud?.hide(animated: true, afterDelay: 0.1)
+        UIApplication.shared.window?.hideLoading()
     }
 }

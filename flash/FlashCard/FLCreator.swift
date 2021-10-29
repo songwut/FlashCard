@@ -138,10 +138,12 @@ struct FLCreator {
         iView.element = element
         iView.scale = (scale == 1.0) ? 1.0 : scale
         iView.update(scale: scale)
-        iView.update(rotation: element.rotation)
-        //iView.backgroundColor = UIColor.purple.withAlphaComponent(0.5)
+        iView.update(rotation: element.rotation?.doubleValue)
+        iView.backgroundColor = UIColor.clear
         //textView.backgroundColor = UIColor.purple.withAlphaComponent(0.3)
         stage.addSubview(iView)
+        
+        iView.bounds = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
         return iView
     }
     
@@ -190,7 +192,7 @@ struct FLCreator {
         iView.frame = frame
         iView.center = center
         //iView.contentView = imageview
-        iView.update(rotation: element.rotation)
+        iView.update(rotation: element.rotation?.doubleValue)
         stage.addSubview(iView)
         return iView
     }
@@ -214,6 +216,7 @@ struct FLCreator {
         quizView.center = center
         quizView.isEditor = self.isEditor
         quizView.createNewUI(element)
+        stage.addSubview(quizView)
         return quizView
     }
     
@@ -261,7 +264,7 @@ struct FLCreator {
             iView.frame = frame
             iView.center = center
             //iView.contentView = playerView
-            iView.update(rotation: element.rotation)
+            iView.update(rotation: element.rotation?.doubleValue)
             stage.addSubview(iView)
             return iView
         }
@@ -319,7 +322,7 @@ struct FLCreator {
         iView.frame = frame
         iView.center = center
         //iView.contentView = view
-        iView.update(rotation: element.rotation)
+        iView.update(rotation: element.rotation?.doubleValue)
         stage.addSubview(iView)
         return iView
     }

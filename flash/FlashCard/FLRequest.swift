@@ -7,11 +7,6 @@
 
 import Foundation
 
-struct FLRequestSt {
-    let id: Int
-    let endPoint:EndPoint
-}
-
 enum EndPoint:String {
     case ugcFlashCardDetail = "ugc/flash-card/%@/"
     case ugcCardIdDropbox = "ugc/flash-card/%@/card/%@/dropbox/"

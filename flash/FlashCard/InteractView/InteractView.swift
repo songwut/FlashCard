@@ -349,7 +349,7 @@ class InteractView: CHTStickerView {
         dict["height"] = percentHeight as AnyObject
         dict["position_x"] = centerX as AnyObject
         dict["position_y"] = centerY as AnyObject
-        dict["rotation"] = angle as AnyObject
+        dict["rotation"] = rotationDegree as AnyObject
         //dict["scale"] = scale as AnyObject
         dict["type"] = type as AnyObject
         
@@ -396,7 +396,7 @@ class InteractView: CHTStickerView {
         return degrees
     }
     
-    var rotation: Float = 0 {
+    var rotation: Double = 0 {
         didSet {
             print("update rotation: \(self.rotation)")
         }
@@ -413,7 +413,7 @@ class InteractView: CHTStickerView {
     
     
     
-    func update(rotation:Float?) {
+    func update(rotation:Double?) {
         if let r = rotation {
             self.rotation = r
             let rAngle = CGFloat(r)

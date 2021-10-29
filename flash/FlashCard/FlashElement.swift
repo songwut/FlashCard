@@ -1,5 +1,5 @@
 //
-//  Models.swift
+//  FlashElement.swift
 //  flash
 //
 //  Created by Songwut Maneefun on 17/6/2564 BE.
@@ -95,7 +95,7 @@ class FlashElement: FLBaseResult {
     //Base
     var media: FLMediaResult?
     var sort: Int?
-    var rotation: Float?
+    var rotation: NSNumber?
     var scale: Float = 1.0//default
     var tool: FLTool?
     var x:NSNumber = 0
@@ -135,6 +135,23 @@ class FlashElement: FLBaseResult {
     var fill: String?
     //var stroke = "#000000"
     var strokeWidth:Float?
+    
+    
+    func width(on stageWidth: CGFloat) -> CGFloat {
+        return ((stageWidth * CGFloat(truncating: self.width)) / 100)
+    }
+    
+    func height(on stageHeight: CGFloat) -> CGFloat {
+        return ((stageHeight * CGFloat(truncating: self.height)) / 100)
+    }
+    
+    func offsetY(on stageHeight: CGFloat) -> CGFloat {
+        return ((stageHeight * CGFloat(truncating: self.y)) / 100)
+    }
+
+    func offsetX(on stageWidth: CGFloat) -> CGFloat {
+        return (stageWidth * CGFloat(truncating: self.x) / 100)
+    }
     
     func updateNewFontSize() {
         let newSize = self.fontSize * self.fontScale

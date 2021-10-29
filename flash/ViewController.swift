@@ -120,6 +120,24 @@ class ViewController: UIViewController {
             self.present(vc, animated: true, completion: nil)
         }
     }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    @IBAction func openFlashPlayerSwiftUI(_ sender: UIButton) {
+        
+        let viewModel = FLFlashCardObser(flashId: 6)
+        let vm = FLFlashCardViewModel(flashId: 6)
+        let flashPlayerView = FLFlashPlayerView(viewModel: viewModel,vm:vm, dismiss: {_ in
+            self.presentedViewController?.dismiss(animated: true)
+        })
+        
+        let vc = UIHostingController(rootView: flashPlayerView)
+        vc.view.backgroundColor = .white
+        vc.modalTransitionStyle = .crossDissolve
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true) {
+        }
+    }
     
     @IBAction func openProgressUI(_ sender: UIButton) {
         
@@ -170,11 +188,12 @@ class ViewController: UIViewController {
         let model = FLFlashCardViewModel()
         model.callAPIFlashDetail(.get) { (detail) in
             self.hideLoading()
-            let flPostVC = FLPostViewController.instantiate(viewModel: model)
+            let vc = FLPostViewController.instantiate(viewModel: model)
+            vc.createStatus = .edit
             if let nav = self.navigationController {
-                nav.pushViewController(flPostVC, animated: true)
+                nav.pushViewController(vc, animated: true)
             } else {
-                self.present(flPostVC, animated: true, completion: nil)
+                self.present(vc, animated: true, completion: nil)
             }
         }
         
@@ -195,6 +214,18 @@ class ViewController: UIViewController {
         */
     }
     
+    @IBAction func newPostPressed(_ sender: UIButton) {
+        self.showLoading(nil)
+        let model = FLFlashCardViewModel()
+        let vc = FLPostViewController.instantiate(viewModel: model)
+        vc.createStatus = .new
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func popupImageLimitPressed(_ sender: UIButton) {
         PopupManager.showWarning("You can upload 20 images per page !", at: self)
     }
@@ -209,6 +240,13 @@ class ViewController: UIViewController {
     
     
     @IBAction func loginPressed(_ sender: UIButton?) {
+        let username = self.usernameTextField.text ?? "sysadmin@conicle.com"
+        let password = self.passTextField.text ?? "sysadminConicle"
+        
+        UserDefaults.standard.setValue(username, forKey: "user_key")
+        UserDefaults.standard.setValue(password, forKey: "pass_key")
+        UserDefaults.standard.synchronize()
+        
         if UserManager.shared.isLoggedin() {
             UserManager.shared.updateProfile {
                 if let user = UserManager.shared.profile {
@@ -223,17 +261,8 @@ class ViewController: UIViewController {
     }
     
     func loginAPI() {
-        //sysadmin@conicle.com
-        
         let username = self.usernameTextField.text ?? "sysadmin@conicle.com"
         let password = self.passTextField.text ?? "sysadminConicle"
-        
-        UserDefaults.standard.setValue(username, forKey: "user_key")
-        UserDefaults.standard.setValue(password, forKey: "pass_key")
-        UserDefaults.standard.synchronize()
-        
-//        let username = "wnios"
-//        let password = "adminadmin"
         
         self.showLoading(nil)
         let request = LoginRequest()

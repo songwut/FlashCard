@@ -26,7 +26,7 @@ class FLItemCollectionViewCell: UICollectionViewCell {
                 self.addNewUI()
                 
             } else if let flItem = self.item as? FLCardPageResult {
-                self.imageView.imageUrl(flItem.image, placeholderImage: defaultImage)
+                self.imageView.imageUrl(flItem.image)
                 self.imageView.isHidden = false
                 self.cardView.isHidden = true
                 print("self.imageView:\(self.imageView.frame.size)")

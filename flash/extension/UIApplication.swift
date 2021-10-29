@@ -7,22 +7,23 @@
 
 import UIKit
 
+
 extension UIApplication {
-    var windows: UIWindow? {
-        let window = self.keyWindow
+    var window: UIWindow? {
+        let window = UIApplication.shared.windows.first { $0.isKeyWindow }
         return window
     }
     
     var statusBarView: UIView? {
         if #available(iOS 13.0, *) {
             let tag = 1212312121
-            if let statusBar = self.keyWindow?.viewWithTag(tag) {
+            if let statusBar = window?.viewWithTag(tag) {
                 return statusBar
             } else {
                 let statusBarView = UIView(frame: UIApplication.shared.statusBarFrame)
                 statusBarView.tag = tag
 
-                self.keyWindow?.addSubview(statusBarView)
+                window?.addSubview(statusBarView)
                 return statusBarView
             }
         } else {
@@ -33,7 +34,7 @@ extension UIApplication {
         return nil
     }
     
-    class func topViewController(_ viewController: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+    class func topViewController(_ viewController: UIViewController? = UIApplication.shared.window?.rootViewController) -> UIViewController? {
         if let nav = viewController as? UINavigationController {
             return topViewController(nav.visibleViewController)
         }

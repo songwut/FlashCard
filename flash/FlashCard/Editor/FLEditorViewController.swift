@@ -396,8 +396,8 @@ final class FLEditorViewController: FLBaseViewController {
             //need prepare element in first card
             
             stage.isEditor = true
+            stage.isRequireToLoadElement = false
             stage.loadElement(viewModel: self.viewModel) { [] (anyView) in
-                stage.isRequireToLoadElement = false //skip load element in first stage
                 // all element in stage ready
                 //then custom for editor
                 if let iView = anyView as? InteractView {
@@ -724,9 +724,15 @@ final class FLEditorViewController: FLBaseViewController {
         if let iView = stageView.createElement(element) as? InteractTextView {
             element.sort = stageView.subviews.count + 1
             self.manageTextView(in: iView, stageView: stageView)
-            //Auto select all test
-            iView.textView?.selectAll(self)
-            iView.textView?.becomeFirstResponder()
+            
+            DispatchQueue.main.async {
+                self.updateTextviewHeight(iView)
+                
+                //Auto select all test
+                iView.textView?.selectAll(self)
+                iView.textView?.becomeFirstResponder()
+            }
+            
             
             //Auto open text tool
             self.openToolBar(tool: .text, view: iView)
@@ -792,12 +798,14 @@ final class FLEditorViewController: FLBaseViewController {
         let row = self.indexOfMajorCell()
         media?.deviceVideoUrl = url
         element.media = media
+        element.type = type
         
         self.selectedViewIsHiddenTool(true)
         
         let stageView = self.getStageView(at: row)
         if let iView = stageView.createElement(element) as? InteractView {
             element.sort = stageView.subviews.count + 1
+            iView.element = element
             self.manageIView(in: iView, stageView: stageView)
             iView.isHiddenEditingTool = false
         }
@@ -875,9 +883,10 @@ final class FLEditorViewController: FLBaseViewController {
             self.toolVC?.quizMenu?.setQuizButtonEnable(true)
         })
         
-        let scaleUI = quizView.scaleUI
-        quizView.transform = CGAffineTransform(scaleX: CGFloat(scaleUI), y: CGFloat(scaleUI))
         
+        stageView.quizManageSizeAnimate(quizView)
+        let scaleUI = quizView.scaleUI
+        //quizView.transform = CGAffineTransform(scaleX: CGFloat(scaleUI), y: CGFloat(scaleUI))
     }
     
     func manageIView(in iView:InteractView, stageView: FLStageView) {
@@ -892,16 +901,18 @@ final class FLEditorViewController: FLBaseViewController {
         iView.delegate = self
         
         let type = iView.element?.type ?? .unknow
-        if type == .image {
-            let page = self.viewModel.currentPageDetail
-            self.viewModel.callAPIDropboxUpload(page, media: iView.element?.media, iView: iView) {
-                ConsoleLog.show("callAPIDropboxUpload")
-            }
-        } else if type == .video {
-            let page = self.viewModel.currentPageDetail
-            self.viewModel.callAPIDropboxUpload(page, media: iView.element?.media, iView: iView) {
+        if iView.element!.isCreating {
+            if type == .image {
+                let page = self.viewModel.currentPageDetail
+                self.viewModel.callAPIDropboxUpload(page, media: iView.element?.media, iView: iView) {
                     ConsoleLog.show("callAPIDropboxUpload")
                 }
+            } else if type == .video {
+                let page = self.viewModel.currentPageDetail
+                self.viewModel.callAPIDropboxUpload(page, media: iView.element?.media, iView: iView) {
+                        ConsoleLog.show("callAPIDropboxUpload")
+                    }
+            }
         }
         
         if let tool = iView.element?.tool {
@@ -1448,7 +1459,7 @@ extension FLEditorViewController: InteractTextViewDelegate {
     func interacTextViewDidChangeRotating(view: InteractTextView) {
         guard let element = view.element else { return }
         let degrees = Double(view.angle) * Double((180 / Float.pi))
-        view.element?.rotation = Float(degrees)
+        view.element?.rotation = NSNumber(value: degrees)
         view.element?.scale = Float(view.hardScale)
         print("stickerView angle: \(view.angle) degrees: \(degrees)")
         print("stickerView scale: \(view.hardScale)")
@@ -1489,8 +1500,11 @@ extension FLEditorViewController : CHTStickerViewDelegate {
     }
     
     func stickerViewDidBeginMoving(_ stickerView: CHTStickerView!) {
+        self.selectedViewIsHiddenTool(true)
+        
         guard let iView = stickerView as? InteractView else { return }
         self.selectedView = iView
+        self.selectedViewIsHiddenTool(false)
         
         iView.unSelectTextView()
     }
@@ -1512,7 +1526,7 @@ extension FLEditorViewController : CHTStickerViewDelegate {
         guard let iView = stickerView as? InteractView else { return }
         guard let element = iView.element else { return }
         let degrees = Double(stickerView.angle) * Double((180 / Float.pi))
-        iView.element?.rotation = Float(degrees)
+        iView.element?.rotation = NSNumber(value: degrees)
         iView.element?.scale = Float(iView.hardScale)
         print("stickerView angle: \(stickerView.angle) degrees: \(degrees)")
         print("stickerView scale: \(iView.hardScale)")

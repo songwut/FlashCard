@@ -6,6 +6,9 @@
 //
 
 import Foundation
+
+var primaryColor: UIColor = UIColor("EA2427")
+var secondaryColor: UIColor = UIColor("423F3B")
 var kmColor: UIColor = UIColor(hex: "0097A9")
 var notificationColor: UIColor = UIColor(hex: "FF0000")
 var buttonWaitingColor = UIColor(hex: "FFB330")

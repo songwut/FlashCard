@@ -16,7 +16,7 @@ class FLStageView: UIView {
     var cover: UIImageView!
     var coverImageBase64: String?
     //var sort:Int?
-    var flColor: FLColorResult = FLColorResult(JSON: ["code" : "color_01", "cl_code": "FFFFFF"])! {
+    var flColor: FLColorResult = MockObject.flColor {
         didSet {
             self.backgroundColor = UIColor(flColor.hex)
         }
@@ -62,21 +62,29 @@ class FLStageView: UIView {
             guard let cardDetail = cardDetail else { return }
             self.cardDetail = cardDetail
             self.flColor = cardDetail.bgColor
+            
             for element in cardDetail.componentList {
                 let anyView = self.createElement(element)
+                
                 anyView?.tag = element.id
                 if let iView = anyView as? InteractView {
+                    iView.element?.sort = self.subviews.count + 1
                     iView.isHiddenEditingTool = true
                     
                 } else if let iView = anyView as? InteractTextView {
+                    iView.element?.sort = self.subviews.count + 1
                     iView.isHiddenEditingTool = true
                     
                 } else if let quizView = anyView as? FLQuizView {
+                    quizView.element?.sort = self.subviews.count + 1
                     if !self.isEditor {//animate in player
                         self.quizManageSizeAnimate(quizView)
                     }
                 }
                 
+                if let v = anyView {
+                    self.addSubview(v)
+                }
                 complete(anyView)
             }
             self.cover.isHidden = true
@@ -115,9 +123,6 @@ class FLStageView: UIView {
             
         }  else if element.type == .quiz {
             view = self.createQuizView(element)
-        }
-        if let v = view {
-            self.addSubview(v)
         }
         return view
     }

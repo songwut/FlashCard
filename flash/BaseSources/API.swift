@@ -70,6 +70,7 @@ class API {
     
     class func createResponseBody(_ responseData: Data?, urlResponse: HTTPURLResponse?, url:String) -> ResponseBody? {
         print("Request url: \(url))")
+        print("statusCode: \(String(describing: urlResponse?.statusCode)))")
         print("HTTPURLResponse: \(String(describing: urlResponse)))")
 //        API.checkAuthorized(response: urlResponse, responseBody: responseBody)
         

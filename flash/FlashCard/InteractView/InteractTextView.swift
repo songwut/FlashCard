@@ -68,9 +68,9 @@ class InteractTextView: UIView {
         }
     }
     
-    func update(rotation:Float?) {
+    func update(rotation: Double?) {
         if let r = rotation {
-            self.rotation = r
+            self.rotation = Float(r)
             let rAngle = CGFloat(r)
             self.transform = CGAffineTransform(rotationAngle: rAngle)
         }

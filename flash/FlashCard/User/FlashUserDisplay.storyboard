@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -84,16 +83,16 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="89.5"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kRP-gK-muo">
-                                                        <rect key="frame" x="99" y="15" width="216" height="59.5"/>
+                                                        <rect key="frame" x="99" y="14.5" width="216" height="60"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/20" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63E-aA-AtE">
-                                                                <rect key="frame" x="67.5" y="0.0" width="81" height="59.5"/>
+                                                                <rect key="frame" x="68" y="0.0" width="80" height="60"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wm1-fV-9kV">
-                                                                <rect key="frame" x="156.5" y="0.0" width="59.5" height="59.5"/>
+                                                                <rect key="frame" x="156" y="0.0" width="60" height="60"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" secondItem="wm1-fV-9kV" secondAttribute="height" multiplier="1:1" id="VLr-Xj-9tr"/>
                                                                 </constraints>
@@ -111,7 +110,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8pr-Cw-Ffz">
-                                                                <rect key="frame" x="0.0" y="0.0" width="59.5" height="59.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" secondItem="8pr-Cw-Ffz" secondAttribute="height" multiplier="1:1" id="ZFh-S7-cut"/>
                                                                 </constraints>
@@ -139,6 +138,7 @@
                                                             <constraint firstItem="wm1-fV-9kV" firstAttribute="leading" secondItem="63E-aA-AtE" secondAttribute="trailing" constant="8" id="U7c-Xp-uRo"/>
                                                             <constraint firstAttribute="trailing" secondItem="wm1-fV-9kV" secondAttribute="trailing" id="eas-eS-Len"/>
                                                             <constraint firstItem="63E-aA-AtE" firstAttribute="top" secondItem="kRP-gK-muo" secondAttribute="top" id="gzl-hR-IG6"/>
+                                                            <constraint firstAttribute="height" constant="60" id="ijY-ib-77c"/>
                                                             <constraint firstAttribute="bottom" secondItem="63E-aA-AtE" secondAttribute="bottom" id="lOV-Hx-vlJ"/>
                                                             <constraint firstItem="8pr-Cw-Ffz" firstAttribute="width" secondItem="8pr-Cw-Ffz" secondAttribute="height" multiplier="1:1" id="oJM-TJ-JTV"/>
                                                             <constraint firstAttribute="width" constant="216" id="xxW-hF-f3I"/>
@@ -148,9 +148,10 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="kRP-gK-muo" secondAttribute="bottom" constant="15" id="A6w-g1-pp7"/>
-                                                    <constraint firstItem="kRP-gK-muo" firstAttribute="top" secondItem="I52-TQ-azu" secondAttribute="top" constant="15" id="KoS-cC-sBU"/>
+                                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kRP-gK-muo" secondAttribute="bottom" id="A6w-g1-pp7"/>
+                                                    <constraint firstItem="kRP-gK-muo" firstAttribute="top" relation="greaterThanOrEqual" secondItem="I52-TQ-azu" secondAttribute="top" id="KoS-cC-sBU"/>
                                                     <constraint firstItem="kRP-gK-muo" firstAttribute="centerY" secondItem="I52-TQ-azu" secondAttribute="centerY" id="WIA-DH-M8N"/>
+                                                    <constraint firstItem="kRP-gK-muo" firstAttribute="centerY" secondItem="I52-TQ-azu" secondAttribute="centerY" id="wff-is-PGb"/>
                                                     <constraint firstItem="kRP-gK-muo" firstAttribute="centerX" secondItem="I52-TQ-azu" secondAttribute="centerX" id="yHZ-Fr-c6g"/>
                                                 </constraints>
                                             </view>
@@ -176,7 +177,7 @@
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pnE-U4-6mH">
                                                 <rect key="frame" x="0.0" y="149.5" width="414" height="16"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="g5y-WU-EEI"/>
                                                 </constraints>
@@ -188,7 +189,7 @@
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RsD-1X-YTs">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="JH8-ao-zNt"/>
                                                 </constraints>
@@ -232,8 +233,5 @@
         <image name="chevron.left" catalog="system" width="96" height="128"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="ic_v2_close" width="24" height="24"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

@@ -30,6 +30,7 @@ struct UGCCatagoryListView: View {
                 .frame(height: 80)
                 .background(Color.white)
         })
+        .background(UIColor.background().color)
     }
     
     var ListView: some View {

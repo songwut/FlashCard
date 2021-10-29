@@ -15,19 +15,29 @@ protocol BasePagingProtocol {
 }
 
 protocol BaseViewProtocol {
-    func showProgressLoading()
-    func hideProgressLoading()
+    func showLoading()
+    func hideLoading()
+    
 }
 
 protocol FLStageViewModelProtocol: BaseViewProtocol {
-    func stageUploading()
-    var stageVC: FLEditorViewController? { get set }
-    
     func showProgressLoading()
     func hideProgressLoading()
 }
 
-class FLFlashCardViewModel: BasePagingProtocol {
+class FLFlashCardViewModel: BasePagingProtocol, BaseViewProtocol {
+    
+    init(flashId: Int? = nil) {
+        self.flashId = flashId ?? 6
+    }
+    func showLoading() {
+        let window = UIApplication.shared.window
+    }
+    
+    func hideLoading() {
+        
+    }
+    
     var isFirstPage = true
     var isLoadNextPage = false
     var nextPage: Int?
@@ -69,18 +79,21 @@ class FLFlashCardViewModel: BasePagingProtocol {
             complete(result)
         }
     }
-    /*
-    func callAPIFlash(_ method:APIMethod, complete: @escaping (_ result: MaterialFlashPageResult?) -> ()) {
-        
+    
+    //callAPINewFlashCard | callAPIFlashDetail
+    //deferen endPoint but same Data
+    func callAPINewFlashCard(profile: ProfileResult, complete: @escaping (_ result: FLDetailResult?) -> ()) {
         let request = FLRequest()
-        request.apiMethod = method
         request.endPoint = .ugcFlashCard
-        API.request(request) { (responseBody: ResponseBody?, result: MaterialFlashPageResult?, isCache, error) in
-            //self.detail = result
+        request.apiMethod = .post
+        request.parameter = self.createJSONNewFlash(profileId: profile.id)
+        request.apiType = .json
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+            self?.detail = result
             complete(result)
         }
     }
-    */
+    
     func callAPIFlashDetail(_ method:APIMethod ,status: FLStatus? = nil, complete: @escaping (_ result: FLDetailResult?) -> ()) {
         let request = FLRequest()
         request.apiMethod = method
@@ -280,7 +293,7 @@ class FLFlashCardViewModel: BasePagingProtocol {
         }
     }
     
-    func callAPIDropboxUpload(_ currentCard:FLCardPageResult? ,media: FLMediaResult?, iView: InteractView ,complete: @escaping () -> ()) {
+    func callAPIDropboxUpload(_ currentCard:FLCardPageResult? ,media: FLMediaResult?, iView: InteractView, mainVC: UIViewController? = nil ,complete: @escaping () -> ()) {
         guard let card = currentCard else { return }
         
         let request = FLRequest()
@@ -299,6 +312,7 @@ class FLFlashCardViewModel: BasePagingProtocol {
                 
                 if let mp4VideoUrl = media?.mp4VideoUrl {
                     multipartFormData.append(mp4VideoUrl, withName: "file")
+
                     
                 } else if let imageData = m.imageData {
                     let fileType = URL(string: m.filename)?.pathExtension ?? "jpeg"
@@ -317,12 +331,22 @@ class FLFlashCardViewModel: BasePagingProtocol {
                 ConsoleLog.show("Upload respond: \(respond)")
                 if let data = respond.data {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        let dropboxPage = FLDropboxPageResult(JSON: json)!
-                        print("JSON: \(json)")
-                        currentPageDetail?.dropboxPage = dropboxPage
-                        //currentPageDetail?.componentList
-                        iView.element?.src = dropboxPage.image
+                        if let media = FLMediaResult(JSON: json) {
+                            print("JSON: \(json)")
+                            //currentPageDetail?.dropboxPage = dropboxPage
+                            //currentPageDetail?.componentList
+                            if let _ = media.mp4VideoUrl {
+                                //iView.element?.mp4VideoUrl = media.file
+                            } else {
+                                iView.element?.src = media.image
+                            }
+                        }
+                        
                         complete()
+                    }
+                } else {
+                    if let mainVC = mainVC {
+                        PopupManager.showWarning("\(respond)", at: mainVC)
                     }
                 }
                 
@@ -403,5 +427,16 @@ class FLFlashCardViewModel: BasePagingProtocol {
         
     }
     
+    
+}
+
+extension FLFlashCardViewModel {
+    func createJSONNewFlash(profileId: Int) -> [String : Any] {
+        var param = [String : Any]()
+        param["name"] = "Untitled - 01"
+        param["created_by"] = profileId
+        param["image"] = NSNull()
+        return param
+    }
     
 }

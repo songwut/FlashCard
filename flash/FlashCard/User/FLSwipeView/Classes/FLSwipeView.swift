@@ -119,7 +119,6 @@ public class FLSwipeView <Element>: UIView {
         card.delegate = self
         card.model = element
         card.addContentView(view: (self.contentView?(index, card.bounds, element)))
-        print("card \(index):\(card.frame)")
         return card
     }
     
@@ -167,7 +166,6 @@ public class FLSwipeView <Element>: UIView {
         card.index = index
         Timer.scheduledTimer(timeInterval: 1.01, target: self, selector: #selector(enableUndoButton), userInfo: card, repeats: false)
         loadedCards.remove(at: 0)
-        
         if (index + loadedCards.count) < allCards.count {
             let tinderCard = createTinderCard(index: index + loadedCards.count, element: allCards[index + loadedCards.count])
             self.insertSubview(tinderCard, belowSubview: loadedCards.last!)
@@ -213,6 +211,15 @@ public class FLSwipeView <Element>: UIView {
             lastCard?.rollBackCard()
             loadedCards.removeLast()
         }
+        /*
+        if index >= 0 {
+            let prvCard = allCards[index]
+            let prvCardView = self.createTinderCard(index: index, element: prvCard)
+            prvCardView.index = index
+            //self.saveCards.append(prvCardView)
+            Timer.scheduledTimer(timeInterval: 1.01, target: self, selector: #selector(enableUndoButton), userInfo: prvCardView, repeats: false)
+        }
+        */
         
         undoCard.layer.removeAllAnimations()
         self.insertSubview(undoCard, aboveSubview: loadedCards.first!)
@@ -221,6 +228,7 @@ public class FLSwipeView <Element>: UIView {
         animateCardAfterSwiping()
         delegate?.undoCardsDone(model: undoCard.model!)
         currentCard = nil
+        self.saveCards.removeLast()
     }
     
     /*

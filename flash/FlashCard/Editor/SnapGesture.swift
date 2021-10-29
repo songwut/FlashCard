@@ -324,7 +324,7 @@ class SnapGesture: NSObject, UIGestureRecognizerDelegate {
                 // Save the last rotation
                 let degrees = view.getDegreesRotation()
                 print("ended degrees: \(degrees)")
-                view.rotation = Float(degrees)
+                view.rotation = Double(degrees)
                 gesture.rotation = 0
             }
         }

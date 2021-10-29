@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 /// Wrapper around `UIActivityIndicator`
 public struct ActivityIndicator: UIViewRepresentable {
     /// Determines if the activity indicator is animating

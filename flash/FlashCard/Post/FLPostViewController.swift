@@ -53,6 +53,12 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var statusPin: UIView!
     @IBOutlet private weak var statusValueLabel: UILabel!
     
+    @IBOutlet private weak var requestStackView: UIStackView!
+    @IBOutlet private weak var requestLabel: UILabel!
+    @IBOutlet private weak var requesValue: UIButton!
+    @IBOutlet private weak var requesIcon: UIImageView!
+    @IBOutlet private weak var requesDesc: UILabel!
+    
     @IBOutlet private weak var cancelButton: UIButton!
     @IBOutlet private weak var submitButton: UIButton!
     @IBOutlet private weak var myLibraryButton: UIButton!
@@ -67,6 +73,9 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     var latestTags: [UGCTagResult]?
+    private var time = 1
+    private var imageCoverData: Data?
+    private let formatText = "d MMM yyyy HH:mm"
     
     deinit {
         ConsoleLog.show("complete removed : FLPostViewController")
@@ -95,6 +104,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         let maxChaTitle = FlashStyle.post.maxChaTitle
         self.titleTextField.delegate = self
         //self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
+        self.coverImageView.cornerRadius = 8
         self.titleLimitLabel.text = "0/\(maxChaTitle) Characters Limit"
         self.titleLimitLabel.font = FontHelper.getFontSystem(12, font: .text)
         self.titleTextField.font = fontValue
@@ -145,6 +155,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.tagView.delegate = self
         self.tagView.tagLineBreakMode = .byTruncatingTail
         
+        self.submitButton.setTitleColor(.white, for: .normal)
         self.submitButton.isHidden = false
         self.cancelButton.isHidden = true
         self.coverImageView.image = UIImage(named: "flash-cover")
@@ -162,20 +173,28 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         previewBtn.tintColor = .white
         
         self.navigationController?.navigationBar.topItem?.rightBarButtonItems = [previewBtn, editBtn]
-        //let buttonItems = [ UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(self.onAdd(_:)))
         
-        self.showLoading(nil)
-        if let detail = self.viewModel.detail {
-            self.loadDetail(detail)
-        } else {
-            self.viewModel.callAPIFlashDetail(.get) { [weak self] (detail) in
+        if self.createStatus == .new {
+            guard let profile = UserManager.shared.profile else { return }
+            self.showLoading(nil)
+            self.viewModel.callAPINewFlashCard(profile: profile) { [weak self] (detail) in
                 DispatchQueue.main.async {
                     self?.loadDetail(detail)
                 }
             }
+        } else {
+            if let detail = self.viewModel.detail {
+                self.loadDetail(detail)
+            } else {
+                self.showLoading(nil)
+                self.viewModel.callAPIFlashDetail(.get) { [weak self] (detail) in
+                    DispatchQueue.main.async {
+                        self?.loadDetail(detail)
+                    }
+                }
+            }
         }
     }
-    
     
     func serDefaultUI() {
         self.titleTextField.text = ""
@@ -195,12 +214,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         if let owner = detail.owner {
             self.ownerValueLabel.text = owner.name
         }
-        if let datetimePublish = detail.datetimePublish {//yyyy-MM-dd HH:mm:ss
-            let dateTime = formatter.with(dateFormat: "d MMM yyyy HH:mm", dateString: datetimePublish)
-            self.updateValueLabel.text = dateTime
-        } else {
-            self.updateValueLabel.text = "now"
-        }
+        let dateTime = formatter.with(dateFormat: formatText, dateString: detail.datetimeUpdate)
+        self.updateValueLabel.text = dateTime
         self.timeValueLabel.text = "\(self.time)"
         self.idValueLabel.isHidden = detail.code == ""
         self.idValueLabel.text = detail.code
@@ -209,14 +224,21 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.statusValueLabel.text = detail.status.title()
         self.minusButton.isEnabled = !(self.time == 1)
         
-        
-        if detail.status == .unpublish {
-            self.submitButton.isHidden = false
-            self.cancelButton.isHidden = true
-        } else if detail.status == .waitForApprove  {
+        if detail.requestStatus == .completed  {
+            self.submitButton.backgroundColor = .disable()
+            self.submitButton.isUserInteractionEnabled = false
             self.submitButton.isHidden = true
             self.cancelButton.isHidden = false
+        } else if detail.requestStatus == .waitForApprove  {
+            self.submitButton.backgroundColor = .config_primary()
+            self.submitButton.isUserInteractionEnabled = true
+            self.submitButton.isHidden = true
+            self.cancelButton.isHidden = false
+        } else {
+            self.submitButton.isHidden = false
+            self.cancelButton.isHidden = true
         }
+        
         
         let isEnable = detail.status == .unpublish
         let disableColor = UIColor.disable()
@@ -239,7 +261,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         statusPin.backgroundColor = detail.status.color()
         
     }
-    var time = 1
+    
     @IBAction func timePlusPressed(_ sender: UIButton) {
         self.time = self.time + 1
         self.minusButton.isEnabled = !(self.time == 1)
@@ -254,6 +276,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.timeValueLabel.text = "\(self.time)"
         ConsoleLog.show("timeNumber: \(self.time)")
     }
+    
     @objc func editPressed() {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
@@ -344,41 +367,39 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     @IBAction func submitPressed(_ sender: UIButton) {
-        let detail = self.viewModel.detail
-        self.openPopupWith(newStatus: .waitForApprove)
+        let detail = self.viewModel.detail!
+        self.openPopupWith(detail: detail)
     }
     
     @IBAction func cancelPressed(_ sender: UIButton) {
-        let detail = self.viewModel.detail
-        self.openPopupWith(newStatus: .unpublish)
+        let detail = self.viewModel.detail!
+        self.openPopupWith(detail: detail)
     }
     
-    func openPopupWith(newStatus: FLStatus) {
+    func openPopupWith(detail: FLDetailResult) {
         let detail = self.viewModel.detail
         var desc = "Do you confirm to submit this material?"
-        if detail?.status == .waitForApprove {
+        if detail?.requestStatus == .waitForApprove {
             desc = "Do you confirm to cancel the request?"
         }
         
         let confirm = ActionButton(
             title: "confirm".localized(),
-            action: Action(handler: { (sender) in
-                self.callApiPost(newStatus)
+            action: Action(handler: { [weak self] (sender) in
+                self?.callApiPost(requestStatus: .waitForApprove)
             })
         )
         PopupManager.showWarning(desc, confirm: confirm, at: self)
     }
     
-    func callApiPost(_ status: FLStatus) {
+    func callApiPost(requestStatus: FLRequestStatus) {
         //mock
-        self.viewModel.detail?.status = status
+        self.viewModel.detail?.status = .unpublish
+        self.viewModel.detail?.requestStatus = requestStatus
         self.loadDetail(self.viewModel.detail)
         
-        //api
-//        self.viewModel.callAPIDetail(.post, status: status) {
-//
-//        }
-        print("submit confirm")
+        
+        
     }
     
     @IBAction func myLibraryPressed(_ sender: UIButton) {
@@ -471,15 +492,16 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
         if let originalImage = info[.originalImage] as? UIImage {
             let size = originalImage.size
             var newWidth: CGFloat = 1024
-            if size.height > size.width {// 3000, 2000
+            if size.height > size.width {
                 let ratio = size.width / size.height
                 newWidth = 1024 * ratio
             }
             let img = originalImage.resizeImage(newWidth: newWidth)
             let imgData = img.jpeg ?? img.png
             guard let data = imgData else { return }
-            var imageSize: Int = data.count
+            self.imageCoverData = data
             self.coverImageView.image = UIImage(data: data)
+            let imageSize: Int = data.count
             print("actual size of image in KB: %f ", Double(imageSize) / 1024.0)
         }
     }

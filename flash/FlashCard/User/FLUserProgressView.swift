@@ -7,14 +7,17 @@
 
 import SwiftUI
 
-protocol FLUserProgressViewDelegate {
-    func segmentSelected(_ index: Int)
+struct AmountModel {
+   var amount: Int
+   var cost: Double
+}
+class FLProgressViewObs: ObservableObject {
+    @Published var value: Int = 1
 }
 
-
 struct FLProgressView: View {
-    var value: Int
-    var maximum: Int = 7
+    @EnvironmentObject var obs: FLProgressViewObs
+    @State var maximum: Int = 1
     var height: CGFloat = UIDevice.isIpad() ? 5 : 2
     var spacing: CGFloat = 2
     var selectedColor: Color = UIColor.config_primary().color
@@ -25,7 +28,7 @@ struct FLProgressView: View {
             ForEach(0 ..< maximum) { index in
                 Rectangle()
                     .clipShape(Capsule())
-                    .foregroundColor(index < self.value ? self.selectedColor : self.unselectedColor)
+                    .foregroundColor(index < obs.value ? self.selectedColor : self.unselectedColor)
             }
         }
         .frame(maxHeight: height)
@@ -34,23 +37,19 @@ struct FLProgressView: View {
 }
 
 struct FLUserProgressView: View {
-    @State var value = 1
     var isShowButton = false
-    var maximum = 10
-    var delegate: FLUserProgressViewDelegate?
-    
+    @EnvironmentObject var obs: FLProgressViewObs
+    @State var maximum: Int = 01
     var body: some View {
         VStack(alignment: .leading) {
-            FLProgressView(value: value, maximum: maximum)
+            FLProgressView(obs: _obs)
                 .animation(.default)
                 .padding(.vertical)
             if self.isShowButton {
                 Button(action: {
-                    self.value = (self.value + 1) % (self.maximum + 1)
-                    //TODO: pless until self.value == 0
-                    self.delegate?.segmentSelected(self.value)
+                    obs.value = (obs.value + 1) % (maximum + 1)
                 }) {
-                    Text("Increment value:\(self.value)")
+                    Text("Increment value:\(obs.value)")
                         .foregroundColor(.blue)
                 }
             }
@@ -62,5 +61,11 @@ struct FLUserProgressView: View {
 }
 
 
-
+struct FLUserProgressView_Previews: PreviewProvider {
+    static var previews: some View {
+        FLUserProgressView()
+            .previewLayout(.fixed(width: 343, height: 60))
+            .environment(\.sizeCategory, .small)
+    }
+}
 

@@ -49,16 +49,20 @@ class FLPlayerViewController: FLBaseViewController {
             self.navCardView.alpha = 0.0
         }
     }
-    
-    private let sgProgress = UIHostingController(rootView: FLUserProgressView())
+    private let sgProgressObs = FLProgressViewObs()
     private var infoView: UIHostingController<FLInfoView>!
     private var cardSize = CGSize.zero
     private var cardFrame = CGRect.zero
     private var stageRatio: CGFloat = 1.0
     private let creator = FLCreator(isEditor: false)
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNeedsStatusBarAppearanceUpdate()
         self.view.backgroundColor = self.playerState.backgeoundColor()
         self.topView.isHidden = self.playerState == .preview
         self.closeButton.addTarget(self, action: #selector(self.didPressedClose(_:)), for: .touchUpInside)
@@ -71,18 +75,16 @@ class FLPlayerViewController: FLBaseViewController {
         self.infoStackView.updateLayout()
         self.progressStackView.updateLayout()
         self.viewContainer.alpha = 0.0
-        
-        let width = self.progressStackView.frame.width
-        self.sgProgress.view.frame = CGRect(x: 0, y: 0, width: width, height: self.progressStackView.frame.height)
-        self.sgProgress.view.backgroundColor = .clear
-        self.progressStackView.addArrangedSubview(self.sgProgress.view)
-        self.sgProgress.rootView.delegate = self
+        self.pageLabel.textColor = .black
+        self.pageLabel.font = .font(16, font: .text)
         
         
-        self.viewModel.callAPIFlashDetail(.get) { (flashDetail) in
+        self.viewModel.callAPIFlashDetail(.get) { [weak self] (flashDetail) in
+            guard let self = self else { return }
             guard let detail = flashDetail else { return }
             self.title = detail.name
             self.titleLabel.text = detail.name
+            
             self.infoView = UIHostingController(rootView: FLInfoView(detail: detail))
             self.infoView.view.frame = CGRect(x: 0, y: 0, width: self.infoStackView.frame.width, height: 60)
             self.infoView.view.backgroundColor = UIColor.clear
@@ -95,9 +97,17 @@ class FLPlayerViewController: FLBaseViewController {
         }
         
         self.viewModel.callAPIFlashCard { [weak self] (cardResult: FLFlashDetailResult?) in
-            guard let viewContainer = self?.viewContainer else { return }
-            self?.manageStageFrame(viewContainer)
-            //self?.loadCardPage()
+            guard let self = self else { return }
+            
+            let count = cardResult?.list.count ?? 0
+            let width = self.progressStackView.frame.width
+            let sgProgress = UIHostingController(rootView: FLProgressView(maximum:count).environmentObject(self.sgProgressObs))
+            sgProgress.view.frame = CGRect(x: 0, y: 0, width: width, height: self.progressStackView.frame.height)
+            sgProgress.view.backgroundColor = .clear
+            self.progressStackView.addArrangedSubview(sgProgress.view)
+            
+            guard let viewContainer = self.viewContainer else { return }
+            self.manageStageFrame(viewContainer)
         }
     }
     
@@ -156,14 +166,61 @@ class FLPlayerViewController: FLBaseViewController {
             print("cardSize:\(self.cardSize)")
             print("stageRatio:\(self.stageRatio)")
             
-            
             self.createStageAnimate(cardFrame: self.cardFrame)
         }
     }
     
-    private func updatePageNumber() -> String {
-        let pageNum = self.viewModel.pageIndex + 1
-        return"\(pageNum) / \(self.viewModel.pageList.count)"
+    private func updatePageNumber() {
+        let pageNum = self.swipeView.index + 1
+        self.pageLabel.text = "\(pageNum) / \(self.viewModel.pageList.count)"
+        self.sgProgressObs.value = pageNum
+        self.updateButton()
+    }
+    
+    private func updateButton() {
+        let activeColor:UIColor = UIColor("525252")
+        
+        let pageNum = self.swipeView.index + 1
+        let count = self.viewModel.pageList.count
+        if count == 1 {
+            self.leftButton.tintColor = .disable()
+            self.rightButton.tintColor = .disable()
+            self.leftButton.borderColor = .disable()
+            self.rightButton.borderColor = .disable()
+            self.leftButton.isUserInteractionEnabled = false
+            self.rightButton.isUserInteractionEnabled = false
+            
+        } else if pageNum == 1 {
+            self.leftButton.tintColor = .disable()
+            self.rightButton.tintColor = activeColor
+            self.leftButton.borderColor = .disable()
+            self.rightButton.borderColor = activeColor
+            self.leftButton.isUserInteractionEnabled = false
+            self.rightButton.isUserInteractionEnabled = true
+            
+        } else if pageNum < count {
+            self.leftButton.tintColor = activeColor
+            self.rightButton.tintColor = activeColor
+            self.leftButton.borderColor = activeColor
+            self.rightButton.borderColor = activeColor
+            self.leftButton.isUserInteractionEnabled = true
+            self.rightButton.isUserInteractionEnabled = true
+            
+        } else if pageNum == count {
+            self.leftButton.tintColor = activeColor
+            self.rightButton.tintColor = .disable()
+            self.leftButton.borderColor = activeColor
+            self.rightButton.borderColor = .disable()
+            self.leftButton.isUserInteractionEnabled = true
+            self.rightButton.isUserInteractionEnabled = false
+        }
+    }
+    
+    func createStageAnimate1(cardFrame: CGRect) {
+//        let vc = UIHostingController(rootView: CardSwipeLoopView(cardSize: cardFrame.size))
+//        vc.view.frame = cardFrame
+//        self.viewContainer.addSubview(vc.view)
+//        self.viewContainer.alpha = 1.0
     }
     
     func createStageAnimate(cardFrame: CGRect) {
@@ -177,9 +234,6 @@ class FLPlayerViewController: FLBaseViewController {
             return stageView
         }
         
-        self.sgProgress.rootView.maximum = self.viewModel.pageList.count
-        self.pageLabel.text = self.updatePageNumber()
-                
         self.swipeView = FLSwipeView<FLCardPageResult>(frame: self.viewContainer.bounds, contentView: contentView)
         self.swipeView.cardFrame = cardFrame
         self.viewContainer.addSubview(self.swipeView)
@@ -190,8 +244,20 @@ class FLPlayerViewController: FLBaseViewController {
                 // if need to custom more anyView
             }
         }
-        
+        self.updatePageNumber()
         self.viewContainer.alpha = 1.0
+    }
+    
+    func loadNextPage(page: FLCardPageResult) {
+        print("Watchout Left \(page.id)")
+        let nextIndex = self.swipeView.index + 1
+        print("nextIndex \(nextIndex)")
+        self.updatePageNumber()
+        if let firstCard = self.swipeView.loadedCards.first?.overlay as? FLStageView {
+            firstCard.loadElement(viewModel: self.viewModel) { (anyView) in
+                // if need to custom more anyView
+            }
+        }
     }
     
     @objc func stageViewButtonSelected(button:UIButton) {
@@ -226,14 +292,7 @@ class FLPlayerViewController: FLBaseViewController {
     var pageInfoVC: FLInfoPageViewController?
 }
 
-extension FLPlayerViewController: FLUserProgressViewDelegate, FLInfoViewDelegate {
-    
-    //FLUserProgressViewDelegate
-    func segmentSelected(_ index: Int) {
-        print("segmentSelected index:\(index)")
-    }
-    
-    //FLInfoViewDelegate
+extension FLPlayerViewController: FLInfoViewDelegate {
     func didOpenInfo() {
         self.footerStackView.updateLayout()
         self.footerStackView.removeAllArranged()
@@ -267,29 +326,19 @@ extension FLPlayerViewController : FLSwipeViewDelegate {
     }
     
     func cardGoesLeft(model: Any) {
-        //emojiView.rateValue =  2.5
         let page = model as! FLCardPageResult
-        print("Watchout Left \(page.id)")
-        let nextIndex = self.swipeView.index + 1
-        print("nextIndex \(nextIndex)")
-        if let firstCard = self.swipeView.loadedCards.first?.overlay as? FLStageView {
-            firstCard.loadElement(viewModel: self.viewModel) { (anyView) in
-                // if need to custom more anyView
-            }
-        }
-        
+        self.loadNextPage(page: page)
     }
     
     func cardGoesRight(model : Any) {
-        //emojiView.rateValue =  2.5
         let page = model as! FLCardPageResult
-        print("Watchout Right \(page.id)")
+        self.loadNextPage(page: page)
     }
     
     func undoCardsDone(model: Any) {
-        //emojiView.rateValue =  2.5
         let page = model as! FLCardPageResult
         print("Reverting done \(page.name)")
+        self.updatePageNumber()
     }
     
     func endOfCardsReached() {

@@ -138,6 +138,9 @@ class FLListViewController: UIViewController {
         self.menuDuplicate.menu = .duplicate
         self.menuAdd.menu = .add
         self.menuSelect.menu = .select
+        
+        self.menuDelete.isUserInteractionEnabled = false
+        self.menuDuplicate.isUserInteractionEnabled = false
     }
     
     @objc func menuPressed(_ sender: UIButton) {
@@ -145,9 +148,14 @@ class FLListViewController: UIViewController {
         if btn.actionMenu == .select {
             if self.userAction == "select" {
                 self.userAction = ""
+                self.menuDelete.isUserInteractionEnabled = false
+                self.menuDuplicate.isUserInteractionEnabled = false
             } else {
                 self.userAction = "select"
+                self.menuDelete.isUserInteractionEnabled = true
+                self.menuDuplicate.isUserInteractionEnabled = true
             }
+            
             if self.userAction == "select" {
                 //case can delete, duplicate
                 let count = self.selectSortList.count
@@ -242,8 +250,8 @@ class FLListViewController: UIViewController {
         self.showLoading(nil)
         self.viewModel.callAPIAddNewCard(param: newCardData) { [weak self] (cardPage) in
             guard let self = self else { return }
-            guard let page = cardPage else { return }
             self.hideLoading()
+            guard let page = cardPage else { return }
             let lastItemIndex = self.viewModel.pageList.count - 1
             page.index = lastItemIndex + 1
             self.list.insert(page, at: lastItemIndex)

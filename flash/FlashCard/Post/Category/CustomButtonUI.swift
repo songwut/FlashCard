@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CustomSwiftUI: View {
+struct CustomButtonUI: View {
     var body: some View {
         VStack(spacing: 16) {
             Button("Button 1") {}
@@ -18,6 +18,14 @@ struct CustomSwiftUI: View {
             Button("Button 3") {}
                 .frame(width: 300, height: 42, alignment: .center)
                 .buttonStyle(ButtonBorder(color: .red))
+            
+            Button(action: {}, label: {
+                Image("ic_v2_chevron-left")
+                    .frame(width: 60, height: 60, alignment: .center)
+            
+            })
+            .frame(width: 60, height: 60, alignment: .center)
+            .buttonStyle(ButtonBorderCircle(color: .red, lineWidth: 2))
             
             Button(action: {
                 
@@ -96,6 +104,21 @@ struct ButtonBorder: ButtonStyle {
     }
 }
 
+struct ButtonBorderCircle: ButtonStyle {
+    var color: Color
+    var lineWidth: CGFloat = 1
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration
+            .label
+            .foregroundColor(configuration.isPressed ? .gray : color)
+            .background(
+                Circle()
+                    .strokeBorder(color, lineWidth: lineWidth)
+            )
+    }
+}
+
 struct ButtonCheckBox: ButtonStyle {
     
     var isChecked: Bool
@@ -129,9 +152,9 @@ struct ButtonGradient: ButtonStyle {
     }
 }
 
-struct CustomSwiftUI_Previews: PreviewProvider {
+struct CustomButtonUI_Previews: PreviewProvider {
     static var previews: some View {
-        CustomSwiftUI()
+        CustomButtonUI()
             .previewLayout(.fixed(width: 300.0, height: 500))
             .environment(\.sizeCategory, .small)
     }

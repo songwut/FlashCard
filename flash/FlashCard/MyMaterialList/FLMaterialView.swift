@@ -14,6 +14,10 @@ struct FLMaterialView: View {
     @State var image: UIImage?
     @ObservedObject var imageLoader = ImageLoaderService()
     
+    private let timeFont: Font = .font(10, font: .text)
+    private let nameFont: Font = .font(14, font: .medium)
+    private let statusFont: Font = .font(12, font: .medium)
+    
     var body: some View {
         VStack(alignment: .leading, spacing: nil, content: {
             HStack(spacing:8) {
@@ -41,33 +45,66 @@ struct FLMaterialView: View {
     
     var infoView: some View {
         VStack(alignment: .leading, spacing: 4) {
-            let timeFont = FontHelper.getFontSystem(10, font: .text).font
-            let nameFont = FontHelper.getFontSystem(14, font: .medium).font
-            let statusFont = FontHelper.getFontSystem(12, font: .medium).font
+            
             HStack(spacing: 4) {
                 Image("outline")
                     .resizable()
                     .frame(width: 12, height: 12, alignment: .center)
                     .foregroundColor(Color("A9A9A9"))
-                Text("2 mins ago")
+                let timeText = flash.datetimeCreate.dateTimeAgo()
+                Text(timeText)
                     .font(timeFont)
+                    .foregroundColor(.black)
             }
+            .frame(height: 20)
+            
             Text(flash.name)
                 .font(nameFont)
+                .foregroundColor(.black)
+            
             if let owner = flash.owner {
                 Text("\("by".localized()) \(owner.name)")
                     .font(timeFont)
+                    .foregroundColor(.black)
+                    .frame(height: 20)
             }
-            HStack(spacing: 4) {
-                Circle()
-                    .fill(flash.status.color().color)
-                    .frame(width: 7, height: 7)
-                Text(flash.status.title())
-                    .font(statusFont)
+            
+            
+            PublicStatusView
+                .frame(height: 20)
+            
+            if flash.requestStatus != .none {
+                RequestStatusView
+                    .frame(height: 20)
             }
             Spacer()
         }
         .padding(.top, 8)
+    }
+    
+    var PublicStatusView: some View {
+        HStack(spacing: 4) {
+            Circle()
+                .fill(flash.status.color().color)
+                .frame(width: 7, height: 7)
+            Text(flash.status.title())
+                .font(statusFont)
+                .foregroundColor(.black)
+        }
+    }
+    
+    var RequestStatusView: some View {
+        HStack(spacing: 4) {
+            VStack(alignment: .leading, spacing: nil, content: {
+                let textColor = flash.requestStatus.color().color
+                let bgColor = flash.requestStatus.bgColor().color
+                Text(flash.requestStatus.title())
+                    .font(statusFont)
+                    .foregroundColor(textColor)
+                    .background(bgColor)
+            })
+            Spacer()
+        }
     }
     
     var editButton: some View {
@@ -98,8 +135,7 @@ struct FLMaterialView: View {
 
 struct FLMaterialView_Previews: PreviewProvider {
     static var previews: some View {
-        let flash = MaterialFlashResult(JSON: ["name": "10 Figma Tricks I Wish I Knew Earlier"])!
-        FLMaterialView(isEditor: true, flash: flash)
+        FLMaterialView(isEditor: true, flash: MockObject.materialFlash)
             .previewLayout(.fixed(width: 400.0, height: 124))
             .environment(\.sizeCategory, .small)
     }

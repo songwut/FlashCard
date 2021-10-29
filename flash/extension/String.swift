@@ -27,4 +27,12 @@ extension String {
         let textWidth = rect.size.width.rounded(.up)
         return CGSize(width: textWidth, height: textHeight)
     }
+    
+    func dateTimeAgo() -> String {
+        let dateStr = formatter.with(dateFormat: "d MMM yyyy, HH:mm", dateString: self)
+        if let date = formatter.dateWith(dateString: self) {
+            return date.getTimeAgoSinceNow(dateText: dateStr)
+        }
+        return dateStr
+    }
 }

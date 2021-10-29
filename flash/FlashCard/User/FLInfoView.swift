@@ -12,8 +12,9 @@ protocol FLInfoViewDelegate {
 }
 
 struct FLInfoView: View {
-    @State var detail: FLDetailResult
+    @State var detail: FLDetailResult?
     var delegate: FLInfoViewDelegate?
+    var didOpenInfo: ((Any?) -> Void)? = nil
     
     var body: some View {
         self.contentView
@@ -35,16 +36,17 @@ struct FLInfoView: View {
             .cornerRadius(8)
             
             VStack(alignment: .center, spacing: 0, content: {
-                Text(detail.name)
+                Text(detail?.name ?? "")
                     .foregroundColor(Color("222831"))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                let name:String = detail.owner?.name ?? "-"
+                let name:String = detail?.owner?.name ?? "-"
                     Text("by \(name)")
                     .foregroundColor(Color("979797"))
                     .frame(maxWidth: .infinity, alignment: .leading)
             })
             
             Button(action: {
+                didOpenInfo?(nil)
                 delegate?.didOpenInfo()
             }, label: {
                 Image("info")

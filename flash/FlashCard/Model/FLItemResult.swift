@@ -9,33 +9,59 @@ import Foundation
 import ObjectMapper
 
 enum FLStatus: Int {
-    case unknow = 0
+    case publish = 0
     case unpublish = 1
-    case waitForApprove = 2
-    case approved = 3
     
     func title() -> String {
         switch self {
+        case .publish:
+            return "publish".localized()
         case .unpublish:
-            return "Unpublish"
-        case .waitForApprove:
-            return "Wait For Approve"
-        case .approved:
-            return "Approve"
-        default:
-            return ""
+            return "Unpublish".localized()
         }
     }
+    
     func color() -> UIColor {
         switch self {
+        case .publish:
+            return .config_primary()
         case .unpublish:
-            return UIColor.config_primary()
+            return .error()
+        }
+    }
+}
+
+enum FLRequestStatus: String {
+    case none = "none"
+    case completed = "completed"
+    case waitForApprove = "waiting_for_approve"
+    case reject = "Reject"
+    case requestExpired = "request_expired"
+    
+    func title() -> String {
+        return self.rawValue.localized()
+    }
+    
+    func color() -> UIColor {
+        switch self {
+        case .completed:
+            return .success()
         case .waitForApprove:
             return .warning()
-        case .approved:
-            return .success()
+        case .reject:
+            return .error()
+        case .requestExpired:
+            return .text()
         default:
-            return UIColor.config_primary()
+            return UIColor.white
+        }
+    }
+    
+    func bgColor() -> UIColor {
+        if self == .completed {
+            return self.color().withAlphaComponent(0.1)
+        } else {
+            return self.color().withAlphaComponent(0.25)
         }
     }
 }
@@ -90,6 +116,9 @@ class MaterialFlashResult: BaseResult, Identifiable {
     var code: String?
     var datetimePublish: String?
     var contentCode: ContentCode = .flash
+    var datetimeUpdate = ""
+    var datetimeCreate = ""
+    var requestStatus: FLRequestStatus = .none
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -98,6 +127,7 @@ class MaterialFlashResult: BaseResult, Identifiable {
         progress             <- map["progress"]
         owner                <- map["created_by"]
         datetimePublish      <- map["datetime_publish"]
+        datetimeUpdate       <- map["datetime_update"]
     }
     
     class func with(_ dict: [String : Any]) -> MaterialFlashResult? {
@@ -162,9 +192,10 @@ class FLDropboxPageResult: FLBaseResult {
 }
 
 class FLMediaResult: FLBaseResult {
-    var file: String?
     var imageBase64: String?
     var imageData: Data?
+    
+    var file: String?
     var cardId: Int = 0
     var uuid: String = ""
     var filename: String = ""
@@ -249,7 +280,10 @@ class FLBaseItemResult: FLBaseResult {
     }
 }
 
-class FLBaseResult:Mappable {
+class FLBaseResult:Mappable, Equatable, Identifiable {
+    static func == (lhs: FLBaseResult, rhs: FLBaseResult) -> Bool {
+        return lhs.id == rhs.id
+    }
 
     var id = 0
     var name = ""
