@@ -48,7 +48,6 @@ final class FLEditorViewController: FLBaseViewController {
     
     var createStatus:FLCreateStatus = .new
     var toolVC: FLToolViewController?
-    var viewModelDelegate: FLStageViewModelProtocol!
     var viewModel = FLFlashCardViewModel()
     
     lazy var deletePageButton: UIButton? = {
@@ -97,7 +96,7 @@ final class FLEditorViewController: FLBaseViewController {
         
         self.titleLabel = UILabel()
         self.titleLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width / 2, height: 40)
-        self.titleLabel.font = .font(16, font: .text)
+        self.titleLabel.font = .font(16, .text)
         self.titleLabel.textColor = .white
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.titleLabel)
         self.navigationItem.leftItemsSupplementBackButton = true
@@ -145,43 +144,41 @@ final class FLEditorViewController: FLBaseViewController {
         self.prepareToolVC()
         self.contentPageView.alpha = 0.0
         
+        if self.createStatus == .new {
+            
+            guard let profile = UserManager.shared.profile else { return }
+            self.showLoading(nil)
+            self.viewModel.callAPINewFlashCard(profile: profile) { [weak self] (detail) in
+                self?.hideLoading()
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.callAPIFlashCardDetail()
+                }
+            }
+        } else {
+            self.callAPIFlashCardDetail()
+        }
+    }
+    
+    func callAPIFlashCardDetail() {
         self.viewModel.callAPIFlashDetail(.get) { (flashDetail) in
             guard let detail = flashDetail else { return }
             self.titleLabel.text = detail.name
         }
         
-        if self.createStatus == .new {
-            //mock
-            self.viewModel.callAPIFlashCard { (cardResult: FLFlashDetailResult?) in
-                if let object = cardResult {
-                    ConsoleLog.show("total:\(object.total)")
-                    ConsoleLog.show("list:\(object.list)")
+        self.viewModel.callAPIFlashCard { [weak self]  (cardResult: FLFlashDetailResult?) in
+            guard let self = self else { return }
+            self.titleLabel.text = self.viewModel.detail?.name ?? ""
+            if let object = cardResult {
+                ConsoleLog.show("total:\(object.total)")
+                ConsoleLog.show("list:\(object.list)")
+                if object.total >= 1 {
                     self.manageStageFrame(pageList: self.viewModel.pageList)
-                }
-            }
-            /* //create and load
-            self.showLoading(nil)
-            self.viewModel.callAPIFlash(.post) { (return) in
-                self.viewModel.flashId = 6
-                self.viewModel.pageList = [//mock
-                    FLCardPageResult(JSON: ["index" : 0])!
-                ]
-                self.viewModel.callAPIFlashCard { (cardResult: FLFlashDetailResult?) in
-                    if let object = cardResult {
-                        ConsoleLog.show("total:\(object.total)")
-                        ConsoleLog.show("list:\(object.list)")
-             self.manageStageFrame(pageList: self.viewModel.pageList)
+                } else {
+                    //no card page need create new
+                    self.callAPIAddNewCard {  (cardPage:FLCardPageResult?) in
+                        self.manageStageFrame(pageList: self.viewModel.pageList)
                     }
-                }
-            }
-            */
-        } else {
-            self.viewModel.callAPIFlashCard { (cardResult: FLFlashDetailResult?) in
-                self.titleLabel.text = self.viewModel.detail?.name ?? ""
-                if let object = cardResult {
-                    ConsoleLog.show("total:\(object.total)")
-                    ConsoleLog.show("list:\(object.list)")
-                    self.manageStageFrame(pageList: self.viewModel.pageList)
                 }
             }
         }
@@ -221,7 +218,6 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     @objc func deletePressed(_ sender: UIButton) {
-        //TODO: Api delete
         ConsoleLog.show("pageList before: \(self.viewModel.pageList.count)")
         let index = self.viewModel.pageIndex
         let stage = self.getStageView(at: index)
@@ -242,22 +238,28 @@ final class FLEditorViewController: FLBaseViewController {
     @objc func addRightPressed(_ sender: UIButton) {
         self.saveCurrentCardPage()
         
-        var newCardData = [String: Any]()
-        var data = [String: Any]()
-        data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
-        newCardData["data"] = data
         self.showLoading(nil)
-        self.viewModel.callAPIAddNewCard(param: newCardData) { [weak self] (cardPage) in
+        self.callAPIAddNewCard {  [weak self]  (cardPage:FLCardPageResult?) in
             guard let self = self else { return }
-            guard let card = cardPage else { return }
             self.hideLoading()
+            guard let card = cardPage else { return }
             let lastItemIndex = self.viewModel.pageList.count - 1
             card.index = lastItemIndex
             self.createNewCardView(card)
             self.gotoPage(index: lastItemIndex)
         }
+    }
+    
+    func callAPIAddNewCard(_ complete: @escaping (_ result: FLCardPageResult?) -> ()) {
+        var newCardData = [String: Any]()
+        var data = [String: Any]()
+        data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
+        newCardData["data"] = data
         
-        
+        self.viewModel.callAPIAddNewCard(param: newCardData) {(cardPage) in
+            self.hideLoading()
+            complete(cardPage)
+        }
     }
     
     func saveCurrentCardPage() {
@@ -322,7 +324,10 @@ final class FLEditorViewController: FLBaseViewController {
             let stageHidth = stageWidth * FlashStyle.pageCardRatio
             let stageX = (areaFrame.width - stageWidth) / 2
             let stageY = (areaFrame.height - stageHidth) / 2
-            var stageFrame = CGRect(x: stageX, y: stageY, width: stageWidth, height: stageHidth)
+            var stageFrame = CGRect(x: stageX,
+                                    y: stageY,
+                                    width: stageWidth,
+                                    height: stageHidth)
             //stageHidth allway less than area
             
             //case rotate , iphone less height 3:4, 16:9
@@ -335,7 +340,10 @@ final class FLEditorViewController: FLBaseViewController {
                 let newWidth = stageFrame.width * ratioDown
                 let newX = (areaFrame.width - newWidth) / 2
                 let newY = (areaFrame.height - newHeight) / 2
-                let updateFrame = CGRect(x: newX, y: newY, width: newWidth, height: newHeight)
+                let updateFrame = CGRect(x: newX,
+                                         y: newY,
+                                         width: newWidth,
+                                         height: newHeight)
                 stageFrame = updateFrame
             }
             
@@ -343,11 +351,14 @@ final class FLEditorViewController: FLBaseViewController {
             self.stageView?.frame = stageFrame
             self.stageView?.stageRatio = stageFrame.width / FlashStyle.baseStageWidth
             let stageView = self.stageView!
-            self.deletePageButton?.center = CGPoint(x: stageView.center.x, y: stageView.frame.origin.y)
+            self.deletePageButton?.center = CGPoint(x: stageView.center.x,
+                                                    y: stageView.frame.origin.y)
             
-            self.addLeftPageButton?.center = CGPoint(x: stageView.frame.origin.x, y: stageView.center.y)
+            self.addLeftPageButton?.center = CGPoint(x: stageView.frame.origin.x,
+                                                     y: stageView.center.y)
             
-            self.addRightPageButton?.center = CGPoint(x: stageView.frame.origin.x + stageView.frame.width, y: stageView.center.y)
+            self.addRightPageButton?.center = CGPoint(x: stageView.frame.origin.x + stageView.frame.width,
+                                                      y: stageView.center.y)
             
             self.manageAddLR()
             
@@ -355,7 +366,9 @@ final class FLEditorViewController: FLBaseViewController {
             self.sectionEdge = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
             self.cellSize = stageFrame.size
             
-            self.sliderView?.frame = CGRect(x: 0, y: 0, width: areaFrame.width, height: areaFrame.height)
+            self.sliderView?.frame = CGRect(x: 0, y: 0,
+                                            width: areaFrame.width,
+                                            height: areaFrame.height)
             self.sliderView?.stackHeight.constant = stageFrame.height
             self.sliderView?.leftWidth.constant = self.sectionEdge.left
             self.sliderView?.rightWidth.constant = self.sectionEdge.right
@@ -385,19 +398,21 @@ final class FLEditorViewController: FLBaseViewController {
         self.manageAddLR()
         
         if self.createStatus == .new {
-            self.reloadCardPage(method: .get)//First card page
+            //case new Load first card page
+            self.createStatus = .edit
+            self.reloadCardPage(method: .get)
             self.isEditorPageReady = true
             UIView.animate(withDuration: 0.3) {
                 self.contentPageView.alpha = 1.0
             }
-            //TODO: recheck case come from case new page
             
         } else {
-            //need prepare element in first card
+            //case edit need prepare element in first card
             
             stage.isEditor = true
             stage.isRequireToLoadElement = false
-            stage.loadElement(viewModel: self.viewModel) { [] (anyView) in
+            stage.loadElement(viewModel: self.viewModel) { [ weak self] (anyView) in
+                guard let self = self else { return }
                 // all element in stage ready
                 //then custom for editor
                 if let iView = anyView as? InteractView {
@@ -434,7 +449,8 @@ final class FLEditorViewController: FLBaseViewController {
     
     private func loadElement(in stage: FLStageView) {
         stage.isEditor = true
-        stage.loadElement(viewModel: self.viewModel) { [] (anyView) in
+        stage.loadElement(viewModel: self.viewModel) { [ weak self] (anyView) in
+            guard let self = self else { return }
             // all element in stage ready
             //then custom for editor
             if let iView = anyView as? InteractView {
@@ -471,7 +487,6 @@ final class FLEditorViewController: FLBaseViewController {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapStage(_:)))
         stage.addGestureRecognizer(tap)
-        //stage.addGestureRecognizer(TapGesture(target: self, action: #selector(self.stageTaped(_:))))
         return stage
     }
     
@@ -582,33 +597,8 @@ final class FLEditorViewController: FLBaseViewController {
         return safeIndex
     }
     
-    //var halfModalDelegate: HalfModalTransitioningDelegate!
-    
     func prepareToolVC() {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
-        //        if let vc = s.instantiateViewController(identifier: "FLToolViewController") as? FLToolViewController {
-        //            // toolHelper = FLToolHelper(vc: self, toolBar: vc)
-        //            //tool parameter
-        //
-        //            vc.didSelectedColor = Action(handler: { (sender) in
-        //                guard let hex = sender as? String else { return }
-        //                self.stageView.backgroundColor = UIColor(hex)
-        //            })
-        //            vc.didCreateText = Action(handler: { (sender) in
-        //                let element = TextElement()
-        //                self.createTextView(element)
-        //            })
-        //            self.halfModalDelegate = HalfModalTransitioningDelegate(viewController: vc, presentingViewController: vc)
-        //            vc.setup(FLToolViewSetup(tool: .none))
-        //
-        //            self.halfModalDelegate.startHeight = 150 + vc.safeAreaTopHeight
-        //            self.halfModalDelegate.backgroundColor = .clear
-        //            vc.modalPresentationStyle = .custom
-        //            vc.transitioningDelegate = self.halfModalDelegate
-        //            self.present(vc, animated: true, completion: nil)
-        //        }
-        
-        //add child
         if let vc = s.instantiateViewController(withIdentifier: "FLToolViewController") as? FLToolViewController {
             self.toolVC = vc
             self.toolVC?.didChangeTextAlignment = Action(handler: { [weak self] (sender) in
@@ -660,7 +650,6 @@ final class FLEditorViewController: FLBaseViewController {
             })
             self.toolVC?.didClose = Action(handler: { [weak self] (sender) in
                 guard let self = self else { return }
-                //self.view.endEditing(true)
                 if let tool = sender as? FLTool, tool == .text {
                     if let iViewText = self.selectedView as? InteractView,
                        let textView = iViewText.textView {
@@ -671,8 +660,8 @@ final class FLEditorViewController: FLBaseViewController {
                         textView.resignFirstResponder()
                     }
                 }
-                
             })
+            
             self.toolVC?.view.isHidden = true
             self.toolStackView.addArrangedSubview(self.toolVC!.view)
             self.addChild(self.toolVC!)
@@ -696,8 +685,6 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     func createNewQuiz(element: FlashElement) {
-        //let element = FlashElement.with(["type": FLType.quiz.rawValue])!
-        //element.question = question
         let row = self.indexOfMajorCell()
         
         self.selectedViewIsHiddenTool(true)
@@ -726,13 +713,12 @@ final class FLEditorViewController: FLBaseViewController {
             self.manageTextView(in: iView, stageView: stageView)
             
             DispatchQueue.main.async {
-                self.updateTextviewHeight(iView)
+                self.updateTextViewHeight(iView)
                 
                 //Auto select all test
                 iView.textView?.selectAll(self)
                 iView.textView?.becomeFirstResponder()
             }
-            
             
             //Auto open text tool
             self.openToolBar(tool: .text, view: iView)
@@ -742,6 +728,11 @@ final class FLEditorViewController: FLBaseViewController {
             print("controlView width: \(size.width) ,controlView height: \(size.height)")
             
             iView.isHiddenEditingTool = false
+            
+            //Text view need update frame
+            DispatchQueue.main.async {
+                iView.updateFixWidth(scale: 1.0, originalBounds: iView.bounds)
+            }
         }
     }
     
@@ -962,7 +953,7 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     
-    func updateTextviewHeight(_ iView:InteractView) {
+    func updateTextViewHeight(_ iView:InteractView) {
         guard let textView = iView.textView else { return }
         let iViewFrame = iView.frame
         let textViewPoint = textView.frame.origin
@@ -996,7 +987,7 @@ final class FLEditorViewController: FLBaseViewController {
         //textView.frame = CGRect(origin: textView.frame.origin, size: newSize)
     }
     
-    func updateTextviewHeight(_ iView:InteractTextView) {
+    func updateTextViewHeight(_ iView:InteractTextView) {
         guard let textView = iView.textView else { return }
         let iViewCenter = iView.center
         let iViewFrame = iView.frame
@@ -1387,7 +1378,7 @@ extension FLEditorViewController: UITextViewDelegate {
             textView.updateLayout()
             print("text: \(String(describing: textView.text))")
             iView.element?.text = textView.text
-            self.updateTextviewHeight(iView)
+            self.updateTextViewHeight(iView)
         } else if let iView = textView.superview as? InteractTextView {
             iView.element?.text = textView.text
             //iView.updateLayout()
@@ -1400,7 +1391,7 @@ extension FLEditorViewController: UITextViewDelegate {
 //            print("contentFixWidth: \(width)")
 //            iView.contentFixWidth = width//TODO: bug text growing
             DispatchQueue.main.async {
-                self.updateTextviewHeight(iView)
+                self.updateTextViewHeight(iView)
             }
         }
     }

@@ -74,15 +74,15 @@ class FLCardInfoViewController: UIViewController {
         formatter.numberStyle = .decimal
         
         self.titleHeight.constant = UIDevice.isIpad() ? 80 : 60
-        self.titleLabel.font = .font(UIDevice.isIpad() ? 24 : 14, font: .medium)
+        self.titleLabel.font = .font(UIDevice.isIpad() ? 24 : 14, .medium)
         
-        let titleFont = UIFont.font(14, font: .medium)
+        let titleFont = UIFont.font(14, .medium)
         self.nameLabel.font = titleFont
         self.countLabel.font = titleFont
         self.quizLabel.font = titleFont
         self.likeLabel.font = titleFont
         
-        let detailFont = UIFont.font(14, font: .medium)
+        let detailFont = UIFont.font(14, .medium)
         self.instructorLabel.font = detailFont
         self.providerLabel.font = detailFont
         self.categoryLabel.font = detailFont

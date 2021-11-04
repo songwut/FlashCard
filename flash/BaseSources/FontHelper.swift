@@ -98,21 +98,21 @@ struct FontHelper {
 }
 
 extension UIFont {
-    static func font(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> UIFont {
+    static func font(_ rawSize: CGFloat, _ font: AppFont, isItalic: Bool = false) -> UIFont {
         return UIFont(name: font.fontName(isItalic), size: rawSize * fontScale)!
     }
     
-    static func font(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> UIFont {
+    static func font(_ size: StyleName, _ font: AppFont, isItalic: Bool = false) -> UIFont {
         return UIFont(name: font.fontName(isItalic), size: size.rawValue * fontScale)!
     }
 }
 
 extension Font {//SwiftUI
-    static func font(_ rawSize: CGFloat, font: AppFont, isItalic: Bool = false) -> Font {
+    static func font(_ rawSize: CGFloat, _ font: AppFont, isItalic: Bool = false) -> Font {
         return UIFont(name: font.fontName(isItalic), size: rawSize * fontScale)!.font
     }
     
-    static func font(_ size: StyleName, font: AppFont, isItalic: Bool = false) -> Font {
+    static func font(_ size: StyleName, _ font: AppFont, isItalic: Bool = false) -> Font {
         return UIFont(name: font.fontName(isItalic), size: size.rawValue * fontScale)!.font
     }
 }

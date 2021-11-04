@@ -20,7 +20,7 @@ class TitleCollectionViewCell: BaseCollectionViewCell {
                 self.textLabel.text = totalText
                 self.textLabel.numberOfLines = 1
                 self.textLabel.textColor = .gray
-                self.textLabel.font = FontHelper.getFontSystem(14, font: .regular)
+                self.textLabel.font = .font(14, .regular)
             }
         }
     }

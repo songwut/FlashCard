@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FLQuizProgressBar: View {
     @State var choice: FLChoiceResult
-    private let titleFont: Font = .font(UIDevice.isIpad() ? 24 : 12, font: .medium)
+    private let titleFont: Font = .font(UIDevice.isIpad() ? 24 : 12, .medium)
     var width:CGFloat = 200
     var body: some View {
         ZStack(alignment: .leading) {

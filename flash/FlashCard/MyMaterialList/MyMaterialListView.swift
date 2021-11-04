@@ -11,12 +11,12 @@ struct MyMaterialListView: View {
     @ObservedObject var viewModel = MyMaterialListViewModel()
     
     @State var myMaterialFlash: MaterialFlashPageResult
-    @State var list: [MaterialFlashResult]
+    @State var list: [LMMaterialResult]
     @State private var isLoading = false
     
     var body: some View {
         VStack(alignment: .leading) {
-            List {
+            List {//List = UITableView in UIKit can change to ScrollView but need custom footer UI loding
                 VStack(alignment: .leading, spacing: nil, content: {
                     let items = myMaterialFlash.list
                     let count =  items.count
@@ -24,21 +24,23 @@ struct MyMaterialListView: View {
                     let totalText =  count.textNumber(many: "learning_material".localized())
                     Text("\(total) \(totalText)")
                         .frame(height: 40)
-                        .foregroundColor(UIColor.text75().color)
-                        .font(FontHelper.getFontSystem(.l, font: .text).font)
+                        .foregroundColor(.text75())
+                        .font(.font(14, .text))
                 })
+                .listRowBackground(Color.white)
+                .background(Color.white)
                 .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
                 
                 CreateView
-                    .listRowBackground(Color.clear)
+                    .background(Color.white)
+                    .listRowBackground(Color.white)
                     .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
                 
-                let items = list
-                let next = myMaterialFlash.next
-                ForEach(items) { item in
+                ForEach(list) { item in
                     ZStack {
-                        FLMaterialView(isEditor: true, flash: item)
+                        MyMaterialView(isEditor: true, item: item)
                             .background(Color.white)
+                            .listRowBackground(Color.white)
                         
                         NavigationLink(destination: FLFlashPostView(flashId:item.id)) {
                             Rectangle()
@@ -46,7 +48,7 @@ struct MyMaterialListView: View {
                         .buttonStyle(PlainButtonStyle())
                         .opacity(0.0)
                     }
-                    .listRowBackground(Color.clear)
+                    .background(Color.white)
                     .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
                     .frame(height: FlashStyle.flashItemHeight)
                     .onAppear {
@@ -55,19 +57,23 @@ struct MyMaterialListView: View {
                         }
                     }
                 }
+                .listRowBackground(Color.white)
+                .background(Color.white)
                 
                 if viewModel.isListFull == false {
                     //ActivityIndicator(isAnimating: $viewModel.isLoading)
-                    ActivityIndicator(isAnimating: .constant(isLoading))
+                    ActivityIndicator(isAnimating: .constant(isLoading), color: .black, style: .medium)
                 }
             }
-            
+            .listSeparatorStyleNone()
+            .listRowBackground(Color.white)
+            .background(Color.white)
             
         }
         //.listStyle(SidebarListStyle()) //ios 14
         .padding(.leading, 16)
         .padding(.trailing, 16)
-        .background(Color.clear)
+        .background(Color.white)
         .navigationBarTitle("My Material", displayMode: .automatic)
         .onAppear(perform: {
             viewModel.next = myMaterialFlash.next
@@ -78,40 +84,28 @@ struct MyMaterialListView: View {
         
     }
     
-    
-    
     var CreateView: some View {
         VStack(alignment: .leading, spacing: nil, content: {
             ZStack {
-                //TODO: change image cover waiting Desige export
-                let createList = [
-                    FLCreateItem(coverName: "flash-create-cover", title: "Flash Card", isReady: true),
-                    FLCreateItem(coverName: "flash-create-cover", title: "Flash Card", isReady: true),FLCreateItem(coverName: "flash-create-cover", title: "Flash Card", isReady: true),
-                    FLCreateItem(coverName: "flash-create-cover", title: "Flash Card", isReady: true)
-                ]
                 FLCreateMaterialView()
                     .frame(height: 122)
                     .padding(.bottom, 8)
-                NavigationLink(destination: FLCreateMaterialListView(list: createList)) {
+                let vm =  FLCreateMaterialListViewModel()
+                NavigationLink(destination: FLCreateMaterialListView(viewModel: vm)) {
                     Rectangle()
                 }
                 .buttonStyle(PlainButtonStyle())
                 .opacity(0.0)
             }
         })
-    }
-    
-    var listView: some View {
-        VStack(alignment: .leading, spacing: 8, content: {
-            
-        })
+        .background(Color.clear)
     }
 }
 
 extension MyMaterialListView {
-    func manageLastItem(item: MaterialFlashResult) {
+    func manageLastItem(item: LMMaterialResult) {
         let items = list
-        let next = myMaterialFlash.next//TODO:wait back
+        let next = myMaterialFlash.next//TODO:wait backend fix this
         let nextUrl = myMaterialFlash.nextUrl
         
         if items.isLastItem(item) {
@@ -123,8 +117,6 @@ extension MyMaterialListView {
                         if let page = newPage {
                             self.myMaterialFlash = page
                             self.list.append(contentsOf: page.list)
-                        } else {
-                            //HTTPURLResponse: nil
                         }
                         
                         isLoading = false
@@ -139,5 +131,8 @@ struct MyMaterialListView_Previews: PreviewProvider {
     
     static var previews: some View {
         MyMaterialListView(myMaterialFlash: MockObject.myMaterialFlash, list: MockObject.myMaterialFlash.list)
+            .previewDevice("iPhone 12")
+            .preferredColorScheme(.dark)
+        
     }
 }

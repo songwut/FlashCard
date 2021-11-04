@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FLStageView: UIView {
+class FLStageView: FlashStageView {
     var stageRatio:CGFloat = 1
     var flCreator: FLCreator!
     var isEditor = false
@@ -30,6 +30,7 @@ class FLStageView: UIView {
         super.init(frame: frame)
         self.cornerRadius = FlashStyle.cardCornerRadius
         self.cover = UIImageView(frame: CGRect(origin: .zero, size: frame.size))
+        self.backgroundColor = .white
     }
     
     var card: FLCardPageResult? {

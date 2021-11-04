@@ -27,6 +27,7 @@ struct FLEditorViewControllerRep: UIViewControllerRepresentable {
             controller.viewModel.flashId = flashId
             controller.createStatus = .edit
         } else {
+            controller.viewModel.flashId = 0
             controller.createStatus = .new
         }
         return controller

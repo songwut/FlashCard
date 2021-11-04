@@ -31,66 +31,13 @@ enum FLStatus: Int {
     }
 }
 
-enum FLRequestStatus: String {
-    case none = "none"
-    case completed = "completed"
-    case waitForApprove = "waiting_for_approve"
-    case reject = "Reject"
-    case requestExpired = "request_expired"
-    
-    func title() -> String {
-        return self.rawValue.localized()
-    }
-    
-    func color() -> UIColor {
-        switch self {
-        case .completed:
-            return .success()
-        case .waitForApprove:
-            return .warning()
-        case .reject:
-            return .error()
-        case .requestExpired:
-            return .text()
-        default:
-            return UIColor.white
-        }
-    }
-    
-    func bgColor() -> UIColor {
-        if self == .completed {
-            return self.color().withAlphaComponent(0.1)
-        } else {
-            return self.color().withAlphaComponent(0.25)
-        }
-    }
-}
-
-class FLDetailResult: MaterialFlashResult {
+class FLDetailResult: LMMaterialResult {
     var countView = 0
-    var provider: BaseResult?
+    var provider: ProviderResult?
     var category: CategoryResult?
-    var instructor: BaseResult?
+    var instructor: InstructorResult?
     var tagList = [UGCTagResult]()
-    
     var estimateTime: Int?//only min
-    
-//    "datetime_create": "2021-08-04T09:55:45.443966",
-//            "datetime_update": "2021-08-04T09:55:45.444002",
-//            "is_display": 0,
-//            "content_type": {
-//                "id": 379,
-//                "code": "flashcard.flashcard"
-//            },
-//            "created_by": {
-//                "id": 20,
-//                "image": "account/2019/05/1e6c9040-747.jpg",
-//                "name": "Admin No7 Palida"
-//            },
-//            "tag_list": [],
-//            "instructor_list": null,
-//            "category": null,
-//            "provider": null
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -100,39 +47,6 @@ class FLDetailResult: MaterialFlashResult {
         progress             <- map["progress"]
         owner                <- map["created_by"]
         datetimePublish      <- map["datetime_publish"]
-    }
-    
-    override class func with(_ dict: [String : Any]) -> FLDetailResult? {
-        let item = Mapper<FLDetailResult>().map(JSON: dict)
-        return item
-    }
-}
-
-class MaterialFlashResult: BaseResult, Identifiable {
-    let uuid = UUID()
-    var progress: Any?
-    var status: FLStatus = .unpublish
-    var owner: OwnerResult?
-    var code: String?
-    var datetimePublish: String?
-    var contentCode: ContentCode = .flash
-    var datetimeUpdate = ""
-    var datetimeCreate = ""
-    var requestStatus: FLRequestStatus = .none
-    
-    override func mapping(map: Map) {
-        super.mapping(map: map)
-        code                 <- map["code"]
-        contentCode          <- map["content_type.code"]
-        progress             <- map["progress"]
-        owner                <- map["created_by"]
-        datetimePublish      <- map["datetime_publish"]
-        datetimeUpdate       <- map["datetime_update"]
-    }
-    
-    class func with(_ dict: [String : Any]) -> MaterialFlashResult? {
-        let item = Mapper<MaterialFlashResult>().map(JSON: dict)
-        return item
     }
 }
 
@@ -162,7 +76,7 @@ class FLCardPageResult: FLBaseResult {
     var order = 0
     var sort:Int? //not order in api
     var dropboxPage: FLDropboxPageResult?
-    var stage: FLStageView?//ref for delete
+    var stage: FlashStageView?//ref for delete
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -309,13 +223,25 @@ class FLBaseResult:Mappable, Equatable, Identifiable {
     }
 }
 
+class LMMaterialPageResult: MaterialFlashPageResult {
+    
+    required init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        
+    }
+}
+
 class MaterialFlashPageResult: BaseResult {
     var previous: Int?
     var next: Int?
     var nextUrl: String?
     var count = 0
     var pageSize = 24
-    var list = [MaterialFlashResult]()
+    var list = [LMMaterialResult]()
     
     required init?(map: Map) {
         super.init(map: map)
@@ -354,5 +280,41 @@ class UserAnswerPageResult: BaseResult {
         self.pageSize     <- map["page_size"]
         choiceList        <- map["choice"]
         userAnswerList    <- map["results"]
+    }
+}
+
+
+class UGCTagPageResult: BaseResult {
+    var list = [UGCTagResult]()
+    
+    required init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        list  <- map["results"]
+    }
+    
+    class func with(_ dict: [String : Any]) -> UGCTagPageResult? {
+        let item = Mapper<UGCTagPageResult>().map(JSON: dict)
+        return item
+    }
+}
+
+class UGCTagResult: BaseResult {
+    var isSelected: Bool = false
+    
+    required init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+    }
+    
+    class func with(_ dict: [String : Any]) -> UGCTagResult? {
+        let item = Mapper<UGCTagResult>().map(JSON: dict)
+        return item
     }
 }

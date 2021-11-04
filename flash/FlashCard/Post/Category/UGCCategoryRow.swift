@@ -7,31 +7,12 @@
 
 import SwiftUI
 
-protocol UGCCategoryRowDelegate: AnyObject {
-    func didSelectCategory(_ category: CategoryResult)
-}
-
-//extension UGCCategoryRow {
-//
-//    func foo(action: @escaping () -> Void ) -> Self {
-//         var copy = self
-//         copy.selectCategory = action
-//         return copy
-//     }
-//}
-class Box<T> {
-    let content: T
-    init(_ item: T) { content = item }
-}
-
 struct UGCCategoryRow: View {
     @State var isChecked: Bool = false
     @State var isExpaned: Bool = false
     @State var category: CategoryResult
     
-    var parent: Box<UGCCategoryRow>?
     var isFirst: Bool = true
-    var delegate: UGCCatagoryListViewDelegate?
     
     var checkPressed: ( _ category: CategoryResult) -> ()?
     
@@ -42,7 +23,7 @@ struct UGCCategoryRow: View {
                     Rectangle()
                         .fill(Color.config_secondary10())
                 }
-                self.contentView
+                ContentView
                     .padding(.leading, 16)
                     .padding(.trailing, 16)
             }
@@ -54,9 +35,9 @@ struct UGCCategoryRow: View {
                     VStack(alignment: .leading, spacing: 8) {
                         ForEach(0..<childList.count) { i in
                             let c = childList[i]
-                            UGCCategoryRow(category: c, isFirst: false) { category in
+                            UGCCategoryRow(category: c, isFirst: false) { c in
                                 print("createPressed")
-                                self.isChecked = category.isChecked
+                                self.isChecked = c.isChecked
                                 return checkPressed(category)
                             }
                             .padding(.leading, 16)
@@ -68,7 +49,7 @@ struct UGCCategoryRow: View {
         .frame(minHeight: 42, alignment: .leading)
     }
     
-    var contentView: some View {
+    var ContentView: some View {
         HStack {
             //arrow
             let iconName = isExpaned ? "ic_v2_chevron-down" : "ic_v2_chevron-right"
@@ -87,7 +68,10 @@ struct UGCCategoryRow: View {
             
             
             Button(action: {
-                isChecked.toggle()
+                let isChecked = category.isChecked
+                if !isChecked {
+                    self.clearCheckAllchild(category.childList)
+                }
                 category.isChecked = isChecked
                 checkPressed(category)
             }, label: {
@@ -107,6 +91,15 @@ struct UGCCategoryRow: View {
                     .font(FontHelper.getFontSystem(.paragraph, font: .text).font)
             }
             Spacer()
+        }
+    }
+    
+    func clearCheckAllchild(_ childList: [CategoryResult]) {
+        for caregory in childList {
+            if caregory.isChecked {
+                caregory.isChecked = false
+                clearCheckAllchild(caregory.childList)
+            }
         }
     }
 }

@@ -104,8 +104,8 @@ struct FLCardInfoSheetView: View {
     
     var RightView: some View {
         VStack(alignment: .leading, spacing: 4, content: {
-            let titleFont = UIFont.font(14, font: .medium)
-            let font = UIFont.font(10, font: .text)
+            let titleFont = UIFont.font(14, .medium)
+            let font = UIFont.font(10, .text)
             Text("10 Figma Tricks I Wish I Knew Earlier")
                 .font(titleFont.font)
             Text("Instructor: Nof Chanwit")

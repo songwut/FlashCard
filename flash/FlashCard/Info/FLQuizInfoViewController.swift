@@ -56,7 +56,7 @@ class FLQuizInfoViewController: PageViewController {
         self.ansTextHeight.constant = UIDevice.isIpad() ? 90 : 50
         self.titleLabel.textColor = .black
         self.answerLabel.textColor = .black
-        self.titleLabel.font = .font(UIDevice.isIpad() ? 24 : 14, font: .medium)
+        self.titleLabel.font = .font(UIDevice.isIpad() ? 24 : 14, .medium)
         self.titleLabel.text = "quiz".localized()
         self.answerLabel.text = "Answer".localized()
         self.userTableView.backgroundColor = .white
@@ -66,7 +66,7 @@ class FLQuizInfoViewController: PageViewController {
         self.userTableView.register(UINib(nibName: "FLUserTableViewCell", bundle: nil), forCellReuseIdentifier: FLUserTableViewCell.id)
         
         self.answerLabel.text = "answer".localized()
-        self.answerLabel.font = .font( UIDevice.isIpad() ? 28 : 14, font: .medium)
+        self.answerLabel.font = .font( UIDevice.isIpad() ? 28 : 14, .medium)
         self.userListHeight.constant = 0
         
         self.tableView = self.userTableView

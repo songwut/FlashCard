@@ -41,8 +41,8 @@ class FLUserTableViewCell: UITableViewCell {
         self.userImageView.layer.masksToBounds = true
         let w = FlashStyle.quiz.userMinHeight - FlashStyle.quiz.userSpacing
         self.userImageView.cornerRadius = w / 2
-        self.titleLabel.font = .font(UIDevice.isIpad() ? 22 : 12, font: .medium)
-        self.descLabel.font = .font(UIDevice.isIpad() ? 18 : 10, font: .text)
+        self.titleLabel.font = .font(UIDevice.isIpad() ? 22 : 12, .medium)
+        self.descLabel.font = .font(UIDevice.isIpad() ? 18 : 10, .text)
         self.titleLabel.textColor = UIColor("222831")
         self.descLabel.textColor = .text50()
     }

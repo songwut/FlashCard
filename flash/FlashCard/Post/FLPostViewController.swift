@@ -73,6 +73,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     var latestTags: [UGCTagResult]?
+    private var imageBase64:String?
     private var time = 1
     private var imageCoverData: Data?
     private let formatText = "d MMM yyyy HH:mm"
@@ -99,8 +100,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.footerView.setShadow(radius: 16, opacity: 0.09, color: .black, offset: CGSize(width: 0, height: -2))
-        let fontTitle = UIFont.font(16, font: .text)
-        let fontValue = UIFont.font(16, font: .text)
+        let fontTitle = UIFont.font(16, .text)
+        let fontValue = UIFont.font(16, .text)
         let maxChaTitle = FlashStyle.post.maxChaTitle
         self.titleTextField.delegate = self
         //self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
@@ -112,7 +113,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.idView.borderWidth = 1
         self.idView.cornerRadius = 9
         self.idLabel.font = fontTitle
-        self.idValueLabel.font = UIFont.font(14, font: .text)
+        self.idValueLabel.font = UIFont.font(14, .text)
         self.descLabel.font = fontTitle
         self.descTextView.borderWidth = 1
         self.descTextView.borderColor = UIColor("A9A9A9")
@@ -129,6 +130,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.updateValueLabel.textColor = .text()
         self.timeLabel.font = fontTitle
         self.timeMinLabel.font = fontTitle
+        self.timeMinLabel.text = "minutes".localized()
         self.timeValueLabel.font = fontValue
         self.categoryLabel.font = fontTitle
         self.categoryValueLabel.text = FlashStyle.post.categoryPlaceHolder
@@ -141,6 +143,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.statusLabel.font = fontTitle
         self.statusValueLabel.font = fontValue
         self.idView.backgroundColor = .clear
+        self.requesDesc.font = .font(10, .medium)
+        self.requesDesc.textColor = .text75()
         self.categoryView.isUserInteractionEnabled = true
         self.tagContentView.isUserInteractionEnabled = true
         
@@ -162,6 +166,19 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.imageButton.backgroundColor = UIColor.elementBackground()
         
         self.serDefaultUI()
+        
+        if self.createStatus == .new {
+            guard let profile = UserManager.shared.profile else { return }
+            self.showLoading(nil)
+            self.viewModel.callAPINewFlashCard(profile: profile) { [weak self] (detail) in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    guard let detail = detail else { return }
+                    self.viewModel.flashId = detail.id
+                    self.loadDetail(detail)
+                }
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -174,15 +191,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         
         self.navigationController?.navigationBar.topItem?.rightBarButtonItems = [previewBtn, editBtn]
         
-        if self.createStatus == .new {
-            guard let profile = UserManager.shared.profile else { return }
-            self.showLoading(nil)
-            self.viewModel.callAPINewFlashCard(profile: profile) { [weak self] (detail) in
-                DispatchQueue.main.async {
-                    self?.loadDetail(detail)
-                }
-            }
-        } else {
+        if self.createStatus == .edit {
             if let detail = self.viewModel.detail {
                 self.loadDetail(detail)
             } else {
@@ -206,6 +215,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     func loadDetail(_ detail: FLDetailResult?) {
+        self.createStatus = .edit//reset to edit
         self.hideLoading()
         guard let detail = detail else { return }
         self.time = detail.estimateTime ?? 5 //TODO: get real time
@@ -217,10 +227,10 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         let dateTime = formatter.with(dateFormat: formatText, dateString: detail.datetimeUpdate)
         self.updateValueLabel.text = dateTime
         self.timeValueLabel.text = "\(self.time)"
-        self.idValueLabel.isHidden = detail.code == ""
+        self.idView.isHidden = detail.code == ""
         self.idValueLabel.text = detail.code
-        self.idValueLabel.textColor = UIColor("52BCFF")//TODO: Content code color
-        self.idView.borderColor = UIColor("52BCFF")//TODO: Content code color
+        self.idValueLabel.textColor = detail.contentCode.getColor()
+        self.idView.borderColor = detail.contentCode.getColor()
         self.statusValueLabel.text = detail.status.title()
         self.minusButton.isEnabled = !(self.time == 1)
         
@@ -392,30 +402,60 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         PopupManager.showWarning(desc, confirm: confirm, at: self)
     }
     
-    func callApiPost(requestStatus: FLRequestStatus) {
+    func callApiPost(requestStatus: RequestStatus) {
+        //TODO: patch + send approve
+        
+        self.callAPIFlashDetailUpdate()
+        
         //mock
         self.viewModel.detail?.status = .unpublish
         self.viewModel.detail?.requestStatus = requestStatus
         self.loadDetail(self.viewModel.detail)
         
-        
-        
     }
     
-    @IBAction func myLibraryPressed(_ sender: UIButton) {
-        //TODO: dismiss and back to my library
+    func callAPIFlashDetailUpdate() {
+        let json = self.createJSON()
+        self.viewModel.callAPIFlashDetailUpdate(parameter: json) { (newDetail) in
+            
+        }
     }
     
+    func createJSON() -> [String: Any]? {
+        let detail = self.viewModel.detail!
+        var dict = [String: Any]()
+        
+        var tags = [String]()
+        if let latestTags = latestTags {
+            for tag in latestTags {
+                tags.append(tag.name)
+            }
+        }
+        
+        dict["name"] = self.titleTextField.text
+        dict["desc"] = self.descTextView.text
+        dict["code"] = detail.code
+        dict["created_by"] = detail.owner?.id ?? UserManager.shared.profile.id
+        
+        if let imageBase64 = self.imageBase64 {
+            dict["image"] = imageBase64
+        }
+        if let category = self.selectedCategory {
+            dict["category"] = category.id
+        }
+        
+        dict["tag_list"] = tags
+        dict["is_display"] = true
+        
+        //may next phase
+        //dict["provider"] =
+        //dict["instructor_list"] =
+        return dict
+    }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    @IBAction func myMaterialPressed(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
     
     private func manageTagContentViewWith(tags:[UGCTagResult]) {
         
@@ -427,7 +467,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             for tag in tags {
                 tagList.append(tag.name)
             }
-            self.tagView?.textFont = .font(13, font: .text)
+            self.tagView?.textFont = .font(13, .text)
             self.tagView?.addTags(tagList)
             DispatchQueue.main.async {
                 self.tagView.isHidden = false
@@ -499,8 +539,11 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
             let img = originalImage.resizeImage(newWidth: newWidth)
             let imgData = img.jpeg ?? img.png
             guard let data = imgData else { return }
+            guard let uiimage = UIImage(data: data) else { return }
             self.imageCoverData = data
-            self.coverImageView.image = UIImage(data: data)
+            self.coverImageView.image = uiimage
+            let imageBase64 = uiimage.jpegData(compressionQuality: 1)?.base64EncodedString()
+            self.imageBase64 = imageBase64
             let imageSize: Int = data.count
             print("actual size of image in KB: %f ", Double(imageSize) / 1024.0)
         }

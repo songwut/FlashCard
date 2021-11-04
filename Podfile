@@ -10,6 +10,7 @@ pod 'SVGKit'
 	pod 'SDWebImage'
 	pod 'MBProgressHUD', '~> 1.1.0'
 	pod 'GrowingTextView'
+	pod 'netfox'
 end
 
 target 'flash' do

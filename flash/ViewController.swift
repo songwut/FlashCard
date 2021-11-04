@@ -8,6 +8,19 @@
 import UIKit
 import SwiftUI
 
+var flashFixId = 6
+
+extension ViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        flashFixId = Int(NSString(string: textField.text ?? "6").intValue)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
 class ViewController: UIViewController {
     
     @IBOutlet private weak var stageButton: UIButton!
@@ -15,6 +28,7 @@ class ViewController: UIViewController {
     @IBOutlet private weak var passTextField: UITextField!
     @IBOutlet private weak var loginButton: UIButton!
     
+    @IBOutlet private weak var flashIdTextField: UITextField!
     
     func getCenter(_ view: UIView) -> CGPoint {
         let parentFrame = view.superview?.frame ?? .zero
@@ -26,7 +40,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = FlashStyle.screenColor
-        
+        self.flashIdTextField.delegate = self
         let screenHeight = self.view.frame.height
         let screenWidth = self.view.frame.width
         let screenRatio:CGFloat = 16 / 9
@@ -58,15 +72,28 @@ class ViewController: UIViewController {
             UserDefaults.standard.setValue("sysadminConicle", forKey: "pass_key")
             UserDefaults.standard.synchronize()
         }
+        
+        if self.usernameTextField.text == "", self.passTextField.text == "" {
+            UserDefaults.standard.setValue("sysadmin@conicle.com", forKey: "user_key")
+            UserDefaults.standard.setValue("sysadminConicle", forKey: "pass_key")
+            UserDefaults.standard.synchronize()
+            
+            self.usernameTextField.text = "sysadmin@conicle.com"
+            self.passTextField.text = "sysadminConicle"
+        }
+        
+        self.loginPressed(loginButton)
     }
     
     @IBAction func myMaterialPressed(_ sender: UIButton) {
+        
         let viewModel = FLFlashCardViewModel()
         self.showLoading(nil)
         viewModel.callAPIMyFlashCard(.get) { (myFlashDetail) in
             self.hideLoading()
             guard let myFlashDetail = myFlashDetail else { return }
             let vc = UIHostingController(rootView: MyMaterialListView(myMaterialFlash: myFlashDetail, list: myFlashDetail.list))
+            vc.view.backgroundColor = .white
             if let nav = self.navigationController {
                 nav.pushViewController(vc, animated: true)
             } else {
@@ -100,7 +127,7 @@ class ViewController: UIViewController {
     @IBAction func openFlashPlayer(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
-        vc.viewModel.flashId = 6
+        vc.viewModel.flashId = flashFixId
         vc.playerState = .user
         vc.modalTransitionStyle = .crossDissolve
         vc.modalPresentationStyle = .fullScreen
@@ -112,7 +139,7 @@ class ViewController: UIViewController {
     @IBAction func openFlashPlayerPreview(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
-        vc.viewModel.flashId = 6
+        vc.viewModel.flashId = flashFixId
         vc.playerState = .preview
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)

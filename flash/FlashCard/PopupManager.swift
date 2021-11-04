@@ -38,8 +38,6 @@ class PopupManager: NSObject {
         var vc = UIApplication.shared.window?.rootViewController
         if let current = mainVC {
             vc = current
-        } else {
-            vc = UserManager.shared.tabMenu ?? UserManager.shared.rootVC
         }
         
         PopupViewController.showVC(vc!, content: popup, didClose: btnAction)

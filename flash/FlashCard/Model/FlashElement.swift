@@ -163,9 +163,9 @@ class FlashElement: FLBaseResult {
         let isItalic = self.flTextStyle.contains(.italic)
         let size = self.fontSize * self.fontScale
         print("manageFont size: \(size)")
-        var font:UIFont = .font(size, font: .text, isItalic: isItalic)
+        var font:UIFont = .font(size, .text, isItalic: isItalic)
         if self.flTextStyle.contains(.bold) {
-            font = .font(size, font: .bold, isItalic: isItalic)
+            font = .font(size, .bold, isItalic: isItalic)
         }
         return font
     }

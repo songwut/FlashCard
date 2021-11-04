@@ -49,7 +49,7 @@ class FLPlayerViewController: FLBaseViewController {
             self.navCardView.alpha = 0.0
         }
     }
-    private let sgProgressObs = FLProgressViewObs()
+    private let sgProgressModel = FLProgressViewModel()
     private var infoView: UIHostingController<FLInfoView>!
     private var cardSize = CGSize.zero
     private var cardFrame = CGRect.zero
@@ -76,7 +76,7 @@ class FLPlayerViewController: FLBaseViewController {
         self.progressStackView.updateLayout()
         self.viewContainer.alpha = 0.0
         self.pageLabel.textColor = .black
-        self.pageLabel.font = .font(16, font: .text)
+        self.pageLabel.font = .font(16, .text)
         
         
         self.viewModel.callAPIFlashDetail(.get) { [weak self] (flashDetail) in
@@ -101,7 +101,7 @@ class FLPlayerViewController: FLBaseViewController {
             
             let count = cardResult?.list.count ?? 0
             let width = self.progressStackView.frame.width
-            let sgProgress = UIHostingController(rootView: FLProgressView(maximum:count).environmentObject(self.sgProgressObs))
+            let sgProgress = UIHostingController(rootView: FLProgressView(maximum:count).environmentObject(self.sgProgressModel))
             sgProgress.view.frame = CGRect(x: 0, y: 0, width: width, height: self.progressStackView.frame.height)
             sgProgress.view.backgroundColor = .clear
             self.progressStackView.addArrangedSubview(sgProgress.view)
@@ -173,7 +173,7 @@ class FLPlayerViewController: FLBaseViewController {
     private func updatePageNumber() {
         let pageNum = self.swipeView.index + 1
         self.pageLabel.text = "\(pageNum) / \(self.viewModel.pageList.count)"
-        self.sgProgressObs.value = pageNum
+        self.sgProgressModel.value = pageNum
         self.updateButton()
     }
     

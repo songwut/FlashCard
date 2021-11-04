@@ -334,73 +334,24 @@ class InteractTextView: UIView {
             let max: CGFloat = [scale, minimumScale].max() ?? 0
             scale = max
             
-            let scaledBounds = CGRectScale(initialBounds, scale, scale)
-            
-            self.hardScale = scale
-            self.bounds = CGRect(x: 0, y: 0, width: scaledBounds.width, height: originalBounds.height)
-            self.contentFixWidth = scaledBounds.width - (FlashStyle.text.marginIView / 2)
+            self.updateFixWidth(scale: scale, originalBounds: originalBounds)
+//            let scaledBounds = CGRectScale(initialBounds, scale, scale)
+//
+//            self.hardScale = scale
+//            self.bounds = CGRect(x: 0, y: 0, width: scaledBounds.width, height: originalBounds.height)
+//            self.contentFixWidth = scaledBounds.width - (FlashStyle.text.marginIView / 2)
             //self.setNeedsDisplay()
             break
         default:
             break
         }
-        /*
-        //scale X
-        //textViewDidChange
-        var deltaX:CGFloat
-        var deltaY:CGFloat
-        if button.tag == FLTag.left.rawValue {
-            deltaX = location.x - previous.x
-            deltaY = location.y - previous.y
-        } else {
-            deltaX = location.x + previous.x
-            deltaY = location.y + previous.y
-        }
-        print("******")
-        print("previous X: \(previous.x) Y:\(previous.y)")
-        print("location X: \(location.x) Y:\(location.y)")
-        print("deltaX: \(deltaX) Y:\(deltaY)")
-        //use only text
-        if let iView = self.selectedView, let textView = iView.textView {
-            //let textViewFrame = textView.frame
-            let iViewFrame = iView.frame
-            let deltaXConvert = deltaX * -1
-            //scale left+right
-            let newWidth = iViewFrame.width + (deltaXConvert * 2)
-            
-            let newX:CGFloat = iViewFrame.origin.x + deltaX
-            let iViewFrameUpdate = CGRect(x: newX, y: iViewFrame.origin.y, width: newWidth, height: iViewFrame.height)
-            
-            iView.frame = iViewFrameUpdate
-            
-            print("out iView:\(iView.frame)")
-            if !self.isScaleWidth {//for textview fix layout
-                self.isScaleWidth = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    UIView.animate(withDuration: 0.05, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations: {
-                        textView.frame = CGRect(x: 0, y: 0, width: iViewFrameUpdate.width, height: iViewFrameUpdate.height)
-                        //textView.frame = CGRect(x: 0, y: 0, width: iViewFrameUpdate.width, height: iViewFrameUpdate.width)
-                        //textView.contentSize.width
-                        
-                        self.updateTextviewHeight(iView)
-                    }, completion: { [weak self] (ended) in
-                        self?.isScaleWidth = false
-                        let factH = iView.frame.height - textView.frame.height
-                        print("factH:\(factH)")
-                        print("iView:\(iView.frame)")
-                        print("textView:\(textView.frame)")
-                        print("contentsize:\(textView.contentSize)")
-                    })
-                }
-                
-            }
-            //TODO: Do when touches end
-            //iView.textView?.contentSize = iViewFrameUpdate.size
-            //iView.textView?.frame.size = iViewFrameUpdate.size
-            //iView.textView?.textContainer
-            //button.center = CGPointMake(button.center.x + delta_x, button.center.y + delta_y);
-        }
-        */
+    }
+    
+    func updateFixWidth(scale: CGFloat, originalBounds: CGRect) {
+        self.hardScale = scale
+        let scaledBounds = CGRectScale(initialBounds, scale, scale)
+        self.bounds = CGRect(x: 0, y: 0, width: scaledBounds.width, height: originalBounds.height)
+        self.contentFixWidth = scaledBounds.width - (FlashStyle.text.marginIView / 2)
     }
     
     @objc func handlePinchGesture(_ gesture: UIPinchGestureRecognizer) {
@@ -741,7 +692,6 @@ class InteractTextView: UIView {
         self.minimumSize = [self.minimumSize, defaultMinimumSize].max() ?? 0
         
         
-        let originalCenter = self.center
         let originalTransform = self.transform
         var frame = contentView.frame
         frame = CGRect(x: 0, y: 0, width: Int(frame.size.width) + defaultInset * 2, height: Int(frame.size.height) + defaultInset * 2);
@@ -773,7 +723,6 @@ class InteractTextView: UIView {
         self.controlTextLeft.image = controlWidthIcon
         self.controlTextRight.image = controlWidthIcon
         
-        //self.center = originalCenter
         self.transform = originalTransform
     }
     

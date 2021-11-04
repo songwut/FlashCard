@@ -1,38 +1,38 @@
 //
-//  FLMaterialView.swift
+//  MyMaterialView.swift
 //  flash
 //
 //  Created by Songwut Maneefun on 21/9/2564 BE.
 //
 
 import SwiftUI
-import SwURL
 
-struct FLMaterialView: View {
+//== LearningMaterialResult // == MaterialFlashResult
+
+struct MyMaterialView: View {
     @State var isEditor: Bool
-    @State var flash: MaterialFlashResult
+    @State var item: LMMaterialResult
     @State var image: UIImage?
     @ObservedObject var imageLoader = ImageLoaderService()
     
-    private let timeFont: Font = .font(10, font: .text)
-    private let nameFont: Font = .font(14, font: .medium)
-    private let statusFont: Font = .font(12, font: .medium)
+    private let timeFont: Font = .font(10, .text)
+    private let nameFont: Font = .font(14, .medium)
+    private let statusFont: Font = .font(12, .medium)
     
     var body: some View {
         VStack(alignment: .leading, spacing: nil, content: {
             HStack(spacing:8) {
-                
-                FLCoverView(url: flash.image)
+                ImageView(url: item.image)
                     .frame(width: FlashStyle.flashItemHeight)
                     .clipped()
                 
-                infoView
+                InfoView
                 Spacer()
                 VStack(spacing: 0) {
                     if isEditor {
-                        editButton
+                        EditButton
                     } else {
-                        iconView
+                        IconView
                     }
                     Spacer()
                 }
@@ -40,10 +40,11 @@ struct FLMaterialView: View {
             }
             .background(Color.clear)
         })
+        .background(Color.clear)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
     }
     
-    var infoView: some View {
+    var InfoView: some View {
         VStack(alignment: .leading, spacing: 4) {
             
             HStack(spacing: 4) {
@@ -51,18 +52,18 @@ struct FLMaterialView: View {
                     .resizable()
                     .frame(width: 12, height: 12, alignment: .center)
                     .foregroundColor(Color("A9A9A9"))
-                let timeText = flash.datetimeCreate.dateTimeAgo()
+                let timeText = item.datetimeCreate.dateTimeAgo()
                 Text(timeText)
                     .font(timeFont)
                     .foregroundColor(.black)
             }
             .frame(height: 20)
             
-            Text(flash.name)
+            Text(item.name)
                 .font(nameFont)
                 .foregroundColor(.black)
             
-            if let owner = flash.owner {
+            if let owner = item.owner {
                 Text("\("by".localized()) \(owner.name)")
                     .font(timeFont)
                     .foregroundColor(.black)
@@ -73,7 +74,7 @@ struct FLMaterialView: View {
             PublicStatusView
                 .frame(height: 20)
             
-            if flash.requestStatus != .none {
+            if item.requestStatus != .none {
                 RequestStatusView
                     .frame(height: 20)
             }
@@ -85,9 +86,9 @@ struct FLMaterialView: View {
     var PublicStatusView: some View {
         HStack(spacing: 4) {
             Circle()
-                .fill(flash.status.color().color)
+                .fill(item.status.color().color)
                 .frame(width: 7, height: 7)
-            Text(flash.status.title())
+            Text(item.status.title())
                 .font(statusFont)
                 .foregroundColor(.black)
         }
@@ -96,9 +97,9 @@ struct FLMaterialView: View {
     var RequestStatusView: some View {
         HStack(spacing: 4) {
             VStack(alignment: .leading, spacing: nil, content: {
-                let textColor = flash.requestStatus.color().color
-                let bgColor = flash.requestStatus.bgColor().color
-                Text(flash.requestStatus.title())
+                let textColor = item.requestStatus.color().color
+                let bgColor = item.requestStatus.bgColor().color
+                Text(item.requestStatus.title())
                     .font(statusFont)
                     .foregroundColor(textColor)
                     .background(bgColor)
@@ -107,7 +108,7 @@ struct FLMaterialView: View {
         }
     }
     
-    var editButton: some View {
+    var EditButton: some View {
         Button(action: {
             
         }, label: {
@@ -120,7 +121,7 @@ struct FLMaterialView: View {
         })
     }
     
-    var iconView: some View {
+    var IconView: some View {
         ZStack(alignment: .center, content: {
             Circle()
                 .fill(Color("4782DA"))
@@ -133,10 +134,10 @@ struct FLMaterialView: View {
     }
 }
 
-struct FLMaterialView_Previews: PreviewProvider {
+struct MyMaterialView_Previews: PreviewProvider {
     static var previews: some View {
-        FLMaterialView(isEditor: true, flash: MockObject.materialFlash)
-            .previewLayout(.fixed(width: 400.0, height: 124))
+        MyMaterialView(isEditor: true, item: MockObject.materialFlash)
+            .previewLayout(.fixed(width: 300, height: 120))
             .environment(\.sizeCategory, .small)
     }
 }

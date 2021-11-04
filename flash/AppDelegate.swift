@@ -14,9 +14,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         //self.printFonts()
+        UITableView.appearance().backgroundColor = .clear
         UINavigationBar.appearance().barTintColor = UIColor.config_primary()
         UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.font(16, font: .text)]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.font(16, .text)]
         
         if #available(iOS 14.0, *) {
             // iOS 14 doesn't have extra separators below the list by default.

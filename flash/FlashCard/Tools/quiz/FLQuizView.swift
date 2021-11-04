@@ -37,7 +37,7 @@ class FLQuizView: UIView {
     var question: FLQuestionResult? {
         didSet {
             self.titleLabel.text = "Question :"
-            self.questionTextView.font = .font(.paragraph, font: .text)
+            self.questionTextView.font = .font(.paragraph, .text)
             if self.isEditor {
                 self.questionTextView.placeholder = "Write your question."
                 self.questionTextView.placeholderColor = .white
@@ -215,7 +215,7 @@ class FLQuizView: UIView {
         self.questionTextView.textColor = .white
         self.questionTextView.minHeight = 36
         
-        self.addButton?.titleFont =  .font(.paragraph, font: .text)
+        self.addButton?.titleFont =  .font(.paragraph, .text)
         self.addButton?.setTitle("+ Add Option", for: .normal)
         
         self.cardView.cornerRadius = 8

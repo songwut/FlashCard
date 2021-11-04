@@ -14,7 +14,7 @@ struct FLTagView: View {
 	@Binding var tags: [String]
 	
 	var body: some View {
-        let font = UIFont.font(10, font: .text)
+        let font = UIFont.font(10, .text)
 		HStack {
 			Text(tag.lowercased())
 				.padding(.leading, 2)

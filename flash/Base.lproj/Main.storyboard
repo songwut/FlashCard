@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="88" width="428" height="804"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Vb-Qd-kfA">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="830"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="782"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="H8P-3b-MCT">
                                                 <rect key="frame" x="0.0" y="0.0" width="428" height="150"/>
@@ -67,8 +67,50 @@
                                                     </view>
                                                 </subviews>
                                             </stackView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uuf-Pa-VMX">
+                                                <rect key="frame" x="0.0" y="150" width="428" height="82"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Bgd-Zd-WtE">
+                                                        <rect key="frame" x="16" y="16" width="396" height="50"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h66-tT-ub8">
+                                                                <rect key="frame" x="0.0" y="0.0" width="396" height="50"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flash ID " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8g6-fx-OAc">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="65" height="50"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="6" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kUV-nz-A21">
+                                                                        <rect key="frame" x="65" y="0.0" width="331" height="50"/>
+                                                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="50" id="Umj-FR-UT9"/>
+                                                                </constraints>
+                                                            </stackView>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="Bgd-Zd-WtE" firstAttribute="top" secondItem="uuf-Pa-VMX" secondAttribute="top" constant="16" id="Arn-JH-q8P"/>
+                                                    <constraint firstItem="Bgd-Zd-WtE" firstAttribute="leading" secondItem="uuf-Pa-VMX" secondAttribute="leading" constant="16" id="NNG-vK-3vG"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Bgd-Zd-WtE" secondAttribute="trailing" constant="16" id="Pun-2S-Adc"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Bgd-Zd-WtE" secondAttribute="bottom" constant="16" id="tqw-Ic-a1S"/>
+                                                </constraints>
+                                            </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JgN-Xs-DJk">
-                                                <rect key="frame" x="0.0" y="150" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="232" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="8qY-gd-So5"/>
                                                 </constraints>
@@ -77,15 +119,15 @@
                                                     <action selector="myMaterialPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mTO-Nx-t3i"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gj1-Dh-DKf">
-                                                <rect key="frame" x="0.0" y="200" width="428" height="50"/>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gj1-Dh-DKf">
+                                                <rect key="frame" x="0.0" y="282" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="rZx-5c-XYz"/>
                                                 </constraints>
                                                 <state key="normal" title="Stage UI create new"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ViZ-68-bWh">
-                                                <rect key="frame" x="0.0" y="250" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="282" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="WE3-aH-RIm"/>
                                                 </constraints>
@@ -95,7 +137,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PdI-EO-BW0">
-                                                <rect key="frame" x="0.0" y="300" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="332" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="wrf-jQ-vwt"/>
                                                 </constraints>
@@ -105,7 +147,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kFo-sL-lEE">
-                                                <rect key="frame" x="0.0" y="350" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="382" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="QW3-mb-O2s"/>
                                                 </constraints>
@@ -115,36 +157,40 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cMQ-Jc-H0m">
-                                                <rect key="frame" x="0.0" y="400" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="432" width="428" height="50"/>
+                                                <color key="backgroundColor" systemColor="systemYellowColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="wep-Pa-Mbm"/>
                                                 </constraints>
-                                                <state key="normal" title="Flash Post"/>
+                                                <state key="normal" title="Flash Post (waiting Approve API)">
+                                                    <color key="titleColor" systemColor="labelColor"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="flPostPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VeS-jU-LyL"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgr-gq-9Ph">
-                                                <rect key="frame" x="0.0" y="450" width="428" height="30"/>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgr-gq-9Ph">
+                                                <rect key="frame" x="0.0" y="482" width="428" height="0.0"/>
                                                 <state key="normal" title="Flash Player SwiftUI"/>
                                                 <connections>
                                                     <action selector="openFlashPlayerSwiftUI:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1ac-AG-xXp"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gdw-U6-VOx">
-                                                <rect key="frame" x="0.0" y="480" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="482" width="428" height="50"/>
+                                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="3uE-Uo-XZo"/>
                                                 </constraints>
-                                                <state key="normal" title="Flash Post New">
-                                                    <color key="titleColor" systemColor="systemRedColor"/>
+                                                <state key="normal" title="Flash Post New(อย่ากดบ่อย)">
+                                                    <color key="titleColor" systemColor="labelColor"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="newPostPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dVV-of-hgS"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9l-uZ-GAd">
-                                                <rect key="frame" x="0.0" y="530" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="532" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="plM-se-gEN"/>
                                                 </constraints>
@@ -154,7 +200,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Xy-Rz-6f7">
-                                                <rect key="frame" x="0.0" y="580" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="582" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="mAY-n6-dKR"/>
                                                 </constraints>
@@ -163,8 +209,8 @@
                                                     <action selector="tagListSelectPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5D3-6H-IBK"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tb9-kW-HCk">
-                                                <rect key="frame" x="0.0" y="630" width="428" height="50"/>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tb9-kW-HCk">
+                                                <rect key="frame" x="0.0" y="632" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="Muc-J1-muq"/>
                                                 </constraints>
@@ -174,7 +220,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qdn-nQ-1rx">
-                                                <rect key="frame" x="0.0" y="680" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="632" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="GBb-jW-mKC"/>
                                                 </constraints>
@@ -184,7 +230,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH6-xe-kb2">
-                                                <rect key="frame" x="0.0" y="730" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="682" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="XCD-AG-Hk7"/>
                                                 </constraints>
@@ -194,7 +240,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9s-hA-vSV">
-                                                <rect key="frame" x="0.0" y="780" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="732" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="kgS-IN-4FC"/>
                                                 </constraints>
@@ -226,6 +272,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="mZy-2j-bZT"/>
                     <connections>
+                        <outlet property="flashIdTextField" destination="kUV-nz-A21" id="5UK-bI-cN5"/>
                         <outlet property="loginButton" destination="0zN-T8-ANS" id="qty-wQ-T8B"/>
                         <outlet property="passTextField" destination="QL9-o1-8w1" id="mCu-a1-UOH"/>
                         <outlet property="stageButton" destination="Gj1-Dh-DKf" id="4vz-ZX-eus"/>
@@ -271,8 +318,14 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -280,8 +333,11 @@
         <systemColor name="systemGray2Color">
             <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

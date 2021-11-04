@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MyNewMaterialView: View {
+struct MyNewMaterialView: View {//may use in next Fhash#2
     var content: MaterialFlashPageResult
     var createPressed: () -> ()
     var itemPressed: () -> ()
@@ -35,7 +35,7 @@ struct MyNewMaterialView: View {
                 ForEach(0..<items.count) { i in
                     if i < limit {
                         let item = items[i]
-                        FLMaterialView(isEditor: false, flash: item)
+                        MyMaterialView(isEditor: false, item: item)
                             .frame(maxWidth: .infinity, maxHeight: 124, alignment: .center)
                     }
                 }

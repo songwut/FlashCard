@@ -68,17 +68,6 @@ class FLCard: UIView {
             
         }
         
-        layer.cornerRadius = FlashStyle.cardCornerRadius //bounds.width/20
-        clipsToBounds = false
-        layer.masksToBounds = false
-//        layer.shadowRadius = 8
-//        layer.shadowOpacity = 0.4
-//        layer.shadowOffset = CGSize(width: 0, height: 0)
-//        layer.shadowColor = UIColor.darkGray.cgColor
-//        layer.masksToBounds = false
-//        clipsToBounds = true
-        backgroundColor = .white
-        
         originalPoint = center
         
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.beingDragged))
@@ -87,6 +76,14 @@ class FLCard: UIView {
         
         containerView = UIView(frame: bounds)
         containerView.backgroundColor = .clear
+        
+//        containerView.cornerRadius = FlashStyle.cardCornerRadius //bounds.width/20
+//        containerView.clipsToBounds = false
+//        containerView.layer.masksToBounds = false
+//        containerView.layer.shadowRadius = FlashStyle.cardCornerRadius
+//        containerView.layer.shadowOpacity = 0.2
+//        containerView.layer.shadowOffset = CGSize(width: 0, height: 0)
+//        containerView.layer.shadowColor = UIColor.black.cgColor
     }
     
     /*
@@ -273,10 +270,9 @@ extension FLCard: UIGestureRecognizerDelegate {
         case .changed:
             let rotationStrength = min(xCenter / UIScreen.main.bounds.size.width, 1)
             let rotationAngel = .pi/8 * rotationStrength
-            let scale = max(1 - abs(rotationStrength) / stength, range)
             center = CGPoint(x: originalPoint.x + xCenter, y: originalPoint.y + yCenter)
             let transforms = CGAffineTransform(rotationAngle: rotationAngel)
-            let scaleTransform: CGAffineTransform = transforms.scaledBy(x: scale, y: scale)
+            let scaleTransform: CGAffineTransform = transforms.scaledBy(x: 1, y: 1)
             self.transform = scaleTransform
             updateOverlay(xCenter)
             break;

@@ -6,99 +6,9 @@
 //
 
 import UIKit
-import SVGKit
 import AVKit
 
-enum FLInteractViewHandler: Int {
-    case none
-    case close
-    case rotate
-    case flip
-}
-
-enum FLInteractViewPosition {
-    case midLeft
-    case midRight
-    
-    case topLeft
-    case topRight
-    case bottomLeft
-    case bottomRight
-}
-
-@objc protocol InteractViewDelegate {
-    @objc optional func interacViewDidBeginMoving(view: InteractView)
-    @objc optional func interacViewDidChangeMoving(view: InteractView)
-    @objc optional func interacViewDidEndMoving(view: InteractView)
-    @objc optional func interacViewDidBeginRotating(view: InteractView)
-    @objc optional func interacViewDidChangeRotating(view: InteractView)
-    @objc optional func interacViewDidEndRotating(view: InteractView)
-    @objc optional func interacViewDidClose(view: InteractView)
-    @objc optional func interacViewDidTap(view: InteractView)
-}
-
-enum FLType: String {
-    case unknow = ""
-    case text = "text"
-    case image = "image"
-    case video = "video"
-    case shape = "shape"
-    case sticker = "sticker"
-    case quiz = "questionnaire"
-}
-
-class FLControlIcon: UIImageView {
-    var position: FLInteractViewPosition = .midLeft
-}
-
-class FLPlaverView: UIView {
-    var player = AVPlayer()
-    var playerItem: AVPlayerItem?
-    
-    var playerLayer: CALayer?
-    var mediaUrl: URL!
-    
-    func createVideo(url: URL) {
-        self.backgroundColor = .black
-        mediaUrl = url
-        playerLayer = AVPlayerLayer(player: self.player)
-        playerLayer?.contentsGravity = .resizeAspectFill
-        playerLayer?.backgroundColor = UIColor.purple.cgColor
-        playerLayer?.frame = self.bounds
-        layer.addSublayer(playerLayer!)
-        
-        
-        
-        playerItem = AVPlayerItem(url: mediaUrl)
-        player.replaceCurrentItem(with: playerItem)
-        player.play()
-        
-        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
-                                               object: self.player.currentItem,
-                                               queue: .main) { [weak self] _ in
-            self?.player.seek(to: CMTime.zero)
-            self?.player.play()
-        }
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    func updateUrl(url: URL) {
-        mediaUrl = url
-        playerItem = AVPlayerItem(url: mediaUrl)
-        player.replaceCurrentItem(with: playerItem)
-    }
-    
-    override func layoutSublayers(of layer: CALayer) {
-        super.layoutSublayers(of: layer)
-        playerLayer?.frame = self.bounds
-    }
-}
-
 class InteractView: CHTStickerView {
-    //var delegate: InteractViewDelegate?
     var textColor: String?
     var contentFixWidth: CGFloat?
     var isCreateNew = true
@@ -449,12 +359,6 @@ class InteractView: CHTStickerView {
         }
     }
     
-    var svgImage: SVGKImage?
-    
-    func updateVector(_ svgImage:SVGKImage?) {
-        self.imageView?.image = svgImage?.uiImage
-    }
-    
     var currentScale: CGPoint {
         let a = transform.a
         let b = transform.b
@@ -528,12 +432,6 @@ class InteractView1: UIView, UIGestureRecognizerDelegate {
     }
     
     var textView: UITextView?
-    
-    var svgImage: SVGKImage?
-    
-    func updateVector(_ svgImage:SVGKImage?) {
-        self.imageView?.image = svgImage?.uiImage
-    }
     
     var contentView: UIView? {
         didSet {

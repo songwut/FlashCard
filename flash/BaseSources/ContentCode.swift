@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum TypeVideo: Int {
+    case video = 1
+    case youtube = 2
+}
+
 enum ContentCode: String {
     //https://gitlab.conicle.co/hrd/conicle/wikis/data-dictionary-content-type
     //4.0
