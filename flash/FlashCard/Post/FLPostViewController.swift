@@ -68,7 +68,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     var viewModel: FLFlashCardViewModel! {
         didSet {
             let detail = self.viewModel.detail
-            //detail.status = .waitForApprove //mock
+            //detail.displayStatus = .waitForApprove //mock
         }
     }
     
@@ -84,9 +84,16 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     @objc func titleTextFieldChange(_ textField: UITextField) {
         if let text = textField.text {
-            let maxCha = FlashStyle.post.maxChaTitle
-            textField.text = String(text.prefix(maxCha))
+            let maxLength = FlashStyle.post.maxChaTitle
+            textField.text = String(text.prefix(maxLength))
+            let countText = textField.text?.count ?? 0
+            self.updateTitleLimit(countText)
         }
+    }
+    
+    private func updateTitleLimit(_ count: Int) {
+        let maxLength = FlashStyle.post.maxChaTitle
+        self.titleLimitLabel.text = "\(count)/\(maxLength) Characters Limit"
     }
     
     var selectedCategory: CategoryResult? {
@@ -104,9 +111,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         let fontValue = UIFont.font(16, .text)
         let maxChaTitle = FlashStyle.post.maxChaTitle
         self.titleTextField.delegate = self
-        //self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
+        self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
         self.coverImageView.cornerRadius = 8
-        self.titleLimitLabel.text = "0/\(maxChaTitle) Characters Limit"
         self.titleLimitLabel.font = FontHelper.getFontSystem(12, font: .text)
         self.titleTextField.font = fontValue
         self.titleTextField.textColor = .text()
@@ -131,6 +137,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.timeLabel.font = fontTitle
         self.timeMinLabel.font = fontTitle
         self.timeMinLabel.text = "minutes".localized()
+        self.timeMinLabel.textColor = .text()
         self.timeValueLabel.font = fontValue
         self.categoryLabel.font = fontTitle
         self.categoryValueLabel.text = FlashStyle.post.categoryPlaceHolder
@@ -155,6 +162,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.tagContentView.addGestureRecognizer(tapTag)
         self.tagContentView.updateLayout()
         self.tagContentView.backgroundColor = .white
+        self.tagView.backgroundColor = .clear
         self.tagView.updateLayout()
         self.tagView.delegate = self
         self.tagView.tagLineBreakMode = .byTruncatingTail
@@ -179,6 +187,13 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                 }
             }
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self.viewModel.detail?.name = self.titleTextField.text ?? ""
+        self.viewModel.detail?.desc = self.descTextView.text ?? ""
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -215,15 +230,22 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     func loadDetail(_ detail: FLDetailResult?) {
-        self.createStatus = .edit//reset to edit
         self.hideLoading()
         guard let detail = detail else { return }
         self.time = detail.estimateTime ?? 5 //TODO: get real time
+        
         self.titleTextField.text = detail.name
+        self.updateTitleLimit(detail.name.count)
+        
         self.descTextView.text = detail.desc
+        self.coverImageView.setImage(detail.image, placeholderImage: nil)
         if let owner = detail.owner {
             self.ownerValueLabel.text = owner.name
         }
+        
+        self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)
+        
+        self.categoryValueLabel.text = detail.category?.name ?? FlashStyle.post.categoryPlaceHolder
         let dateTime = formatter.with(dateFormat: formatText, dateString: detail.datetimeUpdate)
         self.updateValueLabel.text = dateTime
         self.timeValueLabel.text = "\(self.time)"
@@ -231,7 +253,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.idValueLabel.text = detail.code
         self.idValueLabel.textColor = detail.contentCode.getColor()
         self.idView.borderColor = detail.contentCode.getColor()
-        self.statusValueLabel.text = detail.status.title()
+        self.statusValueLabel.text = detail.displayStatus.title()
         self.minusButton.isEnabled = !(self.time == 1)
         
         if detail.requestStatus == .completed  {
@@ -247,10 +269,11 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         } else {
             self.submitButton.isHidden = false
             self.cancelButton.isHidden = true
+            self.requestStackView.isHidden = true
         }
         
         
-        let isEnable = detail.status == .unpublish
+        let isEnable = detail.displayStatus == .unpublish
         let disableColor = UIColor.disable()
         let textColor = UIColor.text()
         titleTextField.isEnabled = isEnable
@@ -262,13 +285,14 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         minusButton.isEnabled = isEnable
         plusButton.tintColor = isEnable ? UIColor.config_primary() : disableColor
         minusButton.tintColor = isEnable ? UIColor.config_primary() : disableColor
-        categoryView.isUserInteractionEnabled = isEnable
-        categoryValueLabel.textColor = isEnable ? .text25() : disableColor
+        categoryValueLabel.textColor = isEnable ? textColor : disableColor
         categoryButton.isEnabled = isEnable
+        categoryView.isUserInteractionEnabled = isEnable
+        
         tagButton.isEnabled = isEnable
         tagContentView.isUserInteractionEnabled = isEnable
         tagView.isUserInteractionEnabled = isEnable
-        statusPin.backgroundColor = detail.status.color()
+        statusPin.backgroundColor = detail.displayStatus.color()
         
     }
     
@@ -302,20 +326,14 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @objc func previewPressed() {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
-        vc.playerState = .user
+        vc.playerState = .preview
         vc.viewModel =  self.viewModel
         
-        vc.modalTransitionStyle = .crossDissolve
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true) {
-            
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
         }
-        
-//        if let nav = self.navigationController {
-//            nav.pushViewController(vc, animated: true)
-//        } else {
-//            self.present(vc, animated: true, completion: nil)
-//        }
     }
     
     @IBAction func imagePressed(_ sender: UIButton) {
@@ -330,35 +348,42 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     @objc func categoryPressed() {
-        JSON.read("ugc-flash-card-category") { (object) in
-            if let dictList = object as? [[String : Any]],
-               let detail = UGCCategoryPageResult(JSON: ["results": dictList]) {
-                let mockList = detail.list
-                var categoryView = UGCCatagoryListView(items: mockList) { category in
-                    print("UGCCatagoryListView: select: \(category.name)")
-                }
-                categoryView.delegate = self
-                let host = UIHostingController(rootView: categoryView)
-                if let nav = self.navigationController {
-                    nav.pushViewController(host, animated: true)
-                } else {
-                    self.present(host, animated: true, completion: nil)
-                }
+        self.view.endEditing(true)
+        self.viewModel.callAPICategoryList { (categoryPageResult) in
+            guard let categoryPage = categoryPageResult else { return }
+            var categoryView = UGCCatagoryListView(items: categoryPage.list) { category in
+                print("UGCCatagoryListView: select: \(category.name)")
+                self.selectedCategory = category
+            }
+            //categoryView.delegate = self
+            let host = UIHostingController(rootView: categoryView)
+            if let nav = self.navigationController {
+                nav.pushViewController(host, animated: true)
+            } else {
+                self.present(host, animated: true, completion: nil)
             }
         }
     }
     
     @objc func tagViewPressed() {
+        self.view.endEditing(true)
+        let detail = self.viewModel.detail!
+        
         if let tagList = self.latestTags {
             self.openTagListVC(tags: tagList)
         } else {
             //TODO: use real api
             self.latestTags = nil
+            
+            for tag in detail.tagList {
+                let tagSet = detail.tagList.first {$0.id == tag.id}
+                tagSet?.isSelected = true
+            }
             JSON.read("ugc-flash-card-tag-list") { (object) in
                 if let dict = object as? [String : Any],
                    let detail = UGCTagPageResult(JSON: dict) {
                     let mockList = detail.list
-                    self.latestTags = mockList
+                    
                     self.openTagListVC(tags: mockList)
                 }
             }
@@ -387,54 +412,72 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     func openPopupWith(detail: FLDetailResult) {
-        let detail = self.viewModel.detail
-        var desc = "Do you confirm to submit this material?"
-        if detail?.requestStatus == .waitForApprove {
-            desc = "Do you confirm to cancel the request?"
+        let detail = self.viewModel.detail!
+        var desc = "confirm_submit_material".localized()
+        if detail.requestStatus == .waitForApprove {
+            desc = "confirm_cancel_request".localized()
         }
         
         let confirm = ActionButton(
             title: "confirm".localized(),
             action: Action(handler: { [weak self] (sender) in
-                self?.callApiPost(requestStatus: .waitForApprove)
+                self?.callApiPost(requestStatus: detail.requestStatus)
             })
         )
         PopupManager.showWarning(desc, confirm: confirm, at: self)
     }
     
     func callApiPost(requestStatus: RequestStatus) {
-        //TODO: patch + send approve
-        
-        self.callAPIFlashDetailUpdate()
-        
-        //mock
-        self.viewModel.detail?.status = .unpublish
-        self.viewModel.detail?.requestStatus = requestStatus
-        self.loadDetail(self.viewModel.detail)
-        
+        if requestStatus == .none {
+            self.callAPIFlashDetailUpdate()
+            
+        } else if requestStatus == .waitForApprove {
+            self.callAPIFlashDetailCancel()
+        }
     }
     
     func callAPIFlashDetailUpdate() {
         let json = self.createJSON()
-        self.viewModel.callAPIFlashDetailUpdate(parameter: json) { (newDetail) in
-            
+        ConsoleLog.show("callAPIFlashDetailUpdate")
+        self.viewModel.callAPIFlashDetailUpdate(parameter: json) { [weak self] (newDetail) in
+            self?.createStatus = .edit//reset to edit
+            self?.loadDetail(newDetail)
+            self?.callAPIFlashDetailSubmit()
+        }
+    }
+    
+    func callAPIFlashDetailSubmit() {
+        self.viewModel.callAPIFlashDetailSubmit { [weak self] (detail) in
+            self?.viewModel.detail?.requestStatus = .waitForApprove//mock
+            self?.viewModel.detail?.displayStatus = .unpublish//mock
+            self?.loadDetail(detail)
+        }
+    }
+    
+    func callAPIFlashDetailCancel() {
+        self.viewModel.callAPIFlashDetailCancel { [weak self]  (detail) in
+            self?.viewModel.detail?.requestStatus = .none//mock
+            self?.viewModel.detail?.displayStatus = .publish//mock
+            self?.loadDetail(detail)
         }
     }
     
     func createJSON() -> [String: Any]? {
         let detail = self.viewModel.detail!
+        
         var dict = [String: Any]()
         
-        var tags = [String]()
+        var tags = [Int]()
         if let latestTags = latestTags {
             for tag in latestTags {
-                tags.append(tag.name)
+                tags.append(tag.id)
             }
         }
         
         dict["name"] = self.titleTextField.text
         dict["desc"] = self.descTextView.text
-        dict["code"] = detail.code
+        dict["duration"] = self.time
+        //dict["code"] = detail.code
         dict["created_by"] = detail.owner?.id ?? UserManager.shared.profile.id
         
         if let imageBase64 = self.imageBase64 {
@@ -445,7 +488,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
         
         dict["tag_list"] = tags
-        dict["is_display"] = true
+        dict["is_display"] = false //detail.displayStatus.rawValue
         
         //may next phase
         //dict["provider"] =
@@ -461,7 +504,9 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         
         if tags.isEmpty {
             self.tagView.isHidden = true
+            self.tagPlaceholderLabel.text = FlashStyle.post.tagPlaceHolder
         } else {
+            self.tagPlaceholderLabel.text = ""
             self.tagView.removeAllTags()
             var tagList = [String]()
             for tag in tags {
@@ -479,31 +524,18 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                 self.tagHeight.constant = tagViewContentHeight + 2
                 
                 for i in 0..<self.tagView.tagViews.count {
-                    let isSelected = tags[i].isSelected
                     self.tagView?.tagViews[i].tag = tags[i].id
-                    self.tagView?.tagViews[i].cornerRadius = 15
+                    self.tagView?.tagViews[i].cornerRadius = CGFloat(self.tagView.tagViewHeight / 2)
                     self.tagView?.tagViews[i].borderWidth = 1
                     self.tagView?.tagViews[i].clipsToBounds = true
-                    self.tagView?.tagViews[i].tagBackgroundColor = isSelected ? tagBgEnableColor : .white
+                    self.tagView?.tagViews[i].tagBackgroundColor = tagBgEnableColor
                     self.tagView?.tagViews[i].textColor = tagTextEnableColor
-                    self.tagView?.tagViews[i].borderColor = isSelected ? .clear : tagTextEnableColor
+                    self.tagView?.tagViews[i].borderColor = .clear
                 }
             }
         }
     }
     
-}
-
-extension FLPostViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-
-        if let text = textField.text, textField == self.titleTextField {
-            let currentText = text + string
-            let maxCha = FlashStyle.post.maxChaTitle
-            return currentText.count <= maxCha
-         }
-        return true
-    }
 }
 
 extension FLPostViewController: TagListViewDelegate, TagListSelectViewControllerDelegate, UGCCatagoryListViewDelegate {
@@ -515,6 +547,7 @@ extension FLPostViewController: TagListViewDelegate, TagListSelectViewController
     
     func tagListSelectViewController(_ tags: [UGCTagResult]) {
         print("select: \(tags.count) tag")
+        latestTags = tags
         self.manageTagContentViewWith(tags: tags)
     }
     
@@ -536,7 +569,7 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
                 let ratio = size.width / size.height
                 newWidth = 1024 * ratio
             }
-            let img = originalImage.resizeImage(newWidth: newWidth)
+            let img = originalImage.resizeImage(newWidth: newWidth).cropSquare()
             let imgData = img.jpeg ?? img.png
             guard let data = imgData else { return }
             guard let uiimage = UIImage(data: data) else { return }
@@ -554,3 +587,42 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
     }
 
 }
+
+extension FLPostViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        self.viewModel.detail?.name = text
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        if let text = textField.text, textField == self.titleTextField {
+            let currentText = text + string
+            let maxCha = FlashStyle.post.maxChaTitle
+            return currentText.count <= maxCha
+         }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.isFirstResponder {
+            textField.resignFirstResponder()
+        }
+        return true
+    }
+}
+
+extension FLPostViewController: UITextViewDelegate {
+    func textViewDidEndEditing(_ textView: UITextView) {
+        guard let text = textView.text else { return }
+        self.viewModel.detail?.desc = text
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if textView.isFirstResponder {
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+}
+

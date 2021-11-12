@@ -136,24 +136,24 @@
                                                     <action selector="editFlashButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QVF-cm-ooG"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PdI-EO-BW0">
-                                                <rect key="frame" x="0.0" y="332" width="428" height="50"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="wrf-jQ-vwt"/>
-                                                </constraints>
-                                                <state key="normal" title="Flash Player [User]"/>
-                                                <connections>
-                                                    <action selector="openFlashPlayer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xqN-jx-4BM"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kFo-sL-lEE">
-                                                <rect key="frame" x="0.0" y="382" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="332" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="QW3-mb-O2s"/>
                                                 </constraints>
-                                                <state key="normal" title="Flash Player [Edit Preview]"/>
+                                                <state key="normal" title="Flash Player [Preview1]"/>
                                                 <connections>
                                                     <action selector="openFlashPlayerPreview:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9gO-89-o4a"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PdI-EO-BW0">
+                                                <rect key="frame" x="0.0" y="382" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="wrf-jQ-vwt"/>
+                                                </constraints>
+                                                <state key="normal" title="Flash Player  [Preview2]"/>
+                                                <connections>
+                                                    <action selector="openFlashPlayer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xqN-jx-4BM"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cMQ-Jc-H0m">
@@ -162,7 +162,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="wep-Pa-Mbm"/>
                                                 </constraints>
-                                                <state key="normal" title="Flash Post (waiting Approve API)">
+                                                <state key="normal" title="Flash Edit Post (waiting Approve API)">
                                                     <color key="titleColor" systemColor="labelColor"/>
                                                 </state>
                                                 <connections>
@@ -182,7 +182,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="3uE-Uo-XZo"/>
                                                 </constraints>
-                                                <state key="normal" title="Flash Post New(อย่ากดบ่อย)">
+                                                <state key="normal" title="Flash New Post">
                                                     <color key="titleColor" systemColor="labelColor"/>
                                                 </state>
                                                 <connections>
@@ -272,6 +272,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="mZy-2j-bZT"/>
                     <connections>
+                        <outlet property="flashIdField" destination="kUV-nz-A21" id="WMQ-dD-eHI"/>
                         <outlet property="flashIdTextField" destination="kUV-nz-A21" id="5UK-bI-cN5"/>
                         <outlet property="loginButton" destination="0zN-T8-ANS" id="qty-wQ-T8B"/>
                         <outlet property="passTextField" destination="QL9-o1-8w1" id="mCu-a1-UOH"/>

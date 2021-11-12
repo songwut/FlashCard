@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-var flashFixId = 6
+var flashFixId = 260
 
 extension ViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     @IBOutlet private weak var stageButton: UIButton!
     @IBOutlet private weak var usernameTextField: UITextField!
     @IBOutlet private weak var passTextField: UITextField!
+    @IBOutlet private weak var flashIdField: UITextField!
     @IBOutlet private weak var loginButton: UIButton!
     
     @IBOutlet private weak var flashIdTextField: UITextField!
@@ -63,6 +64,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.stageButton.addTarget(self, action: #selector(self.stageButtonPressed(_:)), for: .touchUpInside)
         
+        self.flashIdField.text = "\(flashFixId)"
         self.passTextField.isSecureTextEntry = true
         if let user = UserDefaults.standard.string(forKey: "user_key") {
             self.usernameTextField.text = user
@@ -105,6 +107,7 @@ class ViewController: UIViewController {
     @objc func stageButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
+        vc.viewModel.flashId = flashFixId
         vc.createStatus = .new
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
@@ -116,6 +119,7 @@ class ViewController: UIViewController {
     @IBAction func editFlashButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
+        vc.viewModel.flashId = flashFixId
         vc.createStatus = .edit
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
@@ -129,10 +133,10 @@ class ViewController: UIViewController {
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
         vc.viewModel.flashId = flashFixId
         vc.playerState = .user
-        vc.modalTransitionStyle = .crossDissolve
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true) {
-            
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
         }
     }
     
@@ -151,9 +155,8 @@ class ViewController: UIViewController {
         return .darkContent
     }
     @IBAction func openFlashPlayerSwiftUI(_ sender: UIButton) {
-        
-        let viewModel = FLFlashCardObser(flashId: 6)
-        let vm = FLFlashCardViewModel(flashId: 6)
+        let viewModel = FLFlashCardObser(flashId: flashFixId)
+        let vm = FLFlashCardViewModel(flashId: flashFixId)
         let flashPlayerView = FLFlashPlayerView(viewModel: viewModel,vm:vm, dismiss: {_ in
             self.presentedViewController?.dismiss(animated: true)
         })
@@ -213,15 +216,14 @@ class ViewController: UIViewController {
     @IBAction func flPostPressed(_ sender: UIButton) {
         self.showLoading(nil)
         let model = FLFlashCardViewModel()
-        model.callAPIFlashDetail(.get) { (detail) in
-            self.hideLoading()
-            let vc = FLPostViewController.instantiate(viewModel: model)
-            vc.createStatus = .edit
-            if let nav = self.navigationController {
-                nav.pushViewController(vc, animated: true)
-            } else {
-                self.present(vc, animated: true, completion: nil)
-            }
+        model.flashId = flashFixId
+        self.hideLoading()
+        let vc = FLPostViewController.instantiate(viewModel: model)
+        vc.createStatus = .edit
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
         }
         
         /*
@@ -242,7 +244,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func newPostPressed(_ sender: UIButton) {
-        self.showLoading(nil)
         let model = FLFlashCardViewModel()
         let vc = FLPostViewController.instantiate(viewModel: model)
         vc.createStatus = .new

@@ -76,14 +76,6 @@ class FLCard: UIView {
         
         containerView = UIView(frame: bounds)
         containerView.backgroundColor = .clear
-        
-//        containerView.cornerRadius = FlashStyle.cardCornerRadius //bounds.width/20
-//        containerView.clipsToBounds = false
-//        containerView.layer.masksToBounds = false
-//        containerView.layer.shadowRadius = FlashStyle.cardCornerRadius
-//        containerView.layer.shadowOpacity = 0.2
-//        containerView.layer.shadowOffset = CGSize(width: 0, height: 0)
-//        containerView.layer.shadowColor = UIColor.black.cgColor
     }
     
     /*

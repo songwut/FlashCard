@@ -54,7 +54,7 @@ class FLPlayerViewController: FLBaseViewController {
     private var cardSize = CGSize.zero
     private var cardFrame = CGRect.zero
     private var stageRatio: CGFloat = 1.0
-    private let creator = FLCreator(isEditor: false)
+    private var creator = FLCreator(isEditor: false)
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
@@ -226,6 +226,7 @@ class FLPlayerViewController: FLBaseViewController {
     func createStageAnimate(cardFrame: CGRect) {
         //Can change lib CardView here
         //Dynamically create view for each card
+        self.creator.playerState = self.playerState
         let contentView: (Int, CGRect, FLCardPageResult) -> (UIView) = { (index: Int ,frame: CGRect , pageResult: FLCardPageResult) -> (UIView) in
             
             let stageView = FLStageView(frame: frame)

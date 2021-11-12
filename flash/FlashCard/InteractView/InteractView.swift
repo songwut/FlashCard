@@ -8,6 +8,13 @@
 import UIKit
 import AVKit
 
+extension InteractView {
+    class func getRadians(degrees: Double) -> Double {
+        let radians = degrees * .pi / 180
+        return radians
+    }
+}
+
 class InteractView: CHTStickerView {
     var textColor: String?
     var contentFixWidth: CGFloat?

@@ -50,7 +50,6 @@ class PopupManager: NSObject {
         let popup: PopupContent
         let icon = ImageTint(image: UIImage(named: "ic_v2_alert"), color: .error())
         icon.size = 75
-        //popup = PopupContent(title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: "confirm".localized(),  closeButtonTitle: "cancel".localized(), isError: true)
         popup = PopupContent(atbTitle: nil, title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: nil, closeButtonTitle: "cancel".localized(), confirmAction: confirm)
         popup.closeColor = .info_75()
         popup.confirmColor = .info_75()
@@ -58,8 +57,6 @@ class PopupManager: NSObject {
         var vc = UIApplication.shared.window?.rootViewController
         if let current = mainVC {
             vc = current
-        } else {
-            vc = UserManager.shared.tabMenu ?? UserManager.shared.rootVC
         }
         
         PopupViewController.showVC(vc!, content: popup, didClose: btnAction)

@@ -9,8 +9,8 @@ import Foundation
 import ObjectMapper
 
 enum FLStatus: Int {
-    case publish = 0
-    case unpublish = 1
+    case publish = 1
+    case unpublish = 0
     
     func title() -> String {
         switch self {
@@ -35,7 +35,7 @@ class FLDetailResult: LMMaterialResult {
     var countView = 0
     var provider: ProviderResult?
     var category: CategoryResult?
-    var instructor: InstructorResult?
+    var instructorList = [InstructorResult]()
     var tagList = [UGCTagResult]()
     var estimateTime: Int?//only min
     
@@ -45,8 +45,13 @@ class FLDetailResult: LMMaterialResult {
         countView            <- map["count_view"]
         code                 <- map["code"]
         progress             <- map["progress"]
+        estimateTime         <- map["duration"]
         owner                <- map["created_by"]
         datetimePublish      <- map["datetime_publish"]
+        category             <- map["category"]
+        provider             <- map["provider"]
+        instructorList       <- map["instructor_list"]
+        tagList              <- map["tag_list"]
     }
 }
 

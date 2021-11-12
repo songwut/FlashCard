@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FLFlashPlayerView: View {
+struct FLFlashPlayerView: View {//need to fix many things
     @ObservedObject var viewModel: FLFlashCardObser
     //@State var detail: FLDetailResult
     //@State var list: [FLCardPageResult]

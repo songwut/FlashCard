@@ -247,6 +247,7 @@ final class FLEditorViewController: FLBaseViewController {
             card.index = lastItemIndex
             self.createNewCardView(card)
             self.gotoPage(index: lastItemIndex)
+            //TODO:auto slide
         }
     }
     
@@ -254,6 +255,7 @@ final class FLEditorViewController: FLBaseViewController {
         var newCardData = [String: Any]()
         var data = [String: Any]()
         data["bg_color"] = ["cl_code" : "FFFFFF","code": "color_01"]
+        data["component"] = []
         newCardData["data"] = data
         
         self.viewModel.callAPIAddNewCard(param: newCardData) {(cardPage) in
@@ -713,7 +715,6 @@ final class FLEditorViewController: FLBaseViewController {
             self.manageTextView(in: iView, stageView: stageView)
             
             DispatchQueue.main.async {
-                self.updateTextViewHeight(iView)
                 
                 //Auto select all test
                 iView.textView?.selectAll(self)
@@ -728,11 +729,6 @@ final class FLEditorViewController: FLBaseViewController {
             print("controlView width: \(size.width) ,controlView height: \(size.height)")
             
             iView.isHiddenEditingTool = false
-            
-            //Text view need update frame
-            DispatchQueue.main.async {
-                iView.updateFixWidth(scale: 1.0, originalBounds: iView.bounds)
-            }
         }
     }
     
@@ -1355,6 +1351,14 @@ extension FLEditorViewController: UITextViewDelegate {
             iView.isHiddenEditingTool = false
             self.openToolBar(tool: .text, view: iView)
             self.toolVC?.open(.text)
+            
+            DispatchQueue.main.async {//special fix for textview jumping
+                if let element = iView.element, element.isCreating, iView.contentFixWidth == nil {
+                    iView.contentFixWidth = iView.frame.width
+                    self.updateTextViewHeight(iView)
+                    iView.updateLayout()
+                }
+            }
         }
     }
     

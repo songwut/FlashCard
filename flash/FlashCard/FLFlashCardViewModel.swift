@@ -124,7 +124,33 @@ class FLFlashCardViewModel: BaseViewModel {
         request.apiMethod = .patch
         request.endPoint = .ugcFlashCardDetail
         request.parameter = parameter
-        request.arguments = ["\(String(describing: detail.code))"]
+        request.arguments = ["\(detail.id)"]
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+            self?.checkResponseBody(responseBody)
+            self?.detail = result
+            complete(result)
+        }
+    }
+    
+    func callAPIFlashDetailSubmit(complete: @escaping (_ result: FLDetailResult?) -> ()) {
+        guard let detail = self.detail else { return }
+        let request = FLRequest()
+        request.apiMethod = .post
+        request.endPoint = .ugcFlashPostSubmit
+        request.arguments = ["\(detail.id)"]
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+            self?.checkResponseBody(responseBody)
+            self?.detail = result
+            complete(result)
+        }
+    }
+    
+    func callAPIFlashDetailCancel(complete: @escaping (_ result: FLDetailResult?) -> ()) {
+        guard let detail = self.detail else { return }
+        let request = FLRequest()
+        request.apiMethod = .post
+        request.endPoint = .ugcFlashPostCancel
+        request.arguments = ["\(detail.id)"]
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
             self?.detail = result
@@ -448,6 +474,26 @@ class FLFlashCardViewModel: BaseViewModel {
         }
     }
     
+    func callAPICategoryList(complete: @escaping (_ result: UGCCategoryPageResult?) -> ()) {
+        
+        let request = FLRequest()
+        request.apiMethod = .get
+        request.endPoint = .subCategory
+        API.request(request) { (response: ResponseBody?, result: UGCCategoryPageResult?, isCache, error) in
+            self.checkResponseBody(response)
+            complete(result)
+        }
+        /*
+        JSON.read("ugc-flash-card-category") { (object) in
+            if let dictList = object as? [[String : Any]],
+               let detail = UGCCategoryPageResult(JSON: ["results": dictList]) {
+                complete(detail)
+            }
+        }
+        */
+    }
+    
+    
     private func removeCardView(idList:[Int]) {
         for id in idList {
             let card = self.pageList.first { (pageResult) -> Bool in
@@ -478,7 +524,7 @@ class FLFlashCardViewModel: BaseViewModel {
 extension FLFlashCardViewModel {
     func createJSONNewFlash(profileId: Int) -> [String : Any] {
         var param = [String : Any]()
-        param["name"] = "Untitled - 01"
+        param["name"] = "Untitled"
         param["created_by"] = profileId
         param["image"] = NSNull()
         return param

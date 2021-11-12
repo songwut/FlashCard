@@ -25,6 +25,7 @@ struct MyMaterialView: View {
                 ImageView(url: item.image)
                     .frame(width: FlashStyle.flashItemHeight)
                     .clipped()
+                    .cornerRadius(8)
                 
                 InfoView
                 Spacer()
@@ -86,9 +87,9 @@ struct MyMaterialView: View {
     var PublicStatusView: some View {
         HStack(spacing: 4) {
             Circle()
-                .fill(item.status.color().color)
+                .fill(item.displayStatus.color().color)
                 .frame(width: 7, height: 7)
-            Text(item.status.title())
+            Text(item.displayStatus.title())
                 .font(statusFont)
                 .foregroundColor(.black)
         }

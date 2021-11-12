@@ -36,4 +36,39 @@ extension UIImage {
         
         return newImage!
     }
+    
+    func cropSquare() -> UIImage {
+        
+        if self.size.width == self.size.height {
+            //skip if this already square
+            return self
+        }
+        
+        let minSize = min(self.size.width, self.size.height)
+        let contextImage: UIImage = UIImage(cgImage: self.cgImage!)
+        let contextSize: CGSize = contextImage.size
+        
+        var posX: CGFloat = 0.0
+        var posY: CGFloat = 0.0
+        var cgwidth: CGFloat = CGFloat(minSize)
+        var cgheight: CGFloat = CGFloat(minSize)
+        
+        // See what size is longer and create the center off of that
+        if contextSize.width > contextSize.height {
+            posX = ((contextSize.width - contextSize.height) / 2)
+            posY = 0
+            cgwidth = contextSize.height
+            cgheight = contextSize.height
+        } else {
+            posX = 0
+            posY = ((contextSize.height - contextSize.width) / 2)
+            cgwidth = contextSize.width
+            cgheight = contextSize.width
+        }
+        
+        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
+        let imageRef: CGImage = contextImage.cgImage!.cropping(to: rect)!
+        let image: UIImage = UIImage(cgImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
+        return image
+    }
 }

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct UGCCategoryRow: View {
-    @State var isChecked: Bool = false
+    //@State var isChecked: Bool = false
+    @State var isUpdate: Bool = false
     @State var isExpaned: Bool = false
     @State var category: CategoryResult
     
@@ -37,7 +38,8 @@ struct UGCCategoryRow: View {
                             let c = childList[i]
                             UGCCategoryRow(category: c, isFirst: false) { c in
                                 print("createPressed")
-                                self.isChecked = c.isChecked
+                                //self.isChecked = c.isChecked
+                                category.isChecked = c.isChecked
                                 return checkPressed(category)
                             }
                             .padding(.leading, 16)
@@ -69,10 +71,11 @@ struct UGCCategoryRow: View {
             
             Button(action: {
                 let isChecked = category.isChecked
-                if !isChecked {
+                if isChecked {
                     self.clearCheckAllchild(category.childList)
                 }
                 category.isChecked = isChecked
+                isUpdate.toggle()
                 checkPressed(category)
             }, label: {
                 Image("ic_v2_check")
@@ -81,7 +84,7 @@ struct UGCCategoryRow: View {
                     .frame(width: 18, height: 18, alignment: .center)
             })
             .buttonStyle(
-                ButtonCheckBox(isChecked: self.isChecked)
+                ButtonCheckBox(isChecked: category.isChecked)
             )
             
             

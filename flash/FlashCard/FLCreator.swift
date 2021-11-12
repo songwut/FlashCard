@@ -6,31 +6,11 @@
 //
 
 import UIKit
-//import SVGKit
 import AVKit
-/*
-extension UIImageView {
-    func downloadedsvg(from url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
-        contentMode = mode
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard
-                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
-                let data = data, error == nil,
-                let receivedicon: SVGKImage = SVGKImage(data: data),
-                let image = receivedicon.uiImage
-                else { return }
-            DispatchQueue.main.async() {
-                self.image = image
-            }
-        }.resume()
-    }
-}
-*/
 
 struct FLCreator {
     var isEditor = true
-    //var stageView: FLStageView!//visual stage
+    var playerState: FLPlayerState = .user
     
     init(isEditor:Bool) {
         self.isEditor = isEditor
@@ -129,18 +109,16 @@ struct FLCreator {
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(x: 0, y: 0, width: viewW + margin, height: viewH + margin)
-        iView.contentFixWidth = viewW
         iView.frame = frame
         iView.center = center
         textView.updateLayout()
-        //iView.textView = textView
         iView.type = element.type
         iView.element = element
         iView.scale = (scale == 1.0) ? 1.0 : scale
         iView.update(scale: scale)
-        iView.update(rotation: element.rotation?.doubleValue)
+        let radians = InteractView.getRadians(degrees: element.rotation?.doubleValue ?? 0)
+        iView.update(rotation: radians)
         iView.backgroundColor = UIColor.clear
-        //textView.backgroundColor = UIColor.purple.withAlphaComponent(0.3)
         stage.addSubview(iView)
         
         iView.bounds = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
@@ -153,7 +131,6 @@ struct FLCreator {
         var viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
         var viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
         
-        //fix size olly case create New
         if let _ = element.graphicType, element.isCreating {
             viewW = stage.frame.width * FlashStyle.graphic.displayRatio
             viewH = viewW//square
@@ -192,7 +169,8 @@ struct FLCreator {
         iView.frame = frame
         iView.center = center
         //iView.contentView = imageview
-        iView.update(rotation: element.rotation?.doubleValue)
+        let radians = InteractView.getRadians(degrees: element.rotation?.doubleValue ?? 0)
+        iView.update(rotation: radians)
         stage.addSubview(iView)
         return iView
     }

@@ -124,7 +124,8 @@ class FLCardInfoViewController: UIViewController {
         self.coverImage.setImage(detail.image, placeholderImage: UIImage(named: "card-info-cover"))
         self.countLabel.text = formatter.string(from: NSNumber(value: detail.countView))
         self.nameLabel.text = detail.name
-        self.instructorLabel.text = "instructor".localized() + " : " + (detail.instructor?.name ?? "")
+        //conflict Design = 1 | API = list
+        //self.instructorLabel.text = "instructor".localized() + " : " + (detail.instructor?.name ?? "")
         self.providerLabel.text = "content_provider".localized() + " : " + (detail.provider?.name ?? "")
         self.categoryLabel.text = "category".localized() + " : " + (detail.category?.name ?? "")
         self.descLabel.text = detail.desc

@@ -275,7 +275,7 @@ class ProgressCheckIn: BaseResult {
     
     case inprogress = 21
     case verifying = 22
-    case reSubmit = 6 // qa sanbox, sanbox = 4
+    case reSubmit = 6
     
     case completed = 30
     case contentRequestExpired = -6

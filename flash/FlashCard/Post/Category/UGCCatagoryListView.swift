@@ -61,6 +61,7 @@ struct UGCCatagoryListView: View {
             Button(action: {
                 guard let c = selectedCategory else { return }
                 delegate?.didSelectCategory(c)
+                didSelectCategory(c)
                 presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text("done".localized().uppercased())

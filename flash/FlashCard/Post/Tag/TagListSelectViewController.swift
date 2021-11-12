@@ -88,7 +88,7 @@ class TagListSelectViewController: UIViewController {
                 for i in 0..<self.tagView.tagViews.count {
                     let isSelected = tags[i].isSelected
                     self.tagView?.tagViews[i].tag = tags[i].id
-                    self.tagView?.tagViews[i].cornerRadius = 15
+                    self.tagView?.tagViews[i].cornerRadius = CGFloat(self.tagView.tagViewHeight / 2)
                     self.tagView?.tagViews[i].borderWidth = 1
                     self.tagView?.tagViews[i].clipsToBounds = true
                     self.tagView?.tagViews[i].tagBackgroundColor = isSelected ? tagBgEnableColor : .white

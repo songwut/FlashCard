@@ -19,8 +19,12 @@ enum EndPoint:String {
     case ugcFlashSticker = "ugc/flash-card/sticker/"
     case ugcFlashShape = "ugc/flash-card/shape/"
     
+    case ugcFlashPostSubmit = "ugc/flash-card/%@/content-request/submit/"
+    case ugcFlashPostCancel = "ugc/flash-card/%@/content-request/cancel/"
+    
     case learningContentCoverList = "learning-content/content-cover/"
     case subCategory = "sub-category/"
+    case learningMaterialDetail = "%@/%@/%@"//LM/type/id
 }
 
 class FLRequest: APIRequest {

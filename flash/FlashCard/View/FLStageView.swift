@@ -69,14 +69,17 @@ class FLStageView: FlashStageView {
                 
                 anyView?.tag = element.id
                 if let iView = anyView as? InteractView {
+                    iView.element = element
                     iView.element?.sort = self.subviews.count + 1
                     iView.isHiddenEditingTool = true
                     
                 } else if let iView = anyView as? InteractTextView {
+                    iView.element = element
                     iView.element?.sort = self.subviews.count + 1
                     iView.isHiddenEditingTool = true
                     
                 } else if let quizView = anyView as? FLQuizView {
+                    quizView.element = element
                     quizView.element?.sort = self.subviews.count + 1
                     if !self.isEditor {//animate in player
                         self.quizManageSizeAnimate(quizView)
