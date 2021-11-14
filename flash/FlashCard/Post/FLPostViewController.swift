@@ -239,13 +239,11 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         
         self.descTextView.text = detail.desc
         self.coverImageView.setImage(detail.image, placeholderImage: nil)
-        if let owner = detail.owner {
-            self.ownerValueLabel.text = owner.name
-        }
+        self.ownerValueLabel.text = detail.owner?.name ?? ""
         
         self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)
         
-        self.categoryValueLabel.text = detail.category?.name ?? FlashStyle.post.categoryPlaceHolder
+        self.categoryValueLabel.text = self.getCatagoryName(detail)
         let dateTime = formatter.with(dateFormat: formatText, dateString: detail.datetimeUpdate)
         self.updateValueLabel.text = dateTime
         self.timeValueLabel.text = "\(self.time)"
@@ -296,6 +294,19 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         
     }
     
+    private func getCatagoryName(_ detail: FLDetailResult) -> String {
+        var categoryText: String?
+        
+        if let selectedCategory = self.selectedCategory {
+            categoryText = selectedCategory.name
+            
+        } else if let category = detail.category {
+            categoryText = category.name
+            
+        }
+        return categoryText ?? FlashStyle.post.categoryPlaceHolder
+    }
+    
     @IBAction func timePlusPressed(_ sender: UIButton) {
         self.time = self.time + 1
         self.minusButton.isEnabled = !(self.time == 1)
@@ -326,6 +337,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @objc func previewPressed() {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
+        vc.isShowInfo = false
         vc.playerState = .preview
         vc.viewModel =  self.viewModel
         
@@ -379,20 +391,18 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                 let tagSet = detail.tagList.first {$0.id == tag.id}
                 tagSet?.isSelected = true
             }
-            JSON.read("ugc-flash-card-tag-list") { (object) in
-                if let dict = object as? [String : Any],
-                   let detail = UGCTagPageResult(JSON: dict) {
-                    let mockList = detail.list
-                    
-                    self.openTagListVC(tags: mockList)
-                }
-            }
+            self.openTagListVC(tags: detail.tagList)
         }
     }
     
     func openTagListVC(tags:[UGCTagResult]) {
+        var idTags = [Int]()
+        for tag in tags {
+            idTags.append(tag.id)
+        }
+        
         let tagListVC = TagListSelectViewController()
-        tagListVC.tagList = tags
+        tagListVC.viewModel.selectTagId = idTags
         tagListVC.delegate = self
         if let nav = self.navigationController {
             nav.pushViewController(tagListVC, animated: true)
@@ -547,7 +557,7 @@ extension FLPostViewController: TagListViewDelegate, TagListSelectViewController
     
     func tagListSelectViewController(_ tags: [UGCTagResult]) {
         print("select: \(tags.count) tag")
-        latestTags = tags
+        self.latestTags = tags
         self.manageTagContentViewWith(tags: tags)
     }
     

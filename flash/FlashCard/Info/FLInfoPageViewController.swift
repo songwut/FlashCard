@@ -60,6 +60,7 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
         
         if isQuiz {
             self.quizInfoVC = FLQuizInfoViewController(frame: self.view.bounds, viewModel: self.viewModel)
+            self.quizInfoVC.quiz = self.quiz
             self.quizInfoVC.view.frame = self.view.bounds
             self.quizInfoVC.cardView.updateLayout()
             self.quizInfoVC.cardView.roundCorners([.topLeft, .topRight], radius: 16)
@@ -98,7 +99,8 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        print("didFinishAnimating")
+        
+        
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {

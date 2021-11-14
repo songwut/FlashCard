@@ -22,6 +22,7 @@ enum EndPoint:String {
     case ugcFlashPostSubmit = "ugc/flash-card/%@/content-request/submit/"
     case ugcFlashPostCancel = "ugc/flash-card/%@/content-request/cancel/"
     
+    case tagList = "dashboard/tag/type/MATERIAL_TYPE/"
     case learningContentCoverList = "learning-content/content-cover/"
     case subCategory = "sub-category/"
     case learningMaterialDetail = "%@/%@/%@"//LM/type/id

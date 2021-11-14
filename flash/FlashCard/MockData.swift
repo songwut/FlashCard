@@ -24,6 +24,22 @@ struct MockObject {
     static var flColor: FLColorResult = FLColorResult(JSON: ["code" : "color_01", "cl_code": "FFFFFF"])!
     static var detail = FLDetailResult(JSON: ["name" : "detail.name"])!
     
+    static var userAnswerPage: UserAnswerPageResult {
+        let data: [String: Any] = [
+            "api": "web",
+            "config_datetime_update": "2021-10-28T18:24:48.189536Z",
+            "datetime_update": "2021-10-28T18:24:48.189536Z",
+            "dict_datetime_update": "2021-10-22T10:29:21.737542Z",
+            "id": 337,
+            "image": "https://develop.conicle.co/media/flash_card/card/2021/10/a5c00f92-027.jpg",
+            "sort": 1
+        ]
+        let item = UserAnswerPageResult(JSON: data)!
+        
+        return item
+    }
+    
+    
     static var cardList = [
         FLCardPageResult(JSON: ["name" : "Any", "sort": 1])!,
         FLCardPageResult(JSON: ["name" : "Any", "sort": 2])!,

@@ -18,8 +18,9 @@ class TagListSelectViewController: UIViewController {
     @IBOutlet private weak var tagHeight: NSLayoutConstraint!
     @IBOutlet private weak var doneButton: UIButton!
     
+    var viewModel = TagListViewModel()
+    
     var delegate: TagListSelectViewControllerDelegate?
-    var tagList = [UGCTagResult]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,22 +31,30 @@ class TagListSelectViewController: UIViewController {
         self.totalLabel.textColor = .text75()
         self.tagView.delegate = self
         self.tagView.tagLineBreakMode = .byTruncatingTail
-        self.manageTagContentViewWith(tags: self.tagList)
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.showLoading(nil)
+        self.viewModel.callAPITagList { (list) in
+            self.manageTagContentViewWith(tags: list)
+        }
     }
     
     private func loadMore() {
-        self.manageTagContentViewWith(tags: self.tagList)
+        self.manageTagContentViewWith(tags: self.viewModel.tagList)
     }
     
     @objc private func resetPressed() {
-        for tag in self.tagList {
+        for tag in self.viewModel.tagList {
             tag.isSelected = false
         }
-        self.manageTagContentViewWith(tags: self.tagList)
+        self.manageTagContentViewWith(tags: self.viewModel.tagList)
     }
     
     @IBAction private func donePressed() {
-        let selectList = self.tagList.filter { (tag) -> Bool in
+        let selectList = self.viewModel.tagList.filter { (tag) -> Bool in
             return tag.isSelected
         }
         print("selectList: \(selectList.count)")
@@ -64,7 +73,7 @@ class TagListSelectViewController: UIViewController {
     
     private func manageTagContentViewWith(tags:[UGCTagResult]) {
         self.countSelectedList(tags)
-        
+        //may improve pagination with collectionView
         if tags.isEmpty {
             self.tagView.isHidden = true
             
@@ -72,6 +81,10 @@ class TagListSelectViewController: UIViewController {
             self.tagView?.removeAllTags()
             var tagList = [String]()
             for tag in tags {
+                let select = self.viewModel.selectTagId.first {$0 == tag.id}
+                let isSelected = select != nil
+                tag.isSelected = isSelected
+                
                 tagList.append(tag.name)
             }
             
@@ -86,8 +99,9 @@ class TagListSelectViewController: UIViewController {
                 self.tagHeight.constant = tagViewContentHeight + 2
                 
                 for i in 0..<self.tagView.tagViews.count {
+                    let tagId = tags[i].id
                     let isSelected = tags[i].isSelected
-                    self.tagView?.tagViews[i].tag = tags[i].id
+                    self.tagView?.tagViews[i].tag = tagId
                     self.tagView?.tagViews[i].cornerRadius = CGFloat(self.tagView.tagViewHeight / 2)
                     self.tagView?.tagViews[i].borderWidth = 1
                     self.tagView?.tagViews[i].clipsToBounds = true
@@ -97,6 +111,8 @@ class TagListSelectViewController: UIViewController {
                 }
             }
         }
+        self.viewModel.selectTagId.removeAll()
+        self.hideLoading()
     }
     /*
     // MARK: - Navigation
@@ -114,7 +130,7 @@ extension TagListSelectViewController: TagListViewDelegate {
     func tagPressed(_ title: String, tagView: TagView, sender: TagListView) {
         ConsoleLog.show("Tag : \(title), \(sender), \(tagView.tag)")
         let id = tagView.tag
-        let tagList = self.tagList.filter { (tag) -> Bool in
+        let tagList = self.viewModel.tagList.filter { (tag) -> Bool in
             return tag.id == id
         }
         guard let selectTag = tagList.first else { return }
@@ -124,7 +140,7 @@ extension TagListSelectViewController: TagListViewDelegate {
         tagView.textColor = tagTextEnableColor
         tagView.borderColor = isSelected ? .clear : tagTextEnableColor
         
-        self.countSelectedList(self.tagList)
+        self.countSelectedList(self.viewModel.tagList)
     }
 }
 

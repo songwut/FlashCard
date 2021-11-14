@@ -291,6 +291,7 @@ class UserAnswerPageResult: BaseResult {
 
 class UGCTagPageResult: BaseResult {
     var list = [UGCTagResult]()
+    var next: Int?
     
     required init?(map: Map) {
         super.init(map: map)
@@ -298,6 +299,7 @@ class UGCTagPageResult: BaseResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        next  <- map["next"]
         list  <- map["results"]
     }
     

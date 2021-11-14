@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import netfox
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,6 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // To remove all separators including the actual ones:
         UITableView.appearance().separatorStyle = .none
         UITableViewCell.appearance().selectedBackgroundView = UIView()
+        self.manageLognetfox()
         return true
     }
     
@@ -39,6 +41,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let names = UIFont.fontNames(forFamilyName: familyName)
             print("Font Names = [\(names)]")
         }
+    }
+    
+    func manageLognetfox() {
+        // MARK: - Log Netfox
+        let nameTarget = Bundle.main.object(forInfoDictionaryKey: "CFBundleExecutable") as? String
+        
+        #if DEBUG
+        NFX.sharedInstance().start()
+        #else
+        if nameTarget == "flash" {
+            NFX.sharedInstance().start()
+        } else {
+            NFX.sharedInstance().stop()
+        }
+        #endif
     }
     
     // MARK: UISceneSession Lifecycle

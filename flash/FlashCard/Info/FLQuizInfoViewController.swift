@@ -35,6 +35,7 @@ class FLQuizInfoViewController: PageViewController {
     var delegate: FLQuizInfoViewControllerDelegate?
     var userAnswerList = [FLAnswerResult]()
     var selfFrame: CGRect = .zero
+    var quiz: FlashElement?
     
     init(frame: CGRect, viewModel: FLFlashCardViewModel) {
         self.selfFrame = frame
@@ -75,8 +76,12 @@ class FLQuizInfoViewController: PageViewController {
         self.userTableView.dataSource = self
         self.userTableView.reloadData()
         
+        self.reloadAnswerDetail()
+    }
+    
+    func reloadAnswerDetail() {
         let card = self.viewModel.currentPage
-        self.viewModel.callAPICardDetailAnswerDetail(card, method: .get, param: nil) { [weak self] (result) in
+        self.viewModel.callAPICardDetailAnswerDetail(card, quiz: self.quiz, method: .get, param: nil) { [weak self] (result) in
             if let userAnswerPage = result {
                 self?.userAnswerList = userAnswerPage.userAnswerList
                 self?.manage(userAnswerPage: userAnswerPage)
@@ -121,7 +126,7 @@ class FLQuizInfoViewController: PageViewController {
         self.viewModel.isLoadNextPage = true
         
         let card = self.viewModel.currentPage
-        self.viewModel.callAPICardDetailAnswerDetail(card, method: .get, param: nil) { [weak self] (result) in
+        self.viewModel.callAPICardDetailAnswerDetail(card, quiz: self.quiz, method: .get, param: nil) { [weak self] (result) in
             guard let self = self else { return }
             if let userAnswerPage = result {
                 self.userAnswerList = userAnswerPage.userAnswerList
@@ -139,8 +144,10 @@ extension FLQuizInfoViewController: FLQuizProgressBarDelegate{
         self.quizInfoVC.view.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         self.progressHeight.constant = size.height
         
-        self.cardView.updateLayout()
-        self.cardView.roundCorners([.topLeft, .topRight], radius: 16)
+        DispatchQueue.main.async {
+            self.cardView.updateLayout()
+            self.cardView.roundCorners([.topLeft, .topRight], radius: 16)
+        }
     }
 }
 

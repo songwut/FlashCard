@@ -88,7 +88,9 @@ class FLFlashCardViewModel: BaseViewModel {
             if let flashIs = result?.id {
                 self?.flashId = flashIs
             }
-            self?.detail = result
+            if let detail = result {
+                self?.detail = detail
+            }
             complete(result)
         }
     }
@@ -100,7 +102,9 @@ class FLFlashCardViewModel: BaseViewModel {
         request.arguments = ["\(self.flashId)"]
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
-            self?.detail = result
+            if let detail = result {
+                self?.detail = detail
+            }
             complete(result)
         }
         
@@ -127,7 +131,9 @@ class FLFlashCardViewModel: BaseViewModel {
         request.arguments = ["\(detail.id)"]
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
-            self?.detail = result
+            if let detail = result {
+                self?.detail = detail
+            }
             complete(result)
         }
     }
@@ -140,7 +146,9 @@ class FLFlashCardViewModel: BaseViewModel {
         request.arguments = ["\(detail.id)"]
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
-            self?.detail = result
+            if let detail = result {
+                self?.detail = detail
+            }
             complete(result)
         }
     }
@@ -153,7 +161,9 @@ class FLFlashCardViewModel: BaseViewModel {
         request.arguments = ["\(detail.id)"]
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
-            self?.detail = result
+            if let detail = result {
+                self?.detail = detail
+            }
             complete(result)
         }
     }
@@ -216,7 +226,9 @@ class FLFlashCardViewModel: BaseViewModel {
         //JSON format error
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLCardPageDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
-            self?.currentPageDetail = result
+            if let page = result {
+                self?.currentPageDetail = page
+            }
             complete(result)
         }
         
@@ -288,9 +300,10 @@ class FLFlashCardViewModel: BaseViewModel {
     var answerPageResult: UserAnswerPageResult?
     
     func callAPICardDetailAnswerDetail(_ currentCard: FLCardPageResult? ,
-                           method: APIMethod = .get ,
-                           param:[String: Any]? = nil,
-                           complete: @escaping (_ result: UserAnswerPageResult?) -> ()) {
+                                       quiz: FlashElement? = nil,
+                                       method: APIMethod = .get,
+                                       param:[String: Any]? = nil,
+                                       complete: @escaping (_ result: UserAnswerPageResult?) -> ()) {
         
         guard let card = currentCard else { return }
         
@@ -320,6 +333,19 @@ class FLFlashCardViewModel: BaseViewModel {
                     self.isFirstPage = false
                     
                     complete(pageResult)
+                } else {//case show progress 0%
+                    //empty choiceList
+                    var choiceList = [FLChoiceResult]()
+                    if let quiz = quiz, let question = quiz.question  {
+                        for choice in question.choiceList {
+                            choice.isAnswer = false// hide answer after show fake 0%
+                            choice.percent = 0
+                            choiceList.append(choice)
+                        }
+                    }
+                    let userAnswerPage = UserAnswerPageResult(JSON: ["name": ""])!
+                    userAnswerPage.choiceList = choiceList
+                    complete(userAnswerPage)
                 }
             }
         }
@@ -492,7 +518,6 @@ class FLFlashCardViewModel: BaseViewModel {
         }
         */
     }
-    
     
     private func removeCardView(idList:[Int]) {
         for id in idList {

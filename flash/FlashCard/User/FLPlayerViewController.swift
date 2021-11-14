@@ -23,6 +23,7 @@ enum FLPlayerState {
 
 class FLPlayerViewController: FLBaseViewController {
 
+    var isShowInfo = true
     var playerState: FLPlayerState = .user
     var viewModel = FLFlashCardViewModel()
     
@@ -85,15 +86,16 @@ class FLPlayerViewController: FLBaseViewController {
             self.title = detail.name
             self.titleLabel.text = detail.name
             
-            self.infoView = UIHostingController(rootView: FLInfoView(detail: detail))
-            self.infoView.view.frame = CGRect(x: 0, y: 0, width: self.infoStackView.frame.width, height: 60)
-            self.infoView.view.backgroundColor = UIColor.clear
-            self.infoView.view.cornerRadius = 8
-            self.infoView.view.borderWidth = 1
-            self.infoView.view.borderColor = UIColor("D0D3D6")
-            self.infoView.rootView.delegate = self
-            self.infoStackView.addArrangedSubview(self.infoView.view)
-            
+            if self.isShowInfo {
+                self.infoView = UIHostingController(rootView: FLInfoView(detail: detail))
+                self.infoView.view.frame = CGRect(x: 0, y: 0, width: self.infoStackView.frame.width, height: 60)
+                self.infoView.view.backgroundColor = UIColor.clear
+                self.infoView.view.cornerRadius = 8
+                self.infoView.view.borderWidth = 1
+                self.infoView.view.borderColor = UIColor("D0D3D6")
+                self.infoView.rootView.delegate = self
+                self.infoStackView.addArrangedSubview(self.infoView.view)
+            }
         }
         
         self.viewModel.callAPIFlashCard { [weak self] (cardResult: FLFlashDetailResult?) in
