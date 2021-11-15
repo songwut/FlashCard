@@ -22,6 +22,7 @@ enum EndPoint:String {
     case ugcFlashPostSubmit = "ugc/flash-card/%@/content-request/submit/"
     case ugcFlashPostCancel = "ugc/flash-card/%@/content-request/cancel/"
     
+    case myContent = "content/my-content/"
     case tagList = "dashboard/tag/type/MATERIAL_TYPE/"
     case learningContentCoverList = "learning-content/content-cover/"
     case subCategory = "sub-category/"
@@ -37,6 +38,7 @@ class FLRequest: APIRequest {
     var apiMethod: APIMethod = .get
     var apiType: APIParameterType = .url
     var nextUrl : String?
+    var contentType = "application/json"
     
     override var method: APIMethod {
         return self.apiMethod
@@ -70,7 +72,7 @@ class FLRequest: APIRequest {
             var dict = [String: String]()
             if let csrftoken = API.getCookie(name: "csrftoken") {
                 dict["Accept"] = "application/json"
-                dict["Content-Type"] = "application/json"
+                dict["Content-Type"] = self.contentType
                 dict["X-CSRFToken"] = csrftoken
             }
             return dict

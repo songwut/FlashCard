@@ -73,7 +73,6 @@ public class FLSwipeView <Element>: UIView {
         for (i,element) in elements.enumerated() {
             
             if loadedCards.count < bufferSize {
-                
                 let cardView = self.createTinderCard(index: i, element: element)
                 if loadedCards.isEmpty {
                     self.addSubview(cardView)
@@ -114,8 +113,9 @@ public class FLSwipeView <Element>: UIView {
         } else {
             frame = CGRect(x: inset, y: inset + (CGFloat(loadedCards.count) * self.sepeatorDistance), width: bounds.width - (inset * 2), height: bounds.height - (CGFloat(bufferSize) * sepeatorDistance) - (inset * 2) )
         }
-        
         let card = FLCard(frame: frame)
+        card.isLast = index == (allCards.count - 1)
+        card.setupView()
         card.delegate = self
         card.model = element
         card.addContentView(view: (self.contentView?(index, card.bounds, element)))

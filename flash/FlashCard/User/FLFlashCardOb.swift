@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 
-class FLFlashCardObser: ObservableObject {
+class FLFlashPlayerViewModel: ObservableObject {
     @State var flashId = 0
     @Published var detail: FLDetailResult?
     @Published var list = [FLCardPageResult]()

@@ -23,6 +23,7 @@ protocol TinderCardDelegate: NSObjectProtocol {
 class FLCard: UIView {
     
     var index: Int!
+    var isLast = false
     
     var overlay: UIView?
     var containerView : UIView!
@@ -37,7 +38,6 @@ class FLCard: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -70,9 +70,11 @@ class FLCard: UIView {
         
         originalPoint = center
         
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.beingDragged))
-        panGestureRecognizer.delegate = self
-        addGestureRecognizer(panGestureRecognizer)
+        if !self.isLast {//no Gesture onny last card
+            let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.beingDragged))
+            panGestureRecognizer.delegate = self
+            addGestureRecognizer(panGestureRecognizer)
+        }
         
         containerView = UIView(frame: bounds)
         containerView.backgroundColor = .clear

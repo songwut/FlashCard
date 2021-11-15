@@ -1206,6 +1206,9 @@ extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerC
                             let JSON:[String : Any] = ["filename" : filename]
                             let media = FLMediaResult(JSON: JSON)
                             media?.mp4VideoUrl = mp4Url
+                            if let fileName = fileAttributes.name {
+                                media?.filename = fileName
+                            }
                             print("video mp4 size: width \(size.width) height: \(size.height)")
                             self?.createNewVideo(movieUrl, size: size, media: media)
                         } catch {

@@ -170,7 +170,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.submitButton.setTitleColor(.white, for: .normal)
         self.submitButton.isHidden = false
         self.cancelButton.isHidden = true
-        self.coverImageView.image = UIImage(named: "flash-cover")
+        self.coverImageView.image = nil
         self.imageButton.backgroundColor = UIColor.elementBackground()
         
         self.serDefaultUI()
@@ -238,7 +238,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.updateTitleLimit(detail.name.count)
         
         self.descTextView.text = detail.desc
-        self.coverImageView.setImage(detail.image, placeholderImage: nil)
+        self.coverImageView.setImage(detail.image, placeholderImage: defaultCoverFlash)
         self.ownerValueLabel.text = detail.owner?.name ?? ""
         
         self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)

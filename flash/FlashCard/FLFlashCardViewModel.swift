@@ -64,7 +64,7 @@ class FLFlashCardViewModel: BaseViewModel {
         if let nextUrl = nextUrl {
             request.nextUrl = nextUrl
         }
-        request.endPoint = .ugcFlashCard
+        request.endPoint = .myContent
         request.apiMethod = method
         request.parameter = param
         request.apiType = .json
@@ -366,23 +366,35 @@ class FLFlashCardViewModel: BaseViewModel {
     
     func callAPIDropboxUpload(_ currentCard:FLCardPageResult? ,media: FLMediaResult?, iView: InteractView, mainVC: UIViewController? = nil ,complete: @escaping () -> ()) {
         guard let card = currentCard else { return }
-        
+        let boundary: String = UUID().uuidString
         let request = FLRequest()
         request.apiMethod = .post
         request.endPoint = .ugcCardIdDropbox
         request.arguments = ["\(self.flashId)", "\(card.id)"]
-        request.apiType = .json
+        request.apiType = .url
+        request.contentType = "multipart/form-data; boundary=\(boundary)"
         let headers = request.headers
         ConsoleLog.show("URL:\(request.url)")
+        
+        
+        
+        
         AF.upload(multipartFormData: { (multipartFormData) in
             
             if let m = media {
+                
                 multipartFormData.append("\(card.id)".data(using: .utf8)!, withName: "card_id")
                 multipartFormData.append(m.filename.data(using: .utf8)!, withName: "filename")
                 multipartFormData.append("\(m.uuid)".data(using: .utf8)!, withName: "uuid")
                 
                 if let mp4VideoUrl = media?.mp4VideoUrl {
-                    multipartFormData.append(mp4VideoUrl, withName: "file")
+                    var videoData = try! Data(contentsOf: mp4VideoUrl)
+                        //[NSData dataWithContentsOfURL:[NSURL fileURLWithPath: videoURL]];
+                    let fileType = URL(string: m.filename)?.pathExtension ?? "mp4"
+                    multipartFormData.append("multipart".data(using: .utf8)!, withName: "Content-Type")
+                    multipartFormData.append("file".data(using: .utf8)!, withName: "name")
+                    multipartFormData.append(videoData, withName: "file", fileName: m.filename, mimeType: "video/\(fileType)")
+                    //multipartFormData.append(mp4VideoUrl, withName: "file")
 
                     
                 } else if let imageData = m.imageData {
@@ -404,10 +416,8 @@ class FLFlashCardViewModel: BaseViewModel {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         if let media = FLMediaResult(JSON: json) {
                             print("JSON: \(json)")
-                            //currentPageDetail?.dropboxPage = dropboxPage
-                            //currentPageDetail?.componentList
                             if let _ = media.mp4VideoUrl {
-                                //iView.element?.mp4VideoUrl = media.file
+                                //do something after upload video to api
                             } else {
                                 iView.element?.src = media.image
                             }
@@ -549,9 +559,9 @@ class FLFlashCardViewModel: BaseViewModel {
 extension FLFlashCardViewModel {
     func createJSONNewFlash(profileId: Int) -> [String : Any] {
         var param = [String : Any]()
-        param["name"] = "Untitled"
+        param["content_name"] = "Untitled"
         param["created_by"] = profileId
-        param["image"] = NSNull()
+        param["code"] = ""
         return param
     }
     

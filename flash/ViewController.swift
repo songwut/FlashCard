@@ -155,7 +155,7 @@ class ViewController: UIViewController {
         return .darkContent
     }
     @IBAction func openFlashPlayerSwiftUI(_ sender: UIButton) {
-        let viewModel = FLFlashCardObser(flashId: flashFixId)
+        let viewModel = FLFlashPlayerViewModel(flashId: flashFixId)
         let vm = FLFlashCardViewModel(flashId: flashFixId)
         let flashPlayerView = FLFlashPlayerView(viewModel: viewModel,vm:vm, dismiss: {_ in
             self.presentedViewController?.dismiss(animated: true)

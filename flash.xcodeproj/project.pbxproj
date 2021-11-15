@@ -72,6 +72,10 @@
 		692806882725C0320026274A /* RandomAccessCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806872725C0320026274A /* RandomAccessCollection.swift */; };
 		692806892725C0320026274A /* RandomAccessCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806872725C0320026274A /* RandomAccessCollection.swift */; };
 		6928068A2725C0320026274A /* RandomAccessCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692806872725C0320026274A /* RandomAccessCollection.swift */; };
+		6937D1602742A0F900C39277 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6937D15F2742A0F900C39277 /* SDWebImageSwiftUI */; };
+		6937D1652742BF5700C39277 /* FLFlashPlayerUIKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D1642742BF5700C39277 /* FLFlashPlayerUIKitView.swift */; };
+		6937D1662742BF5700C39277 /* FLFlashPlayerUIKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D1642742BF5700C39277 /* FLFlashPlayerUIKitView.swift */; };
+		6937D1672742BF5700C39277 /* FLFlashPlayerUIKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D1642742BF5700C39277 /* FLFlashPlayerUIKitView.swift */; };
 		6940231A26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
 		6940231B26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
 		6940231C26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
@@ -761,6 +765,7 @@
 		692806732725A1860026274A /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		6928067A2725A26D0026274A /* MyMaterialListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMaterialListViewModel.swift; sourceTree = "<group>"; };
 		692806872725C0320026274A /* RandomAccessCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAccessCollection.swift; sourceTree = "<group>"; };
+		6937D1642742BF5700C39277 /* FLFlashPlayerUIKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLFlashPlayerUIKitView.swift; sourceTree = "<group>"; };
 		6940231826FDBDD0002C7508 /* FLTagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLTagListView.swift; sourceTree = "<group>"; };
 		6940231926FDBDD0002C7508 /* FLTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLTagView.swift; sourceTree = "<group>"; };
 		6940233C26FDC47A002C7508 /* FLQuizInfoProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLQuizInfoProgressView.swift; sourceTree = "<group>"; };
@@ -1004,6 +1009,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6937D1602742A0F900C39277 /* SDWebImageSwiftUI in Frameworks */,
 				6928063D27253CDD0026274A /* SwURL in Frameworks */,
 				B24F57C5F6AFBD68DA6FCE37 /* Pods_flash.framework in Frameworks */,
 				692156F92733E4520086A24A /* AsyncImage in Frameworks */,
@@ -1572,6 +1578,7 @@
 			children = (
 				69763EDA26FB516A00FE6490 /* FLFlashEditorView.swift */,
 				69A295B02727DAC600B1F20C /* FLFlashPostView.swift */,
+				6937D1642742BF5700C39277 /* FLFlashPlayerUIKitView.swift */,
 			);
 			path = Representable;
 			sourceTree = "<group>";
@@ -1664,6 +1671,7 @@
 			packageProductDependencies = (
 				6928063C27253CDD0026274A /* SwURL */,
 				692156F82733E4520086A24A /* AsyncImage */,
+				6937D15F2742A0F900C39277 /* SDWebImageSwiftUI */,
 			);
 			productName = flash;
 			productReference = 695899A32669F0710012B032 /* flash.app */;
@@ -1739,6 +1747,7 @@
 			packageReferences = (
 				6928063B27253CDD0026274A /* XCRemoteSwiftPackageReference "SwURL" */,
 				692156F72733E4520086A24A /* XCRemoteSwiftPackageReference "AsyncImage" */,
+				6937D15E2742A0F900C39277 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = 695899A42669F0710012B032 /* Products */;
 			projectDirPath = "";
@@ -2107,6 +2116,7 @@
 				69B9D3D42704A37D009CE4A7 /* FLUserTableViewCell.swift in Sources */,
 				6974C5B1270D8E05009F60AA /* ImageLoaderService.swift in Sources */,
 				6983B303272AF62D00607520 /* FLFlashPlayerVC.swift in Sources */,
+				6937D1652742BF5700C39277 /* FLFlashPlayerUIKitView.swift in Sources */,
 				692156892732B4600086A24A /* StatusResult.swift in Sources */,
 				6985B1C526E5F1B000FEAD8F /* FLPostView.swift in Sources */,
 				697694E52710A2C40051F003 /* Dictionary.swift in Sources */,
@@ -2288,6 +2298,7 @@
 				696ABCA126DFC496009527D3 /* FLCard.swift in Sources */,
 				69A2961E2727EE1100B1F20C /* DefaultValue.swift in Sources */,
 				69EC5217269D9D6D00A23790 /* FLTextStyleView.swift in Sources */,
+				6937D1662742BF5700C39277 /* FLFlashPlayerUIKitView.swift in Sources */,
 				695005FC267A8B33009BBEC4 /* FlashElement.swift in Sources */,
 				698990A726B7EB33008A41C1 /* BaseViewController.swift in Sources */,
 				69C0A23D266E1EA7001C6F32 /* Arrow.swift in Sources */,
@@ -2544,6 +2555,7 @@
 				697D19F126945ED60082783E /* HalfModalTransitionAnimator.swift in Sources */,
 				69B9D3BD27046898009CE4A7 /* FLQuizUserListView.swift in Sources */,
 				6983B305272AF62D00607520 /* FLFlashPlayerVC.swift in Sources */,
+				6937D1672742BF5700C39277 /* FLFlashPlayerUIKitView.swift in Sources */,
 				6921567D2732B3BC0086A24A /* ContentPeriodResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2891,6 +2903,14 @@
 				minimumVersion = 0.4.1;
 			};
 		};
+		6937D15E2742A0F900C39277 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2903,6 +2923,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6928063B27253CDD0026274A /* XCRemoteSwiftPackageReference "SwURL" */;
 			productName = SwURL;
+		};
+		6937D15F2742A0F900C39277 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6937D15E2742A0F900C39277 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 

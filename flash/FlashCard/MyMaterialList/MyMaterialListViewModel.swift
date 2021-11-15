@@ -12,7 +12,11 @@ class MyMaterialListViewModel: ObservableObject {
     @Published var myMaterialFlash: LMMaterialPageResult?
     
     var previous: Int?
-    var next: Int?
+    var next: Int? {
+        didSet {
+            isListFull = next == nil
+        }
+    }
     var nextUrl: String?
     var count = 0
     var pageSize = 24
@@ -25,9 +29,9 @@ class MyMaterialListViewModel: ObservableObject {
             let viewModel = FLFlashCardViewModel()
             viewModel.callAPIMyFlashCard(.get, nextUrl: nextUrl) { [self] (pageResult) in
                 guard let page = pageResult else { return complete(nil) }
-                self.isListFull = page.next == nil
                 self.currentPage += 1
                 self.myMaterialFlash = page
+                self.next = page.next
                 print("currentPage:\(self.currentPage)")
                 complete(page)
             }

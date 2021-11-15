@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FLFlashPlayerView: View {//need to fix many things
-    @ObservedObject var viewModel: FLFlashCardObser
+    @ObservedObject var viewModel: FLFlashPlayerViewModel
     //@State var detail: FLDetailResult
     //@State var list: [FLCardPageResult]
     var vm:FLFlashCardViewModel
@@ -160,6 +160,6 @@ struct FLFlashPlayerView: View {//need to fix many things
 
 struct FLFlashPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        FLFlashPlayerView(viewModel: FLFlashCardObser(flashId: 6), vm: FLFlashCardViewModel(flashId: 6))
+        FLFlashPlayerView(viewModel: FLFlashPlayerViewModel(flashId: 6), vm: FLFlashCardViewModel(flashId: 6))
     }
 }

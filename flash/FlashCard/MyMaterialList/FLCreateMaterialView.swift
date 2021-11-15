@@ -15,7 +15,7 @@ struct FLCreateMaterialView: View {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .stroke(color, style: sStyle)
             VStack {
-                let font = FontHelper.getFontSystem(14, font: .text).font
+                let font:Font = .font(14, .text)
                 Image("ic_v2_create")
                     .resizable()
                     .padding(.all, 2)

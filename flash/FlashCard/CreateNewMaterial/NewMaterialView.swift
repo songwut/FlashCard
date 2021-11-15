@@ -15,7 +15,7 @@ struct NewMaterialView: View {
         GeometryReader(content: { geometry in
             ZStack(alignment: .center, content: {
                 VStack(alignment: .center, spacing: nil, content: {
-                    FLCoverView(url: item.image)
+                    ImageView(url: item.image, placeholder: defaultImage ?? UIImage())
                         .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
                 })
                 .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)

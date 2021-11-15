@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct ImageView: View {
     @ObservedObject var imageLoader = ImageLoaderService()
@@ -16,7 +17,17 @@ struct ImageView: View {
     var body: some View {
         GeometryReader(content: { geometry in
              VStack(alignment: .center, spacing: nil, content: {
-                Image(uiImage: self.image)
+                WebImage(url: URL(string: url))
+                    .placeholder(
+                        Image(uiImage: placeholder)
+                            .resizable()
+                    )
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
+                
+                /*
+                Image(uiImage: img)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
@@ -24,8 +35,10 @@ struct ImageView: View {
                         self.image = image
                     })
                     .onAppear(perform: {
+                        //loading image need improve
                         imageLoader.loadImage(for: url)
                     })
+                */
              })
         })
     }
@@ -33,7 +46,7 @@ struct ImageView: View {
 
 struct ImageView_Previews: PreviewProvider {
     static var previews: some View {
-        let urlString = "https://develop.conicle.co/media/flash_card/2021/10/4eaf90d4-528.png"
+        let urlString = "https://develop.conicle.co/media/flash_card/2021/11/af816fb9-2ed.png"
         ImageView(url: urlString, placeholder: defaultImage!)
             .previewLayout(.fixed(width: 200.0, height: 300))
             .environment(\.sizeCategory, .small)

@@ -20,6 +20,7 @@ class ImageLoaderService: ObservableObject {
         let task = URLSession.shared.dataTask(with: url) { data, _, _ in
             guard let data = data else { return }
             DispatchQueue.main.async {
+                print("urlSring: \(urlSring)")
                 self.image = UIImage(data: data) ?? UIImage()
             }
         }
