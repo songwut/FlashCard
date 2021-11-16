@@ -8,6 +8,9 @@
 import Foundation
 
 extension String {
+    static func className(_ aClass: AnyClass) -> String {
+        return NSStringFromClass(aClass).components(separatedBy: ".").last!
+    }
     
     func size(font: UIFont) -> CGSize {
         return (self as NSString).size(withAttributes: [NSAttributedString.Key.font: font])

@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="88" width="428" height="804"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Vb-Qd-kfA">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="782"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="832"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="H8P-3b-MCT">
                                                 <rect key="frame" x="0.0" y="0.0" width="428" height="150"/>
@@ -204,13 +204,23 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="mAY-n6-dKR"/>
                                                 </constraints>
+                                                <state key="normal" title="Tag list TTGTagCollectionView"/>
+                                                <connections>
+                                                    <action selector="tagListPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="usA-qc-HJ3"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QOt-1q-7sW">
+                                                <rect key="frame" x="0.0" y="632" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="Ocn-hX-Ltv"/>
+                                                </constraints>
                                                 <state key="normal" title="Tag list"/>
                                                 <connections>
-                                                    <action selector="tagListSelectPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5D3-6H-IBK"/>
+                                                    <action selector="tagListSelectPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MOu-yX-zM5"/>
                                                 </connections>
                                             </button>
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tb9-kW-HCk">
-                                                <rect key="frame" x="0.0" y="632" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="682" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="Muc-J1-muq"/>
                                                 </constraints>
@@ -220,7 +230,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qdn-nQ-1rx">
-                                                <rect key="frame" x="0.0" y="632" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="682" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="GBb-jW-mKC"/>
                                                 </constraints>
@@ -230,7 +240,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH6-xe-kb2">
-                                                <rect key="frame" x="0.0" y="682" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="732" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="XCD-AG-Hk7"/>
                                                 </constraints>
@@ -240,7 +250,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9s-hA-vSV">
-                                                <rect key="frame" x="0.0" y="732" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="782" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="kgS-IN-4FC"/>
                                                 </constraints>

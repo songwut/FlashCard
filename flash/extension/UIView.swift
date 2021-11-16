@@ -152,4 +152,8 @@ extension UIView {
             }
         }
     }
+    
+    func setUITestId(_ identifier :String) {
+        self.accessibilityIdentifier = identifier
+    }
 }

@@ -15,6 +15,7 @@ PODS:
   - SDWebImage/Core (5.11.1)
   - SVGKit (3.0.0):
     - CocoaLumberjack (~> 3.0)
+  - TTGTagCollectionView (2.0.1)
 
 DEPENDENCIES:
   - Alamofire (= 5.0.0-rc.2)
@@ -25,10 +26,12 @@ DEPENDENCIES:
   - ObjectMapper
   - SDWebImage
   - SVGKit
+  - TTGTagCollectionView
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - netfox
+    - TTGTagCollectionView
   trunk:
     - Alamofire
     - AlamofireObjectMapper
@@ -49,7 +52,8 @@ SPEC CHECKSUMS:
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
+  TTGTagCollectionView: 29d01ece199c257943ba490e9989734382cda5ae
 
-PODFILE CHECKSUM: fc03784800630ebc2b8becfa22123122e881ec1a
+PODFILE CHECKSUM: 5797017e1374a76b4df40eefbc9201f145d37785
 
 COCOAPODS: 1.10.1

@@ -8,5 +8,6 @@
 #ifndef Header_h
 #define Header_h
 #import "CHTStickerView.h"
+#import "TTGTagCollectionView.h"
 
 #endif /* Header_h */

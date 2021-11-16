@@ -25,15 +25,17 @@ class TagListViewModel: BaseViewModel {
             request.endPoint = .tagList
             
             if self.isLoadNextPage, let next = self.nextPage {
-                request.parameter = ["page_size": 100, "page": next]
+                request.parameter = ["page": next]
+                //request.parameter = ["page_size": 100, "page": next]
             } else {
                 //let pageSize: [String: Any] = ["page_size": 50]
-                //request.parameter = pageSize
+                //request.parameter = ["page_size": 50]
                 //return nil
             }
             
             API.request(request) { (response: ResponseBody?, result: UGCTagPageResult?, isCache, error) in
                 guard let page = result else {
+                    print("error:\(error?.localizedDescription)")
                     return
                 }
                 self.nextPage = page.next

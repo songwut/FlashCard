@@ -372,27 +372,27 @@ class FLFlashCardViewModel: BaseViewModel {
         request.endPoint = .ugcCardIdDropbox
         request.arguments = ["\(self.flashId)", "\(card.id)"]
         request.apiType = .url
-        request.contentType = "multipart/form-data; boundary=\(boundary)"
+        //multipartFormData.append("multipart".data(using: .utf8)!, withName: "Content-Type")
+        request.contentType = "multipart/form-data; boundary=----\(boundary)"
+        request.accept =  "application/json"
         let headers = request.headers
         ConsoleLog.show("URL:\(request.url)")
-        
-        
-        
         
         AF.upload(multipartFormData: { (multipartFormData) in
             
             if let m = media {
                 
-                multipartFormData.append("\(card.id)".data(using: .utf8)!, withName: "card_id")
+                //multipartFormData.append("\(card.id)".data(using: .utf8)!, withName: "card_id")
                 multipartFormData.append(m.filename.data(using: .utf8)!, withName: "filename")
-                multipartFormData.append("\(m.uuid)".data(using: .utf8)!, withName: "uuid")
+                //multipartFormData.append("\(m.uuid)".data(using: .utf8)!, withName: "uuid")
                 
                 if let mp4VideoUrl = media?.mp4VideoUrl {
                     var videoData = try! Data(contentsOf: mp4VideoUrl)
                         //[NSData dataWithContentsOfURL:[NSURL fileURLWithPath: videoURL]];
                     let fileType = URL(string: m.filename)?.pathExtension ?? "mp4"
-                    multipartFormData.append("multipart".data(using: .utf8)!, withName: "Content-Type")
-                    multipartFormData.append("file".data(using: .utf8)!, withName: "name")
+                    //multipartFormData.append("multipart".data(using: .utf8)!, withName: "Content-Type")
+                    //multipartFormData.append("file".data(using: .utf8)!, withName: "name")
+                    //multipartFormData.append(videoData, withName: "file")
                     multipartFormData.append(videoData, withName: "file", fileName: m.filename, mimeType: "video/\(fileType)")
                     //multipartFormData.append(mp4VideoUrl, withName: "file")
 
@@ -401,6 +401,7 @@ class FLFlashCardViewModel: BaseViewModel {
                     let fileType = URL(string: m.filename)?.pathExtension ?? "jpeg"
                     multipartFormData.append(imageData, withName: "image", fileName: m.filename, mimeType: "image/\(fileType)")
                 }
+                print("multipartFormData: \(multipartFormData)")
             }
         }, to: request.url, headers: HTTPHeaders(headers!))
         .uploadProgress(queue: .main, closure: { progress in

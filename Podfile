@@ -11,6 +11,7 @@ pod 'SVGKit'
 	pod 'MBProgressHUD', '~> 1.1.0'
 	pod 'GrowingTextView'
 	pod 'netfox'
+	pod "TTGTagCollectionView"
 end
 
 target 'flash' do

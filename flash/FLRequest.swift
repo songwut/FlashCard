@@ -39,6 +39,7 @@ class FLRequest: APIRequest {
     var apiType: APIParameterType = .url
     var nextUrl : String?
     var contentType = "application/json"
+    var accept = "application/json"
     
     override var method: APIMethod {
         return self.apiMethod
@@ -71,7 +72,7 @@ class FLRequest: APIRequest {
         if self.method == .post || self.method == .patch || self.method == .delete {
             var dict = [String: String]()
             if let csrftoken = API.getCookie(name: "csrftoken") {
-                dict["Accept"] = "application/json"
+                dict["Accept"] = self.accept
                 dict["Content-Type"] = self.contentType
                 dict["X-CSRFToken"] = csrftoken
             }

@@ -206,6 +206,15 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func tagListPressed(_ sender: UIButton) {
+        let tagListVC = TagListViewController()
+        if let nav = self.navigationController {
+            nav.pushViewController(tagListVC, animated: true)
+        } else {
+            self.present(tagListVC, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func flPostPressed(_ sender: UIButton) {
         self.showLoading(nil)
         let model = FLFlashCardViewModel()

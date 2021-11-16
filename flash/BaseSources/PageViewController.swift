@@ -15,7 +15,7 @@ class PageViewController: BaseViewController, UICollectionViewDelegateFlowLayout
     @IBOutlet weak var tableView: UITableView!
     var loadingPageView: LoadingPageView!
     
-    //var loadingFooterView:LoadingFooterView?
+    var loadingFooterView:LoadingFooterView?
     var isLoading:Bool = false
     var pageSection: Int { return 0 }
     var nextPage: Int?
@@ -32,10 +32,10 @@ class PageViewController: BaseViewController, UICollectionViewDelegateFlowLayout
             self.tableView?.dataSource = self
             
         } else {
-//            self.collectionView?.registerSupplementaryNib(LoadingFooterView.self, kind: UICollectionView.elementKindSectionFooter)
-//            self.layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-//            self.collectionView?.delegate = self
-//            self.collectionView?.dataSource = self
+            //self.collectionView?.registerSupplementaryNib(LoadingFooterView.self, kind: UICollectionView.elementKindSectionFooter)
+            //self.layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+            //self.collectionView?.delegate = self
+            //self.collectionView?.dataSource = self
         }
     }
 
@@ -47,7 +47,7 @@ class PageViewController: BaseViewController, UICollectionViewDelegateFlowLayout
     func scrollViewDidEndDeceleratingAnimatingFinal() {
         
     }
-    /*
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let _ = self.nextPage {
             if (scrollView.contentSize.height < scrollView.bounds.height) {
@@ -74,9 +74,8 @@ class PageViewController: BaseViewController, UICollectionViewDelegateFlowLayout
         }
         
     }
-    */
 }
-/*
+
 extension PageViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -133,7 +132,7 @@ extension PageViewController: UICollectionViewDataSource, UICollectionViewDelega
         return CGSize.zero
     }
 }
-*/
+
 extension PageViewController: UITableViewDataSource, UITableViewDelegate {
     //UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -192,7 +191,7 @@ extension PageViewController: UIScrollViewDelegate {
                     self.scrollViewDidEndDeceleratingAnimatingFinal()
                 }
             }
-            /*
+            
             if let loadingFooterView = self.loadingFooterView { //collectionView
                 if loadingFooterView.isAnimatingFinal {
                     print("load more trigger")
@@ -206,7 +205,6 @@ extension PageViewController: UIScrollViewDelegate {
                     self.scrollViewDidEndDeceleratingAnimatingFinal()
                 }
             }
-            */
         }
     }
 }

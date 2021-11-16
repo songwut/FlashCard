@@ -30,6 +30,9 @@ class TagListSelectViewController: UIViewController {
         self.totalLabel.font = UIFont.font(14, .text)
         self.totalLabel.textColor = .text75()
         self.tagView.delegate = self
+        let margin:CGFloat = UIDevice.isIpad() ? 24 : 8
+        self.tagView.paddingX = margin
+        self.tagView.paddingY = margin
         self.tagView.tagLineBreakMode = .byTruncatingTail
         
     }
