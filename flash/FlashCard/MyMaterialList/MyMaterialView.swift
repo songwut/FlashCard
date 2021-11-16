@@ -13,20 +13,31 @@ import SDWebImageSwiftUI
 struct MyMaterialView: View {
     @State var isEditor: Bool
     @State var item: LMMaterialResult
-    @State var image: UIImage?
+    @State var image: UIImage = UIImage()
+    @State var imageColor = Color.white
     @ObservedObject var imageLoader = ImageLoaderService()
     
     private let timeFont: Font = .font(10, .text)
     private let nameFont: Font = .font(14, .medium)
     private let statusFont: Font = .font(12, .medium)
+    private let placeholder = defaultImage ?? UIImage()
     
     var body: some View {
         VStack(alignment: .leading, spacing: nil, content: {
             HStack(spacing:8) {
-                ImageView(url: item.image)
-                    .frame(width: FlashStyle.flashItemHeight)
+                //WebImage(url: URL(string: item.image))
+                ImageView
+                    .frame(maxWidth: FlashStyle.flashItemHeight, maxHeight: .infinity, alignment: .leading)
+                    .background(imageColor)
                     .clipped()
                     .cornerRadius(8)
+                    
+                //.frame(width: FlashStyle.flashItemHeight)
+                    //.onSuccess
+//                ImageView(url: item.image)
+//                    .frame(width: FlashStyle.flashItemHeight)
+//                    .clipped()
+//                    .cornerRadius(8)
                 
                 InfoView
                 Spacer()
@@ -44,6 +55,27 @@ struct MyMaterialView: View {
         })
         .background(Color.clear)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .onAppear(perform: {
+            imageColor =  placeholder.averageColor?.color ?? .white
+        })
+    }
+    
+    var ImageView: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            WebImage(url: URL(string: item.image))
+                .onSuccess { image, cacheType, _  in
+                    DispatchQueue.main.async {
+                        self.image = image
+                        self.imageColor = self.image.averageColor?.color ?? .white
+                    }
+                }
+                .placeholder(
+                    Image(uiImage: placeholder)
+                        .resizable()
+                )
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }
     }
     
     var InfoView: some View {

@@ -12,6 +12,7 @@ struct ImageView: View {
     @ObservedObject var imageLoader = ImageLoaderService()
     @State var image: UIImage = UIImage()
     var url: String
+    var mode: ContentMode = .fit
     var placeholder: UIImage = defaultImage ?? UIImage()
     
     var body: some View {
@@ -23,7 +24,7 @@ struct ImageView: View {
                             .resizable()
                     )
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(contentMode: mode)
                     .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
                 
                 /*

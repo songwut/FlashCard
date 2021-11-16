@@ -293,6 +293,10 @@ final class FLEditorViewController: FLBaseViewController {
         self.pageCountLabel.text = "\(index + 1)/\(max)"
         
         //TODO: slide to page index
+        if let scrollView = self.sliderView?.scrollView {
+            self.isManageScrolling = false
+            self.manageScrollCenter(index, scrollView: scrollView)
+        }
     }
     
     func createAddButton() -> UIButton {
@@ -1232,7 +1236,7 @@ extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerC
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func manageScrollCenter(index:Int, scrollView: UIScrollView) {
+    func manageScrollCenter(_ index:Int, scrollView: UIScrollView) {
         if !self.isManageScrolling {
             self.isManageScrolling = true
             print(index)
@@ -1291,7 +1295,7 @@ extension FLEditorViewController: UIScrollViewDelegate {
             
         } else {
             //self.isManageScrolling = false
-            self.manageScrollCenter(index: indexOfMajorCell, scrollView: scrollView)
+            self.manageScrollCenter(indexOfMajorCell, scrollView: scrollView)
             // This is a much better way to scroll to a cell:
             let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
             //self.layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)

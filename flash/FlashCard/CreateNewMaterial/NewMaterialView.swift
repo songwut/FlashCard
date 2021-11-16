@@ -10,12 +10,15 @@ import SwiftUI
 struct NewMaterialView: View {
     
     @State var item: LMCreateItem
+    let placeholder = defaultImage ?? UIImage()
     
     var body: some View {
         GeometryReader(content: { geometry in
             ZStack(alignment: .center, content: {
                 VStack(alignment: .center, spacing: nil, content: {
-                    ImageView(url: item.image, placeholder: defaultImage ?? UIImage())
+                    ImageView(url: item.image,
+                              mode: .fill,
+                              placeholder: placeholder)
                         .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
                 })
                 .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
