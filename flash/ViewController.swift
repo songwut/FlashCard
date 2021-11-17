@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-var flashFixId = 260
+var flashFixId = 279
 
 extension ViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -64,8 +64,17 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.stageButton.addTarget(self, action: #selector(self.stageButtonPressed(_:)), for: .touchUpInside)
         
-        self.flashIdField.text = "\(flashFixId)"
+        
         self.passTextField.isSecureTextEntry = true
+        
+        if UserDefaults.standard.integer(forKey: "flashid_key") > 0 {
+            flashFixId = UserDefaults.standard.integer(forKey: "flashid_key")
+        } else {
+            UserDefaults.standard.set(flashFixId, forKey: "flashid_key")
+        }
+        
+        self.flashIdField.text = "\(flashFixId)"
+        
         if let user = UserDefaults.standard.string(forKey: "user_key") {
             self.usernameTextField.text = user
             self.passTextField.text = UserDefaults.standard.string(forKey: "pass_key")
@@ -275,6 +284,7 @@ class ViewController: UIViewController {
         
         UserDefaults.standard.setValue(username, forKey: "user_key")
         UserDefaults.standard.setValue(password, forKey: "pass_key")
+        UserDefaults.standard.set(flashFixId, forKey: "flashid_key")
         UserDefaults.standard.synchronize()
         
         if UserManager.shared.isLoggedin() {

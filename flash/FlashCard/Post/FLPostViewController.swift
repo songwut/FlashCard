@@ -67,8 +67,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     var viewModel: FLFlashCardViewModel! {
         didSet {
-            let detail = self.viewModel.detail
-            //detail.displayStatus = .waitForApprove //mock
+            let _ = self.viewModel.detail
         }
     }
     
@@ -77,6 +76,25 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     private var time = 1
     private var imageCoverData: Data?
     private let formatText = "d MMM yyyy HH:mm"
+    
+    lazy var inputToolbar: UIToolbar = {
+        var toolbar = UIToolbar()
+        toolbar.barStyle = .default
+        toolbar.isTranslucent = true
+        toolbar.sizeToFit()
+        
+        var doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.donePressed))
+        var flexibleSpaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        toolbar.setItems([flexibleSpaceButton, doneButton], animated: false)
+        toolbar.isUserInteractionEnabled = true
+        
+        return toolbar
+    }()
+    
+    @objc func donePressed() {
+        self.view.endEditing(true)
+    }
     
     deinit {
         ConsoleLog.show("complete removed : FLPostViewController")
@@ -109,7 +127,6 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.footerView.setShadow(radius: 16, opacity: 0.09, color: .black, offset: CGSize(width: 0, height: -2))
         let fontTitle = UIFont.font(16, .text)
         let fontValue = UIFont.font(16, .text)
-        let maxChaTitle = FlashStyle.post.maxChaTitle
         self.titleTextField.delegate = self
         self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
         self.coverImageView.cornerRadius = 8
@@ -128,6 +145,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.descTextView.placeholderColor = .text25()
         self.descTextView.textColor = .text()
         self.descTextView.font = fontValue
+        self.descTextView.delegate = self
+        self.descTextView.inputAccessoryView = self.inputToolbar
         self.ownerLabel.font = fontTitle
         self.ownerValueLabel.font = fontValue
         self.ownerValueLabel.textColor = .text()
@@ -178,10 +197,10 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         if self.createStatus == .new {
             guard let profile = UserManager.shared.profile else { return }
             self.showLoading(nil)
-            self.viewModel.callAPINewFlashCard(profile: profile) { [weak self] (detail) in
+            self.viewModel.callAPINewFlashCard(profile: profile) { [weak self] (newDetail) in
                 guard let self = self else { return }
                 DispatchQueue.main.async {
-                    guard let detail = detail else { return }
+                    guard let detail = newDetail else { return }
                     self.viewModel.flashId = detail.id
                     self.loadDetail(detail)
                 }
@@ -234,11 +253,18 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         guard let detail = detail else { return }
         self.time = detail.estimateTime ?? 5 //TODO: get real time
         
-        self.titleTextField.text = detail.name
-        self.updateTitleLimit(detail.name.count)
+        self.titleTextField.text = detail.contentName
+        self.updateTitleLimit(detail.contentName.count)
         
         self.descTextView.text = detail.desc
-        self.coverImageView.setImage(detail.image, placeholderImage: defaultCoverFlash)
+        
+        if let imageCoverData = self.imageCoverData,
+           let uiimage = UIImage(data: imageCoverData) {
+            self.coverImageView.image = uiimage
+        } else {
+            self.coverImageView.setImage(detail.image, placeholderImage: defaultCoverFlash)
+        }
+        
         self.ownerValueLabel.text = detail.owner?.name ?? ""
         
         self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)
@@ -281,8 +307,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         timeValueLabel.textColor = isEnable ? textColor : disableColor
         plusButton.isEnabled = isEnable
         minusButton.isEnabled = isEnable
-        plusButton.tintColor = isEnable ? UIColor.config_primary() : disableColor
-        minusButton.tintColor = isEnable ? UIColor.config_primary() : disableColor
+        plusButton.tintColor = isEnable ? .config_primary() : disableColor
+        minusButton.tintColor = isEnable ? .config_primary() : disableColor
         categoryValueLabel.textColor = isEnable ? textColor : disableColor
         categoryButton.isEnabled = isEnable
         categoryView.isUserInteractionEnabled = isEnable
@@ -449,9 +475,9 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     func callAPIFlashDetailUpdate() {
         let json = self.createJSON()
         ConsoleLog.show("callAPIFlashDetailUpdate")
-        self.viewModel.callAPIFlashDetailUpdate(parameter: json) { [weak self] (newDetail) in
+        self.viewModel.callAPIFlashDetailUpdate(parameter: json) { [weak self] (updatedDetail) in
             self?.createStatus = .edit//reset to edit
-            self?.loadDetail(newDetail)
+            self?.loadDetail(updatedDetail)
             self?.callAPIFlashDetailSubmit()
         }
     }
@@ -484,7 +510,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             }
         }
         
-        dict["name"] = self.titleTextField.text
+        dict["content_name"] = self.titleTextField.text
         dict["desc"] = self.descTextView.text
         dict["duration"] = self.time
         //dict["code"] = detail.code
@@ -579,7 +605,7 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
                 let ratio = size.width / size.height
                 newWidth = 1024 * ratio
             }
-            let img = originalImage.resizeImage(newWidth: newWidth).cropSquare()
+            let img = originalImage.resizeImage(newWidth: newWidth).cropRatio(16 / 9)
             let imgData = img.jpeg ?? img.png
             guard let data = imgData else { return }
             guard let uiimage = UIImage(data: data) else { return }
@@ -588,7 +614,6 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
             let imageBase64 = uiimage.jpegData(compressionQuality: 1)?.base64EncodedString()
             self.imageBase64 = imageBase64
             let imageSize: Int = data.count
-            print("actual size of image in KB: %f ", Double(imageSize) / 1024.0)
         }
     }
     
@@ -599,6 +624,10 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
 }
 
 extension FLPostViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.inputAccessoryView = self.inputToolbar
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
         self.viewModel.detail?.name = text
@@ -623,16 +652,13 @@ extension FLPostViewController: UITextFieldDelegate {
 }
 
 extension FLPostViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        textView.inputAccessoryView = self.inputToolbar
+    }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         guard let text = textView.text else { return }
         self.viewModel.detail?.desc = text
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if textView.isFirstResponder {
-            textView.resignFirstResponder()
-        }
-        return true
     }
 }
 

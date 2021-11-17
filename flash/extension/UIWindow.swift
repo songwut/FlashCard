@@ -43,8 +43,8 @@ extension UIWindow {
         }
         hud?.mode = MBProgressHUDMode.text
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            self.hideLoading()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            hud?.hide(animated: true, afterDelay: 0.1)
         }
     }
     

@@ -22,7 +22,7 @@ class TagListViewModel: BaseViewModel {
         } else {
             let request = FLRequest()
             request.apiMethod = .get
-            request.endPoint = .tagList
+            request.endPoint = .tagSelectList
             
             if self.isLoadNextPage, let next = self.nextPage {
                 request.parameter = ["page": next]
@@ -34,19 +34,18 @@ class TagListViewModel: BaseViewModel {
             }
             
             API.request(request) { (response: ResponseBody?, result: UGCTagPageResult?, isCache, error) in
-                guard let page = result else {
-                    print("error:\(error?.localizedDescription)")
-                    return
+                if let page = result {
+                    self.nextPage = page.next
+                    
+                    if self.isFirstPage {
+                        self.tagList = page.list
+                    } else {
+                        self.tagList.append(contentsOf: page.list)
+                    }
+                    
+                    self.isFirstPage = false
                 }
-                self.nextPage = page.next
-                
-                if self.isFirstPage {
-                    self.tagList = page.list
-                } else {
-                    self.tagList.append(contentsOf: page.list)
-                }
-                
-                self.isFirstPage = false
+                print("error:\(error?.localizedDescription)")
                 complete(self.tagList)
             }
         }

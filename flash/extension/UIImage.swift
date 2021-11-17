@@ -71,4 +71,34 @@ extension UIImage {
         let image: UIImage = UIImage(cgImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
         return image
     }
+    
+    func cropRatio(_ ratio: CGFloat) -> UIImage {//.cropRatio(16 / 9)
+        
+        let contextImage: UIImage = UIImage(cgImage: self.cgImage!)
+        let contextSize: CGSize = contextImage.size
+        
+        var posX: CGFloat = 0.0
+        var posY: CGFloat = 0.0
+        var cgwidth: CGFloat = 0.0
+        var cgheight: CGFloat = 0.0
+        
+        if contextSize.width > contextSize.height {
+            cgwidth = contextSize.height * ratio
+            cgheight = contextSize.height
+            posX = ((contextSize.width - cgwidth) / 2)
+            posY = 0
+            
+        } else {
+            cgwidth = contextSize.width
+            cgheight = cgwidth / ratio
+            posX = 0
+            posY = ((contextSize.height - cgheight) / 2)
+            
+        }
+        
+        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
+        let imageRef: CGImage = contextImage.cgImage!.cropping(to: rect)!
+        let image: UIImage = UIImage(cgImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
+        return image
+    }
 }

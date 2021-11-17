@@ -163,6 +163,7 @@ class LearningMaterialEnrollResult: LearningMaterialResult {
 
 
 class LMMaterialResult: BaseResult, Identifiable {
+    var contentName = ""
     let uuid = UUID()
     var progress: ProgressResult?
     var displayStatus: FLStatus = .unpublish
@@ -177,7 +178,7 @@ class LMMaterialResult: BaseResult, Identifiable {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
-        
+        contentName          <- map["conten_name"]
         code                 <- map["code"]
         displayStatus        <- map["is_display"]
         contentCode          <- map["content_type.code"]
