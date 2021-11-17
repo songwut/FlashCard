@@ -15,11 +15,14 @@ class FLStageView: FlashStageView {
     var viewModel: FLFlashCardViewModel?
     var cover: UIImageView!
     var coverImageBase64: String?
-    //var sort:Int?
     var flColor: FLColorResult = MockObject.flColor {
         didSet {
             self.backgroundColor = UIColor(flColor.hex)
         }
+    }
+    
+    deinit {
+        print("FLStageView removed")
     }
     
     required init?(coder aDecoder: NSCoder) {

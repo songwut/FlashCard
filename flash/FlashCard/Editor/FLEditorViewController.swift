@@ -284,15 +284,12 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     func gotoPage(index: Int) {
-        let indexPath = IndexPath(row: index, section: 0)
         let stageWidth: CGFloat = self.stageView?.bounds.width ?? 0
-        let newOfset = CGFloat(self.viewModel.pageList.count) * stageWidth
         self.viewModel.pageIndex = index
         self.manageAddLR()
         let max = self.viewModel.pageList.count
         self.pageCountLabel.text = "\(index + 1)/\(max)"
         
-        //TODO: slide to page index
         if let scrollView = self.sliderView?.scrollView {
             self.isManageScrolling = false
             self.manageScrollCenter(index, scrollView: scrollView)
@@ -474,6 +471,23 @@ final class FLEditorViewController: FLBaseViewController {
         }
     }
     
+    func updateStageList() {//case from grid/list isChangeCardList
+        guard let stageList = self.stageViewList else { return }
+        let pageList = self.viewModel.pageList
+        if pageList.count < stageList.count {
+            //some card deleted need to change pageIndex
+            self.viewModel.pageIndex = pageList.count - 1
+        }
+        self.stageViewList?.removeAll()
+        self.manageMultitleStage(pageList: pageList)
+        DispatchQueue.main.async {
+            let stage = self.getStageView(at: self.viewModel.pageIndex)
+            self.updateAfterAllStageReady(stage: stage)
+            let index = self.viewModel.pageIndex
+            self.gotoPage(index: index)
+        }
+    }
+    
     func createStageView(_ size: CGSize, creator: FLCreator) -> FLStageView {
         let f = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         let stage = FLStageView(frame: f)
@@ -584,6 +598,9 @@ final class FLEditorViewController: FLBaseViewController {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         if let vc = s.instantiateViewController(withIdentifier: "FLListViewController") as? FLListViewController {
             vc.viewModel = self.viewModel
+            vc.didChangeCardList = Action(handler: { [weak self] (sender) in
+                self?.updateStageList()
+            })
             if let nav = self.navigationController {
                 nav.pushViewController(vc, animated: true)
             } else {
@@ -591,8 +608,6 @@ final class FLEditorViewController: FLBaseViewController {
             }
         }
     }
-    
-    
     
     private func indexOfMajorCell() -> Int {
         let itemWidth = self.cellSize.width

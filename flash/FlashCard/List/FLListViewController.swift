@@ -22,6 +22,8 @@ class FLListViewController: UIViewController {
     
     var viewModel = FLFlashCardViewModel()
     var list = [FLBaseResult]()
+    var isChangeCardList = false
+    var didChangeCardList: Action?
     
     private var cellSize = CGSize.zero
     private let edgeMargin:CGFloat = 16
@@ -51,6 +53,14 @@ class FLListViewController: UIViewController {
             self.reloadCollectionView()
         }
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.isMovingFromParent, self.isChangeCardList {
+            self.didChangeCardList?.handler(self.viewModel.pageList)
+        }
     }
     
     func orderingItem() {
@@ -151,7 +161,7 @@ class FLListViewController: UIViewController {
                 self?.selectSortList.removeAll()
                 self?.collectionView.reloadData()
                 self?.updateSelectCount()
-                
+                self?.isChangeCardList = true
             }
             
             
@@ -164,10 +174,8 @@ class FLListViewController: UIViewController {
                 self?.selectSortList.removeAll()
                 self?.collectionView.reloadData()
                 self?.updateSelectCount()
+                self?.isChangeCardList = true
             }
-            
-        } else {
-            
         }
     }
     
@@ -220,6 +228,7 @@ class FLListViewController: UIViewController {
             self.list.insert(page, at: lastItemIndex)
             self.collectionView.reloadData()
             self.slideToNewPage()
+            self.isChangeCardList = true
         }
     }
     
@@ -311,7 +320,7 @@ extension FLListViewController: UICollectionViewDataSource,UICollectionViewDeleg
             
             
         }
-        //TODO: select to open
+        //TODO: select to open if need
     }
     
 }
