@@ -288,7 +288,7 @@ class InteractView: CHTStickerView {
                 }
             }
         } else if element.type == .video {
-            if let videoSrc = element.mp4VideoUploade { //TODO: set after upload api
+            if let videoSrc = element.src {
                 dict["src"] = videoSrc as AnyObject
             }
         } else if element.type == .text {

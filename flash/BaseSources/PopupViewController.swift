@@ -357,7 +357,7 @@ class PopupViewController: UIViewController {
     }
     
     class func openVCByParentViewcontroller(_ viewController: UIViewController, content: Any?, didClose: DidAction? = nil, error: NSError? = nil) {
-        let vc = UIStoryboard(name: "Popup", bundle: nil).instantiateViewController(withIdentifier: "PopupViewController") as! PopupViewController
+        let vc = UIStoryboard(name: "FLPopup", bundle: nil).instantiateViewController(withIdentifier: "PopupViewController") as! PopupViewController
         vc.modalTransitionStyle = .crossDissolve
         vc.modalPresentationStyle = .overFullScreen
         vc.content = content
@@ -368,7 +368,7 @@ class PopupViewController: UIViewController {
     }
     
     class func openVC(_ viewController: UIViewController, content: Any?, didClose: DidAction? = nil, error: NSError? = nil) {
-        let vc = UIStoryboard(name: "Popup", bundle: nil).instantiateViewController(withIdentifier: "PopupViewController") as! PopupViewController
+        let vc = UIStoryboard(name: "FLPopup", bundle: nil).instantiateViewController(withIdentifier: "PopupViewController") as! PopupViewController
         vc.modalTransitionStyle = .crossDissolve
         vc.modalPresentationStyle = .overFullScreen
         vc.content = content

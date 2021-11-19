@@ -205,6 +205,25 @@ class API {
         }
     }
     
+    class func requestForStatus(_ request : APIRequest , completionHandler : @escaping (_ responseBody: ResponseBody?, _ status : Bool) -> Void) {
+        let method = Alamofire.HTTPMethod(rawValue: request.method.rawValue)
+        let encoding = getEncoding(request.paramsType)
+        let urlString = request.urlStrWithFormat(request.url, method: method)
+        let params = request.params ?? request.body
+        let headers = request.headers
+        ConsoleLog.trackAPI(request)
+        AF.request(urlString, method: method, parameters: params, encoding: encoding, headers: HTTPHeaders(headers!), interceptor: nil)
+            .validate(statusCode: 200..<300)
+            .response(completionHandler: { (response) in
+                if let urlResponse = response.response {
+                    completionHandler(API.createResponseBody(response.data, urlResponse: urlResponse, url:request.url), true)
+                } else {
+                    completionHandler(API.createResponseBody(response.data, urlResponse: response.response, url:request.url), false)
+                }
+            })
+        
+    }
+    
 }
 
 extension API {

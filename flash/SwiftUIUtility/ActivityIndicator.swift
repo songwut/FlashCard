@@ -31,7 +31,7 @@ public struct ActivityIndicator: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIActivityIndicatorView {
         let view = UIActivityIndicatorView(style: style)
         view.color = color
-        view.backgroundColor = .clear
+        view.backgroundColor = .white
         return view
     }
     

@@ -1,0 +1,46 @@
+[
+    {
+        "id": 379,
+        "name": "flash_card",
+        "code": "flashcard.flashcard",
+        "image": "https://develop.conicle.co/media/default/content/default_flash_card_material.png",
+        "is_available": true
+    },
+    {
+        "id": 86,
+        "name": "video",
+        "code": "video.video",
+        "type": 1,
+        "image": "https://develop.conicle.co/media/default/content/default_video_material.png",
+        "is_available": false
+    },
+    {
+        "id": 85,
+        "name": "audio",
+        "code": "audio.audio",
+        "image": "https://develop.conicle.co/media/default/content/default_audio_material.png",
+        "is_available": false
+    },
+    {
+        "id": 86,
+        "name": "external_video",
+        "code": "video.video",
+        "type": 2,
+        "image": "https://develop.conicle.co/media/default/content/default_external_video_material.png",
+        "is_available": false
+    },
+    {
+        "id": 89,
+        "name": "document",
+        "code": "material.pdf",
+        "image": "https://develop.conicle.co/media/default/content/default_document_material.png",
+        "is_available": false
+    },
+    {
+        "id": 348,
+        "name": "article",
+        "code": "material.article",
+        "image": "https://develop.conicle.co/media/default/content/default_article_material.png",
+        "is_available": false
+    }
+]

@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 
+let keyPushNotiRegistration = "PushNotificationRegistration"
 var flashFixId = 279
 
 extension ViewController: UITextFieldDelegate {
@@ -93,23 +94,19 @@ class ViewController: UIViewController {
             self.passTextField.text = "sysadminConicle"
         }
         
-        self.loginPressed(loginButton)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.loginPressed(self.loginButton)
+        }
+        
     }
     
     @IBAction func myMaterialPressed(_ sender: UIButton) {
-        
-        let viewModel = FLFlashCardViewModel()
-        self.showLoading(nil)
-        viewModel.callAPIMyFlashCard(.get) { (myFlashDetail) in
-            self.hideLoading()
-            guard let myFlashDetail = myFlashDetail else { return }
-            let vc = UIHostingController(rootView: MyMaterialListView(myMaterialFlash: myFlashDetail, list: myFlashDetail.list))
-            vc.view.backgroundColor = .white
-            if let nav = self.navigationController {
-                nav.pushViewController(vc, animated: true)
-            } else {
-                self.present(vc, animated: true, completion: nil)
-            }
+        let vc = UIHostingController(rootView: MyMaterialListView().environmentObject(MyMaterialListViewModel()))
+        vc.view.backgroundColor = .white
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
         }
     }
     
@@ -319,6 +316,23 @@ class ViewController: UIViewController {
                 }
                 PopupManager.showWarning("Login SUCCESS: User ID  \(profile.id)", at: self)
             }
+        }
+    }
+    
+    @IBAction func logoutPressed(_ sender: UIButton?) {
+        self.logoutAPI()
+    }
+    
+    func logoutAPI() {
+        let request = LogoutRequest()
+        let fieldName = keyPushNotiRegistration
+        request.fcmtoken = UserDefaults.standard.string(forKey: fieldName)
+        API.requestForStatus(request) { (responseBody: ResponseBody?, status) in
+            ConsoleLog.show("LogoutRequest status: \(status)")
+            UserDefaults.standard.setValue(nil, forKey: fieldName)
+            API.deleteCookies()
+            PopupManager.showWarning("Logout SUCCESS", at: self)
+            UserDefaults.standard.set(false, forKey: "isLoggedin")
         }
     }
 }

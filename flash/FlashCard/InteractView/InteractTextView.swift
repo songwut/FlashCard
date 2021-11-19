@@ -20,6 +20,7 @@ import UIKit
 
 
 class InteractTextView: UIView {
+    var isSelectAll = false
     var flColorText: FLColorResult? {
         didSet {
             guard let flColor = self.flColorText else { return }
@@ -778,7 +779,7 @@ class InteractTextView: UIView {
                 }
             }
         } else if element.type == .video {
-            if let videoSrc = element.mp4VideoUploade { //TODO: set after upload api
+            if let videoSrc = element.src {
                 dict["src"] = videoSrc as AnyObject
             }
         } else if element.type == .text {

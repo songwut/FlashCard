@@ -34,6 +34,10 @@ class UGCCategory: CategoryResult {
         super.init(map: map)
     }
     
+    required init(from decoder: Decoder) throws {
+        fatalError("init(from:) has not been implemented")
+    }
+    
     override func mapping(map: Map) {
         super.mapping(map: map)
         

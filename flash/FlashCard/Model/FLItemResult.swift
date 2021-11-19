@@ -37,7 +37,7 @@ class FLDetailResult: LMMaterialResult {
     var category: CategoryResult?
     var instructorList = [InstructorResult]()
     var tagList = [UGCTagResult]()
-    var estimateTime: Int?//only min
+    var estimateTime = 0
     
     override func mapping(map: Map) {
         super.mapping(map: map)

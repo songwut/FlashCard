@@ -38,6 +38,7 @@ class FLRequest: APIRequest {
     var apiMethod: APIMethod = .get
     var apiType: APIParameterType = .url
     var nextUrl : String?
+    var isAutoHeader = false
     var contentType = "application/json"
     var accept = "application/json"
     

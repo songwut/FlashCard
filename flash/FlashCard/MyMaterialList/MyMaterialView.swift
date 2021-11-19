@@ -93,7 +93,7 @@ struct MyMaterialView: View {
             }
             .frame(height: 20)
             
-            Text(item.name)
+            Text(item.nameContent)
                 .font(nameFont)
                 .foregroundColor(.black)
             

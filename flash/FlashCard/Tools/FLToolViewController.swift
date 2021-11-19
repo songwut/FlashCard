@@ -150,23 +150,20 @@ class FLToolViewController: UIViewController {
     
     @objc func keyboardPressed(_ button: UIButton) {
         if self.textMenu != .keyboard {
-            self.textMenu = .keyboard
-            self.open(.text)
+            self.open(.text, textMenu: .keyboard)
         }
     }
     
     @objc func stylePressed(_ button: UIButton) {
         if self.textMenu != .style {
-            self.textMenu = .style
-            self.open(.text)
+            self.open(.text, textMenu: .style)
         }
     }
     
     @objc func colorPressed(_ button: UIButton) {
         //TODO: show color picker
         if self.textMenu != .color {
-            self.textMenu = .color
-            self.open(.text)
+            self.open(.text, textMenu: .color)
         }
     }
     
@@ -279,7 +276,7 @@ class FLToolViewController: UIViewController {
         }
     }
     
-    func open(_ tool: FLTool, isCreating: Bool = false) {
+    func open(_ tool: FLTool, textMenu: FLTextMenu = .keyboard, isCreating: Bool = false) {
         let iView = self.viewModel.view
         self.viewModel.tool = tool
         self.titleLabel.text = tool.title()
@@ -303,7 +300,7 @@ class FLToolViewController: UIViewController {
             self.toolStackView.isHidden = true
             self.textStackView.isHidden = false
             self.colorStackView.isHidden = true
-            self.manageText(self.textMenu, isCreating: isCreating)
+            self.manageText(textMenu, isCreating: isCreating)
             break
         case .graphic:
             self.graphicStackView.isHidden = false
@@ -323,6 +320,11 @@ class FLToolViewController: UIViewController {
             break
         case .menu:
             //show hide all tool
+            self.textStackView.isHidden = true
+            self.graphicStackView.isHidden = true
+            self.toolStackView.isHidden = false
+            self.textStackView.isHidden = true
+            self.colorStackView.isHidden = true
             break
         }
     }
@@ -348,8 +350,10 @@ class FLToolViewController: UIViewController {
         }
     }
     
+    var element: FlashElement?
+    
     func manageText(_ textMenu: FLTextMenu, isCreating: Bool) {
-        
+        self.textMenu = textMenu
         switch textMenu {
         case .keyboard:
             if !isCreating {
@@ -365,12 +369,21 @@ class FLToolViewController: UIViewController {
             self.keyboardView.isHidden = true
             self.textStyleView.isHidden = false
             self.textColorView.isHidden = true
+            if let e = self.element {
+                self.textStyleView.styleList = e.flTextStyle
+                self.textStyleView.alignment = e.flAlignment
+                self.textStyleView.setAlinement(a: e.flAlignment)
+            }
             break
         case .color:
             self.resetTextView(menu: textMenu)
             self.keyboardView.isHidden = true
             self.textStyleView.isHidden = true
             self.textColorView.isHidden = false
+            if let e = self.element {
+                self.textColorView.selectedColor = e.textColor
+                self.textColorView.reloadColor()
+            }
             break
         }
         

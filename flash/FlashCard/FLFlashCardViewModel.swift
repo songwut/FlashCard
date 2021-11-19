@@ -372,44 +372,62 @@ class FLFlashCardViewModel: BaseViewModel {
         request.endPoint = .ugcCardIdDropbox
         request.arguments = ["\(self.flashId)", "\(card.id)"]
         request.apiType = .url
-        //multipartFormData.append("multipart".data(using: .utf8)!, withName: "Content-Type")
-        request.contentType = "multipart/form-data; boundary=----\(boundary)"
-        request.accept =  "application/json"
-        let headers = request.headers
+        
+        //request.contentType = "multipart/form-data; boundary=----\(boundary)"
+        //request.accept =  "application/json"
+        
+        var fileName = ""
+        var fileType = "jpeg"
+        if let m = media {
+            fileName = m.filename.replacingOccurrences(of: "trim.", with: "")
+            fileType = URL(string: fileName)?.pathExtension ?? "mp4"
+        }
+        
+        var videoData: Data?
+        if let mp4VideoUrl = media?.mp4VideoUrl {
+            do {
+                videoData = try Data(contentsOf: mp4VideoUrl, options: Data.ReadingOptions.alwaysMapped)
+            } catch _ {
+                videoData = nil
+                return
+            }
+        }
+        
+        var dict = [String: String]()
+        if let csrftoken = API.getCookie(name: "csrftoken") {
+            dict["X-CSRFToken"] = csrftoken
+            if let m = media, let mp4VideoUrl = media?.mp4VideoUrl {
+                let fileType = URL(string: m.filename)?.pathExtension ?? "mp4"
+                dict["filename"] = fileName
+                dict["Content-Type"] = "multipart/form-data"
+                dict["Accept"] = "application/json"
+            }
+        }
+        let headers: HTTPHeaders = HTTPHeaders(dict)
+        
         ConsoleLog.show("URL:\(request.url)")
+        ConsoleLog.show("headers:\(headers)")
         
         AF.upload(multipartFormData: { (multipartFormData) in
             
             if let m = media {
+                multipartFormData.append(fileName.data(using: .utf8)!, withName: "filename")
                 
-                //multipartFormData.append("\(card.id)".data(using: .utf8)!, withName: "card_id")
-                multipartFormData.append(m.filename.data(using: .utf8)!, withName: "filename")
-                //multipartFormData.append("\(m.uuid)".data(using: .utf8)!, withName: "uuid")
-                
-                if let mp4VideoUrl = media?.mp4VideoUrl {
-                    var videoData = try! Data(contentsOf: mp4VideoUrl)
-                        //[NSData dataWithContentsOfURL:[NSURL fileURLWithPath: videoURL]];
-                    let fileType = URL(string: m.filename)?.pathExtension ?? "mp4"
-                    //multipartFormData.append("multipart".data(using: .utf8)!, withName: "Content-Type")
-                    //multipartFormData.append("file".data(using: .utf8)!, withName: "name")
-                    //multipartFormData.append(videoData, withName: "file")
-                    multipartFormData.append(videoData, withName: "file", fileName: m.filename, mimeType: "video/\(fileType)")
-                    //multipartFormData.append(mp4VideoUrl, withName: "file")
-
+                if let videoData = videoData {
+                    multipartFormData.append(videoData, withName: "file", fileName: fileName, mimeType: "video/\(fileType)")
                     
                 } else if let imageData = m.imageData {
-                    let fileType = URL(string: m.filename)?.pathExtension ?? "jpeg"
-                    multipartFormData.append(imageData, withName: "image", fileName: m.filename, mimeType: "image/\(fileType)")
+                    multipartFormData.append(imageData, withName: "image", fileName: fileName, mimeType: "image/\(fileType)")
                 }
-                print("multipartFormData: \(multipartFormData)")
+                
             }
-        }, to: request.url, headers: HTTPHeaders(headers!))
+        }, to: request.url, method: .post, headers: headers)
         .uploadProgress(queue: .main, closure: { progress in
             let percent = progress.fractionCompleted * 100
             self.stageVC?.showLoading("\(Int(percent))%")
             ConsoleLog.show("Upload Progress: \(progress.fractionCompleted)")
         })
-        .responseJSON(completionHandler: { [self] respond in
+        .responseJSON(completionHandler: { respond in
             do {
                 // make sure this JSON is in the format we expect
                 ConsoleLog.show("Upload respond: \(respond)")
@@ -417,8 +435,9 @@ class FLFlashCardViewModel: BaseViewModel {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         if let media = FLMediaResult(JSON: json) {
                             print("JSON: \(json)")
-                            if let _ = media.mp4VideoUrl {
+                            if let file = media.file {
                                 //do something after upload video to api
+                                iView.element?.src = file
                             } else {
                                 iView.element?.src = media.image
                             }
@@ -560,7 +579,7 @@ class FLFlashCardViewModel: BaseViewModel {
 extension FLFlashCardViewModel {
     func createJSONNewFlash(profileId: Int) -> [String : Any] {
         var param = [String : Any]()
-        param["content_name"] = "Untitled"
+        param["name_content"] = "Untitled"
         param["created_by"] = profileId
         param["code"] = ""
         return param

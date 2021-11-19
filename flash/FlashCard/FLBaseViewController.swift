@@ -11,6 +11,7 @@ class FLBaseViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.window?.overrideUserInterfaceStyle = .light
         self.navigationController?.navigationBar.topItem?.title = ""
     }
 }

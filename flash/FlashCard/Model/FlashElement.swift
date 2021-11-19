@@ -125,7 +125,6 @@ class FlashElement: FLBaseResult {
     //video
     var deviceVideoUrl: URL?
     var mp4VideoUrl: URL?
-    var mp4VideoUploade: String?
     
     //Quiz
     var scaleUI: Float = 1.0//default

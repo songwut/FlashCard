@@ -15,9 +15,11 @@ class FLPlaverView: UIView {
     
     var playerLayer: CALayer?
     var mediaUrl: URL!
+    private var playButton = UIButton()
+    private var isPlay = false
     
     func createVideo(url: URL) {
-        self.backgroundColor = .black
+        self.backgroundColor = .background()
         mediaUrl = url
         playerLayer = AVPlayerLayer(player: self.player)
         playerLayer?.contentsGravity = .resizeAspectFill
@@ -25,12 +27,25 @@ class FLPlaverView: UIView {
         playerLayer?.frame = self.bounds
         layer.addSublayer(playerLayer!)
         
-        
-        
         playerItem = AVPlayerItem(url: mediaUrl)
         player.replaceCurrentItem(with: playerItem)
-        player.play()
         
+        playButton.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+        playButton.setImage(UIImage(named: "ic_v2_play"), for: .normal)
+        playButton.tintColor = UIColor("222831")
+        playButton.bounds = CGRect(x: 0, y: 0, width: 70, height: 70)
+        playButton.cornerRadius = 70 / 2
+        playButton.center = self.center
+        playButton.alpha = 1.0
+        playButton.addTarget(self, action: #selector(self.playPressed), for: .touchUpInside)
+        addSubview(playButton)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.playPressed))
+        self.addGestureRecognizer(tap)
+        self.isUserInteractionEnabled = true
+    }
+    
+    func playLoop() {
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
                                                object: self.player.currentItem,
                                                queue: .main) { [weak self] _ in
@@ -43,6 +58,20 @@ class FLPlaverView: UIView {
         NotificationCenter.default.removeObserver(self)
     }
     
+    @objc func playPressed() {
+        if isPlay {
+            isPlay = false
+            playButton.alpha = 1.0
+            player.pause()
+            NotificationCenter.default.removeObserver(self)
+        } else {
+            isPlay = true
+            playButton.alpha = 0.0
+            player.play()
+            playLoop()
+        }
+    }
+    
     func updateUrl(url: URL) {
         mediaUrl = url
         playerItem = AVPlayerItem(url: mediaUrl)
@@ -52,5 +81,6 @@ class FLPlaverView: UIView {
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
         playerLayer?.frame = self.bounds
+        playButton.center = CGPoint(x: self.bounds.width / 2, y:  self.bounds.height / 2)
     }
 }

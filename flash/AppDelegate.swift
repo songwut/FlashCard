@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = UIColor.config_primary()
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.font(16, .text)]
-        
+        UIApplication.shared.window?.overrideUserInterfaceStyle = .light
         if #available(iOS 14.0, *) {
             // iOS 14 doesn't have extra separators below the list by default.
         } else {

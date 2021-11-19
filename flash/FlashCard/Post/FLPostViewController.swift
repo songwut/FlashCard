@@ -230,11 +230,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                 self.loadDetail(detail)
             } else {
                 self.showLoading(nil)
-                self.viewModel.callAPIFlashDetail(.get) { [weak self] (detail) in
-                    DispatchQueue.main.async {
-                        self?.loadDetail(detail)
-                    }
-                }
+                self.callAPIFlashDetail()
             }
         }
     }
@@ -244,17 +240,17 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.descTextView.text = ""
         self.updateValueLabel.text = ""
         self.categoryValueLabel.text = ""
-        self.updateValueLabel.text = ""//TODO: show
+        self.updateValueLabel.text = ""
         self.idView.isHidden = true
     }
     
     func loadDetail(_ detail: FLDetailResult?) {
         self.hideLoading()
         guard let detail = detail else { return }
-        self.time = detail.estimateTime ?? 5 //TODO: get real time
+        self.time = detail.estimateTime == 0 ? 5 : detail.estimateTime
         
-        self.titleTextField.text = detail.contentName
-        self.updateTitleLimit(detail.contentName.count)
+        self.titleTextField.text = detail.nameContent
+        self.updateTitleLimit(detail.nameContent.count)
         
         self.descTextView.text = detail.desc
         
@@ -472,6 +468,14 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
     }
     
+    func callAPIFlashDetail() {
+        self.viewModel.callAPIFlashDetail(.get) { [weak self] (detail) in
+            DispatchQueue.main.async {
+                self?.loadDetail(detail)
+            }
+        }
+    }
+    
     func callAPIFlashDetailUpdate() {
         let json = self.createJSON()
         ConsoleLog.show("callAPIFlashDetailUpdate")
@@ -487,6 +491,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             self?.viewModel.detail?.requestStatus = .waitForApprove//mock
             self?.viewModel.detail?.displayStatus = .unpublish//mock
             self?.loadDetail(detail)
+            
+            self?.callAPIFlashDetail()
         }
     }
     
@@ -510,7 +516,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             }
         }
         
-        dict["content_name"] = self.titleTextField.text
+        dict["name_content"] = self.titleTextField.text
         dict["desc"] = self.descTextView.text
         dict["duration"] = self.time
         //dict["code"] = detail.code
@@ -524,11 +530,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
         
         dict["tag_list"] = tags
-        dict["is_display"] = false //detail.displayStatus.rawValue
+        dict["is_display"] = false
         
-        //may next phase
-        //dict["provider"] =
-        //dict["instructor_list"] =
         return dict
     }
     

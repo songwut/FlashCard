@@ -15,19 +15,16 @@ class FLCreateMaterialListViewModel: ObservableObject {
     func callAPILearningCoverList() {
         let viewModel = FLFlashCardViewModel()
         viewModel.callAPILearningCoverList { (listResult: [LMCreateItem]?) in
-            if var list = listResult {
+            if let list = listResult {
                 self.isLoaded = true
                 self.list = list
             }
-            
         }
-        
     }
 }
 
 struct FLCreateMaterialListView: View {
-    @ObservedObject var viewModel: FLCreateMaterialListViewModel
-    
+    @EnvironmentObject var viewModel: FLCreateMaterialListViewModel
     private let column = UIDevice.isIpad() ? 3 : 2
     private let margin: CGFloat = 16
     
@@ -50,7 +47,6 @@ struct FLCreateMaterialListView: View {
                 let hWidth = superW - (margin * CGFloat(column))
                 let cellWidth = CGFloat(hWidth / CGFloat(column))
                 let cellHeight = CGFloat(cellWidth * (200 / 164))
-                
                 let list = viewModel.list
                 let row = Float(list.count / column)
                 VStack(alignment: .center, spacing: nil, content: {
@@ -90,7 +86,9 @@ struct FLCreateMaterialListView: View {
 
 struct FLCreateMaterialListView_Previews: PreviewProvider {
     static var previews: some View {
-        let vm = FLCreateMaterialListViewModel()
-        FLCreateMaterialListView(viewModel: vm)
+        FLCreateMaterialListView()
+            .environmentObject(
+                FLCreateMaterialListViewModel()
+            )
     }
 }
