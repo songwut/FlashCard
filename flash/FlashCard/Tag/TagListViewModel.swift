@@ -10,6 +10,7 @@ import Foundation
 class TagListViewModel: BaseViewModel {
     var selectTagId = [Int]()
     var tagList = [UGCTagResult]()
+    var newTagList = [UGCTagResult]()
     var isLoadNextPage = false
     var nextPage: Int?
     var isFirstPage = true
@@ -24,22 +25,23 @@ class TagListViewModel: BaseViewModel {
             request.apiMethod = .get
             request.endPoint = .tagSelectList
             
+            var endpointDict = [String: Any]()
+            endpointDict["page_size"] = 100
             if self.isLoadNextPage, let next = self.nextPage {
-                request.parameter = ["page": next]
-                //request.parameter = ["page_size": 100, "page": next]
-            } else {
-                //let pageSize: [String: Any] = ["page_size": 50]
-                //request.parameter = ["page_size": 50]
-                //return nil
+                endpointDict["page"] = next
             }
+            
+            request.endPointParam = EndPointParam(dict: endpointDict)
             
             API.request(request) { (response: ResponseBody?, result: UGCTagPageResult?, isCache, error) in
                 if let page = result {
                     self.nextPage = page.next
                     
                     if self.isFirstPage {
+                        self.newTagList = page.list
                         self.tagList = page.list
                     } else {
+                        self.newTagList = page.list
                         self.tagList.append(contentsOf: page.list)
                     }
                     
@@ -49,16 +51,5 @@ class TagListViewModel: BaseViewModel {
                 complete(self.tagList)
             }
         }
-        
-        /*
-        JSON.read("ugc-flash-card-tag-list") { (object) in
-            if let dict = object as? [String : Any],
-               let detail = UGCTagPageResult(JSON: dict) {
-                let mockList = detail.list
-                
-                self.openTagListVC(tags: mockList)
-            }
-        }
-        */
     }
 }

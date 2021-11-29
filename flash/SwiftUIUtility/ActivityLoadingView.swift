@@ -1,5 +1,5 @@
 //
-//  LoadingView.swift
+//  ActivityLoadingView.swift
 //  flash
 //
 //  Created by Songwut Maneefun on 19/11/2564 BE.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LoadingView: View {
+struct ActivityLoadingView: View {
     @State var isLoading = false
     
     var body: some View {
@@ -23,9 +23,9 @@ struct LoadingView: View {
     }
 }
 
-struct LoadingView_Previews: PreviewProvider {
+struct ActivityLoadingView_Previews: PreviewProvider {
     static var previews: some View {
-        LoadingView(isLoading: true)
+        ActivityLoadingView(isLoading: true)
             .previewLayout(.fixed(width: 300, height: 120))
             .environment(\.sizeCategory, .small)
     }

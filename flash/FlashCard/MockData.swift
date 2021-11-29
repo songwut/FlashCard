@@ -13,19 +13,6 @@ struct MockObject {
         return JSON.loadItemList("create-list.json")
     }
     
-    //item
-//    static var createList: [LMCreateItem] = [
-//        LMCreateItem(JSON: [
-//                        "name" : "flash",
-//                        "code" : "flashcard.flashcard",
-//                        "is_available": true,
-//                        "image": "https://develop.conicle.co/media/default/content/default_flash_card_material.png"])!,
-//        LMCreateItem(JSON: ["name" : "video", "code" : "video.video"])!,
-//        LMCreateItem(JSON: ["name" : "video", "code" : "audio.audio"])!,
-//        LMCreateItem(JSON: ["name" : "external_video", "code" : "video.video"])!,
-//        LMCreateItem(JSON: ["name" : "video", "code" : "video.video"])!
-//    ]
-    
     static var flColor: FLColorResult = FLColorResult(JSON: ["code" : "color_01", "cl_code": "FFFFFF"])!
     static var detail = FLDetailResult(JSON: ["name" : "detail.name"])!
     
@@ -150,6 +137,6 @@ struct MockObject {
     
     
     static var myMaterialFlash: MaterialFlashPageResult {
-        return JSON.loadItem("my-content.json")//item
+        return JSON.loadItem("my-content.json")
     }
 }

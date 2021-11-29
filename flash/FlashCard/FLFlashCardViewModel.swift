@@ -59,14 +59,15 @@ class FLFlashCardViewModel: BaseViewModel {
         return current?.first
     }
     
-    func callAPIMyFlashCard(_ method:APIMethod, nextUrl: String? = nil, param:[String: Any]? = nil, complete: @escaping (_ result: LMMaterialPageResult?) -> ()) {
+    func callAPIMyFlashCard(_ method:APIMethod, nextUrl: String? = nil, body:[String: Any]? = nil, param: EndPointParam? = nil, complete: @escaping (_ result: LMMaterialPageResult?) -> ()) {
         let request = FLRequest()
         if let nextUrl = nextUrl {
             request.nextUrl = nextUrl
         }
         request.endPoint = .myContent
         request.apiMethod = method
-        request.parameter = param
+        request.parameter = body
+        request.endPointParam = param
         request.apiType = .json
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: LMMaterialPageResult?, isCache, error) in
             self?.checkResponseBody(responseBody)

@@ -37,7 +37,7 @@ class FLDetailResult: LMMaterialResult {
     var category: CategoryResult?
     var instructorList = [InstructorResult]()
     var tagList = [UGCTagResult]()
-    var estimateTime = 0
+    var estimateTime = 5 //default
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -324,4 +324,35 @@ class UGCTagResult: BaseResult {
         let item = Mapper<UGCTagResult>().map(JSON: dict)
         return item
     }
+}
+
+
+class LMMaterialResult: BaseResult, Identifiable {
+    var nameContent = ""
+    let uuid = UUID()
+    var progress: ProgressResult?
+    var displayStatus: FLStatus = .unpublish
+    var owner: OwnerResult?
+    var code: String?
+    var datetimePublish: String?
+    var contentCode: ContentCode = .flash
+    var datetimeUpdate = ""
+    var datetimeCreate = ""
+    var contentRequest: ContentRequest?
+    var requestStatus: RequestStatus = .none
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        nameContent          <- map["name_content"]
+        code                 <- map["code"]
+        displayStatus        <- map["is_display"]
+        contentCode          <- map["content_type.code"]
+        progress             <- map["progress"]
+        owner                <- map["created_by"]
+        contentRequest       <- map["content_request"]
+        requestStatus        <- map["content_request.status"]
+        datetimePublish      <- map["datetime_publish"]
+        datetimeUpdate       <- map["datetime_update"]
+    }
+    
 }

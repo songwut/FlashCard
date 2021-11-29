@@ -101,7 +101,8 @@ class FLQuizView: UIView {
         }
         
         //detail["id"] = question.id as AnyObject//back gen
-        detail["value"] = question.value as AnyObject
+        let quizTitle = question.value == "" ? "question".localized() : question.value
+        detail["value"] = quizTitle as AnyObject
         detail["choice"] = choiceListJson as AnyObject
         dict["detail"] = detail as AnyObject
         

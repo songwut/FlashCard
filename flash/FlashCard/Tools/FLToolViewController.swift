@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
 
 class FLToolViewController: UIViewController {
     
@@ -76,7 +77,6 @@ class FLToolViewController: UIViewController {
         self.titleLabel.text = setup.tool.title()
         self.viewModel.tool = setup.tool
         self.viewModel.view = setup.view
-        
 //        if self.isToolReady {
 //            self.open(setup.tool)
 //        }
@@ -84,6 +84,9 @@ class FLToolViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        IQKeyboardManager.shared.enable = false
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        IQKeyboardManager.shared.unregisterAllNotifications()
         self.view.updateLayout()
         self.view.roundCorners([.topLeft, .topRight], radius: 16)
         self.titleLabel.textColor = .black
@@ -120,8 +123,8 @@ class FLToolViewController: UIViewController {
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if self.keyboardFrame == nil {
-            if let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                
+            if let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+
                 if self.keyboardFrame == nil {
                     print("keyboardSize.height:\(keyboardFrame.height)")
                     self.keyboardHeight.constant = keyboardFrame.height - self.safeAreaBottomHeight
@@ -393,6 +396,9 @@ class FLToolViewController: UIViewController {
         //resignFirstResponder > textViewDidEndEditing
         //make isSelected = false
         //need to set iView still selecting
+        IQKeyboardManager.shared.enable = false
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        
         var textView: UITextView!
         if let iViewText = self.viewModel.view as? InteractTextView {
             textView = iViewText.textView

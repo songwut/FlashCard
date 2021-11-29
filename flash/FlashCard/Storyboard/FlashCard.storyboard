@@ -357,7 +357,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="lDU-Ds-Bq0">
-                                        <rect key="frame" x="0.0" y="100" width="414" height="130"/>
+                                        <rect key="frame" x="0.0" y="100" width="414" height="30"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ykM-rH-eHS">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="30"/>
@@ -406,10 +406,10 @@
                                                 </subviews>
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cWM-bw-TeU">
-                                                <rect key="frame" x="0.0" y="30" width="414" height="100"/>
+                                                <rect key="frame" x="0.0" y="30" width="414" height="0.0"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="100" id="lrh-3x-p2c"/>
+                                                    <constraint firstAttribute="height" id="lrh-3x-p2c"/>
                                                 </constraints>
                                             </view>
                                         </subviews>

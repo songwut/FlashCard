@@ -6,8 +6,21 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
 
 extension UIViewController {
+    
+    func keyboardManager(_ isActive: Bool) {
+        IQKeyboardManager.shared.enable = isActive
+    }
+    
+    func removeChild() {
+        self.children.forEach {
+          $0.willMove(toParent: nil)
+          $0.view.removeFromSuperview()
+          $0.removeFromParent()
+        }
+    }
     
     static func initFromNib() -> Self {
         func instanceFromNib<T: UIViewController>() -> T {
@@ -17,27 +30,15 @@ extension UIViewController {
     }
     
     var safeAreaTopHeight: CGFloat {
-        if #available(iOS 13.0, *) {
-            let window = UIApplication.shared.window
-            let topPadding = window?.safeAreaInsets.top ?? 0
-            return topPadding
-        } else {
-            let window = UIApplication.shared.window
-            let topPadding = window?.safeAreaInsets.top ?? 0
-            return topPadding
-        }
+        let window = UIApplication.shared.window
+        let topPadding = window?.safeAreaInsets.top ?? 0
+        return topPadding
     }
     
     var safeAreaBottomHeight: CGFloat {
-        if #available(iOS 13.0, *) {
-            let window = UIApplication.shared.window
-            let topPadding = window?.safeAreaInsets.bottom ?? 0
-            return topPadding
-        } else {
-            let window = UIApplication.shared.window
-            let topPadding = window?.safeAreaInsets.bottom ?? 0
-            return topPadding
-        }
+        let window = UIApplication.shared.window
+        let topPadding = window?.safeAreaInsets.bottom ?? 0
+        return topPadding
     }
     
     func updateNavigationTheme(barTintColor: UIColor, tintColor: UIColor) {

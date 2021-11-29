@@ -15,6 +15,7 @@ class FLPlaverView: UIView {
     
     var playerLayer: CALayer?
     var mediaUrl: URL!
+    private var playButtonBg = UIView()
     private var playButton = UIButton()
     private var isPlay = false
     
@@ -30,6 +31,9 @@ class FLPlaverView: UIView {
         playerItem = AVPlayerItem(url: mediaUrl)
         player.replaceCurrentItem(with: playerItem)
         
+        playButtonBg.backgroundColor = .clear
+        playButtonBg.bounds = CGRect(x: 0, y: 0, width: self.bounds.width - 20, height: self.bounds.height - 20)
+        
         playButton.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         playButton.setImage(UIImage(named: "ic_v2_play"), for: .normal)
         playButton.tintColor = UIColor("222831")
@@ -38,7 +42,7 @@ class FLPlaverView: UIView {
         playButton.center = self.center
         playButton.alpha = 1.0
         playButton.addTarget(self, action: #selector(self.playPressed), for: .touchUpInside)
-        addSubview(playButton)
+        playButtonBg.addSubview(playButton)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.playPressed))
         self.addGestureRecognizer(tap)
@@ -82,5 +86,6 @@ class FLPlaverView: UIView {
         super.layoutSublayers(of: layer)
         playerLayer?.frame = self.bounds
         playButton.center = CGPoint(x: self.bounds.width / 2, y:  self.bounds.height / 2)
+        playButtonBg.bounds = CGRect(x: 0, y: 0, width: self.bounds.width - 20, height: self.bounds.height - 20)
     }
 }

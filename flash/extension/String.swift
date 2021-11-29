@@ -8,6 +8,22 @@
 import Foundation
 
 extension String {
+    func contains(find: String) -> Bool{
+        return self.range(of: find) != nil
+    }
+    
+    func containsIgnoringCase(find: String) -> Bool{
+        return self.range(of: find, options: .caseInsensitive) != nil
+    }
+    
+    func replace(_ target: String, withString: String) -> String {
+        return self.replacingOccurrences(of: target, with: withString, options: NSString.CompareOptions.literal, range: nil)
+    }
+    
+    mutating func replace(_ originalString:String, with newString:String) {
+        self = self.replacingOccurrences(of: originalString, with: newString)
+    }
+    
     static func className(_ aClass: AnyClass) -> String {
         return NSStringFromClass(aClass).components(separatedBy: ".").last!
     }

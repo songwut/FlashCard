@@ -106,9 +106,9 @@
 		6937D4A92746BA3900C39277 /* create-list.json in Resources */ = {isa = PBXBuildFile; fileRef = 6937D4A82746BA3800C39277 /* create-list.json */; };
 		6937D4AA2746BA3900C39277 /* create-list.json in Resources */ = {isa = PBXBuildFile; fileRef = 6937D4A82746BA3800C39277 /* create-list.json */; };
 		6937D4AB2746BA3900C39277 /* create-list.json in Resources */ = {isa = PBXBuildFile; fileRef = 6937D4A82746BA3800C39277 /* create-list.json */; };
-		6937D4B32747735D00C39277 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D4B22747735C00C39277 /* LoadingView.swift */; };
-		6937D4B42747735E00C39277 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D4B22747735C00C39277 /* LoadingView.swift */; };
-		6937D4B52747735E00C39277 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D4B22747735C00C39277 /* LoadingView.swift */; };
+		6937D4B32747735D00C39277 /* ActivityLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D4B22747735C00C39277 /* ActivityLoadingView.swift */; };
+		6937D4B42747735E00C39277 /* ActivityLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D4B22747735C00C39277 /* ActivityLoadingView.swift */; };
+		6937D4B52747735E00C39277 /* ActivityLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D4B22747735C00C39277 /* ActivityLoadingView.swift */; };
 		6940231A26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
 		6940231B26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
 		6940231C26FDBDD0002C7508 /* FLTagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6940231826FDBDD0002C7508 /* FLTagListView.swift */; };
@@ -151,15 +151,12 @@
 		695899B62669F07B0012B032 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 695899B42669F07B0012B032 /* LaunchScreen.storyboard */; };
 		695899C12669F07B0012B032 /* flashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695899C02669F07B0012B032 /* flashTests.swift */; };
 		695899CC2669F07B0012B032 /* flashUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695899CB2669F07B0012B032 /* flashUITests.swift */; };
-		695899DD2669F35E0012B032 /* AVAssetTrim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695899DC2669F35E0012B032 /* AVAssetTrim.swift */; };
-		695899DE2669F35E0012B032 /* AVAssetTrim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695899DC2669F35E0012B032 /* AVAssetTrim.swift */; };
-		695899DF2669F35E0012B032 /* AVAssetTrim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695899DC2669F35E0012B032 /* AVAssetTrim.swift */; };
 		695899ED266A819F0012B032 /* Gif-CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695899EC266A819F0012B032 /* Gif-CALayer.swift */; };
 		695899EE266A819F0012B032 /* Gif-CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695899EC266A819F0012B032 /* Gif-CALayer.swift */; };
 		695899EF266A819F0012B032 /* Gif-CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695899EC266A819F0012B032 /* Gif-CALayer.swift */; };
-		6959287B2690D49D00AEEAEA /* FLTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6959287A2690D49C00AEEAEA /* FLTypeButton.swift */; };
-		6959287C2690D49D00AEEAEA /* FLTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6959287A2690D49C00AEEAEA /* FLTypeButton.swift */; };
-		6959287D2690D49D00AEEAEA /* FLTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6959287A2690D49C00AEEAEA /* FLTypeButton.swift */; };
+		6959287B2690D49D00AEEAEA /* FLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6959287A2690D49C00AEEAEA /* FLTextView.swift */; };
+		6959287C2690D49D00AEEAEA /* FLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6959287A2690D49C00AEEAEA /* FLTextView.swift */; };
+		6959287D2690D49D00AEEAEA /* FLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6959287A2690D49C00AEEAEA /* FLTextView.swift */; };
 		695C9B3126FE10FE00C242B4 /* ugc-flash-card-quiz-user.json in Resources */ = {isa = PBXBuildFile; fileRef = 695C9B3026FE10FE00C242B4 /* ugc-flash-card-quiz-user.json */; };
 		695C9B3226FE10FE00C242B4 /* ugc-flash-card-quiz-user.json in Resources */ = {isa = PBXBuildFile; fileRef = 695C9B3026FE10FE00C242B4 /* ugc-flash-card-quiz-user.json */; };
 		695C9B3326FE10FE00C242B4 /* ugc-flash-card-quiz-user.json in Resources */ = {isa = PBXBuildFile; fileRef = 695C9B3026FE10FE00C242B4 /* ugc-flash-card-quiz-user.json */; };
@@ -172,6 +169,12 @@
 		695DDCBC26EB537800B0194D /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695DDCBB26EB537800B0194D /* Formatter.swift */; };
 		695DDCBD26EB537800B0194D /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695DDCBB26EB537800B0194D /* Formatter.swift */; };
 		695DDCBE26EB537800B0194D /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695DDCBB26EB537800B0194D /* Formatter.swift */; };
+		69641BB727512FA000E6E4CD /* UGCCreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69641BB427512FA000E6E4CD /* UGCCreateMaterialListView.swift */; };
+		69641BB827512FA000E6E4CD /* UGCCreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69641BB427512FA000E6E4CD /* UGCCreateMaterialListView.swift */; };
+		69641BB927512FA000E6E4CD /* UGCCreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69641BB427512FA000E6E4CD /* UGCCreateMaterialListView.swift */; };
+		69641BBA27512FA000E6E4CD /* NewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69641BB527512FA000E6E4CD /* NewMaterialView.swift */; };
+		69641BBB27512FA000E6E4CD /* NewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69641BB527512FA000E6E4CD /* NewMaterialView.swift */; };
+		69641BBC27512FA000E6E4CD /* NewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69641BB527512FA000E6E4CD /* NewMaterialView.swift */; };
 		6968C77626A0233800A712B0 /* FLControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6968C77526A0233700A712B0 /* FLControlView.swift */; };
 		6968C77726A0233800A712B0 /* FLControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6968C77526A0233700A712B0 /* FLControlView.swift */; };
 		6968C77826A0233800A712B0 /* FLControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6968C77526A0233700A712B0 /* FLControlView.swift */; };
@@ -248,9 +251,6 @@
 		696BBAC826E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */ = {isa = PBXBuildFile; fileRef = 696BBAC726E8A54600E88B49 /* ugc-flash-card-detail.json */; };
 		696BBAC926E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */ = {isa = PBXBuildFile; fileRef = 696BBAC726E8A54600E88B49 /* ugc-flash-card-detail.json */; };
 		696BBACA26E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */ = {isa = PBXBuildFile; fileRef = 696BBAC726E8A54600E88B49 /* ugc-flash-card-detail.json */; };
-		696D0343268F9B0D002B3500 /* FLPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696D0342268F9B0D002B3500 /* FLPageControlView.swift */; };
-		696D0344268F9B0D002B3500 /* FLPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696D0342268F9B0D002B3500 /* FLPageControlView.swift */; };
-		696D0345268F9B0E002B3500 /* FLPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696D0342268F9B0D002B3500 /* FLPageControlView.swift */; };
 		696D034B268F9EBD002B3500 /* FLItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696D0349268F9EBD002B3500 /* FLItemCollectionViewCell.swift */; };
 		696D034C268F9EBD002B3500 /* FLItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696D0349268F9EBD002B3500 /* FLItemCollectionViewCell.swift */; };
 		696D034D268F9EBD002B3500 /* FLItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696D0349268F9EBD002B3500 /* FLItemCollectionViewCell.swift */; };
@@ -284,27 +284,15 @@
 		6973290E26A59C5B001BFC67 /* FontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973290D26A59C5B001BFC67 /* FontHelper.swift */; };
 		6973290F26A59C5B001BFC67 /* FontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973290D26A59C5B001BFC67 /* FontHelper.swift */; };
 		6973291026A59C5B001BFC67 /* FontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973290D26A59C5B001BFC67 /* FontHelper.swift */; };
-		6973291826A5A41E001BFC67 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973291726A5A41E001BFC67 /* MediaManager.swift */; };
-		6973291926A5A41E001BFC67 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973291726A5A41E001BFC67 /* MediaManager.swift */; };
-		6973291A26A5A41E001BFC67 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973291726A5A41E001BFC67 /* MediaManager.swift */; };
 		6974C555270C5433009F60AA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974C554270C5433009F60AA /* String.swift */; };
 		6974C556270C5433009F60AA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974C554270C5433009F60AA /* String.swift */; };
 		6974C557270C5433009F60AA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974C554270C5433009F60AA /* String.swift */; };
 		6974C5B1270D8E05009F60AA /* ImageLoaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974C5B0270D8E05009F60AA /* ImageLoaderService.swift */; };
 		6974C5B2270D8E05009F60AA /* ImageLoaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974C5B0270D8E05009F60AA /* ImageLoaderService.swift */; };
 		6974C5B3270D8E05009F60AA /* ImageLoaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974C5B0270D8E05009F60AA /* ImageLoaderService.swift */; };
-		69763ECD26FB165000FE6490 /* FLCreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763ECC26FB165000FE6490 /* FLCreateMaterialListView.swift */; };
-		69763ECE26FB165000FE6490 /* FLCreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763ECC26FB165000FE6490 /* FLCreateMaterialListView.swift */; };
-		69763ECF26FB165000FE6490 /* FLCreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763ECC26FB165000FE6490 /* FLCreateMaterialListView.swift */; };
-		69763ED426FB184D00FE6490 /* NewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763ED326FB184D00FE6490 /* NewMaterialView.swift */; };
-		69763ED526FB184D00FE6490 /* NewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763ED326FB184D00FE6490 /* NewMaterialView.swift */; };
-		69763ED626FB184D00FE6490 /* NewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763ED326FB184D00FE6490 /* NewMaterialView.swift */; };
 		69763EDB26FB516A00FE6490 /* FLFlashEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EDA26FB516A00FE6490 /* FLFlashEditorView.swift */; };
 		69763EDC26FB516A00FE6490 /* FLFlashEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EDA26FB516A00FE6490 /* FLFlashEditorView.swift */; };
 		69763EDD26FB516A00FE6490 /* FLFlashEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EDA26FB516A00FE6490 /* FLFlashEditorView.swift */; };
-		69763EF026FB79B500FE6490 /* MyNewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */; };
-		69763EF126FB79B500FE6490 /* MyNewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */; };
-		69763EF226FB79B500FE6490 /* MyNewMaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */; };
 		697694E52710A2C40051F003 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697694E42710A2C40051F003 /* Dictionary.swift */; };
 		697C0AB726CA30FB00CA1092 /* FLQuizView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 697C0AB626CA30FB00CA1092 /* FLQuizView.xib */; };
 		697C0AB826CA30FB00CA1092 /* FLQuizView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 697C0AB626CA30FB00CA1092 /* FLQuizView.xib */; };
@@ -354,6 +342,9 @@
 		697D1A042694833B0082783E /* SheetCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697D1A032694833B0082783E /* SheetCardViewController.swift */; };
 		697D1A052694833B0082783E /* SheetCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697D1A032694833B0082783E /* SheetCardViewController.swift */; };
 		697D1A062694833C0082783E /* SheetCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697D1A032694833B0082783E /* SheetCardViewController.swift */; };
+		6980F5C2274BE39100219B58 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980F5C1274BE39100219B58 /* Action.swift */; };
+		6980F5C3274BE39100219B58 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980F5C1274BE39100219B58 /* Action.swift */; };
+		6980F5C4274BE39100219B58 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980F5C1274BE39100219B58 /* Action.swift */; };
 		698193C0272C47F7003793D6 /* FLTextElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698193BF272C47F7003793D6 /* FLTextElementView.swift */; };
 		698193C1272C47F7003793D6 /* FLTextElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698193BF272C47F7003793D6 /* FLTextElementView.swift */; };
 		698193C2272C47F7003793D6 /* FLTextElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698193BF272C47F7003793D6 /* FLTextElementView.swift */; };
@@ -465,9 +456,6 @@
 		6985B3B226E7C37700FEAD8F /* TagListSelectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6985B3AE26E7C37700FEAD8F /* TagListSelectViewController.xib */; };
 		6985B3B326E7C37700FEAD8F /* TagListSelectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6985B3AE26E7C37700FEAD8F /* TagListSelectViewController.xib */; };
 		6985B3B426E7C37700FEAD8F /* TagListSelectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6985B3AE26E7C37700FEAD8F /* TagListSelectViewController.xib */; };
-		6985B3C226E7C7E800FEAD8F /* UGCTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6985B3C126E7C7E800FEAD8F /* UGCTag.swift */; };
-		6985B3C326E7C7E800FEAD8F /* UGCTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6985B3C126E7C7E800FEAD8F /* UGCTag.swift */; };
-		6985B3C426E7C7E800FEAD8F /* UGCTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6985B3C126E7C7E800FEAD8F /* UGCTag.swift */; };
 		6988081926FDA7B400687F65 /* FLCardInfoSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6988081826FDA7B400687F65 /* FLCardInfoSheetView.swift */; };
 		6988081A26FDA7B400687F65 /* FLCardInfoSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6988081826FDA7B400687F65 /* FLCardInfoSheetView.swift */; };
 		6988081B26FDA7B400687F65 /* FLCardInfoSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6988081826FDA7B400687F65 /* FLCardInfoSheetView.swift */; };
@@ -640,7 +628,7 @@
 		69B0FC3126A7F3230086E6C5 /* InteractView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FC3026A7F3230086E6C5 /* InteractView.swift */; };
 		69B0FC3226A7F3230086E6C5 /* InteractView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FC3026A7F3230086E6C5 /* InteractView.swift */; };
 		69B0FC3326A7F3230086E6C5 /* InteractView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FC3026A7F3230086E6C5 /* InteractView.swift */; };
-		69B0FC7826A977640086E6C5 /* FLPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FC7726A977640086E6C5 /* FLPopup.storyboard */; };
+		69B0FC7826A977640086E6C5 /* Popup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69B0FC7726A977640086E6C5 /* Popup.storyboard */; };
 		69B0FC8026A979480086E6C5 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FC7F26A979480086E6C5 /* PopupViewController.swift */; };
 		69B0FC8126A979480086E6C5 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FC7F26A979480086E6C5 /* PopupViewController.swift */; };
 		69B0FC8626A97A130086E6C5 /* NewPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B0FC8526A97A130086E6C5 /* NewPopUpViewController.swift */; };
@@ -719,12 +707,28 @@
 		69D1765327228E14000D9AAD /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D1765227228E14000D9AAD /* PageViewController.swift */; };
 		69D1765427228E14000D9AAD /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D1765227228E14000D9AAD /* PageViewController.swift */; };
 		69D1765527228E14000D9AAD /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D1765227228E14000D9AAD /* PageViewController.swift */; };
+		69D21C932753C6E500EEF341 /* NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21C922753C6E500EEF341 /* NSObject.swift */; };
+		69D21C942753C6E500EEF341 /* NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21C922753C6E500EEF341 /* NSObject.swift */; };
+		69D21C952753C6E500EEF341 /* NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21C922753C6E500EEF341 /* NSObject.swift */; };
+		69D21C9B2753C7D700EEF341 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 69D21C9A2753C7D700EEF341 /* IQKeyboardManagerSwift */; };
+		69D21CA12753EFB500EEF341 /* CreateMaterialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21C9F2753EFB500EEF341 /* CreateMaterialViewController.swift */; };
+		69D21CA22753EFB500EEF341 /* CreateMaterialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21C9F2753EFB500EEF341 /* CreateMaterialViewController.swift */; };
+		69D21CA32753EFB500EEF341 /* CreateMaterialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21C9F2753EFB500EEF341 /* CreateMaterialViewController.swift */; };
+		69D21CA42753EFB500EEF341 /* CreateMaterialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D21CA02753EFB500EEF341 /* CreateMaterialViewController.xib */; };
+		69D21CA52753EFB500EEF341 /* CreateMaterialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D21CA02753EFB500EEF341 /* CreateMaterialViewController.xib */; };
+		69D21CA62753EFB500EEF341 /* CreateMaterialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D21CA02753EFB500EEF341 /* CreateMaterialViewController.xib */; };
+		69D21CAC2753F31000EEF341 /* NewMaterialCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21CAA2753F31000EEF341 /* NewMaterialCollectionViewCell.swift */; };
+		69D21CAD2753F31000EEF341 /* NewMaterialCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21CAA2753F31000EEF341 /* NewMaterialCollectionViewCell.swift */; };
+		69D21CAE2753F31000EEF341 /* NewMaterialCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21CAA2753F31000EEF341 /* NewMaterialCollectionViewCell.swift */; };
+		69D21CAF2753F31000EEF341 /* NewMaterialCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D21CAB2753F31000EEF341 /* NewMaterialCollectionViewCell.xib */; };
+		69D21CB02753F31000EEF341 /* NewMaterialCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D21CAB2753F31000EEF341 /* NewMaterialCollectionViewCell.xib */; };
+		69D21CB12753F31000EEF341 /* NewMaterialCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D21CAB2753F31000EEF341 /* NewMaterialCollectionViewCell.xib */; };
+		69D21CB62753F47200EEF341 /* CreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21CB52753F47200EEF341 /* CreateMaterialListView.swift */; };
+		69D21CB72753F47200EEF341 /* CreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21CB52753F47200EEF341 /* CreateMaterialListView.swift */; };
+		69D21CB82753F47200EEF341 /* CreateMaterialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D21CB52753F47200EEF341 /* CreateMaterialListView.swift */; };
 		69D53B452692F7090020E024 /* FlashStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B442692F7090020E024 /* FlashStyle.swift */; };
 		69D53B462692F7090020E024 /* FlashStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B442692F7090020E024 /* FlashStyle.swift */; };
 		69D53B472692F7090020E024 /* FlashStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B442692F7090020E024 /* FlashStyle.swift */; };
-		69D53B4F2693031B0020E024 /* StatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B4E2693031A0020E024 /* StatViewController.swift */; };
-		69D53B502693031B0020E024 /* StatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B4E2693031A0020E024 /* StatViewController.swift */; };
-		69D53B512693031B0020E024 /* StatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D53B4E2693031A0020E024 /* StatViewController.swift */; };
 		69D64AFF270379DE00FEBDD4 /* FLCardInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D64AFD270379DE00FEBDD4 /* FLCardInfoViewController.swift */; };
 		69D64B00270379DE00FEBDD4 /* FLCardInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D64AFD270379DE00FEBDD4 /* FLCardInfoViewController.swift */; };
 		69D64B01270379DE00FEBDD4 /* FLCardInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D64AFD270379DE00FEBDD4 /* FLCardInfoViewController.swift */; };
@@ -737,6 +741,15 @@
 		69D64B1027038B0B00FEBDD4 /* FLQuizInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D64B0C27038B0B00FEBDD4 /* FLQuizInfoViewController.xib */; };
 		69D64B1127038B0B00FEBDD4 /* FLQuizInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D64B0C27038B0B00FEBDD4 /* FLQuizInfoViewController.xib */; };
 		69D64B1227038B0B00FEBDD4 /* FLQuizInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D64B0C27038B0B00FEBDD4 /* FLQuizInfoViewController.xib */; };
+		69DA99252754E10300ADE863 /* CreateMaterial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69DA99242754E10300ADE863 /* CreateMaterial.storyboard */; };
+		69DA99262754E10300ADE863 /* CreateMaterial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69DA99242754E10300ADE863 /* CreateMaterial.storyboard */; };
+		69DA99272754E10300ADE863 /* CreateMaterial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69DA99242754E10300ADE863 /* CreateMaterial.storyboard */; };
+		69DA99692754F87100ADE863 /* TagSelect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69DA99682754F87100ADE863 /* TagSelect.storyboard */; };
+		69DA996A2754F87100ADE863 /* TagSelect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69DA99682754F87100ADE863 /* TagSelect.storyboard */; };
+		69DA996B2754F87200ADE863 /* TagSelect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69DA99682754F87100ADE863 /* TagSelect.storyboard */; };
+		69DA9A552755290E00ADE863 /* ContentRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA9A542755290E00ADE863 /* ContentRequest.swift */; };
+		69DA9A562755290E00ADE863 /* ContentRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA9A542755290E00ADE863 /* ContentRequest.swift */; };
+		69DA9A572755290E00ADE863 /* ContentRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA9A542755290E00ADE863 /* ContentRequest.swift */; };
 		69DD4CD526EB94AC000BA9B8 /* CustomButtonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DD4CD426EB94AC000BA9B8 /* CustomButtonUI.swift */; };
 		69DD4CD626EB94AD000BA9B8 /* CustomButtonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DD4CD426EB94AC000BA9B8 /* CustomButtonUI.swift */; };
 		69DD4CD726EB94AD000BA9B8 /* CustomButtonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DD4CD426EB94AC000BA9B8 /* CustomButtonUI.swift */; };
@@ -806,7 +819,7 @@
 		6937D2062746313B00C39277 /* LocalStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
 		6937D49B2746AC6800C39277 /* my-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "my-content.json"; sourceTree = "<group>"; };
 		6937D4A82746BA3800C39277 /* create-list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "create-list.json"; sourceTree = "<group>"; };
-		6937D4B22747735C00C39277 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		6937D4B22747735C00C39277 /* ActivityLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLoadingView.swift; sourceTree = "<group>"; };
 		6940231826FDBDD0002C7508 /* FLTagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLTagListView.swift; sourceTree = "<group>"; };
 		6940231926FDBDD0002C7508 /* FLTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLTagView.swift; sourceTree = "<group>"; };
 		6940233C26FDC47A002C7508 /* FLQuizInfoProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLQuizInfoProgressView.swift; sourceTree = "<group>"; };
@@ -833,13 +846,14 @@
 		695899C72669F07B0012B032 /* flashUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = flashUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		695899CB2669F07B0012B032 /* flashUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flashUITests.swift; sourceTree = "<group>"; };
 		695899CD2669F07B0012B032 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		695899DC2669F35E0012B032 /* AVAssetTrim.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVAssetTrim.swift; sourceTree = "<group>"; };
 		695899EC266A819F0012B032 /* Gif-CALayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Gif-CALayer.swift"; sourceTree = "<group>"; };
-		6959287A2690D49C00AEEAEA /* FLTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLTypeButton.swift; sourceTree = "<group>"; };
+		6959287A2690D49C00AEEAEA /* FLTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLTextView.swift; sourceTree = "<group>"; };
 		695C9B3026FE10FE00C242B4 /* ugc-flash-card-quiz-user.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "ugc-flash-card-quiz-user.json"; sourceTree = "<group>"; };
 		695C9B4B26FE53E000C242B4 /* ViewDidLoadModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDidLoadModifier.swift; sourceTree = "<group>"; };
 		695DDCB426EB533900B0194D /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		695DDCBB26EB537800B0194D /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
+		69641BB427512FA000E6E4CD /* UGCCreateMaterialListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UGCCreateMaterialListView.swift; sourceTree = "<group>"; };
+		69641BB527512FA000E6E4CD /* NewMaterialView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMaterialView.swift; sourceTree = "<group>"; };
 		6968C77526A0233700A712B0 /* FLControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLControlView.swift; sourceTree = "<group>"; };
 		6968C78926A0257400A712B0 /* FLControlView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLControlView.xib; sourceTree = "<group>"; };
 		6968C79A26A15DE900A712B0 /* InteractTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractTextView.swift; sourceTree = "<group>"; };
@@ -866,7 +880,6 @@
 		696BBABC26E8760600E88B49 /* FLPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLPostViewController.swift; sourceTree = "<group>"; };
 		696BBABD26E8760600E88B49 /* FLPostViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLPostViewController.xib; sourceTree = "<group>"; };
 		696BBAC726E8A54600E88B49 /* ugc-flash-card-detail.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "ugc-flash-card-detail.json"; sourceTree = "<group>"; };
-		696D0342268F9B0D002B3500 /* FLPageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLPageControlView.swift; sourceTree = "<group>"; };
 		696D0349268F9EBD002B3500 /* FLItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		696D034A268F9EBD002B3500 /* FLItemCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		6972050B268E098C002E3149 /* FLItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLItemView.swift; sourceTree = "<group>"; };
@@ -878,13 +891,9 @@
 		697328DF26A5938F001BFC67 /* fonts.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = fonts.css; sourceTree = "<group>"; };
 		6973290626A59C38001BFC67 /* PublicSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicSetting.swift; sourceTree = "<group>"; };
 		6973290D26A59C5B001BFC67 /* FontHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontHelper.swift; sourceTree = "<group>"; };
-		6973291726A5A41E001BFC67 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
 		6974C554270C5433009F60AA /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6974C5B0270D8E05009F60AA /* ImageLoaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoaderService.swift; sourceTree = "<group>"; };
-		69763ECC26FB165000FE6490 /* FLCreateMaterialListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLCreateMaterialListView.swift; sourceTree = "<group>"; };
-		69763ED326FB184D00FE6490 /* NewMaterialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMaterialView.swift; sourceTree = "<group>"; };
 		69763EDA26FB516A00FE6490 /* FLFlashEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLFlashEditorView.swift; sourceTree = "<group>"; };
-		69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNewMaterialView.swift; sourceTree = "<group>"; };
 		697694E42710A2C40051F003 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		697C0AB626CA30FB00CA1092 /* FLQuizView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLQuizView.xib; sourceTree = "<group>"; };
 		697C0ABD26CA310D00CA1092 /* FLQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLQuizView.swift; sourceTree = "<group>"; };
@@ -902,6 +911,7 @@
 		697D19E826945ED50082783E /* HalfModalPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfModalPresentationController.swift; sourceTree = "<group>"; };
 		697D19FB2694685B0082783E /* FLToolViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLToolViewController.swift; sourceTree = "<group>"; };
 		697D1A032694833B0082783E /* SheetCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetCardViewController.swift; sourceTree = "<group>"; };
+		6980F5C1274BE39100219B58 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		698193BF272C47F7003793D6 /* FLTextElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLTextElementView.swift; sourceTree = "<group>"; };
 		6983B2882729352E00607520 /* FLFlashPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLFlashPlayerView.swift; sourceTree = "<group>"; };
 		6983B2AA272A77DA00607520 /* UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindow.swift; sourceTree = "<group>"; };
@@ -940,7 +950,6 @@
 		6985B39D26E7C00800FEAD8F /* TagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagListView.swift; sourceTree = "<group>"; };
 		6985B3AD26E7C37700FEAD8F /* TagListSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListSelectViewController.swift; sourceTree = "<group>"; };
 		6985B3AE26E7C37700FEAD8F /* TagListSelectViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagListSelectViewController.xib; sourceTree = "<group>"; };
-		6985B3C126E7C7E800FEAD8F /* UGCTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UGCTag.swift; sourceTree = "<group>"; };
 		6988081826FDA7B400687F65 /* FLCardInfoSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLCardInfoSheetView.swift; sourceTree = "<group>"; };
 		6989905426B7B8B4008A41C1 /* FLListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLListViewController.swift; sourceTree = "<group>"; };
 		6989906826B7BB39008A41C1 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
@@ -999,7 +1008,7 @@
 		69B0FC1326A71F6C0086E6C5 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		69B0FC1A26A7356B0086E6C5 /* SnapGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapGesture.swift; sourceTree = "<group>"; };
 		69B0FC3026A7F3230086E6C5 /* InteractView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractView.swift; sourceTree = "<group>"; };
-		69B0FC7726A977640086E6C5 /* FLPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FLPopup.storyboard; sourceTree = "<group>"; };
+		69B0FC7726A977640086E6C5 /* Popup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Popup.storyboard; sourceTree = "<group>"; };
 		69B0FC7F26A979480086E6C5 /* PopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 		69B0FC8526A97A130086E6C5 /* NewPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPopUpViewController.swift; sourceTree = "<group>"; };
 		69B0FC8C26A97A550086E6C5 /* CourseDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailViewController.swift; sourceTree = "<group>"; };
@@ -1029,12 +1038,20 @@
 		69D176332721B60D000D9AAD /* FLBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLBaseViewController.swift; sourceTree = "<group>"; };
 		69D1764B27228D3D000D9AAD /* LoadingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingPageView.swift; sourceTree = "<group>"; };
 		69D1765227228E14000D9AAD /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
+		69D21C922753C6E500EEF341 /* NSObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSObject.swift; sourceTree = "<group>"; };
+		69D21C9F2753EFB500EEF341 /* CreateMaterialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMaterialViewController.swift; sourceTree = "<group>"; };
+		69D21CA02753EFB500EEF341 /* CreateMaterialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateMaterialViewController.xib; sourceTree = "<group>"; };
+		69D21CAA2753F31000EEF341 /* NewMaterialCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMaterialCollectionViewCell.swift; sourceTree = "<group>"; };
+		69D21CAB2753F31000EEF341 /* NewMaterialCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewMaterialCollectionViewCell.xib; sourceTree = "<group>"; };
+		69D21CB52753F47200EEF341 /* CreateMaterialListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMaterialListView.swift; sourceTree = "<group>"; };
 		69D53B442692F7090020E024 /* FlashStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashStyle.swift; sourceTree = "<group>"; };
-		69D53B4E2693031A0020E024 /* StatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatViewController.swift; sourceTree = "<group>"; };
 		69D64AFD270379DE00FEBDD4 /* FLCardInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLCardInfoViewController.swift; sourceTree = "<group>"; };
 		69D64AFE270379DE00FEBDD4 /* FLCardInfoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLCardInfoViewController.xib; sourceTree = "<group>"; };
 		69D64B0B27038B0B00FEBDD4 /* FLQuizInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLQuizInfoViewController.swift; sourceTree = "<group>"; };
 		69D64B0C27038B0B00FEBDD4 /* FLQuizInfoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLQuizInfoViewController.xib; sourceTree = "<group>"; };
+		69DA99242754E10300ADE863 /* CreateMaterial.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CreateMaterial.storyboard; sourceTree = "<group>"; };
+		69DA99682754F87100ADE863 /* TagSelect.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TagSelect.storyboard; sourceTree = "<group>"; };
+		69DA9A542755290E00ADE863 /* ContentRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentRequest.swift; sourceTree = "<group>"; };
 		69DD4CD426EB94AC000BA9B8 /* CustomButtonUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonUI.swift; sourceTree = "<group>"; };
 		69EC5204269D90AA00A23790 /* FLSliderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FLSliderView.xib; sourceTree = "<group>"; };
 		69EC520B269D90B900A23790 /* FLSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLSliderView.swift; sourceTree = "<group>"; };
@@ -1049,6 +1066,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69D21C9B2753C7D700EEF341 /* IQKeyboardManagerSwift in Frameworks */,
 				6937D1602742A0F900C39277 /* SDWebImageSwiftUI in Frameworks */,
 				6928063D27253CDD0026274A /* SwURL in Frameworks */,
 				B24F57C5F6AFBD68DA6FCE37 /* Pods_flash.framework in Frameworks */,
@@ -1090,16 +1108,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		692156EE2733C4B70086A24A /* CreateNewMaterial */ = {
-			isa = PBXGroup;
-			children = (
-				69763ECC26FB165000FE6490 /* FLCreateMaterialListView.swift */,
-				69763ED326FB184D00FE6490 /* NewMaterialView.swift */,
-				69763EEF26FB79B500FE6490 /* MyNewMaterialView.swift */,
-			);
-			path = CreateNewMaterial;
-			sourceTree = "<group>";
-		};
 		6958999A2669F0710012B032 = {
 			isa = PBXGroup;
 			children = (
@@ -1135,6 +1143,8 @@
 				6985B2C426E779EC00FEAD8F /* BaseSources */,
 				69EC51BE269C690C00A23790 /* Fonts */,
 				698990FB26B90504008A41C1 /* extension */,
+				69A295B72727DAD200B1F20C /* Representable */,
+				69641BB227512FA000E6E4CD /* UGC */,
 				69720535268E299F002E3149 /* FlashCard */,
 				6974C5A9270D8DEC009F60AA /* SwiftUIUtility */,
 				6983B2722729321F00607520 /* UIKitUtility */,
@@ -1167,6 +1177,29 @@
 				695899CD2669F07B0012B032 /* Info.plist */,
 			);
 			path = flashUITests;
+			sourceTree = "<group>";
+		};
+		69641BB227512FA000E6E4CD /* UGC */ = {
+			isa = PBXGroup;
+			children = (
+				69641BB327512FA000E6E4CD /* CreateNewMaterial */,
+			);
+			path = UGC;
+			sourceTree = "<group>";
+		};
+		69641BB327512FA000E6E4CD /* CreateNewMaterial */ = {
+			isa = PBXGroup;
+			children = (
+				69641BB527512FA000E6E4CD /* NewMaterialView.swift */,
+				69DA99242754E10300ADE863 /* CreateMaterial.storyboard */,
+				69D21C9F2753EFB500EEF341 /* CreateMaterialViewController.swift */,
+				69D21CA02753EFB500EEF341 /* CreateMaterialViewController.xib */,
+				69D21CAA2753F31000EEF341 /* NewMaterialCollectionViewCell.swift */,
+				69D21CAB2753F31000EEF341 /* NewMaterialCollectionViewCell.xib */,
+				69641BB427512FA000E6E4CD /* UGCCreateMaterialListView.swift */,
+				69DA9A542755290E00ADE863 /* ContentRequest.swift */,
+			);
+			path = CreateNewMaterial;
 			sourceTree = "<group>";
 		};
 		6968C79F26A15DF100A712B0 /* InteractView */ = {
@@ -1202,6 +1235,7 @@
 		696ABB6B26D7BE0D009527D3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6959287A2690D49C00AEEAEA /* FLTextView.swift */,
 				698F1F0927303214008A6D0D /* FLPlaverView.swift */,
 				696ABB6C26D7BE53009527D3 /* FLDashButton.swift */,
 				698F1ED227302F11008A6D0D /* FlashStageView.swift */,
@@ -1254,7 +1288,6 @@
 				6984904A2695DD3700B5FEF6 /* FLToolHelper.swift */,
 				697D19FB2694685B0082783E /* FLToolViewController.swift */,
 				698490542695E13D00B5FEF6 /* FLToolViewModel.swift */,
-				6973291726A5A41E001BFC67 /* MediaManager.swift */,
 				697C0AC426CA311400CA1092 /* quiz */,
 				698991F226BCF238008A41C1 /* graphic */,
 				69EC5229269DADED00A23790 /* text */,
@@ -1274,23 +1307,20 @@
 				6984901C2695A66A00B5FEF6 /* FLFlashCardViewModel.swift */,
 				6984903C2695BEF700B5FEF6 /* FLAssets.xcassets */,
 				6985B1B826E270AC00FEAD8F /* MockJSON */,
-				69A295B72727DAD200B1F20C /* Representable */,
-				69B0FC7626A976930086E6C5 /* Storyboard */,
 				6984901B2695A64A00B5FEF6 /* Editor */,
+				69B0FC7626A976930086E6C5 /* Storyboard */,
 				696ABB6B26D7BE0D009527D3 /* View */,
 				6968C79F26A15DF100A712B0 /* InteractView */,
 				69720512268E0992002E3149 /* Tools */,
 				698990DF26B8FC5C008A41C1 /* List */,
-				698990D826B81403008A41C1 /* Model */,
 				696ABB3026D75630009527D3 /* User */,
 				69B9D336270447CC009CE4A7 /* Info */,
+				6985B37526E7B0B200FEAD8F /* Category */,
+				6985B38326E7B0DD00FEAD8F /* Tag */,
 				6985B1CB26E5F37500FEAD8F /* Post */,
+				698990D826B81403008A41C1 /* Model */,
 				69A295A92727DA2900B1F20C /* MyMaterialList */,
-				692156EE2733C4B70086A24A /* CreateNewMaterial */,
-				69D53B4E2693031A0020E024 /* StatViewController.swift */,
-				6959287A2690D49C00AEEAEA /* FLTypeButton.swift */,
 				69B0FCCA26A98D8D0086E6C5 /* PopupManager.swift */,
-				696D0342268F9B0D002B3500 /* FLPageControlView.swift */,
 			);
 			path = FlashCard;
 			sourceTree = "<group>";
@@ -1298,11 +1328,12 @@
 		6974C5A9270D8DEC009F60AA /* SwiftUIUtility */ = {
 			isa = PBXGroup;
 			children = (
+				695C9B4B26FE53E000C242B4 /* ViewDidLoadModifier.swift */,
 				69DD4CD426EB94AC000BA9B8 /* CustomButtonUI.swift */,
 				6983B30C272AFC8900607520 /* StatusBarController.swift */,
 				692156E72733BF150086A24A /* ListSeparatorStyleNoneModifier.swift */,
 				692806732725A1860026274A /* ActivityIndicator.swift */,
-				6937D4B22747735C00C39277 /* LoadingView.swift */,
+				6937D4B22747735C00C39277 /* ActivityLoadingView.swift */,
 				692806872725C0320026274A /* RandomAccessCollection.swift */,
 				6974C5B0270D8E05009F60AA /* ImageLoaderService.swift */,
 				692806272724C7980026274A /* ImageView.swift */,
@@ -1363,7 +1394,6 @@
 		6983B2722729321F00607520 /* UIKitUtility */ = {
 			isa = PBXGroup;
 			children = (
-				695899DC2669F35E0012B032 /* AVAssetTrim.swift */,
 				69B0FBBD26A6CBE40086E6C5 /* Units.swift */,
 				698490112695A18F00B5FEF6 /* JSON.swift */,
 			);
@@ -1408,13 +1438,9 @@
 		6985B1CB26E5F37500FEAD8F /* Post */ = {
 			isa = PBXGroup;
 			children = (
-				6985B20526E6302A00FEAD8F /* UGCCategory.swift */,
-				6985B3C126E7C7E800FEAD8F /* UGCTag.swift */,
 				6985B1C426E5F1B000FEAD8F /* FLPostView.swift */,
 				696BBABD26E8760600E88B49 /* FLPostViewController.xib */,
 				696BBABC26E8760600E88B49 /* FLPostViewController.swift */,
-				6985B38326E7B0DD00FEAD8F /* Tag */,
-				6985B37526E7B0B200FEAD8F /* Category */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1422,7 +1448,11 @@
 		6985B2C426E779EC00FEAD8F /* BaseSources */ = {
 			isa = PBXGroup;
 			children = (
+				69B0FC7726A977640086E6C5 /* Popup.storyboard */,
+				69D21C922753C6E500EEF341 /* NSObject.swift */,
+				69B0FC7F26A979480086E6C5 /* PopupViewController.swift */,
 				6937D1DA2743F0E600C39277 /* BaseCollectionReusableView.swift */,
+				6980F5C1274BE39100219B58 /* Action.swift */,
 				6937D2062746313B00C39277 /* LocalStorage.swift */,
 				6937D1FF274630B400C39277 /* LogoutRequest.swift */,
 				6937D1CD2743F09600C39277 /* LoadingFooterView.swift */,
@@ -1461,7 +1491,6 @@
 				6985B1ED26E61EF100FEAD8F /* ContentResult.swift */,
 				6985B1F426E61F2000FEAD8F /* BaseResult.swift */,
 				6989909026B7CB40008A41C1 /* API.swift */,
-				69B0FC7F26A979480086E6C5 /* PopupViewController.swift */,
 				698990C326B7F403008A41C1 /* TabBarMenuViewController.swift */,
 				698990CA26B7F8A7008A41C1 /* BaseNavigationController.swift */,
 				6989909E26B7EA3A008A41C1 /* Reachability.swift */,
@@ -1483,6 +1512,7 @@
 		6985B37526E7B0B200FEAD8F /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				6985B20526E6302A00FEAD8F /* UGCCategory.swift */,
 				6985B1D926E6021700FEAD8F /* UGCCatagoryListView.swift */,
 				6985B1CF26E5F7C900FEAD8F /* UGCCategoryRow.swift */,
 			);
@@ -1497,6 +1527,7 @@
 				6940231826FDBDD0002C7508 /* FLTagListView.swift */,
 				6940231926FDBDD0002C7508 /* FLTagView.swift */,
 				6985B3AD26E7C37700FEAD8F /* TagListSelectViewController.swift */,
+				69DA99682754F87100ADE863 /* TagSelect.storyboard */,
 				694EA2BD273ED84A00B6CBE9 /* TagListViewModel.swift */,
 				6985B3AE26E7C37700FEAD8F /* TagListSelectViewController.xib */,
 			);
@@ -1535,7 +1566,6 @@
 				695005FA267A8B33009BBEC4 /* FlashElement.swift */,
 				698F1EEA273030E5008A6D0D /* FLMenuList.swift */,
 				698990D126B81124008A41C1 /* FLItemResult.swift */,
-				695C9B4B26FE53E000C242B4 /* ViewDidLoadModifier.swift */,
 				6989923526BCF932008A41C1 /* FLGraphicResult.swift */,
 				698991DD26BC2802008A41C1 /* FLStickerResult.swift */,
 				698991E426BC2870008A41C1 /* FLShapeResult.swift */,
@@ -1626,6 +1656,7 @@
 		69A295B72727DAD200B1F20C /* Representable */ = {
 			isa = PBXGroup;
 			children = (
+				69D21CB52753F47200EEF341 /* CreateMaterialListView.swift */,
 				69763EDA26FB516A00FE6490 /* FLFlashEditorView.swift */,
 				69A295B02727DAC600B1F20C /* FLFlashPostView.swift */,
 				6937D1642742BF5700C39277 /* FLFlashPlayerUIKitView.swift */,
@@ -1637,7 +1668,6 @@
 			isa = PBXGroup;
 			children = (
 				69720536268E29D4002E3149 /* FlashCard.storyboard */,
-				69B0FC7726A977640086E6C5 /* FLPopup.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -1722,6 +1752,7 @@
 				6928063C27253CDD0026274A /* SwURL */,
 				692156F82733E4520086A24A /* AsyncImage */,
 				6937D15F2742A0F900C39277 /* SDWebImageSwiftUI */,
+				69D21C9A2753C7D700EEF341 /* IQKeyboardManagerSwift */,
 			);
 			productName = flash;
 			productReference = 695899A32669F0710012B032 /* flash.app */;
@@ -1798,6 +1829,7 @@
 				6928063B27253CDD0026274A /* XCRemoteSwiftPackageReference "SwURL" */,
 				692156F72733E4520086A24A /* XCRemoteSwiftPackageReference "AsyncImage" */,
 				6937D15E2742A0F900C39277 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				69D21C992753C7D700EEF341 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = 695899A42669F0710012B032 /* Products */;
 			projectDirPath = "";
@@ -1816,7 +1848,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				696ABB3826D75692009527D3 /* FlashUserDisplay.storyboard in Resources */,
+				69DA99692754F87100ADE863 /* TagSelect.storyboard in Resources */,
 				6937D49C2746AC6800C39277 /* my-content.json in Resources */,
+				69D21CA42753EFB500EEF341 /* CreateMaterialViewController.xib in Resources */,
 				697328EE26A59391001BFC67 /* fonts.css in Resources */,
 				696ABCAF26DFC496009527D3 /* ic_skip@2x.png in Resources */,
 				6928066A272585900026274A /* ugc-flash.json in Resources */,
@@ -1826,11 +1860,12 @@
 				6985B1FC26E6251D00FEAD8F /* ugc-flash-card-category.json in Resources */,
 				6968C7A426A15E1000A712B0 /* InteractTextView.xib in Resources */,
 				69B0FBF426A6F6F60086E6C5 /* DB HeaventRounded Med It v3.2.1.ttf in Resources */,
-				69B0FC7826A977640086E6C5 /* FLPopup.storyboard in Resources */,
+				69B0FC7826A977640086E6C5 /* Popup.storyboard in Resources */,
 				69EC5205269D90AA00A23790 /* FLSliderView.xib in Resources */,
 				69B9D330270447C1009CE4A7 /* FLInfoPageViewController.xib in Resources */,
 				698991B526BAA246008A41C1 /* ugc-flash-card-id-card.json in Resources */,
 				69D64B02270379DE00FEBDD4 /* FLCardInfoViewController.xib in Resources */,
+				69DA99252754E10300ADE863 /* CreateMaterial.storyboard in Resources */,
 				696ABCB826DFC496009527D3 /* ic_skip@3x.png in Resources */,
 				696BBAC126E8760600E88B49 /* FLPostViewController.xib in Resources */,
 				6984903D2695BEF700B5FEF6 /* FLAssets.xcassets in Resources */,
@@ -1844,6 +1879,7 @@
 				6989920026BCF28C008A41C1 /* FLGraphicView.xib in Resources */,
 				696ABCAC26DFC496009527D3 /* overlay_like@3x.png in Resources */,
 				69720537268E29D4002E3149 /* FlashCard.storyboard in Resources */,
+				69D21CAF2753F31000EEF341 /* NewMaterialCollectionViewCell.xib in Resources */,
 				69B0FBE526A6F6F60086E6C5 /* DB HeaventRounded Med v3.2.1.ttf in Resources */,
 				6985B1AF26E23E5A00FEAD8F /* ugc-flash-card-id-card-id.json in Resources */,
 				698490632695E93D00B5FEF6 /* FLColorView.xib in Resources */,
@@ -1884,6 +1920,7 @@
 				698991B626BAA246008A41C1 /* ugc-flash-card-id-card.json in Resources */,
 				695C9B3226FE10FE00C242B4 /* ugc-flash-card-quiz-user.json in Resources */,
 				6968C78B26A0257400A712B0 /* FLControlView.xib in Resources */,
+				69DA996A2754F87100ADE863 /* TagSelect.storyboard in Resources */,
 				69B0FBEC26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */,
 				696ABCB026DFC496009527D3 /* ic_skip@2x.png in Resources */,
 				6937D1CF2743F09600C39277 /* LoadingFooterView.xib in Resources */,
@@ -1916,6 +1953,7 @@
 				6985B3B326E7C37700FEAD8F /* TagListSelectViewController.xib in Resources */,
 				696D034F268F9EBD002B3500 /* FLItemCollectionViewCell.xib in Resources */,
 				6968C7A526A15E1000A712B0 /* InteractTextView.xib in Resources */,
+				69DA99262754E10300ADE863 /* CreateMaterial.storyboard in Resources */,
 				6985B21426E65FB500FEAD8F /* ugc-flash-card-tag-list.json in Resources */,
 				696ABCB626DFC496009527D3 /* ic_like@2x.png in Resources */,
 				69B9D3D82704A37D009CE4A7 /* FLUserTableViewCell.xib in Resources */,
@@ -1926,6 +1964,7 @@
 				6937D4AA2746BA3900C39277 /* create-list.json in Resources */,
 				6985B1FD26E6251D00FEAD8F /* ugc-flash-card-category.json in Resources */,
 				696ABCB926DFC496009527D3 /* ic_skip@3x.png in Resources */,
+				69D21CB02753F31000EEF341 /* NewMaterialCollectionViewCell.xib in Resources */,
 				69EC521E269D9D7E00A23790 /* FLTextStyleView.xib in Resources */,
 				698490642695E93D00B5FEF6 /* FLColorView.xib in Resources */,
 				697C0BF726CD169300CA1092 /* flash-card-new-quiz.json in Resources */,
@@ -1935,6 +1974,7 @@
 				6985B1BB26E270D900FEAD8F /* ugc-flash-card-id.json in Resources */,
 				696ABCAA26DFC496009527D3 /* overlay_skip@3x.png in Resources */,
 				696BBAC926E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */,
+				69D21CA52753EFB500EEF341 /* CreateMaterialViewController.xib in Resources */,
 				697C0AB826CA30FB00CA1092 /* FLQuizView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1946,6 +1986,7 @@
 				698991B726BAA246008A41C1 /* ugc-flash-card-id-card.json in Resources */,
 				695C9B3326FE10FE00C242B4 /* ugc-flash-card-quiz-user.json in Resources */,
 				6968C78C26A0257400A712B0 /* FLControlView.xib in Resources */,
+				69DA996B2754F87200ADE863 /* TagSelect.storyboard in Resources */,
 				69B0FBED26A6F6F60086E6C5 /* DB HeaventRoundedv3.2.1.ttf in Resources */,
 				696ABCB126DFC496009527D3 /* ic_skip@2x.png in Resources */,
 				6937D1D02743F09600C39277 /* LoadingFooterView.xib in Resources */,
@@ -1978,6 +2019,7 @@
 				6985B3B426E7C37700FEAD8F /* TagListSelectViewController.xib in Resources */,
 				696D0350268F9EBD002B3500 /* FLItemCollectionViewCell.xib in Resources */,
 				6968C7A626A15E1000A712B0 /* InteractTextView.xib in Resources */,
+				69DA99272754E10300ADE863 /* CreateMaterial.storyboard in Resources */,
 				6985B21526E65FB500FEAD8F /* ugc-flash-card-tag-list.json in Resources */,
 				696ABCB726DFC496009527D3 /* ic_like@2x.png in Resources */,
 				69B9D3D92704A37D009CE4A7 /* FLUserTableViewCell.xib in Resources */,
@@ -1988,6 +2030,7 @@
 				6937D4AB2746BA3900C39277 /* create-list.json in Resources */,
 				6985B1FE26E6251D00FEAD8F /* ugc-flash-card-category.json in Resources */,
 				696ABCBA26DFC496009527D3 /* ic_skip@3x.png in Resources */,
+				69D21CB12753F31000EEF341 /* NewMaterialCollectionViewCell.xib in Resources */,
 				69EC521F269D9D7E00A23790 /* FLTextStyleView.xib in Resources */,
 				698490652695E93D00B5FEF6 /* FLColorView.xib in Resources */,
 				697C0BF826CD169300CA1092 /* flash-card-new-quiz.json in Resources */,
@@ -1997,6 +2040,7 @@
 				6985B1BC26E270D900FEAD8F /* ugc-flash-card-id.json in Resources */,
 				696ABCAB26DFC496009527D3 /* overlay_skip@3x.png in Resources */,
 				696BBACA26E8A54600E88B49 /* ugc-flash-card-detail.json in Resources */,
+				69D21CA62753EFB500EEF341 /* CreateMaterialViewController.xib in Resources */,
 				697C0AB926CA30FB00CA1092 /* FLQuizView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2064,6 +2108,7 @@
 				698490552695E13D00B5FEF6 /* FLToolViewModel.swift in Sources */,
 				69A295B12727DAC600B1F20C /* FLFlashPostView.swift in Sources */,
 				697C0ABE26CA310D00CA1092 /* FLQuizView.swift in Sources */,
+				69641BBA27512FA000E6E4CD /* NewMaterialView.swift in Sources */,
 				698991AE26BA99CF008A41C1 /* Int.swift in Sources */,
 				698990A626B7EB33008A41C1 /* BaseViewController.swift in Sources */,
 				695005FB267A8B33009BBEC4 /* FlashElement.swift in Sources */,
@@ -2076,20 +2121,20 @@
 				692806742725A1860026274A /* ActivityIndicator.swift in Sources */,
 				695899B12669F0710012B032 /* flash.xcdatamodeld in Sources */,
 				69B0FCA226A97EFA0086E6C5 /* UIButton.swift in Sources */,
+				69D21CA12753EFB500EEF341 /* CreateMaterialViewController.swift in Sources */,
 				695DDCBC26EB537800B0194D /* Formatter.swift in Sources */,
 				69A296092727EC4A00B1F20C /* SectionType.swift in Sources */,
 				696ABCD826DFD990009527D3 /* FLInfoView.swift in Sources */,
-				69763ED426FB184D00FE6490 /* NewMaterialView.swift in Sources */,
 				697D19FC2694685B0082783E /* FLToolViewController.swift in Sources */,
 				69BA86E126F63B3D00954E40 /* CHTStickerView.m in Sources */,
 				69B9D3BB27046898009CE4A7 /* FLQuizUserListView.swift in Sources */,
 				6968C79B26A15DE900A712B0 /* InteractTextView.swift in Sources */,
 				697C0AFE26CA6D0900CA1092 /* FLQuizViewController.swift in Sources */,
 				6989905526B7B8B4008A41C1 /* FLListViewController.swift in Sources */,
-				6985B3C226E7C7E800FEAD8F /* UGCTag.swift in Sources */,
 				698990C426B7F403008A41C1 /* TabBarMenuViewController.swift in Sources */,
 				695899AB2669F0710012B032 /* ViewController.swift in Sources */,
 				69B0FC9B26A97EB00086E6C5 /* ResponseBody.swift in Sources */,
+				69641BB727512FA000E6E4CD /* UGCCreateMaterialListView.swift in Sources */,
 				698991C626BC0A16008A41C1 /* LoginRequest.swift in Sources */,
 				6983B35B272B098100607520 /* FLStageViewUI.swift in Sources */,
 				698F1EEB273030E5008A6D0D /* FLMenuList.swift in Sources */,
@@ -2111,7 +2156,7 @@
 				69EC5216269D9D6D00A23790 /* FLTextStyleView.swift in Sources */,
 				6984904B2695DD3700B5FEF6 /* FLToolHelper.swift in Sources */,
 				6989909826B7E9A5008A41C1 /* ConsoleLog.swift in Sources */,
-				6937D4B32747735D00C39277 /* LoadingView.swift in Sources */,
+				6937D4B32747735D00C39277 /* ActivityLoadingView.swift in Sources */,
 				692156AC2732B94D0086A24A /* FilterItemResult.swift in Sources */,
 				69A296102727ECA900B1F20C /* ConfigFactory.swift in Sources */,
 				69BA86FE26F89F9F00954E40 /* VideoConvertor.swift in Sources */,
@@ -2120,19 +2165,17 @@
 				6989923626BCF932008A41C1 /* FLGraphicResult.swift in Sources */,
 				69D176342721B610000D9AAD /* FLBaseViewController.swift in Sources */,
 				6983B362272B143000607520 /* FLDeck.swift in Sources */,
-				695899DD2669F35E0012B032 /* AVAssetTrim.swift in Sources */,
 				6983B2892729352E00607520 /* FLFlashPlayerView.swift in Sources */,
 				698990F426B90496008A41C1 /* NibBased.swift in Sources */,
-				69763ECD26FB165000FE6490 /* FLCreateMaterialListView.swift in Sources */,
 				69C0A23C266E1EA7001C6F32 /* Arrow.swift in Sources */,
 				692156A52732B9170086A24A /* PageResult.swift in Sources */,
 				69A296022727EBDB00B1F20C /* ContentCode.swift in Sources */,
-				69763EF026FB79B500FE6490 /* MyNewMaterialView.swift in Sources */,
 				698193C0272C47F7003793D6 /* FLTextElementView.swift in Sources */,
 				698F1F0A27303215008A6D0D /* FLPlaverView.swift in Sources */,
 				6989906926B7BB39008A41C1 /* BaseViewModel.swift in Sources */,
 				6984905C2695E92100B5FEF6 /* FLColorView.swift in Sources */,
 				69D1765327228E14000D9AAD /* PageViewController.swift in Sources */,
+				69D21CB62753F47200EEF341 /* CreateMaterialListView.swift in Sources */,
 				69B0FC1B26A7356B0086E6C5 /* SnapGesture.swift in Sources */,
 				692156742732B3980086A24A /* InstructorResult.swift in Sources */,
 				696ABB6D26D7BE54009527D3 /* FLDashButton.swift in Sources */,
@@ -2146,7 +2189,6 @@
 				698991BF26BC09F2008A41C1 /* ProfileResult.swift in Sources */,
 				69B0FCAF26A9805F0086E6C5 /* UIViewController.swift in Sources */,
 				69B0FC0D26A6FB3A0086E6C5 /* ColorHelper.swift in Sources */,
-				6973291826A5A41E001BFC67 /* MediaManager.swift in Sources */,
 				69BA876426F9E92600954E40 /* FLCreateMaterialView.swift in Sources */,
 				6937D1F62743F94100C39277 /* UICollectionView.swift in Sources */,
 				697D19F526945ED60082783E /* HalfModalPresentationController.swift in Sources */,
@@ -2167,12 +2209,15 @@
 				698991EC26BCF22D008A41C1 /* FLGraphicView.swift in Sources */,
 				692156662732B33A0086A24A /* ProviderResult.swift in Sources */,
 				696ABC8326DF93AF009527D3 /* FLUserProgressView.swift in Sources */,
+				69DA9A552755290E00ADE863 /* ContentRequest.swift in Sources */,
 				6940231D26FDBDD0002C7508 /* FLTagView.swift in Sources */,
+				6980F5C2274BE39100219B58 /* Action.swift in Sources */,
 				6983EA90272BC5B000AFA788 /* FLImageElementView.swift in Sources */,
 				698991E526BC2870008A41C1 /* FLShapeResult.swift in Sources */,
 				6983B2AB272A77DA00607520 /* UIWindow.swift in Sources */,
 				6940231A26FDBDD0002C7508 /* FLTagListView.swift in Sources */,
 				698991A426BA908D008A41C1 /* BaseCollectionViewCell.swift in Sources */,
+				69D21C932753C6E500EEF341 /* NSObject.swift in Sources */,
 				6983B30D272AFC8900607520 /* StatusBarController.swift in Sources */,
 				696D034B268F9EBD002B3500 /* FLItemCollectionViewCell.swift in Sources */,
 				698990CB26B7F8A7008A41C1 /* BaseNavigationController.swift in Sources */,
@@ -2192,6 +2237,7 @@
 				696BBABE26E8760600E88B49 /* FLPostViewController.swift in Sources */,
 				698990AD26B7ED01008A41C1 /* UIApplication.swift in Sources */,
 				695899ED266A819F0012B032 /* Gif-CALayer.swift in Sources */,
+				69D21CAC2753F31000EEF341 /* NewMaterialCollectionViewCell.swift in Sources */,
 				69D53B452692F7090020E024 /* FlashStyle.swift in Sources */,
 				6921567B2732B3BC0086A24A /* ContentPeriodResult.swift in Sources */,
 				697D1A042694833B0082783E /* SheetCardViewController.swift in Sources */,
@@ -2213,9 +2259,7 @@
 				698F1ED327302F11008A6D0D /* FlashStageView.swift in Sources */,
 				692156972732B4AA0086A24A /* AccountResult.swift in Sources */,
 				698991DE26BC2802008A41C1 /* FLStickerResult.swift in Sources */,
-				69D53B4F2693031B0020E024 /* StatViewController.swift in Sources */,
 				696ABCDF26E090AC009527D3 /* FLStageView.swift in Sources */,
-				696D0343268F9B0D002B3500 /* FLPageControlView.swift in Sources */,
 				697C0ACF26CA336F00CA1092 /* FLChoiceResult.swift in Sources */,
 				6985B1F526E61F2000FEAD8F /* BaseResult.swift in Sources */,
 				6921566D2732B36C0086A24A /* TransactionResult.swift in Sources */,
@@ -2242,7 +2286,7 @@
 				6989920926BCF28C008A41C1 /* FLImageCell.swift in Sources */,
 				6937D1D12743F09600C39277 /* LoadingFooterView.swift in Sources */,
 				69D1762C27217A68000D9AAD /* AutoTextView.swift in Sources */,
-				6959287B2690D49D00AEEAEA /* FLTypeButton.swift in Sources */,
+				6959287B2690D49D00AEEAEA /* FLTextView.swift in Sources */,
 				69B0FC8026A979480086E6C5 /* PopupViewController.swift in Sources */,
 				6985B1D026E5F7C900FEAD8F /* UGCCategoryRow.swift in Sources */,
 				698F1E5727301E03008A6D0D /* RequestStatus.swift in Sources */,
@@ -2266,7 +2310,6 @@
 				696ABCCF26DFCCE4009527D3 /* FLPlayerViewController.swift in Sources */,
 				698F1F01273031EC008A6D0D /* FLType.swift in Sources */,
 				6985B1D126E5F7C900FEAD8F /* UGCCategoryRow.swift in Sources */,
-				69763ED526FB184D00FE6490 /* NewMaterialView.swift in Sources */,
 				692156672732B33A0086A24A /* ProviderResult.swift in Sources */,
 				6983B35C272B098100607520 /* FLStageViewUI.swift in Sources */,
 				69B9D3D52704A37D009CE4A7 /* FLUserTableViewCell.swift in Sources */,
@@ -2290,6 +2333,7 @@
 				6983B28A2729352E00607520 /* FLFlashPlayerView.swift in Sources */,
 				692806292724C7980026274A /* ImageView.swift in Sources */,
 				695899C12669F07B0012B032 /* flashTests.swift in Sources */,
+				6980F5C3274BE39100219B58 /* Action.swift in Sources */,
 				6983B2E7272AB7D000607520 /* FLFlashCardOb.swift in Sources */,
 				697D19F626945ED60082783E /* HalfModalPresentationController.swift in Sources */,
 				698991A526BA908D008A41C1 /* BaseCollectionViewCell.swift in Sources */,
@@ -2323,12 +2367,12 @@
 				69BA876526F9E92600954E40 /* FLCreateMaterialView.swift in Sources */,
 				698193C1272C47F7003793D6 /* FLTextElementView.swift in Sources */,
 				69A296112727ECA900B1F20C /* ConfigFactory.swift in Sources */,
-				6985B3C326E7C7E800FEAD8F /* UGCTag.swift in Sources */,
 				6972050D268E098C002E3149 /* FLItemView.swift in Sources */,
 				695005F5267A8AE0009BBEC4 /* FLCreator.swift in Sources */,
 				6972051F268E1B3C002E3149 /* FLMenuBarView.swift in Sources */,
 				69D53B462692F7090020E024 /* FlashStyle.swift in Sources */,
 				6983B2AC272A77DA00607520 /* UIWindow.swift in Sources */,
+				69D21C942753C6E500EEF341 /* NSObject.swift in Sources */,
 				6940233E26FDC47A002C7508 /* FLQuizInfoProgressView.swift in Sources */,
 				69720530268E298F002E3149 /* FLEditorViewController.swift in Sources */,
 				69BA86E226F63B3D00954E40 /* CHTStickerView.m in Sources */,
@@ -2342,22 +2386,20 @@
 				69B0FC9526A97B1B0086E6C5 /* ImageTint.swift in Sources */,
 				697D19FD2694685B0082783E /* FLToolViewController.swift in Sources */,
 				697C0AFF26CA6D0900CA1092 /* FLQuizViewController.swift in Sources */,
-				6937D4B42747735E00C39277 /* LoadingView.swift in Sources */,
+				6937D4B42747735E00C39277 /* ActivityLoadingView.swift in Sources */,
 				698991AF26BA99CF008A41C1 /* Int.swift in Sources */,
 				6953270C272DC2510081AD35 /* CardSwipeLoopView.swift in Sources */,
 				69532710272DC26F0081AD35 /* CardSwipeLoopView.swift in Sources */,
 				692156982732B4AA0086A24A /* AccountResult.swift in Sources */,
 				698990C526B7F403008A41C1 /* TabBarMenuViewController.swift in Sources */,
-				69D53B502693031B0020E024 /* StatViewController.swift in Sources */,
 				6973290F26A59C5B001BFC67 /* FontHelper.swift in Sources */,
 				696ABCD926DFD990009527D3 /* FLInfoView.swift in Sources */,
 				698990BB26B7EF88008A41C1 /* ErrorType.swift in Sources */,
 				6989909226B7CB40008A41C1 /* API.swift in Sources */,
-				69763EF126FB79B500FE6490 /* MyNewMaterialView.swift in Sources */,
+				69641BB827512FA000E6E4CD /* UGCCreateMaterialListView.swift in Sources */,
 				6985B1C626E5F1B000FEAD8F /* FLPostView.swift in Sources */,
 				69763EDC26FB516A00FE6490 /* FLFlashEditorView.swift in Sources */,
 				6974C5B2270D8E05009F60AA /* ImageLoaderService.swift in Sources */,
-				69763ECE26FB165000FE6490 /* FLCreateMaterialListView.swift in Sources */,
 				69BA86FF26F89FA000954E40 /* VideoConvertor.swift in Sources */,
 				699012882696FA180059ACE4 /* SlideSheetPresentationController.swift in Sources */,
 				69B0FBC626A6D0930086E6C5 /* UITextView.swift in Sources */,
@@ -2389,6 +2431,7 @@
 				6937D201274630B500C39277 /* LogoutRequest.swift in Sources */,
 				6985B1E826E61EB400FEAD8F /* CategoryResult.swift in Sources */,
 				695899EE266A819F0012B032 /* Gif-CALayer.swift in Sources */,
+				69D21CA22753EFB500EEF341 /* CreateMaterialViewController.swift in Sources */,
 				695DDCBD26EB537800B0194D /* Formatter.swift in Sources */,
 				69B0FC3226A7F3230086E6C5 /* InteractView.swift in Sources */,
 				69A2960A2727EC4A00B1F20C /* SectionType.swift in Sources */,
@@ -2396,7 +2439,6 @@
 				6989908826B7C364008A41C1 /* FLRequest.swift in Sources */,
 				6937D1DC2743F0E600C39277 /* BaseCollectionReusableView.swift in Sources */,
 				695DDCB626EB533900B0194D /* Date.swift in Sources */,
-				695899DE2669F35E0012B032 /* AVAssetTrim.swift in Sources */,
 				6983B363272B143000607520 /* FLDeck.swift in Sources */,
 				6984905D2695E92100B5FEF6 /* FLColorView.swift in Sources */,
 				696ABB7826D7EAE0009527D3 /* DashBorderView.swift in Sources */,
@@ -2404,7 +2446,7 @@
 				6985B3B026E7C37700FEAD8F /* TagListSelectViewController.swift in Sources */,
 				69B0FCBE26A9835B0086E6C5 /* Utility.swift in Sources */,
 				692156E92733BF150086A24A /* ListSeparatorStyleNoneModifier.swift in Sources */,
-				6959287C2690D49D00AEEAEA /* FLTypeButton.swift in Sources */,
+				6959287C2690D49D00AEEAEA /* FLTextView.swift in Sources */,
 				69A296032727EBDB00B1F20C /* ContentCode.swift in Sources */,
 				6937D1F72743F94100C39277 /* UICollectionView.swift in Sources */,
 				69B9D3BC27046898009CE4A7 /* FLQuizUserListView.swift in Sources */,
@@ -2415,7 +2457,6 @@
 				695005A7267A5756009BBEC4 /* TestVideoViewController.swift in Sources */,
 				6968C7AC26A183FB00A712B0 /* UIFont.swift in Sources */,
 				69B9D32E270447C1009CE4A7 /* FLInfoPageViewController.swift in Sources */,
-				696D0344268F9B0D002B3500 /* FLPageControlView.swift in Sources */,
 				69B0FC1526A71F6C0086E6C5 /* UIImageView.swift in Sources */,
 				6921567C2732B3BC0086A24A /* ContentPeriodResult.swift in Sources */,
 				69D176352721B610000D9AAD /* FLBaseViewController.swift in Sources */,
@@ -2426,19 +2467,22 @@
 				6983B30E272AFC8900607520 /* StatusBarController.swift in Sources */,
 				69B9D3CD27048966009CE4A7 /* FLUserView.swift in Sources */,
 				6983EA91272BC5B000AFA788 /* FLImageElementView.swift in Sources */,
+				69641BBB27512FA000E6E4CD /* NewMaterialView.swift in Sources */,
 				697C0ABF26CA310D00CA1092 /* FLQuizView.swift in Sources */,
-				6973291926A5A41E001BFC67 /* MediaManager.swift in Sources */,
 				692156422732B1620086A24A /* LMCreateItem.swift in Sources */,
+				69D21CAD2753F31000EEF341 /* NewMaterialCollectionViewCell.swift in Sources */,
 				698F1F0B27303215008A6D0D /* FLPlaverView.swift in Sources */,
 				692156AD2732B94D0086A24A /* FilterItemResult.swift in Sources */,
 				6985B3A526E7C00800FEAD8F /* TagListView.swift in Sources */,
 				698991DF26BC2802008A41C1 /* FLStickerResult.swift in Sources */,
+				69D21CB72753F47200EEF341 /* CreateMaterialListView.swift in Sources */,
 				6937D2082746313B00C39277 /* LocalStorage.swift in Sources */,
 				696ABC8426DF93AF009527D3 /* FLUserProgressView.swift in Sources */,
 				69BA875E26F9D89B00954E40 /* MyMaterialView.swift in Sources */,
 				698991E626BC2870008A41C1 /* FLShapeResult.swift in Sources */,
 				697D19F026945ED60082783E /* HalfModalTransitionAnimator.swift in Sources */,
 				692156752732B3980086A24A /* InstructorResult.swift in Sources */,
+				69DA9A562755290E00ADE863 /* ContentRequest.swift in Sources */,
 				698991C026BC09F2008A41C1 /* ProfileResult.swift in Sources */,
 				69BA876C26F9EE5A00954E40 /* MyMaterialListView.swift in Sources */,
 				69B0FCA326A97EFA0086E6C5 /* UIButton.swift in Sources */,
@@ -2451,19 +2495,20 @@
 			files = (
 				69B0FC8F26A97A550086E6C5 /* CourseDetailViewController.swift in Sources */,
 				6974C557270C5433009F60AA /* String.swift in Sources */,
+				69D21C952753C6E500EEF341 /* NSObject.swift in Sources */,
 				695005AF267A65B3009BBEC4 /* exAll.swift in Sources */,
 				69BA86E326F63B3D00954E40 /* CHTStickerView.m in Sources */,
 				6989906B26B7BB39008A41C1 /* BaseViewModel.swift in Sources */,
 				6928064E272542060026274A /* FLCoverView.swift in Sources */,
 				6989920B26BCF28C008A41C1 /* FLImageCell.swift in Sources */,
 				692156842732B4250086A24A /* ProgressResult.swift in Sources */,
-				6985B3C426E7C7E800FEAD8F /* UGCTag.swift in Sources */,
 				6989905726B7B8B4008A41C1 /* FLListViewController.swift in Sources */,
 				698991E026BC2802008A41C1 /* FLStickerResult.swift in Sources */,
 				69B0FCB126A9805F0086E6C5 /* UIViewController.swift in Sources */,
 				698490142695A19000B5FEF6 /* JSON.swift in Sources */,
 				69BA870026F89FA000954E40 /* VideoConvertor.swift in Sources */,
 				69B9D3CE27048966009CE4A7 /* FLUserView.swift in Sources */,
+				69DA9A572755290E00ADE863 /* ContentRequest.swift in Sources */,
 				698193C2272C47F7003793D6 /* FLTextElementView.swift in Sources */,
 				6937D202274630B500C39277 /* LogoutRequest.swift in Sources */,
 				69B9D32F270447C1009CE4A7 /* FLInfoPageViewController.swift in Sources */,
@@ -2482,18 +2527,17 @@
 				698991D626BC15DD008A41C1 /* ProfileRequest.swift in Sources */,
 				692156A72732B9170086A24A /* PageResult.swift in Sources */,
 				6989908926B7C364008A41C1 /* FLRequest.swift in Sources */,
+				69D21CB82753F47200EEF341 /* CreateMaterialListView.swift in Sources */,
 				698490462695C8C100B5FEF6 /* UIView.swift in Sources */,
 				694EA2C0273ED84A00B6CBE9 /* TagListViewModel.swift in Sources */,
 				692156922732B4840086A24A /* ProgressStepList.swift in Sources */,
 				696ABB8026D95CB4009527D3 /* UIImage.swift in Sources */,
 				698991C126BC09F2008A41C1 /* ProfileResult.swift in Sources */,
 				6989911426B92C55008A41C1 /* Optional.swift in Sources */,
-				69763ECF26FB165000FE6490 /* FLCreateMaterialListView.swift in Sources */,
 				6985B3A626E7C00800FEAD8F /* TagListView.swift in Sources */,
 				695DDCB726EB533900B0194D /* Date.swift in Sources */,
 				69B0FC1D26A7356B0086E6C5 /* SnapGesture.swift in Sources */,
 				69D176362721B610000D9AAD /* FLBaseViewController.swift in Sources */,
-				69763EF226FB79B500FE6490 /* MyNewMaterialView.swift in Sources */,
 				69BA875F26F9D89B00954E40 /* MyMaterialView.swift in Sources */,
 				69A296042727EBDB00B1F20C /* ContentCode.swift in Sources */,
 				6985B1C726E5F1B000FEAD8F /* FLPostView.swift in Sources */,
@@ -2510,7 +2554,7 @@
 				698991A626BA908D008A41C1 /* BaseCollectionViewCell.swift in Sources */,
 				692156612732B2F00086A24A /* LearningMaterialResult.swift in Sources */,
 				6984904D2695DD3700B5FEF6 /* FLToolHelper.swift in Sources */,
-				6937D4B52747735E00C39277 /* LoadingView.swift in Sources */,
+				6937D4B52747735E00C39277 /* ActivityLoadingView.swift in Sources */,
 				697C0AC026CA310D00CA1092 /* FLQuizView.swift in Sources */,
 				69BA876D26F9EE5A00954E40 /* MyMaterialListView.swift in Sources */,
 				6984901F2695A66A00B5FEF6 /* FLFlashCardViewModel.swift in Sources */,
@@ -2538,7 +2582,6 @@
 				698990BC26B7EF88008A41C1 /* ErrorType.swift in Sources */,
 				692156EA2733BF150086A24A /* ListSeparatorStyleNoneModifier.swift in Sources */,
 				698990AF26B7ED01008A41C1 /* UIApplication.swift in Sources */,
-				69763ED626FB184D00FE6490 /* NewMaterialView.swift in Sources */,
 				69A2961F2727EE1100B1F20C /* DefaultValue.swift in Sources */,
 				6989907226B7BB63008A41C1 /* APIRequest.swift in Sources */,
 				69B0FC9D26A97EB00086E6C5 /* ResponseBody.swift in Sources */,
@@ -2546,7 +2589,6 @@
 				6940231C26FDBDD0002C7508 /* FLTagListView.swift in Sources */,
 				6988081B26FDA7B400687F65 /* FLCardInfoSheetView.swift in Sources */,
 				697D19FE2694685B0082783E /* FLToolViewController.swift in Sources */,
-				69D53B512693031B0020E024 /* StatViewController.swift in Sources */,
 				6985B1DC26E6021700FEAD8F /* UGCCatagoryListView.swift in Sources */,
 				6973291026A59C5B001BFC67 /* FontHelper.swift in Sources */,
 				69B0FCBF26A9835B0086E6C5 /* Utility.swift in Sources */,
@@ -2561,6 +2603,7 @@
 				695005FD267A8B33009BBEC4 /* FlashElement.swift in Sources */,
 				6985B20826E6302A00FEAD8F /* UGCCategory.swift in Sources */,
 				69763EDD26FB516A00FE6490 /* FLFlashEditorView.swift in Sources */,
+				6980F5C4274BE39100219B58 /* Action.swift in Sources */,
 				697C0AE526CA520400CA1092 /* FLChoiceView.swift in Sources */,
 				69C0A23E266E1EA7001C6F32 /* Arrow.swift in Sources */,
 				698F1EED273030E5008A6D0D /* FLMenuList.swift in Sources */,
@@ -2573,6 +2616,7 @@
 				6983B28B2729352E00607520 /* FLFlashPlayerView.swift in Sources */,
 				6921568B2732B4600086A24A /* StatusResult.swift in Sources */,
 				695899EF266A819F0012B032 /* Gif-CALayer.swift in Sources */,
+				69D21CA32753EFB500EEF341 /* CreateMaterialViewController.swift in Sources */,
 				698990F626B90496008A41C1 /* NibBased.swift in Sources */,
 				6974C5B3270D8E05009F60AA /* ImageLoaderService.swift in Sources */,
 				6928062A2724C7980026274A /* ImageView.swift in Sources */,
@@ -2582,7 +2626,6 @@
 				697D19EB26945ED60082783E /* HalfNavController.swift in Sources */,
 				6989919926BA905F008A41C1 /* TitleCollectionViewCell.swift in Sources */,
 				69B0FC8826A97A130086E6C5 /* NewPopUpViewController.swift in Sources */,
-				695899DF2669F35E0012B032 /* AVAssetTrim.swift in Sources */,
 				6937D1DD2743F0E600C39277 /* BaseCollectionReusableView.swift in Sources */,
 				695C9B4E26FE53E000C242B4 /* ViewDidLoadModifier.swift in Sources */,
 				6983B30F272AFC8900607520 /* StatusBarController.swift in Sources */,
@@ -2592,6 +2635,7 @@
 				698991EE26BCF22D008A41C1 /* FLGraphicView.swift in Sources */,
 				6985B3A026E7C00800FEAD8F /* CloseButton.swift in Sources */,
 				6989909A26B7E9A5008A41C1 /* ConsoleLog.swift in Sources */,
+				69641BB927512FA000E6E4CD /* UGCCreateMaterialListView.swift in Sources */,
 				692156682732B33A0086A24A /* ProviderResult.swift in Sources */,
 				698991C826BC0A16008A41C1 /* LoginRequest.swift in Sources */,
 				6953270D272DC2510081AD35 /* CardSwipeLoopView.swift in Sources */,
@@ -2599,19 +2643,20 @@
 				69532711272DC26F0081AD35 /* CardSwipeLoopView.swift in Sources */,
 				6985B3A326E7C00800FEAD8F /* TagView.swift in Sources */,
 				698F1F02273031EC008A6D0D /* FLType.swift in Sources */,
-				6959287D2690D49D00AEEAEA /* FLTypeButton.swift in Sources */,
+				6959287D2690D49D00AEEAEA /* FLTextView.swift in Sources */,
 				692156992732B4AA0086A24A /* AccountResult.swift in Sources */,
 				69B0FCA426A97EFA0086E6C5 /* UIButton.swift in Sources */,
+				69641BBC27512FA000E6E4CD /* NewMaterialView.swift in Sources */,
 				695DDCBE26EB537800B0194D /* Formatter.swift in Sources */,
 				69B0FC9626A97B1B0086E6C5 /* ImageTint.swift in Sources */,
 				6928065C272583840026274A /* MockData.swift in Sources */,
 				698490352695BD2E00B5FEF6 /* UIStackView.swift in Sources */,
+				69D21CAE2753F31000EEF341 /* NewMaterialCollectionViewCell.swift in Sources */,
 				6937D1C52743F01100C39277 /* TagListViewController.swift in Sources */,
 				695005A8267A5756009BBEC4 /* TestVideoViewController.swift in Sources */,
 				69D1764E27228D40000D9AAD /* LoadingPageView.swift in Sources */,
 				6968C7AD26A183FB00A712B0 /* UIFont.swift in Sources */,
 				69B9D3D62704A37D009CE4A7 /* FLUserTableViewCell.swift in Sources */,
-				696D0345268F9B0E002B3500 /* FLPageControlView.swift in Sources */,
 				6983B2E8272AB7D000607520 /* FLFlashCardOb.swift in Sources */,
 				696ABB7926D7EAE0009527D3 /* DashBorderView.swift in Sources */,
 				69B0FCCD26A98D8D0086E6C5 /* PopupManager.swift in Sources */,
@@ -2624,7 +2669,6 @@
 				69B0FC1626A71F6C0086E6C5 /* UIImageView.swift in Sources */,
 				6937D2092746313B00C39277 /* LocalStorage.swift in Sources */,
 				697D1A062694833C0082783E /* SheetCardViewController.swift in Sources */,
-				6973291A26A5A41E001BFC67 /* MediaManager.swift in Sources */,
 				698990A126B7EA3A008A41C1 /* Reachability.swift in Sources */,
 				6983B2AD272A77DA00607520 /* UIWindow.swift in Sources */,
 				6989909326B7CB40008A41C1 /* API.swift in Sources */,
@@ -2799,7 +2843,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = flash/flash.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = KJWUN9F44D;
 				INFOPLIST_FILE = flash/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
@@ -2824,7 +2868,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = flash/flash.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = KJWUN9F44D;
 				INFOPLIST_FILE = flash/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
@@ -2991,6 +3035,14 @@
 				minimumVersion = 2.0.2;
 			};
 		};
+		69D21C992753C7D700EEF341 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.5.9;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -3008,6 +3060,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6937D15E2742A0F900C39277 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		69D21C9A2753C7D700EEF341 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 69D21C992753C7D700EEF341 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 

@@ -81,7 +81,7 @@ class TestVideoViewController: UIViewController {
     
     func trimVideo(_ videoUrl: URL, complete:  @escaping (_ url: URL) -> Void) {
         let sourceURL =  videoUrl
-        
+        /*
         if let destinationURL = destinationUrl() {
             do {
                 try time {
@@ -96,6 +96,7 @@ class TestVideoViewController: UIViewController {
                 print("💩 \(error)")
             }
         }
+        */
         
     }
     

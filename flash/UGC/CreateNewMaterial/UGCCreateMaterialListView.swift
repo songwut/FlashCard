@@ -1,5 +1,5 @@
 //
-//  FLCreateMaterialListView.swift
+//  UCGCreateMaterialListView.swift
 //  flash
 //
 //  Created by Songwut Maneefun on 22/9/2564 BE.
@@ -7,8 +7,9 @@
 
 import SwiftUI
 import Combine
-
-class FLCreateMaterialListViewModel: ObservableObject {
+import IQKeyboardManagerSwift
+//use when iOS 14 ++
+class UCGCreateMaterialListViewModel: ObservableObject {
     @Published var list = [LMCreateItem]()
     var isLoaded = false
     
@@ -23,8 +24,8 @@ class FLCreateMaterialListViewModel: ObservableObject {
     }
 }
 
-struct FLCreateMaterialListView: View {
-    @EnvironmentObject var viewModel: FLCreateMaterialListViewModel
+struct UCGCreateMaterialListView: View {
+    @EnvironmentObject var viewModel: UCGCreateMaterialListViewModel
     private let column = UIDevice.isIpad() ? 3 : 2
     private let margin: CGFloat = 16
     
@@ -34,7 +35,10 @@ struct FLCreateMaterialListView: View {
                 ContentView
             }
         })
-        .onAppear(perform: {
+        .onAppear(perform: {//not control IQKeyboard in SwiftUI
+            IQKeyboardManager.shared.enable = false
+            IQKeyboardManager.shared.enableAutoToolbar = false
+            IQKeyboardManager.shared.unregisterAllNotifications()
             viewModel.callAPILearningCoverList()
         })
     }
@@ -84,11 +88,11 @@ struct FLCreateMaterialListView: View {
     
 }
 
-struct FLCreateMaterialListView_Previews: PreviewProvider {
+struct UCGCreateMaterialListView_Previews: PreviewProvider {
     static var previews: some View {
-        FLCreateMaterialListView()
+        UCGCreateMaterialListView()
             .environmentObject(
-                FLCreateMaterialListViewModel()
+                UCGCreateMaterialListViewModel()
             )
     }
 }

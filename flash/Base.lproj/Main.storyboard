@@ -298,6 +298,7 @@
                         <outlet property="flashIdTextField" destination="kUV-nz-A21" id="5UK-bI-cN5"/>
                         <outlet property="loginButton" destination="0zN-T8-ANS" id="qty-wQ-T8B"/>
                         <outlet property="passTextField" destination="QL9-o1-8w1" id="mCu-a1-UOH"/>
+                        <outlet property="scrollView" destination="M7X-M6-ccQ" id="llw-Jg-g4D"/>
                         <outlet property="stageButton" destination="Gj1-Dh-DKf" id="4vz-ZX-eus"/>
                         <outlet property="usernameTextField" destination="Ufa-Bc-c2t" id="DWD-ap-qx2"/>
                     </connections>

@@ -75,11 +75,13 @@ class FLStageView: FlashStageView {
                     iView.element = element
                     iView.element?.sort = self.subviews.count + 1
                     iView.isHiddenEditingTool = true
+                    iView.isUserInteractionEnabled = self.isEditor
                     
                 } else if let iView = anyView as? InteractTextView {
                     iView.element = element
                     iView.element?.sort = self.subviews.count + 1
                     iView.isHiddenEditingTool = true
+                    iView.isUserInteractionEnabled = self.isEditor
                     
                 } else if let quizView = anyView as? FLQuizView {
                     quizView.element = element

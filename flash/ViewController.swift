@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 
 let keyPushNotiRegistration = "PushNotificationRegistration"
-var flashFixId = 279
+var flashFixId = 387
 
 extension ViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -23,7 +23,7 @@ extension ViewController: UITextFieldDelegate {
 }
 
 class ViewController: UIViewController {
-    
+    @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var stageButton: UIButton!
     @IBOutlet private weak var usernameTextField: UITextField!
     @IBOutlet private weak var passTextField: UITextField!
@@ -42,6 +42,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = FlashStyle.screenColor
+        self.scrollView.alpha = 0.0
         self.flashIdTextField.delegate = self
         let screenHeight = self.view.frame.height
         let screenWidth = self.view.frame.width
@@ -204,11 +205,20 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tagListSelectPressed(_ sender: UIButton) {
-        let tagListVC = TagListSelectViewController()
-        if let nav = self.navigationController {
-            nav.pushViewController(tagListVC, animated: true)
-        } else {
+        let s = UIStoryboard(name: "TagSelect", bundle: nil)
+        let tagListVC = s.instantiateViewController(withIdentifier: "TagListSelectViewController") as! TagListSelectViewController
+        
+        //let tagListVC = TagListSelectViewController()
+        //tagListVC.view.bounds = self.view.bounds
+        if UIDevice.isIpad() {
+            tagListVC.modalTransitionStyle = .crossDissolve
+            tagListVC.modalPresentationStyle = .overFullScreen
+            
             self.present(tagListVC, animated: true, completion: nil)
+        } else {
+            if let nav = self.navigationController {
+                nav.pushViewController(tagListVC, animated: true)
+            }
         }
     }
     
@@ -287,6 +297,7 @@ class ViewController: UIViewController {
         if UserManager.shared.isLoggedin() {
             UserManager.shared.updateProfile {
                 if let user = UserManager.shared.profile {
+                    self.scrollView.alpha = 1.0
                     PopupManager.showWarning("Login SUCCESS: User ID  \(user.id)", at: self)
                 } else {
                     self.loginAPI()
@@ -314,6 +325,7 @@ class ViewController: UIViewController {
                     UserDefaults.standard.synchronize()
                     UserManager.shared.profile = profile
                 }
+                self.scrollView.alpha = 1.0
                 PopupManager.showWarning("Login SUCCESS: User ID  \(profile.id)", at: self)
             }
         }
@@ -337,3 +349,9 @@ class ViewController: UIViewController {
     }
 }
 
+extension ViewController: UIPopoverPresentationControllerDelegate {
+
+    func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
+        return true
+    }
+}

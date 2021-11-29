@@ -160,34 +160,3 @@ class LearningMaterialEnrollResult: LearningMaterialResult {
         taskId                       <- map["task_id"]
     }
 }
-
-
-class LMMaterialResult: BaseResult, Identifiable {
-    var nameContent = ""
-    let uuid = UUID()
-    var progress: ProgressResult?
-    var displayStatus: FLStatus = .unpublish
-    var owner: OwnerResult?
-    var code: String?
-    var datetimePublish: String?
-    var contentCode: ContentCode = .flash
-    var datetimeUpdate = ""
-    var datetimeCreate = ""
-    var contentRequest: Any?
-    var requestStatus: RequestStatus = .none
-    
-    override func mapping(map: Map) {
-        super.mapping(map: map)
-        nameContent          <- map["name_content"]
-        code                 <- map["code"]
-        displayStatus        <- map["is_display"]
-        contentCode          <- map["content_type.code"]
-        progress             <- map["progress"]
-        owner                <- map["created_by"]
-        contentRequest       <- map["content_request"]
-        requestStatus        <- map["content_request.requestStatus"]
-        datetimePublish      <- map["datetime_publish"]
-        datetimeUpdate       <- map["datetime_update"]
-    }
-    
-}

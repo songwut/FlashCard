@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import IQKeyboardManagerSwift
 
 struct FLFlashEditorView: View {
     
@@ -13,6 +14,11 @@ struct FLFlashEditorView: View {
     
     var body: some View {
         FLEditorViewControllerRep(flashId: flashId)
+            .onAppear {
+                IQKeyboardManager.shared.enable = false
+                IQKeyboardManager.shared.enableAutoToolbar = false
+                IQKeyboardManager.shared.unregisterAllNotifications()
+            }
     }
 }
 

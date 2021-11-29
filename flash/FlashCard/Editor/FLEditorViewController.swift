@@ -9,11 +9,7 @@ import UIKit
 import AVKit
 import SwiftUI
 import Photos
-
-struct FLStageSetUp {
-   
-    var eventId: Int
-}
+import IQKeyboardManagerSwift
 
 enum FLCreateStatus {
     case new
@@ -47,6 +43,7 @@ final class FLEditorViewController: FLBaseViewController {
     private var widthChange:CGFloat = 0.0
     
     var createStatus:FLCreateStatus = .new
+    var isTurnBack = false
     var toolVC: FLToolViewController?
     var viewModel = FLFlashCardViewModel()
     
@@ -85,13 +82,41 @@ final class FLEditorViewController: FLBaseViewController {
         print("stage removed")
     }
     
-    func setUp(input: FLStageSetUp) {
-        viewModel = FLFlashCardViewModel()
-        viewModel.stageVC = self
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        title = ""
+        self.titleLabel.textColor = headerTextColor
+        let postBtn = UIBarButtonItem(title: "post".localized(), style: .plain, target: self, action: #selector(postPressed))
+        postBtn.tintColor = headerTextColor
+        self.navigationController?.navigationBar.topItem?.rightBarButtonItems = [postBtn]
+    }
+    
+    @objc func postPressed() {
+        if self.isTurnBack {//case edit
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            //case create new flashcard
+            
+            let model = FLFlashCardViewModel()
+            model.flashId = viewModel.flashId
+            let vc = FLPostViewController.instantiate(viewModel: model)
+            vc.createStatus = .edit
+            vc.title = viewModel.detail?.nameContent ?? ""
+            
+            if let nav = self.navigationController {
+                nav.pushViewController(vc, animated: true)
+            } else {
+                self.present(vc, animated: true, completion: nil)
+            }
+            //TODO: next feature 4.12 will bee .video, .audio .article and more
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        IQKeyboardManager.shared.enable = false
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        IQKeyboardManager.shared.unregisterAllNotifications()
         self.view.updateLayout()
         self.view.backgroundColor = .background()
         self.topView.backgroundColor = .background()
@@ -103,7 +128,7 @@ final class FLEditorViewController: FLBaseViewController {
         self.titleLabel = UILabel()
         self.titleLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width / 2, height: 40)
         self.titleLabel.font = .font(16, .text)
-        self.titleLabel.textColor = .white
+        self.titleLabel.textColor = headerTextColor
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.titleLabel)
         self.navigationItem.leftItemsSupplementBackButton = true
         
@@ -153,7 +178,7 @@ final class FLEditorViewController: FLBaseViewController {
         if self.createStatus == .new {
             
             guard let profile = UserManager.shared.profile else { return }
-            self.showLoading(nil)
+            //self.showLoading(nil)//bug
             self.viewModel.callAPINewFlashCard(profile: profile) { [weak self] (detail) in
                 self?.hideLoading()
                 guard let self = self else { return }
@@ -719,7 +744,6 @@ final class FLEditorViewController: FLBaseViewController {
             self.manageTextView(in: iView, stageView: stageView)
             
             DispatchQueue.main.async {
-                
                 //Auto select all test
                 iView.textView?.selectAll(self)
                 iView.isSelectAll = true

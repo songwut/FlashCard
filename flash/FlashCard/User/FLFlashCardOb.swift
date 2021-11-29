@@ -52,8 +52,9 @@ class FLFlashPlayerViewModel: ObservableObject {
             let viewModel = FLFlashCardViewModel()
             //param next id
             //let param = ["page" : nextId, "page_size": pageSize]
-            //TODO: ask Backend with api new patern
-            viewModel.callAPIMyFlashCard(.get, nextUrl: nextUrl) { [self] (pageResult) in
+            let profileId = UserManager.shared.profile.id
+            let param = EndPointParam(dict: ["created_by" : profileId])
+            viewModel.callAPIMyFlashCard(.get, nextUrl: nextUrl,  param: param) { [self] (pageResult) in
                 guard let page = pageResult else { return complete(nil) }
                 self.isListFull = page.next == nil
                 self.currentPage += 1

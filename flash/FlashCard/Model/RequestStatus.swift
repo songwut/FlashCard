@@ -59,4 +59,19 @@ enum RequestStatus: Int {
             return self.color().withAlphaComponent(0.25)
         }
     }
+    
+    func desc() -> String {
+        switch self {
+        case .completed:
+            return "Cannot edit because of this material has already approved"
+        case .waitForApprove:
+            return "Cannot edit because of this material is waiting for approve, if you want to edit press button Cancel Request"
+        case .reject:
+            return "last request status is rejected, if you want to request to publish again you can press Submit to Approve button again"
+        case .requestExpired:
+            return "last request status is Request Expired, if you want to request to publish again you can press Submit to Approve button again"
+        default:
+            return ""
+        }
+    }
 }

@@ -9,8 +9,7 @@ import Foundation
 import Combine
 
 class MyMaterialListViewModel: ObservableObject {
-    
-    @Published var myMaterialFlash: LMMaterialPageResult = JSON.loadItem("my-content.json")
+    @Published var myMaterialFlash: LMMaterialPageResult?
     
     var previous: Int?
     var next: Int? {
@@ -27,7 +26,9 @@ class MyMaterialListViewModel: ObservableObject {
     
     func callAPIMyFlashCard(nextUrl: String?, complete: @escaping (_ result: LMMaterialPageResult?) -> ()) {
         let viewModel = FLFlashCardViewModel()
-        viewModel.callAPIMyFlashCard(.get, nextUrl: nextUrl) { [self] (pageResult) in
+        let profileId = UserManager.shared.profile.id
+        let parem = EndPointParam(dict: ["created_by" : profileId])
+        viewModel.callAPIMyFlashCard(.get, nextUrl: nextUrl, param: parem) { [self] (pageResult) in
             guard let page = pageResult else { return complete(nil) }
             self.currentPage += 1
             self.myMaterialFlash = page

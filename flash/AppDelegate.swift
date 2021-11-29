@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 import netfox
+import IQKeyboardManagerSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,6 +27,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // To remove only extra separators below the list:
             UITableView.appearance().tableFooterView = UIView()
         }
+        
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        IQKeyboardManager.shared.enableDebugging = true
         
         // To remove all separators including the actual ones:
         UITableView.appearance().separatorStyle = .none

@@ -17,7 +17,7 @@ struct MyMaterialListView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if list.isEmpty {
-                LoadingView(isLoading: true)
+                ActivityLoadingView(isLoading: true)
             } else {
                 ContentList
             }
@@ -26,6 +26,7 @@ struct MyMaterialListView: View {
         .background(Color.white)
         .navigationBarTitle("My Material", displayMode: .automatic)
         .onAppear(perform: {
+            list.removeAll()
             callAPIMyFlashCard()
         })
     }
@@ -82,7 +83,7 @@ struct MyMaterialListView: View {
             .background(Color.white)
             
             if viewModel.isListFull == false {
-                LoadingView(isLoading: isLoading)
+                ActivityLoadingView(isLoading: isLoading)
                     .listRowBackground(Color.white)
                     .background(Color.white)
             }
@@ -98,9 +99,9 @@ struct MyMaterialListView: View {
                 FLCreateMaterialView()
                     .frame(height: 122)
                     .padding(.bottom, 8)
-                let createListView = FLCreateMaterialListView()
-                    .environmentObject(FLCreateMaterialListViewModel())
-                NavigationLink(destination: createListView) {
+                //let createListView = UCGCreateMaterialListView()
+                    //.environmentObject(UCGCreateMaterialListViewModel())
+                NavigationLink(destination: CreateMaterialListView()) {
                     Rectangle()
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -115,11 +116,9 @@ struct MyMaterialListView: View {
 extension MyMaterialListView {
     func manageLastItem(item: LMMaterialResult) {
         guard let myMaterial = myMaterialFlash else { return }
-        let items = list
-        let next = myMaterial.next//TODO:wait backend fix this
-        let nextUrl = myMaterial.nextUrl
-        
-        if items.isLastItem(item) {
+        //let next = myMaterial.next //TODO:wait backend fix this
+        guard let nextUrl = myMaterial.nextUrl else { return }
+        if list.isLastItem(item) {
             isLoading = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 self.callAPIMyFlashCard(nextUrl)
@@ -128,14 +127,12 @@ extension MyMaterialListView {
     }
     
     func callAPIMyFlashCard(_ nextUrl:String? = nil) {
-        if !viewModel.isListFull {
-            viewModel.callAPIMyFlashCard(nextUrl: nextUrl) { (newPage) in
-                if let page = newPage {
-                    myMaterialFlash = page
-                    list.append(contentsOf: page.list)
-                }
-                isLoading = false
+        viewModel.callAPIMyFlashCard(nextUrl: nextUrl) { (newPage) in
+            if let page = newPage {
+                myMaterialFlash = page
+                list.append(contentsOf: page.list)
             }
+            isLoading = false
         }
     }
 }
@@ -143,7 +140,6 @@ extension MyMaterialListView {
 struct MyMaterialListView_Previews: PreviewProvider {
     
     static var previews: some View {
-        //MyMaterialListView(myMaterialFlash: MockObject.myMaterialFlash, list: MockObject.myMaterialFlash.list)
         MyMaterialListView()
             .environmentObject(MyMaterialListViewModel())
             .previewDevice("iPhone 12")

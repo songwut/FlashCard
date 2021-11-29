@@ -22,11 +22,28 @@ enum EndPoint:String {
     case ugcFlashPostSubmit = "ugc/flash-card/%@/content-request/submit/"
     case ugcFlashPostCancel = "ugc/flash-card/%@/content-request/cancel/"
     
+    case userReadFlashCard = "flash-card/%@/"
+    
     case myContent = "content/my-content/"
     case tagSelectList = "tag/type/MATERIAL_TYPE/"
     case learningContentCoverList = "learning-content/content-cover/"
     case subCategory = "sub-category/"
     case learningMaterialDetail = "%@/%@/%@"//LM/type/id
+}
+
+struct EndPointParam {
+    var dict: [String: Any]?
+    
+    func tail() -> String {
+        var tail = ""
+        if let dict = self.dict {
+            tail = "?"
+            for (key, value) in dict {
+                tail = tail + "&" + "\(key)=\(value)"
+            }
+        }
+        return tail
+    }
 }
 
 class FLRequest: APIRequest {
@@ -41,6 +58,7 @@ class FLRequest: APIRequest {
     var isAutoHeader = false
     var contentType = "application/json"
     var accept = "application/json"
+    var endPointParam: EndPointParam?
     
     override var method: APIMethod {
         return self.apiMethod
@@ -57,7 +75,10 @@ class FLRequest: APIRequest {
         if self.flashId != 0 {
             self.arguments.insert("\(self.flashId)", at: 0)
         }
-        let enpointStr = endPoint.rawValue.contains("%@") ? String(format: endPoint.rawValue, arguments: self.arguments) : self.endPoint.rawValue
+        var enpointStr = endPoint.rawValue.contains("%@") ? String(format: endPoint.rawValue, arguments: self.arguments) : self.endPoint.rawValue
+        if let endPointParam = self.endPointParam {
+            enpointStr = enpointStr + endPointParam.tail()
+        }
         return "\(apiURL)\(enpointStr)"
     }
     
