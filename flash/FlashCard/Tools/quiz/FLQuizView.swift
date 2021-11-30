@@ -204,10 +204,19 @@ class FLQuizView: UIView {
         self.updateQuizContentSize()
     }
     
+    func updateLayoutAll() {
+        self.titleLabel.layoutIfNeeded()
+        self.questionTextView.layoutIfNeeded()
+        self.choiceStackView.layoutIfNeeded()
+        self.contentStackView.layoutIfNeeded()
+        self.cardView.updateLayout()
+    }
+    
     func updateQuizContentSize() {
+        self.updateLayoutAll()
         let originalframe = self.frame
-        let cardHeight = self.cardView.bounds.height
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let cardHeight = self.cardView.bounds.height
             self.frame = CGRect(x: originalframe.origin.x, y: originalframe.origin.y, width: originalframe.width, height: cardHeight)
         }
     }

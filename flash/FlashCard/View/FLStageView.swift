@@ -102,9 +102,11 @@ class FLStageView: FlashStageView {
     }
     
     func quizManageSizeAnimate(_ quizView: FLQuizView) {
+        //updateQuizContentSize
+        quizView.updateLayoutAll()
+        let originalCenter = quizView.center
         quizView.alpha = 0.0
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let originalCenter = quizView.center
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let cardHeight = quizView.cardView.bounds.height + 50 //fix size
             quizView.bounds = CGRect(x: 0, y: 0, width: quizView.bounds.width, height: cardHeight)
             quizView.center = originalCenter

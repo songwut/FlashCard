@@ -278,8 +278,6 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         
         self.ownerValueLabel.text = detail.owner?.name ?? ""
         
-        self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)
-        
         self.categoryValueLabel.text = self.getCatagoryName(detail)
         let dateTime = formatter.with(dateFormat: formatText, dateString: detail.datetimeUpdate)
         self.updateValueLabel.text = dateTime
@@ -337,6 +335,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             self.enableUI(isEnable: true)
         }
         
+        self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)
     }
     
     private func enableUI(isEnable: Bool) {
@@ -361,6 +360,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         tagView.isUserInteractionEnabled = isEnable
         tagView.tagBackgroundColor = isEnable ? tagBgEnableColor : .text(0.1)
         tagView.textColor = isEnable ? tagBgEnableColor : .text()
+        tagView.borderColor = .clear
+        tagView.borderWidth = 1
     }
     
     private func getCatagoryName(_ detail: FLDetailResult) -> String {
@@ -643,11 +644,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                 for i in 0..<self.tagView.tagViews.count {
                     self.tagView?.tagViews[i].tag = tags[i].id
                     self.tagView?.tagViews[i].cornerRadius = CGFloat(self.tagView.tagViewHeight / 2)
-                    self.tagView?.tagViews[i].borderWidth = 1
                     self.tagView?.tagViews[i].clipsToBounds = true
-                    self.tagView?.tagViews[i].tagBackgroundColor = tagBgEnableColor
-                    self.tagView?.tagViews[i].textColor = tagTextEnableColor
-                    self.tagView?.tagViews[i].borderColor = .clear
                 }
             }
         }
