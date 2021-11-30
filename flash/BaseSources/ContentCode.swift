@@ -107,6 +107,8 @@ enum ContentCode: String {
             color = pdfColor
         case.article:
             color = articleColor
+        case.flash:
+            color = flashcardColor
         default:
             color = .gray
         }

@@ -232,6 +232,7 @@ class FLPlayerViewController: FLBaseViewController {
         let contentView: (Int, CGRect, FLCardPageResult) -> (UIView) = { (index: Int ,frame: CGRect , pageResult: FLCardPageResult) -> (UIView) in
             
             let stageView = FLStageView(frame: frame)
+            stageView.playerState = self.playerState
             stageView.flCreator = self.creator
             stageView.card = pageResult
             return stageView

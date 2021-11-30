@@ -86,8 +86,8 @@ struct MyMaterialView: View {
                     .resizable()
                     .frame(width: 12, height: 12, alignment: .center)
                     .foregroundColor(Color("A9A9A9"))
-                let timeText = item.datetimeCreate.dateTimeAgo()
-                Text(timeText)
+                
+                Text(item.datetimeAgo)
                     .font(timeFont)
                     .foregroundColor(.black)
             }

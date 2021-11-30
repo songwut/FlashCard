@@ -13,6 +13,7 @@ class FLQuizView: UIView {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var questionHeight: NSLayoutConstraint!
     @IBOutlet weak var questionTextView: GrowingTextView!
+    @IBOutlet weak var contentStackView: UIStackView!
     @IBOutlet weak var choiceStackView: UIStackView!
     @IBOutlet weak var addStackView: UIStackView!
     @IBOutlet weak var addButton: FLDashButton?
@@ -199,9 +200,16 @@ class FLQuizView: UIView {
         self.choiceStackView.addArrangedSubview(choiceView)
         question.choiceList.append(choice)
         
-        print("question.choiceList.count: \(question.choiceList.count)")
         self.addStackView.isHidden = question.choiceList.count == FlashStyle.maxChoice
-        
+        self.updateQuizContentSize()
+    }
+    
+    func updateQuizContentSize() {
+        let originalframe = self.frame
+        let cardHeight = self.cardView.bounds.height
+        DispatchQueue.main.async {
+            self.frame = CGRect(x: originalframe.origin.x, y: originalframe.origin.y, width: originalframe.width, height: cardHeight)
+        }
     }
     
     @IBAction func deletePressed(_ sender: UIButton) {
@@ -234,6 +242,7 @@ extension FLQuizView: GrowingTextViewDelegate {
         ConsoleLog.show("question GrowingTextView height:\(height)")
         //self.textView.superview?.layoutIfNeeded()
         self.questionHeight.constant = height
+        self.updateQuizContentSize()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -258,6 +267,7 @@ extension FLQuizView: GrowingTextViewDelegate {
             ConsoleLog.show("paste")
             DispatchQueue.main.async {
                 self.questionTextView.updateLayout()
+                self.updateQuizContentSize()
             }
             return true
         } else if text == "\n" {

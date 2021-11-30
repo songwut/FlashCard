@@ -340,6 +340,7 @@ class LMMaterialResult: BaseResult, Identifiable {
     var datetimeCreate = ""
     var contentRequest: ContentRequest?
     var requestStatus: RequestStatus = .none
+    var datetimeAgo = ""
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -353,6 +354,8 @@ class LMMaterialResult: BaseResult, Identifiable {
         requestStatus        <- map["content_request.status"]
         datetimePublish      <- map["datetime_publish"]
         datetimeUpdate       <- map["datetime_update"]
+        
+        datetimeAgo = datetimeUpdate.dateTimeAgo()
     }
     
 }

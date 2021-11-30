@@ -8,6 +8,7 @@
 import UIKit
 
 class FLStageView: FlashStageView {
+    var playerState: FLPlayerState = .user
     var stageRatio:CGFloat = 1
     var flCreator: FLCreator!
     var isEditor = false
@@ -102,9 +103,10 @@ class FLStageView: FlashStageView {
     
     func quizManageSizeAnimate(_ quizView: FLQuizView) {
         quizView.alpha = 0.0
-        let originalCenter = quizView.center
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            quizView.bounds = CGRect(x: 0, y: 0, width: quizView.bounds.width, height: self.frame.height)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            let originalCenter = quizView.center
+            let cardHeight = quizView.cardView.bounds.height + 50 //fix size
+            quizView.bounds = CGRect(x: 0, y: 0, width: quizView.bounds.width, height: cardHeight)
             quizView.center = originalCenter
             quizView.alpha = 1.0
             quizView.popIn(fromScale: 0.5, toScale: quizView.scaleUI, duration: 0.5, delay: 0) { (done) in
@@ -152,7 +154,9 @@ class FLStageView: FlashStageView {
         let quizView = self.flCreator.createQuiz(element, in: stageView)
         quizView.isEditor = self.isEditor
         quizView.didSelectChoice = Action(handler: { [weak self] (sender) in
-            self?.sendAnswer(sender)
+            if self?.playerState == .user {
+                self?.sendAnswer(sender)
+            }
         })
         return quizView
     }

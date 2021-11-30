@@ -77,6 +77,9 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     private let formatText = "d MMM yyyy HH:mm"
     private var isNeedUpdate = false
     
+    private var editBtn = UIBarButtonItem()
+    private var previewBtn = UIBarButtonItem()
+    
     lazy var inputToolbar: UIToolbar = {
         var toolbar = UIToolbar()
         toolbar.barStyle = .default
@@ -166,7 +169,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.timeMinLabel.font = fontTitle
         self.timeMinLabel.text = "minutes".localized()
         self.timeMinLabel.textColor = .text()
-        self.timeValueLabel.font = fontValue
+        self.timeValueLabel.font = fontTitle
         self.categoryLabel.font = fontTitle
         self.categoryValueLabel.text = FlashStyle.post.categoryPlaceHolder
         self.categoryValueLabel.textColor = .text25()
@@ -230,8 +233,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let editBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_edit"), style: .plain, target: self, action: #selector(self.editPressed))
-        let previewBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_preview"), style: .plain, target: self, action: #selector(self.previewPressed))
+        editBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_edit"), style: .plain, target: self, action: #selector(self.editPressed))
+        previewBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_preview"), style: .plain, target: self, action: #selector(self.previewPressed))
         editBtn.tintColor = headerTextColor
         previewBtn.tintColor = headerTextColor
         
@@ -296,22 +299,29 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.requesValue.setTitleColor(requestStatus.color(), for: .normal)
         self.requesValue.setTitle(detail.contentRequest?.statusLabel.localized() ?? "", for: .normal)
         self.requesDesc.text = requestStatus.desc()
+        self.statusPin.backgroundColor = detail.displayStatus.color()
+        self.requestStackView.isHidden = detail.contentRequest == nil
+        
+        let rightBarButtonItems = (requestStatus == .completed) ? [previewBtn] : [previewBtn, editBtn]
+        self.navigationController?.navigationBar.topItem?.rightBarButtonItems = rightBarButtonItems
         
         if requestStatus == .completed  {
             self.submitButton.backgroundColor = .disable()
             self.submitButton.isUserInteractionEnabled = false
-            self.submitButton.isHidden = true
-            self.cancelButton.isHidden = false
+            self.submitButton.isHidden = false
+            self.cancelButton.isHidden = true
             
-            self.requestStackView.isHidden = false
-            
-        } else if requestStatus == .waitForApprove {
+        } else if requestStatus == .requestExpired ||  requestStatus == .reject  {
             self.submitButton.backgroundColor = .config_primary()
             self.submitButton.isUserInteractionEnabled = true
+            self.submitButton.isHidden = false
+            self.cancelButton.isHidden = true
+            
+        } else if requestStatus == .waitForApprove {
+            self.cancelButton.backgroundColor = .config_primary()
+            self.cancelButton.isUserInteractionEnabled = true
             self.submitButton.isHidden = true
             self.cancelButton.isHidden = false
-            
-            self.requestStackView.isHidden = false
             
         } else {
             self.submitButton.isHidden = false
@@ -320,12 +330,22 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
         
         
-        let isEnable = detail.displayStatus == .unpublish
+        if detail.requestStatus == .waitForApprove
+            || detail.requestStatus == .completed {
+            self.enableUI(isEnable: false)
+        } else {
+            self.enableUI(isEnable: true)
+        }
+        
+    }
+    
+    private func enableUI(isEnable: Bool) {
         let disableColor = UIColor.disable()
         let textColor = UIColor.text()
+        imageButton.isUserInteractionEnabled = isEnable
         titleTextField.isEnabled = isEnable
         titleTextField.textColor = isEnable ? textColor : disableColor
-        descTextView.isEditable = isEnable
+        descTextView.isUserInteractionEnabled = isEnable
         descTextView.textColor = isEnable ? textColor : disableColor
         timeValueLabel.textColor = isEnable ? textColor : disableColor
         plusButton.isEnabled = isEnable
@@ -339,8 +359,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         tagButton.isEnabled = isEnable
         tagContentView.isUserInteractionEnabled = isEnable
         tagView.isUserInteractionEnabled = isEnable
-        statusPin.backgroundColor = detail.displayStatus.color()
-        
+        tagView.tagBackgroundColor = isEnable ? tagBgEnableColor : .text(0.1)
+        tagView.textColor = isEnable ? tagBgEnableColor : .text()
     }
     
     private func getCatagoryName(_ detail: FLDetailResult) -> String {
@@ -447,7 +467,6 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         if let tagList = self.latestTags {
             self.openTagListVC(tags: tagList)
         } else {
-            //TODO: use real api
             self.latestTags = nil
             
             for tag in detail.tagList {

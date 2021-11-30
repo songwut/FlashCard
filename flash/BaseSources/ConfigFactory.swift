@@ -36,6 +36,7 @@ var audioColor: UIColor = UIColor(hex: "273E98")
 var externalVideoColor = UIColor(hex: "F60000")
 var pdfColor = UIColor(hex: "008080")
 var videoColor: UIColor = UIColor(hex: "FF78A0")
+var flashcardColor = UIColor(hex: "4782DA")
 
 var progressNotstartColor = UIColor(hex: "F2F2F2")
 var progressInprogressColor = UIColor(hex: "FFB330")

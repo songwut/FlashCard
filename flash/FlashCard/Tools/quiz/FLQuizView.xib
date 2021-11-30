@@ -146,6 +146,7 @@
                 <outlet property="addStackView" destination="Oyb-kX-eOm" id="W2u-Mx-6cH"/>
                 <outlet property="cardView" destination="1hg-cn-8JH" id="u2p-DQ-oBU"/>
                 <outlet property="choiceStackView" destination="3ON-0J-1ao" id="Wmj-yg-kB9"/>
+                <outlet property="contentStackView" destination="OyF-5L-kWP" id="DM9-kG-SCf"/>
                 <outlet property="deleteButton" destination="rKo-bT-PHl" id="g50-qf-kgg"/>
                 <outlet property="questionHeight" destination="z5h-Vq-jrG" id="ktu-5U-5cD"/>
                 <outlet property="questionTextView" destination="PMM-BR-Iuh" id="lcW-Za-k97"/>
@@ -163,6 +164,6 @@
         </designable>
     </designables>
     <resources>
-        <image name="ic_v2_close" width="24" height="24"/>
+        <image name="ic_v2_close" width="12" height="12"/>
     </resources>
 </document>

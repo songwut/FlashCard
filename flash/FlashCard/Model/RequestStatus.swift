@@ -11,7 +11,7 @@ import Foundation
 enum RequestStatus: Int {
     case none = 999
     case completed = 30
-    case waitForApprove = 1
+    case waitForApprove = 21
     case reject = -3
     case requestExpired = -2
     
@@ -48,7 +48,7 @@ enum RequestStatus: Int {
         case .requestExpired:
             return .text()
         default:
-            return UIColor.white
+            return .black
         }
     }
     

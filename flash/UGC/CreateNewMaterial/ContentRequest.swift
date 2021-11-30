@@ -14,7 +14,7 @@ class ContentRequest: BaseResult {
     var datetimeUpdate = ""
     var statusLabel = ""
     var progress: ProgressResult?
-    var typeRule = 0//1
+    var typeRule = 0
     
     override func mapping(map: Map) {
         super.mapping(map: map)
