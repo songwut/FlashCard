@@ -9,25 +9,35 @@ import SwiftUI
 
 struct FLFlashPostView: View {
     
-    var flashId: Int? = nil
+    var item: LMMaterialResult?
     
     var body: some View {
-        FLPostViewControllerRep(flashId: flashId)
+        FLPostViewControllerRep(item: self.item)
+            .navigationBarBackButtonHidden(true)
+        //custom nav back hide default
+    }
+}
+
+struct UGCPostView: View {
+    var item: LMMaterialResult?
+    
+    var body: some View {
+        FLPostViewControllerRep(item: item)
     }
 }
 
 struct FLPostViewControllerRep: UIViewControllerRepresentable {
-    var flashId: Int?
+    var item: LMMaterialResult?
     
     func makeUIViewController(context: Context) -> some UIViewController {
         let model = FLFlashCardViewModel()
         let vc = FLPostViewController.instantiate(viewModel: model)
-        
-        if let flashId = self.flashId {
-            model.flashId = flashId
+        model.contentCode = item?.contentCode ?? .flashcard
+        if let item = self.item {//flashcard,video
+            model.materialId = item.id
             vc.createStatus = .edit
         } else {
-            vc.createStatus = .new
+            vc.createStatus = .new//flashcard
         }
         return vc
     }

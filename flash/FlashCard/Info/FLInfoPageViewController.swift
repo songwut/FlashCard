@@ -22,6 +22,8 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
     
     var selfFrame: CGRect = .zero
     
+    var didPressTag: DidAction?
+    
     init(frame: CGRect, viewModel: FLFlashCardViewModel) {
         self.viewModel = viewModel
         self.selfFrame = frame
@@ -32,6 +34,10 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.selfFrame = .zero
+    }
+    
+    deinit {
+        ConsoleLog.show(self.className + "removed")
     }
     
     override func viewDidLoad() {
@@ -52,6 +58,7 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
         self.cardInfoVC.detail = self.detail
         print(self.cardInfoVC.view.frame)
         self.cardInfoVC.delegate = self
+        self.cardInfoVC.didPressTag = self.didPressTag
         self.cardInfoVC.isQuiz = isQuiz
         self.pages.append(self.cardInfoVC)
         
@@ -65,12 +72,28 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
             self.quizInfoVC.cardView.updateLayout()
             self.quizInfoVC.cardView.roundCorners([.topLeft, .topRight], radius: 16)
             self.quizInfoVC.delegate = self
-            self.pages.append(self.cardInfoVC)
+            self.pages.append(self.quizInfoVC)
             
             let tap = TapGesture(target: self, action: #selector(self.viewTap(_:)))
             self.quizInfoVC.emptyView.addGestureRecognizer(tap)
         }
-        
+        /*
+        //Stack View
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .leading
+        stackView.spacing = 0.0
+
+        for vc in self.pages {
+            ConsoleLog.show("view: \(vc.view)")
+            let width = vc.view.frame.width
+            vc.view.setWidthConstraint(width)
+            stackView.addArrangedSubview(vc.view)
+        }
+        self.contentStackView.addArrangedSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        */
         self.pageVC = UIPageViewController(transitionStyle: UIPageViewController.TransitionStyle.scroll, navigationOrientation: .horizontal)
         self.pageVC.view.frame = self.view.bounds
         self.addChild(self.pageVC)
@@ -84,6 +107,7 @@ class FLInfoPageViewController: UIViewController, UIPageViewControllerDataSource
             print("pageVC.setViewControllers")
             self.pageScrollEnabled(false)
         }
+        
     }
     
     @objc func viewTap(_ gesture: UITapGestureRecognizer) {

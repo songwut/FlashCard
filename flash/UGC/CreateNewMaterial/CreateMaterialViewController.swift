@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 import IQKeyboardManagerSwift
 
 class CreateMaterialViewController: UIViewController {
@@ -95,15 +96,40 @@ extension CreateMaterialViewController: UICollectionViewDataSource,UICollectionV
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = self.list[indexPath.row]
         if item.isReady {
-            let storyboard = UIStoryboard(name: "FlashCard", bundle: Bundle.main)
-            let vc = storyboard.instantiateViewController(identifier: "FLEditorViewController") as! FLEditorViewController
-            vc.viewModel.flashId = 0
-            vc.createStatus = .new
-            if let nav = self.navigationController {
-                nav.pushViewController(vc, animated: true)
-            } else {
-                self.present(vc, animated: true, completion: nil)
+            if item.contentCode == .flashcard {
+                let storyboard = UIStoryboard(name: "FlashCard", bundle: Bundle.main)
+                let vc = storyboard.instantiateViewController(identifier: "FLEditorViewController") as! FLEditorViewController
+                vc.viewModel.materialId = 0
+                vc.createStatus = .new
+                if let nav = self.navigationController {
+                    nav.pushViewController(vc, animated: true)
+                } else {
+                    self.present(vc, animated: true, completion: nil)
+                }
+                
+            } else if item.contentCode == .video {
+                let createVideoView =  UGCCreateMediaSwiftUIView(isCreated: false)
+                    .environmentObject(UGCCreateMediaViewModel(mId: nil, contentCode: item.contentCode))
+                let vc = UIHostingController(rootView: createVideoView)
+                vc.view.backgroundColor = .white
+                if let nav = self.navigationController {
+                    nav.pushViewController(vc, animated: true)
+                } else {
+                    self.present(vc, animated: true, completion: nil)
+                }
+                
+            } else if item.contentCode == .pdf {
+                let createDocView =  UGCCreateDocSwiftUI(isCreated: false)
+                    .environmentObject(UGCCreateMediaViewModel(mId: nil, contentCode: item.contentCode))
+                let vc = UIHostingController(rootView: createDocView)
+                vc.view.backgroundColor = .white
+                if let nav = self.navigationController {
+                    nav.pushViewController(vc, animated: true)
+                } else {
+                    self.present(vc, animated: true, completion: nil)
+                }
             }
+            
         }
     }
     

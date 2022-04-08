@@ -160,6 +160,6 @@ struct FLFlashPlayerView: View {//need to fix many things
 
 struct FLFlashPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        FLFlashPlayerView(viewModel: FLFlashPlayerViewModel(flashId: 6), vm: FLFlashCardViewModel(flashId: 6))
+        FLFlashPlayerView(viewModel: FLFlashPlayerViewModel(flashId: 6), vm: FLFlashCardViewModel(materialId: 6))
     }
 }

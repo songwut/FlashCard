@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 
 let keyPushNotiRegistration = "PushNotificationRegistration"
-var flashFixId = 387
+var flashFixId = 26
 
 extension ViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -101,6 +101,28 @@ class ViewController: UIViewController {
         
     }
     
+    @IBAction func createVideoPressed(_ sender: UIButton) {
+        let createVideoView =  UGCCreateMediaSwiftUIView(isCreated: false)
+            .environmentObject(UGCCreateMediaViewModel(mId: nil, contentCode: .video))
+        let vc = UIHostingController(rootView: createVideoView)
+        vc.view.backgroundColor = .white
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func myMaterialUIKitPressed(_ sender: UIButton) {
+        let s = UIStoryboard(name: "MyMaterial", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "MyMaterialListViewController") as! MyMaterialListViewController
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func myMaterialPressed(_ sender: UIButton) {
         let vc = UIHostingController(rootView: MyMaterialListView().environmentObject(MyMaterialListViewModel()))
         vc.view.backgroundColor = .white
@@ -114,7 +136,7 @@ class ViewController: UIViewController {
     @objc func stageButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
-        vc.viewModel.flashId = flashFixId
+        vc.viewModel.materialId = flashFixId
         vc.createStatus = .new
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
@@ -126,7 +148,7 @@ class ViewController: UIViewController {
     @IBAction func editFlashButtonPressed(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
-        vc.viewModel.flashId = flashFixId
+        vc.viewModel.materialId = flashFixId
         vc.createStatus = .edit
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
@@ -138,7 +160,7 @@ class ViewController: UIViewController {
     @IBAction func openFlashPlayer(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
-        vc.viewModel.flashId = flashFixId
+        vc.viewModel.materialId = flashFixId
         vc.playerState = .user
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
@@ -150,7 +172,7 @@ class ViewController: UIViewController {
     @IBAction func openFlashPlayerPreview(_ sender: UIButton) {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
-        vc.viewModel.flashId = flashFixId
+        vc.viewModel.materialId = flashFixId
         vc.playerState = .preview
         if let nav = self.navigationController {
             nav.pushViewController(vc, animated: true)
@@ -163,7 +185,7 @@ class ViewController: UIViewController {
     }
     @IBAction func openFlashPlayerSwiftUI(_ sender: UIButton) {
         let viewModel = FLFlashPlayerViewModel(flashId: flashFixId)
-        let vm = FLFlashCardViewModel(flashId: flashFixId)
+        let vm = FLFlashCardViewModel(materialId: flashFixId)
         let flashPlayerView = FLFlashPlayerView(viewModel: viewModel,vm:vm, dismiss: {_ in
             self.presentedViewController?.dismiss(animated: true)
         })
@@ -192,14 +214,29 @@ class ViewController: UIViewController {
             if let dictList = object as? [[String : Any]],
                let detail = UGCCategoryPageResult(JSON: ["results": dictList]) {
                 let mockList = detail.list
-                let host = UIHostingController(rootView: UGCCatagoryListView(items: mockList) { category in
-                    print("UGCCatagoryListView: select: \(category.name)")
-                })
+                let host = UIHostingController(rootView: UGCCatagoryListView(items: mockList))
+                
                 if let nav = self.navigationController {
                     nav.pushViewController(host, animated: true)
                 } else {
                     self.present(host, animated: true, completion: nil)
                 }
+                
+                /*
+                let s = UIStoryboard(name: "SelectCategory", bundle: nil)
+                let selectCategoryVC = s.instantiateViewController(withIdentifier: "SelectCategoryListViewController") as! SelectCategoryListViewController
+                selectCategoryVC.items = mockList
+                selectCategoryVC.didSelectCategory = Action(handler: { sender in
+                    guard let category = sender as? CategoryResult else { return }
+                    //self.selectedCategory = category
+                })
+                if let nav = self.navigationController {
+                    nav.pushViewController(selectCategoryVC, animated: true)
+                } else {
+                    self.present(selectCategoryVC, animated: true, completion: nil)
+                }
+                */
+                
             }
         }
     }
@@ -234,7 +271,7 @@ class ViewController: UIViewController {
     @IBAction func flPostPressed(_ sender: UIButton) {
         self.showLoading(nil)
         let model = FLFlashCardViewModel()
-        model.flashId = flashFixId
+        model.materialId = flashFixId
         self.hideLoading()
         let vc = FLPostViewController.instantiate(viewModel: model)
         vc.createStatus = .edit
@@ -309,8 +346,8 @@ class ViewController: UIViewController {
     }
     
     func loginAPI() {
-        let username = self.usernameTextField.text ?? "sysadmin@conicle.com"
-        let password = self.passTextField.text ?? "sysadminConicle"
+        let username = self.usernameTextField.text ?? "wnios"
+        let password = self.passTextField.text ?? "adminadmin"
         
         self.showLoading(nil)
         let request = LoginRequest()
@@ -319,13 +356,14 @@ class ViewController: UIViewController {
         request.isRemember = true
         API.request(request) { (responseBody: ResponseBody?, profile: ProfileResult?, isCache, error) in
             self.hideLoading()
+            self.scrollView.alpha = 1.0
             if let profile = profile {
                 DispatchQueue.main.async {
                     UserDefaults.standard.set(true, forKey: "isLoggedin")
                     UserDefaults.standard.synchronize()
                     UserManager.shared.profile = profile
                 }
-                self.scrollView.alpha = 1.0
+                
                 PopupManager.showWarning("Login SUCCESS: User ID  \(profile.id)", at: self)
             }
         }

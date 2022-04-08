@@ -31,13 +31,43 @@ enum FLStatus: Int {
     }
 }
 
+//UGC change FLDetailResult -> UGCDetailResult
+class UGCDetailResult: FLDetailResult {
+    var imageVideoList = [UGCCoverResult]()
+    var defaultImage = ""
+    var fileSize = 0
+    var uploadStatus: UploadChunkStatus = .none
+    
+    func fileSizeDisplay() -> String {
+        let mb = Units(bytes:Int64(self.fileSize)).megabytes
+        let mbStr = String(format:"%.2f", mb)
+        
+        let fileText = "file_size".localized()
+        return fileText + " \(mbStr)" + "MB."
+    }
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        uploadStatus         <- map["upload_status"]
+        fileSize             <- map["file_size"]
+        imageVideoList       <- map["image_video_list"]
+        defaultImage         <- map["default_image"]
+    }
+}
+
 class FLDetailResult: LMMaterialResult {
     var countView = 0
+    var instructor: InstructorResult?
     var provider: ProviderResult?
     var category: CategoryResult?
     var instructorList = [InstructorResult]()
     var tagList = [UGCTagResult]()
-    var estimateTime = 5 //default
+    var estimateTime = 0
+    var duration = 0
+    
+    private func countEstimateTime() {
+        self.estimateTime = duration.minsFromSec
+    }
     
     override func mapping(map: Map) {
         super.mapping(map: map)
@@ -45,13 +75,16 @@ class FLDetailResult: LMMaterialResult {
         countView            <- map["count_view"]
         code                 <- map["code"]
         progress             <- map["progress"]
-        estimateTime         <- map["duration"]
+        duration             <- map["duration"]
         owner                <- map["created_by"]
         datetimePublish      <- map["datetime_publish"]
         category             <- map["category"]
         provider             <- map["provider"]
+        instructor           <- map["instructor"]
         instructorList       <- map["instructor_list"]
         tagList              <- map["tag_list"]
+        
+        self.countEstimateTime()
     }
 }
 
@@ -326,29 +359,59 @@ class UGCTagResult: BaseResult {
     }
 }
 
-
-class LMMaterialResult: BaseResult, Identifiable {
+class LMMaterialResult: BaseResult, Identifiable, GridItem {
+    
     var nameContent = ""
-    let uuid = UUID()
+    var uuid: UUID = UUID()
     var progress: ProgressResult?
     var displayStatus: FLStatus = .unpublish
     var owner: OwnerResult?
     var code: String?
     var datetimePublish: String?
-    var contentCode: ContentCode = .flash
+    var contentCode: ContentCode = .flashcard
     var datetimeUpdate = ""
     var datetimeCreate = ""
     var contentRequest: ContentRequest?
     var requestStatus: RequestStatus = .none
     var datetimeAgo = ""
+    var url: String?
+    
+    var hexBgColor: String?
+    
+    func isShowPreview() -> Bool {
+        switch self.contentCode {
+        case .flashcard:
+            return true
+        case .video, .audio, .pdf:
+            return self.url != nil
+        default:
+            return true
+        }
+    }
+    
+    func editedDatetime() -> String {
+        let dateText = formatter.with(dateFormat: "d MMM yyyy, HH:mm", dateString: self.datetimeUpdate)
+        return "edited".localized() + ":" + dateText
+    }
+    
+    func isHiddenEdit() -> Bool {
+        if self.requestStatus == .approved
+            || self.requestStatus == .inprogress
+            || self.requestStatus == .notStart {
+            return true
+        } else {
+            return false
+        }
+    }
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        url                  <- map["url"]
         nameContent          <- map["name_content"]
         code                 <- map["code"]
         displayStatus        <- map["is_display"]
         contentCode          <- map["content_type.code"]
-        progress             <- map["progress"]
+        progress             <- map["content_request.progress"]
         owner                <- map["created_by"]
         contentRequest       <- map["content_request"]
         requestStatus        <- map["content_request.status"]

@@ -118,7 +118,7 @@ struct MockObject {
             "name" : "10 Figma Tricks I Wish I Knew Earlier",
             "id": 199,
             "code": "CARD00002",
-            "image": "https://develop.conicle.co/media/flash_card/2021/10/d5af4102-abe.png",
+            "image": "https://release.conicle.co/media/image_video/2022/3/39b27213-8d53-4100-89d5-16a0fe6630ca.jpg",
             "name": "Untitled - 01",
             "desc": "desc",
             "tag_list": [],
@@ -130,13 +130,23 @@ struct MockObject {
         ]
         let item = LMMaterialResult(JSON: data)!
         item.owner = OwnerResult(JSON: ["id": 1323, "name": "camp ios"])
-        item.contentCode = .flash
-        item.requestStatus = .completed
+        item.contentCode = .flashcard
+        item.requestStatus = .approved
         return item
     }
     
-    
+    static var category: UGCCategory {
+        return UGCCategory(JSON: ["id": -1, "name": "camp ios"])!
+    }
     static var myMaterialFlash: MaterialFlashPageResult {
         return JSON.loadItem("my-content.json")
+    }
+    
+    static var ugcVideoDetail: UGCDetailResult {
+        return JSON.loadItem("ugc-video-detail.json")
+    }
+    
+    static var ugcSimpleVideoUrlStr: String {
+        return "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4"
     }
 }

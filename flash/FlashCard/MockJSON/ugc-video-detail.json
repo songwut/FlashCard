@@ -1,0 +1,46 @@
+{
+  "id": 20608,
+  "code": "VDO00038",
+  "image": "https://release.conicle.co/media/default/content/default_video_material.png",
+  "name": "trim.EF84132D-1C1B-467C-B797-3E2C14724C96.mp4",
+  "name_content": "Untitled",
+  "desc": null,
+  "file_size": 4458807,
+  "content_type": {
+    "id": 86,
+    "code": "video.video"
+  },
+  "tag_list": [],
+  "category": null,
+  "datetime_create": "2022-03-02T10:28:09.276125+07:00",
+  "datetime_update": "2022-03-09T00:19:04.841846+07:00",
+  "datetime_publish": null,
+  "created_by": {
+    "id": 1072,
+    "name": "wn ios",
+    "image": null
+  },
+  "is_display": false,
+  "default_image": "https://release.conicle.co/media/default/content/default_video_material.png",
+  "image_video_list": [
+    {
+      "id": 2158,
+      "image": "https://release.conicle.co/media/image_video/2022/3/9d9ecb94-515f-44f0-9725-22b45df44f4e.jpg"
+    },
+    {
+      "id": 2157,
+      "image": "https://release.conicle.co/media/image_video/2022/3/c0d4b9f5-c7e9-445e-b267-3a982cae427e.jpg"
+    },
+    {
+      "id": 2156,
+      "image": "https://release.conicle.co/media/image_video/2022/3/98b30537-a56a-4ecc-8271-96d9fb38c53a.jpg"
+    }
+  ],
+  "duration": 3,
+  "content_request": {
+    "code": "",
+    "status": null,
+    "type_rule": null
+  },
+  "upload_status": 3
+}

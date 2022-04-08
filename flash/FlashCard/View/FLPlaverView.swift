@@ -10,29 +10,26 @@ import UIKit
 import AVKit
 
 class FLPlaverView: UIView {
-    var player = AVPlayer()
+    var player:AVPlayer?
     var playerItem: AVPlayerItem?
     
     var playerLayer: CALayer?
     var mediaUrl: URL!
-    private var playButtonBg = UIView()
     private var playButton = UIButton()
     private var isPlay = false
     
     func createVideo(url: URL) {
         self.backgroundColor = .background()
         mediaUrl = url
+        player = AVPlayer()
         playerLayer = AVPlayerLayer(player: self.player)
         playerLayer?.contentsGravity = .resizeAspectFill
-        playerLayer?.backgroundColor = UIColor.purple.cgColor
+        playerLayer?.backgroundColor = UIColor.black.cgColor
         playerLayer?.frame = self.bounds
         layer.addSublayer(playerLayer!)
         
         playerItem = AVPlayerItem(url: mediaUrl)
-        player.replaceCurrentItem(with: playerItem)
-        
-        playButtonBg.backgroundColor = .clear
-        playButtonBg.bounds = CGRect(x: 0, y: 0, width: self.bounds.width - 20, height: self.bounds.height - 20)
+        player?.replaceCurrentItem(with: playerItem)
         
         playButton.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         playButton.setImage(UIImage(named: "ic_v2_play"), for: .normal)
@@ -42,7 +39,8 @@ class FLPlaverView: UIView {
         playButton.center = self.center
         playButton.alpha = 1.0
         playButton.addTarget(self, action: #selector(self.playPressed), for: .touchUpInside)
-        playButtonBg.addSubview(playButton)
+        //TODO: will remove next phace
+        //addSubview(playButton)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.playPressed))
         self.addGestureRecognizer(tap)
@@ -50,11 +48,12 @@ class FLPlaverView: UIView {
     }
     
     func playLoop() {
+        guard let player = self.player else { return }
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
-                                               object: self.player.currentItem,
-                                               queue: .main) { [weak self] _ in
-            self?.player.seek(to: CMTime.zero)
-            self?.player.play()
+                                               object: player.currentItem,
+                                               queue: .main) { _ in
+            player.seek(to: CMTime.zero)
+            player.play()
         }
     }
     
@@ -63,29 +62,50 @@ class FLPlaverView: UIView {
     }
     
     @objc func playPressed() {
-        if isPlay {
-            isPlay = false
-            playButton.alpha = 1.0
-            player.pause()
+        DispatchQueue.main.async {
+            if self.isPlay {
+                self.stop()
+            } else {
+                self.isPlay = true
+                self.playButton.alpha = 0.0
+                self.player?.play()
+                self.playLoop()
+            }
+        }
+    }
+    
+    func stop(isEditor: Bool = false) {
+        DispatchQueue.main.async {
+            self.isPlay = false
+            self.player?.pause()
+            if isEditor {
+                self.playButton.alpha = 1.0
+            } else {
+                self.playButton.alpha = 0.0
+            }
             NotificationCenter.default.removeObserver(self)
-        } else {
-            isPlay = true
-            playButton.alpha = 0.0
-            player.play()
-            playLoop()
+        }
+    }
+    
+    func stopAndRemove() {
+        DispatchQueue.main.async {
+            self.isPlay = false
+            self.player?.pause()
+            self.playerLayer?.removeFromSuperlayer()
+            self.player = nil
+            NotificationCenter.default.removeObserver(self)
         }
     }
     
     func updateUrl(url: URL) {
         mediaUrl = url
         playerItem = AVPlayerItem(url: mediaUrl)
-        player.replaceCurrentItem(with: playerItem)
+        player?.replaceCurrentItem(with: playerItem)
     }
     
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
         playerLayer?.frame = self.bounds
         playButton.center = CGPoint(x: self.bounds.width / 2, y:  self.bounds.height / 2)
-        playButtonBg.bounds = CGRect(x: 0, y: 0, width: self.bounds.width - 20, height: self.bounds.height - 20)
     }
 }

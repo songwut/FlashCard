@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct UGCCategoryRow: View {
-    @State var refresh: Bool = false
-    @State var isChecked: Bool = false
-    @State var isExpaned: Bool = false
-    @State var category: CategoryResult
+    @State var category: UGCCategory
+    @State var isFirst: Bool = false
+    @State var parentId: Int = -1
+    @Binding var selectedCategory: UGCCategory
     
-    var isFirst: Bool = true
-    
-    var checkPressed: ( _ category: CategoryResult) -> ()?
+    @State private var isChecked: Bool = false
+    @State private var refresh: Bool = false
+    @State private var isExpaned: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: nil, content: {
@@ -36,13 +36,10 @@ struct UGCCategoryRow: View {
                     VStack(alignment: .leading, spacing: 8) {
                         ForEach(0..<childList.count) { i in
                             let c = childList[i]
-                            UGCCategoryRow(category: c, isFirst: false) { c in
-                                print("createPressed")
-                                self.isChecked = c.isChecked
-                                category.isChecked = c.isChecked
-                                return checkPressed(category)
-                            }
-                            .padding(.leading, 16)
+                            UGCCategoryRow(category: c,
+                                           parentId: category.id ,
+                                           selectedCategory: $selectedCategory)
+                                .padding(.leading, 16)
                         }
                     }
                 }
@@ -54,7 +51,7 @@ struct UGCCategoryRow: View {
         })
     }
     
-    var ContentView: some View {
+    private var ContentView: some View {
         HStack {
             //arrow
             let iconName = isExpaned ? "ic_v2_chevron-down" : "ic_v2_chevron-right"
@@ -71,14 +68,14 @@ struct UGCCategoryRow: View {
                     .frame(width: 24)
             }
             
-            
             Button(action: {
-                isChecked.toggle()
-                if !isChecked {
-                    self.clearCheckAllchild(category.childList)
+                self.isChecked.toggle()
+                self.category.isChecked = self.isChecked
+                
+                if isChecked {
+                    ConsoleLog.show("categorySelected: \(self.category.name)")
+                    self.selectedCategory = self.category
                 }
-                category.isChecked = isChecked
-                checkPressed(category)
                 
                 refresh.toggle()
             }, label: {
@@ -88,7 +85,7 @@ struct UGCCategoryRow: View {
                     .frame(width: 18, height: 18, alignment: .center)
             })
             .buttonStyle(
-                ButtonCheckBox(isChecked: isChecked)
+                ButtonCheckBox(isChecked: self.setChecked(category: category))
             )
             
             VStack(alignment: .leading) {
@@ -97,6 +94,74 @@ struct UGCCategoryRow: View {
                     .font(FontHelper.getFontSystem(.paragraph, font: .text).font)
             }
             Spacer()
+        }
+    }
+    
+    func setChecked(category: UGCCategory) -> Bool {
+        //loop for check on parent UI need to improve
+        ConsoleLog.show("category: \(category.name) \(category.isChecked)")
+        let selectedId = self.selectedCategory.id
+        var isSelect = false
+        
+        if category.id == selectedId {
+            //category.isChecked = self.isChecked
+            isSelect = category.isChecked
+        } else {
+            //isChecked : clild click
+            //case childList improve next phace
+            
+            for c1 in category.childList {//Level 1
+                ConsoleLog.show("c1: \(c1.name)")
+                if c1.id == selectedId {
+                    category.isChecked = c1.isChecked
+                    ConsoleLog.show("category: \(c1.isChecked)")
+                    isSelect = c1.isChecked
+                }
+                
+                for c2 in c1.childList {//Level 2
+                    ConsoleLog.show("c2: \(c2.name)")
+                    if c2.id == selectedId {
+                        category.isChecked = c2.isChecked
+                        c1.isChecked = c2.isChecked
+                        ConsoleLog.show("category: \(c2.isChecked)")
+                        isSelect = c2.isChecked
+                    }
+                    
+                    for c3 in c2.childList {//Level 3
+                        ConsoleLog.show("c3: \(c3.name)")
+                        if c3.id == selectedId {
+                            category.isChecked = c3.isChecked
+                            c1.isChecked = c3.isChecked
+                            c2.isChecked = c3.isChecked
+                            ConsoleLog.show("category: \(c3.isChecked)")
+                            isSelect = c3.isChecked
+                        }
+                        
+                        for c4 in c3.childList {//Level 4
+                            ConsoleLog.show("c4: \(c4.name)")
+                            if c4.id == selectedId {
+                                category.isChecked = c4.isChecked
+                                c1.isChecked = c4.isChecked
+                                c2.isChecked = c4.isChecked
+                                c3.isChecked = c4.isChecked
+                                ConsoleLog.show("category: \(c4.isChecked)")
+                                isSelect = c4.isChecked
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        category.isChecked = isSelect
+        return isSelect
+    }
+    
+    func checkAllchild(_ childList: [CategoryResult]) {
+        for caregory in childList {
+            if caregory.isChecked {
+                caregory.isChecked = false
+                clearCheckAllchild(caregory.childList)
+            }
         }
     }
     
@@ -115,9 +180,8 @@ struct UGCCategoryItemView_Previews: PreviewProvider {
         let name = "Cat name sdf  sfsd fdsf sedfsafsfdssf fd fsf sdf  dsf dsfcdfdfdsfs ds dsfdfdfsf dfs"
         let chlidList = "{\"id\":92,\"name\":\"Category Course LC1\",\"child_list\":[{\"id\":93,\"name\":\"Category Course LC2\",\"child_list\":[{\"id\":94,\"name\":\"Category Course LC3\",\"child_list\":[{\"id\":95,\"name\":\"Category Course LC4\",\"child_list\":null}]}]}]}"
         let c = UGCCategory(JSON: ["name" : name, "child_list": chlidList])!
-        UGCCategoryRow(category: c) { isChecked in
-            
-        }
+        
+        UGCCategoryRow(category: c, parentId: -1, selectedCategory: .constant(c))
         .previewLayout(.fixed(width: 300.0, height: 60))
         .environment(\.sizeCategory, .small)
     }

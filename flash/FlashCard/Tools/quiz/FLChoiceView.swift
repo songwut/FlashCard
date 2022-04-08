@@ -15,13 +15,14 @@ class FLChoiceButton: UIButton {
 
 final class FLChoiceView: UIView {
     @IBOutlet weak var contentHeight: NSLayoutConstraint!
-    @IBOutlet weak var textView: GrowingTextView!
+    @IBOutlet weak var textView: FLQuizTextView!
     @IBOutlet weak var checkButton: FLChoiceButton!
     @IBOutlet weak var fieldButton: FLChoiceButton!
     
     var isEditor = false
     var index = 0
     var didDelete: Action?
+    var didUpdateHeight: Action?
     var height: CGFloat = 36
     
     var answer: FLAnswerResult?
@@ -81,7 +82,7 @@ final class FLChoiceView: UIView {
             } else {
                 print("choice: \(choice.id)")
                 //not ans isAnswer == false
-                if userAnswer.choiceId == choice.id {
+                if userAnswer.id == choice.id {
                     self.updateStyleFalse()
                 } else {
                     self.updateStyleNone()
@@ -131,6 +132,7 @@ extension FLChoiceView: GrowingTextViewDelegate {
         self.contentHeight.constant = height
         self.height = height
         self.checkButton.updateLayout()
+        self.didUpdateHeight?.handler(height)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -150,23 +152,31 @@ extension FLChoiceView: GrowingTextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        var isAddChar = textView.text.count < FlashStyle.maxCharChoice
         if self.textView.isPastingContent {
             self.textView.isPastingContent = false
             ConsoleLog.show("paste")
             DispatchQueue.main.async {
                 self.textView.updateLayout()
             }
-            return true
-        } else if text == "\n" {
+            let newTextCount = textView.text.count + text.count
+            isAddChar = newTextCount < FlashStyle.maxCharChoice
+            return isAddChar
+        } else if text == "\n" {//return,enter
             textView.resignFirstResponder()
             return false
             
-        } else if text == "", textView.text.isEmpty {
+        } else if text == "", textView.text.isEmpty {//delete and remove self
             textView.resignFirstResponder()
             self.didDelete?.handler(self)
             return false
+            
+        } else if text == "" {//delete
+            return true
+            
+        } else {
+            return isAddChar
         }
-        return true
     }
     
 }

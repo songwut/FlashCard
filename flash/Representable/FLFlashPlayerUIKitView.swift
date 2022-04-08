@@ -22,7 +22,7 @@ struct FLPlayerViewControllerRep: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> some UIViewController {
         let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
         let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
-        vc.viewModel.flashId = self.flashId ?? 0
+        vc.viewModel.materialId = self.flashId ?? 0
         vc.playerState = .preview
         return vc
     }

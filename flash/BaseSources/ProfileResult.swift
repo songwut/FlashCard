@@ -46,6 +46,11 @@ class ProfileResult: Mappable {
     var username = ""
     var password = ""
     var phone: String = ""
+    var isTeamDashboard = false
+    var payload: String = ""
+    
+    var isLearningPathView = 0
+    var isCreator = false
     
     lazy var name: String = { [unowned self] in
         if self.middleName.count > 0 {
@@ -59,6 +64,7 @@ class ProfileResult: Mappable {
     }
     
     func mapping(map: Map) {
+        isCreator                   <- map["is_creator"]
         username                    <- map["username"]
         password                    <- map["password"]
         id                          <- map["id"]
@@ -93,6 +99,9 @@ class ProfileResult: Mappable {
         address                     <- map["address"]
         supervisor                  <- map["supervisor"]
         phone                       <- map["phone"]
+        isTeamDashboard             <- map["is_team_dashboard"]
+        isLearningPathView          <- map["learning_path_view"]
+        payload                     <- map["payload"]
     }
     
     class func with(_ dict: [String : Any]) -> ProfileResult? {

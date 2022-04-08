@@ -9,7 +9,8 @@ import Foundation
 import ObjectMapper
 
 class LMCreateItem: BaseResult {
-    var contentCode: ContentCode = .flash
+    var url: String?
+    var contentCode: ContentCode = .flashcard
     var isReady: Bool = false
     
     required init?(map: Map) {
@@ -18,6 +19,7 @@ class LMCreateItem: BaseResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        url          <- map["url"]
         name         <- map["name"]
         contentCode  <- map["code"]
         isReady      <- map["is_available"]

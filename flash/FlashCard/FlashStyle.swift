@@ -55,13 +55,14 @@ enum FLGraphicMenu: String {
 }
 
 struct FlashStyle {
-    static let flashItemHeight: CGFloat = 124
+    static let flashItemHeight: CGFloat = 152
     static let cardCornerRadius:CGFloat = 16
     static let imageMaxSize:CGFloat = 2048
     static let imageQuality:CGFloat = 0.8
     static let maxChoice = 4
     static let maxCharQuestion = 100
     static let maxCharChoice = 50
+    static let maxCard = 24//case from pagination default
     
     static let isIpad = UIDevice.isIpad()
     static let stageColor:UIColor = .gray
@@ -74,11 +75,12 @@ struct FlashStyle {
     
     
     static let baseStageWidth:CGFloat = 325
+    static let baseStageHeight:CGFloat = 485
     static let baseWidth:CGFloat = 375
     static let baseHeight:CGFloat = 600
     
     static let pageCardWidthRatio: CGFloat = UIDevice.isIpad() ?  575 / 1024 : 325.0 / 375
-    static let pageCardRatio: CGFloat = 485 / 325
+    static let pageCardRatio: CGFloat = baseStageHeight / baseStageWidth
     
     static let bottonToolColor: UIColor = UIColor.config_primary()
     static let disableToolColor: UIColor = UIColor.disable()
@@ -118,7 +120,9 @@ struct FlashStyle {
         static let placeholder = "Please\nInput Text\nHere"
         static let textWidthFromFont36:CGFloat = 120
         static let marginIView: CGFloat = 30//left+right,top+botton
-        static let lineHeight: CGFloat = 0
+        static let lineHeight: CGFloat = 1.8
+        static let plusWidth:CGFloat = 30 - 12//plus for digit missing//20
+        static let textMargin: CGFloat = plusWidth / 2
     }
     
     struct quiz {

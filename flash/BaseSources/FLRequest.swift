@@ -7,39 +7,21 @@
 
 import Foundation
 
-enum EndPoint:String {
-    case ugcFlashCardDetail = "ugc/flash-card/%@/"
-    case ugcCardIdDropbox = "ugc/flash-card/%@/card/%@/dropbox/"
-    case ugcCardList = "ugc/flash-card/%@/card/"
-    case ugcCardListDuplicate = "ugc/flash-card/%@/card/duplicate/"
-    case ugcCardDetailUserAnswer = "ugc/flash-card/%@/card/%@/answer/"
-    case ugcCardListDetail = "ugc/flash-card/%@/card/%@/"
-    case ugcFlashCard = "ugc/flash-card/"
-    case ugcFlashColor = "ugc/flash-card/color/"
-    case ugcFlashSticker = "ugc/flash-card/sticker/"
-    case ugcFlashShape = "ugc/flash-card/shape/"
-    
-    case ugcFlashPostSubmit = "ugc/flash-card/%@/content-request/submit/"
-    case ugcFlashPostCancel = "ugc/flash-card/%@/content-request/cancel/"
-    
-    case userReadFlashCard = "flash-card/%@/"
-    
-    case myContent = "content/my-content/"
-    case tagSelectList = "tag/type/MATERIAL_TYPE/"
-    case learningContentCoverList = "learning-content/content-cover/"
-    case subCategory = "sub-category/"
-    case learningMaterialDetail = "%@/%@/%@"//LM/type/id
-}
-
 struct EndPointParam {
     var dict: [String: Any]?
     
     func tail() -> String {
         var tail = ""
         if let dict = self.dict {
-            tail = "?"
+            tail = tail + "?"
             for (key, value) in dict {
-                tail = tail + "&" + "\(key)=\(value)"
+                var strValue = ""
+                if let str = value as? String {
+                    strValue = "\(str)"
+                } else if let int = value as? Int {
+                    strValue = "\(int)"
+                }
+                tail = tail + "&" + "\(key)=\(strValue)"
             }
         }
         return tail
@@ -55,7 +37,6 @@ class FLRequest: APIRequest {
     var apiMethod: APIMethod = .get
     var apiType: APIParameterType = .url
     var nextUrl : String?
-    var isAutoHeader = false
     var contentType = "application/json"
     var accept = "application/json"
     var endPointParam: EndPointParam?

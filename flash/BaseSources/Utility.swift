@@ -8,6 +8,15 @@
 import UIKit
 
 public class Utility {
+    
+    class func duration(hrs: Int, mins: Int, secs: Int) -> String {
+        if hrs >= 1 {
+            return String(format:"%02i:%02i:%02i", hrs, mins, secs)
+        } else {
+            return String(format:"%02i:%02i", mins, secs)
+        }
+    }
+    
     class func  attributedText(with icon: UIImage,iconColor:UIColor? = nil, text: String, titleFont:UIFont? = nil) -> NSMutableAttributedString {
         
         let attributedString = NSMutableAttributedString(string: " \(text)")

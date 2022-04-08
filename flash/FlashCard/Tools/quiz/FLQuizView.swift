@@ -8,17 +8,30 @@
 import UIKit
 import GrowingTextView
 
+import UIKit
+import GrowingTextView
+
+class FLQuizTextView: GrowingTextView {
+    var isPastingContent = false
+    
+    override func paste(_ sender: Any?) {
+        self.isPastingContent = true
+        super.paste(sender)
+    }
+}
+
 class FLQuizView: UIView {
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var questionHeight: NSLayoutConstraint!
-    @IBOutlet weak var questionTextView: GrowingTextView!
+    @IBOutlet weak var questionTextView: FLQuizTextView!
     @IBOutlet weak var contentStackView: UIStackView!
     @IBOutlet weak var choiceStackView: UIStackView!
     @IBOutlet weak var addStackView: UIStackView!
     @IBOutlet weak var addButton: FLDashButton?
     @IBOutlet weak var deleteButton: UIButton?
     
+    var updateChoice: Action?
     var didSelectChoice: Action?
     var didDelete: Action?
     var isEditor = false
@@ -46,6 +59,7 @@ class FLQuizView: UIView {
             
             self.questionTextView.maxLength = FlashStyle.maxCharQuestion
             self.questionTextView.text = self.question?.value ?? ""
+            self.questionTextView.isUserInteractionEnabled = self.isEditor
             self.deleteButton?.isHidden = !self.isEditor
             
             guard let question = self.question else { return }
@@ -129,6 +143,12 @@ class FLQuizView: UIView {
         choiceView.isEditor = self.isEditor
         choiceView.answer = question.answer
         choiceView.choice = choice
+        choiceView.didUpdateHeight = Action(handler: { [weak self] (sender) in
+            if let choiceHeight = sender as? CGFloat {
+                choiceView.bounds = CGRect(x: 0, y: 0, width: choiceView.bounds.width, height: choiceHeight)
+            }
+            self?.updateQuizContentSize(isChangeContent: true)
+        })
         choiceView.didDelete = Action(handler: { [weak self] (sender) in
             let index = question.choiceList.firstIndex { (c) -> Bool in
                 return c.id == choice.id
@@ -158,7 +178,8 @@ class FLQuizView: UIView {
         guard let question = self.question else { return }
         guard let choice = sender.choice else { return }
         if question.answer == nil {
-            let answer = FLAnswerResult(JSON: ["choice_id" : choice.id])
+            let answer = FLAnswerResult(JSON: ["id" : choice.id])
+            answer?.id = choice.id
             answer?.value = choice.value
             question.answer = answer
             for v in self.choiceStackView.arrangedSubviews {
@@ -188,11 +209,13 @@ class FLQuizView: UIView {
         let choice = sender.choice
         choice?.isAnswer = true
         sender.choiceView?.choice = choice
+        self.updateChoice?.handler(question)
     }
     
     @IBAction func addChoicePressed(_ sender: UIButton) {
         guard let question = self.question else { return }
         //create new choice
+        self.isEditor = true
         let order = self.choiceCount + 1
         let title = "Option \(order)"
         let choice = FLChoiceResult(JSON: ["id" : order, "value" : title])!
@@ -202,6 +225,7 @@ class FLQuizView: UIView {
         
         self.addStackView.isHidden = question.choiceList.count == FlashStyle.maxChoice
         self.updateQuizContentSize()
+        self.updateChoice?.handler(question)
     }
     
     func updateLayoutAll() {
@@ -212,12 +236,21 @@ class FLQuizView: UIView {
         self.cardView.updateLayout()
     }
     
-    func updateQuizContentSize() {
+    func updateQuizContentSize(isChangeContent: Bool = false) {
         self.updateLayoutAll()
-        let originalframe = self.frame
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            let cardHeight = self.cardView.bounds.height
-            self.frame = CGRect(x: originalframe.origin.x, y: originalframe.origin.y, width: originalframe.width, height: cardHeight)
+        self.contentStackView.updateLayout()
+        if isChangeContent {
+            let originalCenter = self.center
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.updateLayoutAll()
+                let cardHeight: CGFloat = CGFloat(85 + self.contentStackView.bounds.height)
+                print("self.frame.height: \(self.frame.height)")
+                print("self.cardView.frame.height: \(self.cardView.frame.height)")
+                self.cardView.bounds = CGRect(x: 0, y: 0, width: self.cardView.bounds.width, height: cardHeight)
+                self.bounds = CGRect(x: 0, y: 0, width: self.bounds.width, height: cardHeight + 32)
+                //self.frame = CGRect(x: originalframee.origin.x, y: originalframe.origin.y, width: originalframe.width, height: originalframe.height)
+                self.center = originalCenter
+            }
         }
     }
     
@@ -251,7 +284,7 @@ extension FLQuizView: GrowingTextViewDelegate {
         ConsoleLog.show("question GrowingTextView height:\(height)")
         //self.textView.superview?.layoutIfNeeded()
         self.questionHeight.constant = height
-        self.updateQuizContentSize()
+        self.updateQuizContentSize(isChangeContent: true)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -267,10 +300,10 @@ extension FLQuizView: GrowingTextViewDelegate {
             self.questionTextView.updateLayout()
             ConsoleLog.show("question textViewDidChange: \(textView.text.count)")
         }
-        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        var isAddChar = textView.text.count < FlashStyle.maxCharQuestion
         if self.questionTextView.isPastingContent {
             self.questionTextView.isPastingContent = false
             ConsoleLog.show("paste")
@@ -278,12 +311,17 @@ extension FLQuizView: GrowingTextViewDelegate {
                 self.questionTextView.updateLayout()
                 self.updateQuizContentSize()
             }
-            return true
-        } else if text == "\n" {
+            let newTextCount = textView.text.count + text.count
+            isAddChar = newTextCount < FlashStyle.maxCharQuestion
+            return isAddChar
+        } else if text == "\n" {//return,enter
             textView.resignFirstResponder()
             return false
+        } else if text == "" {//delete
+            return true
+        } else {
+            return isAddChar
         }
-        return true
     }
 }
 

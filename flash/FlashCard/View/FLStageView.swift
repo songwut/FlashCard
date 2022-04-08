@@ -8,6 +8,9 @@
 import UIKit
 
 class FLStageView: FlashStageView {
+    var isVideoAutoPlay = false
+    var isRequireSave = false
+    var playerView: FLPlaverView?
     var playerState: FLPlayerState = .user
     var stageRatio:CGFloat = 1
     var flCreator: FLCreator!

@@ -1,19 +1,27 @@
 //
 //  RequestStatus.swift
-//  flash
+//  LEGO
 //
 //  Created by Songwut Maneefun on 1/11/2564 BE.
+//  Copyright © 2564 BE conicle. All rights reserved.
 //
 
-import Foundation
-
+import UIKit
 
 enum RequestStatus: Int {
     case none = 999
-    case completed = 30
-    case waitForApprove = 21
-    case reject = -3
-    case requestExpired = -2
+    case approved = 30
+    
+    case expired = -2
+    case requestExpired = -6
+    
+    case rejected = -3
+    case canceledByUser = -1
+    
+    //waiting_for_approve
+    case notStart = 0
+    case inprogress = 21//inprogress
+    case waitForApprove = 1
     
 //    case none = "none"
 //    case completed = "completed"
@@ -21,29 +29,53 @@ enum RequestStatus: Int {
 //    case reject = "Reject"
 //    case requestExpired = "request_expired"
     
+//    from web compare next time
+//    approveStatusCode: {
+//        '-11': 'canceled_by_assignment',
+//        '-6': 'request_expired',
+//        '-3': 'rejected',
+//        '-2': 'expired',
+//        '-1': 'canceled_by_user',
+//        '0': 'waiting_approve',
+//        '1': 'waiting_approve',
+//        '21': 'waiting_approve',
+//        '30': 'approved'
+//      }
     
-    func title() -> String {
+    func title() -> String? {
         switch self {
-        case .completed:
-            return "completed".localized()
+        case .approved:
+            return "approved".localized()
+        case .notStart:
+            return "progress_waiting_for_approve".localized()
+        case .inprogress:
+            return "progress_waiting_for_approve".localized()
         case .waitForApprove:
-            return "waiting_for_approve".localized()
-        case .reject:
-            return "reject".localized()
+            return "progress_waiting_for_approve".localized()
+        case .rejected:
+            return "rejected".localized()
+        case .expired:
+            return "request_expired".localized()
         case .requestExpired:
             return "request_expired".localized()
         default:
-            return ""
+            return nil
         }
     }
     
     func color() -> UIColor {
         switch self {
-        case .completed:
-            return .success()
+        case .approved:
+            return UIColor("17CC8D")
+        case .notStart:
+            return .warning()
+        case .inprogress:
+            return .warning()
         case .waitForApprove:
             return .warning()
-        case .reject:
+        case .rejected:
+            return .error()
+        case .canceledByUser:
             return .error()
         case .requestExpired:
             return .text()
@@ -53,23 +85,27 @@ enum RequestStatus: Int {
     }
     
     func bgColor() -> UIColor {
-        if self == .completed {
+        if self == .approved {
             return self.color().withAlphaComponent(0.1)
         } else {
             return self.color().withAlphaComponent(0.25)
         }
     }
     
-    func desc() -> String {
+    func descDict() -> String {
         switch self {
-        case .completed:
-            return "Cannot edit because of this material has already approved"
+        case .approved:
+            return "request_approved_remark"
+        case .notStart:
+            return "request_waiting_remark"
+        case .inprogress:
+            return "request_waiting_remark"
         case .waitForApprove:
-            return "Cannot edit because of this material is waiting for approve, if you want to edit press button Cancel Request"
-        case .reject:
-            return "last request status is rejected, if you want to request to publish again you can press Submit to Approve button again"
+            return "request_waiting_remark"
+        case .rejected:
+            return "request_failed_remark"
         case .requestExpired:
-            return "last request status is Request Expired, if you want to request to publish again you can press Submit to Approve button again"
+            return "request_expired_remark"
         default:
             return ""
         }

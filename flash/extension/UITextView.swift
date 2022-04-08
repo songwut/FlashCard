@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 extension UITextField {
     @IBInspectable var placeHolderColor: UIColor? {
         get {
@@ -17,6 +18,20 @@ extension UITextField {
     }
 }
 extension UITextView {
+    
+    func textAreaSizePur(fixWidth: CGFloat? = nil) -> CGSize {
+        //get width by content
+        let textViewSize = self.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+        //with from content
+        var width = fixWidth ?? textViewSize.width
+        let fix: CGFloat = 0
+        //width = width + fix
+        let height = self.systemLayoutSizeFitting(CGSize(width: width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
+        print("textViewSize: \(textViewSize)")
+        print("height: \(height)")
+        return CGSize(width: width, height: height + fix)
+    }
+    
     func frameFromContent(fixWidth: CGFloat? = nil) -> CGRect {
         //get width by content
         let textViewSize = self.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))

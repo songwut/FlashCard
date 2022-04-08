@@ -59,6 +59,14 @@ class InteractTextView: UIView {
         }
     }
     */
+    
+    func isOutOfSuperView() -> Bool {
+        guard let superview = self.superview else { return true }
+        let intersectedFrame = superview.bounds.intersection(self.frame)
+        let isOutOfBounds = intersectedFrame.size.width < 6 || intersectedFrame.size.height < 6
+        return isOutOfBounds
+    }
+    
     var contentView: UIView {
         get {
             return self.textView

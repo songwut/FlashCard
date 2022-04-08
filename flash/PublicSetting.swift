@@ -7,6 +7,7 @@
 
 import UIKit
 
+var isKMSEnabled = true
 let fontConicleText = "DBHeaventRounded"
 let fontConicleMedium = "DBHeaventRounded-Med"
 let fontConicleBold = "DBHeaventRounded-Bold"
@@ -24,7 +25,7 @@ var configParagraphLineSpacing:[String: CGFloat] = ["en": 2.0,"th": 5.0]
 var isLoginConicle = false
 
 
-var pathDomain = "develop.conicle.co/"
+var pathDomain = "release-5.conicle.co/"// "develop.conicle.co/"
 var domainURL = "https://\(pathDomain)"
 var apiURL = "\(domainURL)api/"
 var isMaintenance = false

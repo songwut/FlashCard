@@ -302,6 +302,9 @@ extension FLPlayerViewController: FLInfoViewDelegate {
         self.footerStackView.removeAllArranged()
         let pageInfoVC = self.pageInfoVC ?? FLInfoPageViewController(frame: self.view.bounds, viewModel: self.viewModel)
         //pageInfoVC.delegate = self
+        pageInfoVC.didPressTag = DidAction(handler: { (sender) in
+            //self.openTagRelatedWithId(tagId: tagId as! Int, tagName: self.tagName, results: self.learningMaterialDetail, contentId: self.learningMaterialId)
+        })
         pageInfoVC.quiz = self.viewModel.getQuizContent()
         pageInfoVC.view.frame = self.view.bounds
         pageInfoVC.modalPresentationStyle = .overCurrentContext

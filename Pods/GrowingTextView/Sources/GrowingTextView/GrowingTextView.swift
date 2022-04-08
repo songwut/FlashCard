@@ -16,13 +16,6 @@ import UIKit
 @IBDesignable @objc
 open class GrowingTextView: UITextView {
     
-    open var isPastingContent = false
-
-    public override func paste(_ sender: Any?) {
-        self.isPastingContent = true
-        super.paste(sender)
-    }
-
     override open var text: String! {
         didSet { setNeedsDisplay() }
     }

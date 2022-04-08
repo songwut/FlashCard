@@ -8,6 +8,39 @@
 import Foundation
 import AVKit
 
+extension AVURLAsset {
+    var fileSize: Int? {
+        let keys: Set<URLResourceKey> = [.totalFileSizeKey, .fileSizeKey]
+        let resourceValues = try? url.resourceValues(forKeys: keys)
+
+        return resourceValues?.fileSize ?? resourceValues?.totalFileSize
+    }
+}
+
+extension URL {
+    var filesize: Int? {
+        let set = Set.init([URLResourceKey.fileSizeKey])
+        var filesize: Int?
+        do {
+            let values = try self.resourceValues(forKeys: set)
+            if let theFileSize = values.fileSize {
+                filesize = theFileSize
+            }
+        }
+        catch {
+            print("Error: \(error)")
+        }
+        return filesize
+    }
+
+    var filesizeNicelyformatted: String? {
+        guard let fileSize = self.filesize else {
+            return nil
+        }
+        return ByteCountFormatter.init().string(fromByteCount: Int64(fileSize))
+    }
+}
+
 class VideoConvertor {
     init(videoURL: URL) {
         self.videoURL = videoURL

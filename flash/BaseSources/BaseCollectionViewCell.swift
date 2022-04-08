@@ -11,4 +11,8 @@ class BaseCollectionViewCell: UICollectionViewCell {
     open class func size() -> CGSize {
         return CGSize(width: 375, height: 30)
     }
+    
+    open func setData(_ data: Any?) {
+        //self.content = data
+    }
 }

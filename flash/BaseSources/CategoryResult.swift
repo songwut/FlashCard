@@ -8,16 +8,22 @@
 import Foundation
 import ObjectMapper
 
-class CategoryResult: BaseResult {
+class CategoryResult: BaseResult, Identifiable {
    
     var count = 0
     var new: Int?
     var sort = 0
-    var childList = [CategoryResult]()
+    var childList = [UGCCategory]()
     var isAll = false
     var subList = [CategoryResult]()
     var allCategory: CategoryResult?
     var isChecked: Bool = false
+    
+    func reset() {
+        for caregory in self.childList {
+            caregory.isChecked = false
+        }
+    }
     
     class func createAll(category:CategoryResult?) -> CategoryResult {
         var id = 0

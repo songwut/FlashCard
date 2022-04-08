@@ -8,7 +8,7 @@
 import Foundation
 
 var headerTextColor = UIColor(hex: "FFFFFF")
-var headerBackgroundColor = UIColor(hex: "FF69B4")
+var headerBackgroundColor = UIColor(hex: "000000")
 
 var primaryColor: UIColor = UIColor("EA2427")
 var secondaryColor: UIColor = UIColor("423F3B")

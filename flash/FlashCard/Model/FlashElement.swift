@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVGKit
 import ObjectMapper
 
 class FLButton: UIButton {
@@ -80,7 +79,7 @@ class FlashElement: FLBaseResult {
     var media: FLMediaResult?
     var sort: Int?
     var rotation: NSNumber?
-    var scale: Float = 1.0//default
+    var scale: NSNumber = NSNumber(1.0) //default
     var tool: FLTool?
     var x:NSNumber = 0
     var y:NSNumber = 0
@@ -92,7 +91,8 @@ class FlashElement: FLBaseResult {
     //text
     var text = ""
     var textColor = "000000"
-    var fontSize:CGFloat = 36
+    var fontSizeFix:CGFloat = 36
+    var fontSizeDisplay:CGFloat = 36
     var flAlignment = FLTextAlignment.center
     var flTextStyle:[FLTextStyle] = [FLTextStyle]()//["bold", "italic", "underline"]
     var fontScale:CGFloat = 1.0
@@ -109,6 +109,7 @@ class FlashElement: FLBaseResult {
     //video
     var deviceVideoUrl: URL?
     var mp4VideoUrl: URL?
+    var mp4VideoUploade: String?
     
     //Quiz
     var scaleUI: Float = 1.0//default
@@ -119,6 +120,7 @@ class FlashElement: FLBaseResult {
     //var stroke = "#000000"
     var strokeWidth:Float?
     
+    var font: UIFont?
     
     func width(on stageWidth: CGFloat) -> CGFloat {
         return ((stageWidth * CGFloat(truncating: self.width)) / 100)
@@ -137,19 +139,20 @@ class FlashElement: FLBaseResult {
     }
     
     func updateNewFontSize() {
-        let newSize = self.fontSize * self.fontScale
-        self.fontSize = newSize
+        let newSize = self.fontSizeFix * self.fontScale
+        self.fontSizeDisplay = newSize
     }
     
-    func manageFont(scale: CGFloat = 1.0) -> UIFont {
-        self.fontScale = scale
+    func manageFontScale() -> UIFont {
         let isItalic = self.flTextStyle.contains(.italic)
-        let size = self.fontSize * self.fontScale
+        let size = self.fontSizeFix * self.fontScale
+        self.fontSizeDisplay = size
         print("manageFont size: \(size)")
         var font:UIFont = .font(size, .text, isItalic: isItalic)
         if self.flTextStyle.contains(.bold) {
             font = .font(size, .bold, isItalic: isItalic)
         }
+        self.font = font
         return font
     }
     
@@ -180,7 +183,7 @@ class FlashElement: FLBaseResult {
         var dict = [String: AnyObject]()
         dict["text"] = self.text as AnyObject
         dict["text_color"] = self.textColor as AnyObject
-        dict["font_size"] = self.fontSize as AnyObject
+        dict["font_size"] = self.fontSizeFix as AnyObject
         dict["text_alignment"] = self.flAlignment.rawValue as AnyObject//["left", center", "right", "justified"]
         dict["text_style"] = self.createStyleList() as AnyObject //["bold", "italic", "underline"]
         return dict
@@ -188,7 +191,6 @@ class FlashElement: FLBaseResult {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
-        //scale           <- map["scale"] not confirm
         sort            <- map["sort"]
         type            <- map["type"]
         height          <- map["height"]
@@ -196,10 +198,10 @@ class FlashElement: FLBaseResult {
         x               <- map["position_x"]
         y               <- map["position_y"]
         rotation        <- map["rotation"]
-        
+        scale           <- map["scale"]
         text            <- map["text"]
         textColor       <- map["text_color"]
-        fontSize        <- map["font_size"]
+        fontSizeFix     <- map["font_size"]
         flAlignment     <- map["text_alignment"]
         flTextStyle     <- map["text_style"]
         

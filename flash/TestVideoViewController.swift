@@ -122,7 +122,7 @@ class TestVideoViewController: UIViewController {
         picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) ?? []
         picker.mediaTypes = ["public.movie"]
         picker.videoQuality = .typeHigh
-        picker.videoExportPreset = AVAssetExportPresetHEVC1920x1080
+        picker.videoExportPreset = AVAssetExportPresetPassthrough
         //picker.allowsEditing = true
         present(picker, animated: true, completion: nil)
     }

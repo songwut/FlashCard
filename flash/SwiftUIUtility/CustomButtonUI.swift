@@ -119,6 +119,20 @@ struct ButtonBorderCircle: ButtonStyle {
     }
 }
 
+struct ButtonCircle: ButtonStyle {
+    var color: Color
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration
+            .label
+            .foregroundColor(.white)
+            .background(
+                Circle()
+                    .fill(color)
+            )
+    }
+}
+
 struct ButtonCheckBox: ButtonStyle {
     
     var isChecked: Bool

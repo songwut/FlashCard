@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import GrowingTextView
+import AVFoundation
 
 final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var scrollView: UIScrollView!
@@ -17,6 +18,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var titleTextField: UITextField!
+    @IBOutlet private weak var titleRequireLabel: UILabel!
     @IBOutlet private weak var titleLimitLabel: UILabel!
     
     @IBOutlet private weak var idView: UIView!
@@ -34,6 +36,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var timeLabel: UILabel!
     @IBOutlet private weak var timeValueLabel: UILabel!
     @IBOutlet private weak var timeMinLabel: UILabel!
+    @IBOutlet private weak var timeScaleView: UIView!
     @IBOutlet private weak var minusButton: UIButton!
     @IBOutlet private weak var plusButton: UIButton!
     
@@ -61,7 +64,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     @IBOutlet private weak var cancelButton: UIButton!
     @IBOutlet private weak var submitButton: UIButton!
-    @IBOutlet private weak var myLibraryButton: UIButton!
+    @IBOutlet private weak var gotoBackButton: UIButton!
     
     var createStatus:FLCreateStatus = .new
     
@@ -76,7 +79,9 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     private var imageCoverData: Data?
     private let formatText = "d MMM yyyy HH:mm"
     private var isNeedUpdate = false
+    private var isNeedChangeBarItems = true
     
+    private var backBtn = UIBarButtonItem()
     private var editBtn = UIBarButtonItem()
     private var previewBtn = UIBarButtonItem()
     
@@ -119,22 +124,24 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     var selectedCategory: CategoryResult? {
         didSet {
-            self.isNeedUpdate = true
             guard let category = self.selectedCategory else { return  }
             self.categoryValueLabel.text = category.name
             self.categoryValueLabel.textColor = .text()
-            self.isNeedUpdate = true
         }
     }
     
-    var latestTags: [UGCTagResult]? {
-        didSet {
-            self.isNeedUpdate = true
-        }
-    }
+    var latestTags: [UGCTagResult]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.scrollView.alpha = 0.0
+        backBtn = UIBarButtonItem(image: UIImage(named: "ic-arrow-nav-back"), style: .plain, target: self, action: #selector(self.backPressed))
+        editBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_edit"), style: .plain, target: self, action: #selector(self.editPressed))
+        previewBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_preview"), style: .plain, target: self, action: #selector(self.previewPressed))
+        backBtn.tintColor = headerTextColor
+        editBtn.tintColor = headerTextColor
+        previewBtn.tintColor = headerTextColor
+        
         self.keyboardManager(false)
         self.footerView.setShadow(radius: 16, opacity: 0.09, color: .black, offset: CGSize(width: 0, height: -2))
         let fontTitle = UIFont.font(16, .medium)
@@ -142,7 +149,17 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.titleTextField.delegate = self
         self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
         self.coverImageView.cornerRadius = 8
+        let title = "title_name_material".localized()
+        let requireColor =  UIColor(hex: "ff3e2b")
+        let atbTitle = Utility.attributedText(with: title, font: self.titleLabel.font, color: .black)
+        let atbRequire = Utility.attributedText(with: " *", font: self.titleLabel.font, color: requireColor)
+        atbTitle.append(atbRequire)
+        self.titleLabel.attributedText = atbTitle
+        self.titleRequireLabel.font = fontValue
+        self.titleRequireLabel.text = ""
+        self.titleRequireLabel.textColor = .error()
         self.titleLimitLabel.font = .font(12, .text)
+        self.titleLimitLabel.textColor = .lightGray
         self.titleTextField.font = fontValue
         self.titleTextField.textColor = .text()
         self.idView.borderWidth = 1
@@ -202,11 +219,14 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.tagView.tagLineBreakMode = .byTruncatingTail
         
         self.submitButton.setTitleColor(.white, for: .normal)
-        self.submitButton.isHidden = false
+        self.submitButton.isHidden = true
         self.cancelButton.isHidden = true
+        self.gotoBackButton.setTitleColor(.config_primary(), for: .normal)
+        self.gotoBackButton.borderColor = .config_primary()
         self.coverImageView.image = nil
+        self.imageButton.isHidden = true
         self.imageButton.backgroundColor = UIColor.elementBackground()
-        
+        self.updateGotoBackTitle()
         self.serDefaultUI()
         
         if self.createStatus == .new {
@@ -216,10 +236,22 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                 guard let self = self else { return }
                 DispatchQueue.main.async {
                     guard let detail = newDetail else { return }
-                    self.viewModel.flashId = detail.id
+                    self.viewModel.materialId = detail.id
                     self.loadDetail(detail)
                 }
             }
+        }
+    }
+    
+    private func updateGotoBackTitle() {
+        let homeVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "Home") }
+        
+        if let _ = homeVC {
+            let backTitle = String(format: "go_to_xx".localized(), "homepage".localized())
+            self.gotoBackButton.setTitle(backTitle, for: .normal)
+        } else {
+            let backTitle = String(format: "go_to_xx".localized(), "my_material".localized())
+            self.gotoBackButton.setTitle(backTitle, for: .normal)
         }
     }
     
@@ -228,17 +260,11 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         
         self.viewModel.detail?.name = self.titleTextField.text ?? ""
         self.viewModel.detail?.desc = self.descTextView.text ?? ""
+        self.callAPIFlashDetailUpdate()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        editBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_edit"), style: .plain, target: self, action: #selector(self.editPressed))
-        previewBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_preview"), style: .plain, target: self, action: #selector(self.previewPressed))
-        editBtn.tintColor = headerTextColor
-        previewBtn.tintColor = headerTextColor
-        
-        self.navigationController?.navigationBar.topItem?.rightBarButtonItems = [previewBtn, editBtn]
         
         if self.createStatus == .edit {
             if let detail = self.viewModel.detail {
@@ -260,6 +286,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     func loadDetail(_ detail: FLDetailResult?) {
+        self.scrollView.alpha = 1.0
         self.hideLoading()
         guard let detail = detail else { return }
         self.time = detail.estimateTime
@@ -281,41 +308,59 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.categoryValueLabel.text = self.getCatagoryName(detail)
         let dateTime = formatter.with(dateFormat: formatText, dateString: detail.datetimeUpdate)
         self.updateValueLabel.text = dateTime
-        self.timeValueLabel.text = "\(self.time)"
-        let minStr = self.time.textNumber(many: "minutes")
-        let minUnit = minStr.replace("\(self.time) ", withString: "")
-        self.timeMinLabel.text = minUnit
+        if self.viewModel.contentCode == .video
+            || self.viewModel.contentCode == .audio {
+            self.imageButton.isHidden = true
+            self.timeScaleView.isHidden = true
+            self.timeMinLabel.text =  detail.duration.materialMin
+        } else {
+            self.imageButton.isHidden = false
+            self.timeScaleView.isHidden = false
+            self.timeValueLabel.text = "\(self.time)"
+            let minStr = self.time.textNumber(many: "minutes")
+            let minUnit = minStr.replace("\(self.time) ", withString: "")
+            self.timeMinLabel.text = minUnit
+        }
+        
         self.idView.isHidden = detail.code == ""
         self.idValueLabel.text = detail.code
         self.idValueLabel.textColor = detail.contentCode.getColor()
         self.idView.borderColor = detail.contentCode.getColor()
         self.statusValueLabel.text = detail.displayStatus.title()
-        self.minusButton.isEnabled = !(self.time == 1)
         
         let requestStatus = detail.requestStatus
         self.requesValue.backgroundColor = requestStatus.bgColor()
         self.requesValue.setTitleColor(requestStatus.color(), for: .normal)
-        self.requesValue.setTitle(detail.contentRequest?.statusLabel.localized() ?? "", for: .normal)
-        self.requesDesc.text = requestStatus.desc()
+        self.requesValue.setTitle(requestStatus.title(), for: .normal)
+        self.requesDesc.text = requestStatus.descDict().localized()
         self.statusPin.backgroundColor = detail.displayStatus.color()
         self.requestStackView.isHidden = detail.contentRequest == nil
         
-        let rightBarButtonItems = (requestStatus == .completed) ? [previewBtn] : [previewBtn, editBtn]
-        self.navigationController?.navigationBar.topItem?.rightBarButtonItems = rightBarButtonItems
+        if self.isNeedChangeBarItems {
+            //protech case goto tag,category
+            //custom BarButton UIKit and SwiftUI
+            self.navigationItem.setHidesBackButton(true, animated:false)
+            
+            let buttonItems = detail.isHiddenEdit() ? [self.previewBtn] : [self.previewBtn, self.editBtn]
+            
+            self.navigationController?.navigationBar.topItem?.rightBarButtonItems = buttonItems
+            self.navigationController?.navigationBar.topItem?.leftBarButtonItem = self.backBtn
+            self.isNeedChangeBarItems = false
+        }
         
-        if requestStatus == .completed  {
+        if requestStatus == .approved  {
             self.submitButton.backgroundColor = .disable()
             self.submitButton.isUserInteractionEnabled = false
             self.submitButton.isHidden = false
             self.cancelButton.isHidden = true
             
-        } else if requestStatus == .requestExpired ||  requestStatus == .reject  {
+        } else if requestStatus == .requestExpired ||  requestStatus == .rejected  {
             self.submitButton.backgroundColor = .config_primary()
             self.submitButton.isUserInteractionEnabled = true
             self.submitButton.isHidden = false
             self.cancelButton.isHidden = true
             
-        } else if requestStatus == .waitForApprove {
+        } else if requestStatus == .inprogress || requestStatus == .notStart {
             self.cancelButton.backgroundColor = .config_primary()
             self.cancelButton.isUserInteractionEnabled = true
             self.submitButton.isHidden = true
@@ -328,8 +373,9 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
         
         
-        if detail.requestStatus == .waitForApprove
-            || detail.requestStatus == .completed {
+        if detail.requestStatus == .inprogress
+            || requestStatus == .notStart
+            || detail.requestStatus == .approved {
             self.enableUI(isEnable: false)
         } else {
             self.enableUI(isEnable: true)
@@ -338,7 +384,17 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)
     }
     
+    private func enableMinusButton(isEnable: Bool) {
+        let disableColor = UIColor.disable()
+        self.minusButton.isUserInteractionEnabled = isEnable
+        self.minusButton.tintColor = isEnable ? .config_primary() : disableColor
+    }
+    
     private func enableUI(isEnable: Bool) {
+        
+        let isEnableMinusUI = isEnable && self.time >= 1
+        self.enableMinusButton(isEnable: isEnableMinusUI)
+        
         let disableColor = UIColor.disable()
         let textColor = UIColor.text()
         imageButton.isUserInteractionEnabled = isEnable
@@ -347,10 +403,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         descTextView.isUserInteractionEnabled = isEnable
         descTextView.textColor = isEnable ? textColor : disableColor
         timeValueLabel.textColor = isEnable ? textColor : disableColor
-        plusButton.isEnabled = isEnable
-        minusButton.isEnabled = isEnable
+        plusButton.isUserInteractionEnabled = isEnable
         plusButton.tintColor = isEnable ? .config_primary() : disableColor
-        minusButton.tintColor = isEnable ? .config_primary() : disableColor
         categoryValueLabel.textColor = isEnable ? textColor : disableColor
         categoryButton.isEnabled = isEnable
         categoryView.isUserInteractionEnabled = isEnable
@@ -359,10 +413,17 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         tagContentView.isUserInteractionEnabled = isEnable
         tagView.isUserInteractionEnabled = isEnable
         tagView.tagBackgroundColor = isEnable ? tagBgEnableColor : .text(0.1)
-        tagView.textColor = isEnable ? tagBgEnableColor : .text()
+        
+        tagView.textColor = isEnable ? tagTextEnableColor : .text()
         tagView.borderColor = .clear
         tagView.borderWidth = 1
+        
+        tagTextColor = isEnable ? tagTextEnableColor : .text()
+        tagBGTextColor = isEnable ? tagBgEnableColor : .text(0.1)
     }
+    
+    private var tagTextColor: UIColor = .text()
+    private var tagBGTextColor: UIColor = .text()
     
     private func getCatagoryName(_ detail: FLDetailResult) -> String {
         var categoryText: String?
@@ -377,9 +438,26 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         return categoryText ?? FlashStyle.post.categoryPlaceHolder
     }
     
+    private func isRequireField() -> Bool {
+        var isRequire = false
+        if let text = self.titleTextField.text,
+           !text.trimmingCharacters(in: .whitespaces).isEmpty,
+            text.count >= 1 {
+            self.titleRequireLabel.text = ""
+        } else {
+            let title = "title_name_material".localized()
+            let placeholder = String(format: "input_xx".localized(), title.lowercased())
+            self.titleRequireLabel.text = placeholder
+            self.titleTextField.text = ""
+            isRequire = true
+        }
+        //TODO: next require tag
+        return isRequire
+    }
+    
     @IBAction func timePlusPressed(_ sender: UIButton) {
         self.time = self.time + 1
-        self.minusButton.isEnabled = !(self.time == 1)
+        self.enableMinusButton(isEnable: self.time >= 1)
         self.timeValueLabel.text = "\(self.time)"
         self.viewModel.detail?.estimateTime = self.time
         self.isNeedUpdate = true
@@ -389,46 +467,146 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBAction func timeMinusPressed(_ sender: UIButton) {
         
         self.time = self.time - 1
-        self.minusButton.isEnabled = !(self.time == 1)
+        self.enableMinusButton(isEnable: self.time >= 1)
         self.timeValueLabel.text = "\(self.time)"
         self.viewModel.detail?.estimateTime = self.time
         self.isNeedUpdate = true
         ConsoleLog.show("timeNumber: \(self.time)")
     }
     
-    @objc func editPressed() {
-        self.callAPIFlashDetailUpdate()
-        if let flEditorVC = self.navigationController?.viewControllers.last as? FLEditorViewController {
-            //case from new flashcard has flPostVC in last
-            self.navigationController?.popViewController(animated: true)
+    @objc func backPressed() {
+        if self.isRequireField() {
+            return
+        }
+        
+        if self.isNeedUpdate {
+            let json = self.createJSON()
+            ConsoleLog.show("callAPIFlashDetailUpdate")
+            self.showLoading(nil)
+            self.viewModel.callAPIFlashDetailUpdate(parameter: json) { [weak self] (updatedDetail) in
+                self?.hideLoading()
+                self?.isNeedUpdate = false
+                self?.createStatus = .edit//reset to edit
+                self?.backAfterUpdate()
+            }
         } else {
-            //case edit exiting content
-            let s = UIStoryboard(name: "FlashCard", bundle: nil)
-            let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
-            vc.createStatus = .edit
-            vc.isTurnBack = true
-            vc.viewModel =  self.viewModel
+            self.backAfterUpdate()
+        }
+    }
+    
+    func backAfterUpdate() {
+        //QA request https://app.clickup.com/t/2771k4y
+        
+        //from CreateMaterialViewController
+        guard let detail = self.viewModel.detail else { return }
+        if detail.requestStatus == .approved {
+            //dissmiss to parent VC (home, mylibrary, mymaterial)
+            let UGCCreateVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "CreateMaterialListView") }
+            let dHomeVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "DynamicHomeViewController") }
+            if let _ = UGCCreateVC, let _ = dHomeVC  {
+                //dissmiss to parent VC (home, mylibrary, mymaterial)
+                self.dismiss(animated: true)
+            } else {
+                self.navigationController?.popViewController(animated: true)
+            }
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    @objc func editPressed() {
+        if self.isRequireField() {
+            return
+        }
+        self.callAPIFlashDetailUpdate()
+        
+        if self.viewModel.contentCode == .flashcard {
+            if let flEditorVC = self.navigationController?.viewControllers.last as? FLEditorViewController {
+                //case from new flashcard has flPostVC in last
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                //case edit exiting content
+                let s = UIStoryboard(name: "FlashCard", bundle: nil)
+                let vc = s.instantiateViewController(withIdentifier: "FLEditorViewController") as! FLEditorViewController
+                vc.createStatus = .edit
+                vc.isTurnBack = true
+                vc.viewModel =  self.viewModel
+                if let nav = self.navigationController {
+                    nav.pushViewController(vc, animated: true)
+                } else {
+                    self.present(vc, animated: true, completion: nil)
+                }
+            }
+        } else if self.viewModel.contentCode == .video
+                    ||  self.viewModel.contentCode == .audio {
+            guard let detail = self.viewModel.detail else { return }
+            let model = UGCCreateMediaViewModel(mId: self.viewModel.materialId,
+                                                contentCode: self.viewModel.contentCode)
+            model.contentCode = self.viewModel.contentCode
+            model.detail = detail
+            
+            let createVideoView =  UGCCreateMediaSwiftUIView(isCreated: false)
+                .environmentObject(model)
+            let vc = UIHostingController(rootView: createVideoView)
+            vc.view.backgroundColor = .white
             if let nav = self.navigationController {
                 nav.pushViewController(vc, animated: true)
             } else {
                 self.present(vc, animated: true, completion: nil)
             }
         }
+        
     }
     
     @objc func previewPressed() {
+        if self.isRequireField() {
+            return
+        }
+        
         self.callAPIFlashDetailUpdate()
         
-        let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
-        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
-        vc.isShowInfo = false
-        vc.playerState = .preview
-        vc.viewModel =  self.viewModel
+        if self.viewModel.contentCode == .flashcard {
+            let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
+            let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
+            vc.isShowInfo = false
+            vc.playerState = .preview
+            vc.viewModel =  self.viewModel
+            
+            if let nav = self.navigationController {
+                nav.pushViewController(vc, animated: true)
+            } else {
+                self.present(vc, animated: true, completion: nil)
+            }
+            
+        } else if self.viewModel.contentCode == .video
+                    ||  self.viewModel.contentCode == .audio {
+            self.openPlayerNormalFullScreen()
+        }
+    }
+    
+    private func openPlayerNormalFullScreen() {
+        guard let urlStr = self.viewModel.detail?.url,
+        let url = URL(string: urlStr) else { return }
         
+        guard let detail = self.viewModel.detail else { return }
+        let model = UGCCreateMediaViewModel(mId: self.viewModel.materialId, contentCode: self.viewModel.contentCode)
+        model.detail = detail
+        
+        let playerView = UGCCustomPlayerView(playerVM: UGCPlayerViewModel(), isNeedMargin: false)
+            .environmentObject(model)
+            .edgesIgnoringSafeArea(.all)
+        
+        let vc = UIHostingController(rootView: playerView)
+        vc.modalTransitionStyle = .crossDissolve
+        vc.modalPresentationStyle = .overFullScreen
         if let nav = self.navigationController {
-            nav.pushViewController(vc, animated: true)
+            nav.present(vc, animated: true, completion: {
+                //vc.timeSlider.delegate = self
+            })
         } else {
-            self.present(vc, animated: true, completion: nil)
+            self.present(vc, animated: true, completion: {
+                //vc.timeSlider.delegate = self
+            })
         }
     }
     
@@ -447,11 +625,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.view.endEditing(true)
         self.viewModel.callAPICategoryList { (categoryPageResult) in
             guard let categoryPage = categoryPageResult else { return }
-            var categoryView = UGCCatagoryListView(items: categoryPage.list) { category in
-                print("UGCCatagoryListView: select: \(category.name)")
-                self.selectedCategory = category
-            }
-            //categoryView.delegate = self
+            var categoryView = UGCCatagoryListView(items: categoryPage.list)
+            categoryView.delegate = self
             let host = UIHostingController(rootView: categoryView)
             if let nav = self.navigationController {
                 nav.pushViewController(host, animated: true)
@@ -501,8 +676,10 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     @IBAction func submitPressed(_ sender: UIButton) {
-        let detail = self.viewModel.detail!
-        self.openPopupWith(detail: detail)
+        if !self.isRequireField() {
+            let detail = self.viewModel.detail!
+            self.openPopupWith(detail: detail)
+        }
     }
     
     @IBAction func cancelPressed(_ sender: UIButton) {
@@ -513,7 +690,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     func openPopupWith(detail: FLDetailResult) {
         let detail = self.viewModel.detail!
         var desc = "confirm_submit_material".localized()
-        if detail.requestStatus == .completed {
+        if detail.requestStatus == .approved {
             desc = "confirm_cancel_request".localized()
         }
         
@@ -527,11 +704,13 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     func callApiPost(requestStatus: RequestStatus) {
-        if requestStatus == .completed {
-            self.callAPIFlashDetailCancel()
+        self.isNeedUpdate = true
+        
+        if requestStatus == .inprogress || requestStatus == .notStart {
+            self.callAPIFlashDetailCancel()//cancel
             
-        } else if requestStatus == .none {
-            self.callAPIFlashDetailUpdate()
+        } else if requestStatus == .none || requestStatus == .requestExpired {
+            self.callAPIFlashDetailUpdate(isSubmit: true)//submit
         }
     }
     
@@ -543,7 +722,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
     }
     
-    func callAPIFlashDetailUpdate() {
+    func callAPIFlashDetailUpdate(isSubmit: Bool = false) {
         if self.isNeedUpdate {
             let json = self.createJSON()
             ConsoleLog.show("callAPIFlashDetailUpdate")
@@ -551,24 +730,50 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                 self?.isNeedUpdate = false
                 self?.createStatus = .edit//reset to edit
                 self?.loadDetail(updatedDetail)
-                self?.callAPIFlashDetailSubmit()
+                if isSubmit {
+                    self?.callAPIFlashDetailSubmit()
+                }
             }
         }
     }
     
     func callAPIFlashDetailSubmit() {
         self.viewModel.callAPIFlashDetailSubmit { [weak self] (detail) in
-            self?.viewModel.detail?.contentRequest?.status = .completed
+            self?.viewModel.detail?.contentRequest?.status = .approved
             self?.viewModel.detail?.displayStatus = .unpublish//mock
             self?.loadDetail(detail)
-            
+            self?.isNeedUpdate = true
+            self?.isNeedChangeBarItems = false
             self?.callAPIFlashDetail()
+        }
+    }
+    
+    func dismiss(animated: Bool = true) {//Dismiss many case
+        
+        let myMaterialListView = self.navigationController?.viewControllers.first { $0.className.contains(find: "MyMaterialListView") }
+        if let targetVC = myMaterialListView {
+            //case create new in MyMaterialListView
+            self.navigationController?.popToViewController(targetVC, animated: animated)
+            return
+        }
+        
+        let myLibraryVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "MyLibraryViewController") }
+        if let targetVC = myLibraryVC {
+            self.navigationController?.popToViewController(targetVC, animated: animated)
+            return
+        }
+        
+        let dHomeVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "DynamicHomeViewController") }
+        if let targetVC = dHomeVC {
+            self.navigationController?.popToViewController(targetVC, animated: animated)
+            return
         }
     }
     
     func callAPIFlashDetailCancel() {
         self.viewModel.callAPIFlashDetailCancel { [weak self]  (detail) in
-            self?.loadDetail(detail)
+            self?.isNeedChangeBarItems = true
+            self?.callAPIFlashDetail()
         }
     }
     
@@ -578,7 +783,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         var dict = [String: Any]()
         
         var tags = [Int]()
-        if let latestTags = latestTags {
+        if let latestTags = self.latestTags {
             for tag in latestTags {
                 tags.append(tag.id)
             }
@@ -604,22 +809,27 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     @IBAction func myMaterialPressed(_ sender: UIButton) {
+        if self.isRequireField() {
+            return
+        }
         
-        let myMaterialListView = self.navigationController!.viewControllers.first { $0.className.contains(find: "MyMaterialListView") }
-        if let targetVC = myMaterialListView {
-            //case create new in MyMaterialListView
-            self.navigationController?.popToViewController(targetVC, animated: true)
-        } else {
-            //case create new in MyLibraryViewController
-            let myLibraryVC = self.navigationController!.viewControllers.first { $0.className.contains(find: "MyLibraryViewController") }
-            if let targetVC = myLibraryVC {
-                self.navigationController?.popToViewController(targetVC, animated: true)
+        if self.isNeedUpdate {
+            let json = self.createJSON()
+            ConsoleLog.show("callAPIFlashDetailUpdate")
+            self.showLoading(nil)
+            self.viewModel.callAPIFlashDetailUpdate(parameter: json) { [weak self] (updatedDetail) in
+                self?.hideLoading()
+                self?.isNeedUpdate = false
+                self?.createStatus = .edit//reset to edit
+                self?.dismiss()
             }
+        } else {
+            self.dismiss()
         }
     }
     
     private func manageTagContentViewWith(tags:[UGCTagResult]) {
-        
+        self.latestTags = tags
         if tags.isEmpty {
             self.tagView.isHidden = true
             self.tagPlaceholderLabel.text = FlashStyle.post.tagPlaceHolder
@@ -632,6 +842,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             }
             self.tagView?.textFont = .font(13, .text)
             self.tagView?.addTags(tagList)
+            
             DispatchQueue.main.async {
                 self.tagView.isHidden = false
                 let marginY: CGFloat = self.tagView.marginY / 2
@@ -645,6 +856,8 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                     self.tagView?.tagViews[i].tag = tags[i].id
                     self.tagView?.tagViews[i].cornerRadius = CGFloat(self.tagView.tagViewHeight / 2)
                     self.tagView?.tagViews[i].clipsToBounds = true
+                    self.tagView?.tagViews[i].textColor = self.tagTextColor
+                    self.tagView?.tagViews[i].tagBackgroundColor = self.tagBGTextColor
                 }
             }
         }
@@ -661,12 +874,14 @@ extension FLPostViewController: TagListViewDelegate, TagListSelectViewController
     
     func tagListSelectViewController(_ tags: [UGCTagResult]) {
         print("select: \(tags.count) tag")
+        self.isNeedUpdate = true
         self.latestTags = tags
         self.manageTagContentViewWith(tags: tags)
     }
     
     func didSelectCategory(_ category: CategoryResult) {
         print("category: \(category.id) \(category.name)")
+        self.isNeedUpdate = true
         self.selectedCategory = category
     }
 }
@@ -691,7 +906,7 @@ extension FLPostViewController: UINavigationControllerDelegate, UIImagePickerCon
             self.coverImageView.image = uiimage
             let imageBase64 = uiimage.jpegData(compressionQuality: 1)?.base64EncodedString()
             self.imageBase64 = imageBase64
-            let imageSize: Int = data.count
+            self.isNeedUpdate = true
         }
     }
     
@@ -708,14 +923,19 @@ extension FLPostViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        self.viewModel.detail?.name = text
+        let title = text.trimmingCharacters(in: .whitespaces)
+        if !title.isEmpty {
+            self.viewModel.detail?.nameContent = text
+            self.isNeedUpdate = true
+        }
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-
+        
         if let text = textField.text, textField == self.titleTextField {
             let currentText = text + string
             let maxCha = FlashStyle.post.maxChaTitle
+            self.isNeedUpdate = true
             return currentText.count <= maxCha
          }
         return true
@@ -732,11 +952,13 @@ extension FLPostViewController: UITextFieldDelegate {
 extension FLPostViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.inputAccessoryView = self.inputToolbar
+        self.isNeedUpdate = true
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         guard let text = textView.text else { return }
         self.viewModel.detail?.desc = text
+        self.isNeedUpdate = true
     }
 }
 

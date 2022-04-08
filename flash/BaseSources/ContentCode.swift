@@ -56,13 +56,25 @@ enum ContentCode: String {
     case pdf = "material.pdf"
     case article = "material.article"
     case learningMaterial = "learning_content.learningcontent"
-    case flash = "flashcard.flashcard"
+    case flashcard = "flashcard.flashcard"
+    
+    func fieldUGCCover() -> String {
+        if self == .video {
+            return "image_video_id"
+        } else if self == .audio {
+            return "image_audio_id"
+        } else {
+            return "image"
+        }
+    }
     
     func path() -> String {
         if self == .video {
             return "video"
         } else if self == .audio {
             return "audio"
+        } else if self == .flashcard {
+            return "flash-card"
         } else {
             return "course"
         }
@@ -107,7 +119,7 @@ enum ContentCode: String {
             color = pdfColor
         case.article:
             color = articleColor
-        case.flash:
+        case.flashcard:
             color = flashcardColor
         default:
             color = .gray

@@ -154,7 +154,7 @@ struct FLStageViewUIRep: UIViewRepresentable {
 
 struct FLStageViewUI_Previews: PreviewProvider {
     static var previews: some View {
-        FLStageViewUI(cardSize: CGSize(width: 300, height: 400), flCreator: FLCreator(isEditor: false), viewModel: FLFlashCardViewModel(flashId: 6), flColor: MockObject.flColor, card: MockObject.cardDetail)
+        FLStageViewUI(cardSize: CGSize(width: 300, height: 400), flCreator: FLCreator(isEditor: false), viewModel: FLFlashCardViewModel(materialId: 6), flColor: MockObject.flColor, card: MockObject.cardDetail)
     }
 }
 

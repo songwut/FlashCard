@@ -14,16 +14,10 @@ protocol BasePagingProtocol {
     var isLoadNextPage: Bool { get set }
 }
 
-protocol BaseViewProtocol {
-    func showLoading()
-    func hideLoading()
-    
-}
-
 class FLFlashCardViewModel: BaseViewModel {
     
-    init(flashId: Int? = nil) {
-        self.flashId = flashId ?? 6
+    init(materialId: Int? = nil) {
+        self.materialId = materialId ?? 6
     }
     func showLoading() {//show loading on window
         let window = UIApplication.shared.window
@@ -37,9 +31,14 @@ class FLFlashCardViewModel: BaseViewModel {
     var isLoadNextPage = false
     var nextPage: Int?
     
+    var learningPathParam: APIParam?
+    var course:Parent?
+    var event:Parent?
+    
+    var safeAreaBottomHeight: CGFloat = 0.0
     var stageVC: FLEditorViewController?
     var myFlashCard: LMMaterialPageResult?
-    var detail: FLDetailResult?
+    var detail: UGCDetailResult?
     var pageList = [FLCardPageResult]()
     var flashCardDetail: FLFlashDetailResult? {
       didSet {
@@ -50,7 +49,13 @@ class FLFlashCardViewModel: BaseViewModel {
     var currentPage: FLCardPageResult?
     var currentPageDetail: FLCardPageDetailResult?
     var newCard = FLNewResult(JSON: ["total" : 0])!
-    var flashId = flashFixId
+    var materialId = 0
+    var contentCode: ContentCode = .flashcard
+    var slotId:Int?
+    
+    func isLimitCard() -> Bool {
+        return self.pageList.count == FlashStyle.maxCard
+    }
     
     func getQuizContent() -> FlashElement? {
         let current = self.currentPageDetail?.componentList.filter({ (flash) -> Bool in
@@ -76,18 +81,32 @@ class FLFlashCardViewModel: BaseViewModel {
         }
     }
     
+    func callAPIMyMaterial(_ method:APIMethod, body:[String: Any]? = nil, param: EndPointParam? = nil, complete: @escaping (_ result: LMMaterialPageResult?) -> ()) {
+        let request = FLRequest()
+        request.endPoint = .myContent
+        request.apiMethod = method
+        request.parameter = body
+        request.endPointParam = param
+        request.apiType = .json
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: LMMaterialPageResult?, isCache, error) in
+            self?.checkResponseBody(responseBody)
+            self?.myFlashCard = result
+            complete(result)
+        }
+    }
+    
     //callAPINewFlashCard | callAPIFlashDetail
     //deferen endPoint but same Data
-    func callAPINewFlashCard(profile: ProfileResult, complete: @escaping (_ result: FLDetailResult?) -> ()) {
+    func callAPINewFlashCard(profile: ProfileResult, complete: @escaping (_ result: UGCDetailResult?) -> ()) {
         let request = FLRequest()
         request.endPoint = .ugcFlashCard
         request.apiMethod = .post
         request.parameter = self.createJSONNewFlash(profileId: profile.id)
         request.apiType = .json
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: UGCDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
             if let flashIs = result?.id {
-                self?.flashId = flashIs
+                self?.materialId = flashIs
             }
             if let detail = result {
                 self?.detail = detail
@@ -96,41 +115,28 @@ class FLFlashCardViewModel: BaseViewModel {
         }
     }
     
-    func callAPIFlashDetail(_ method:APIMethod ,status: FLStatus? = nil, complete: @escaping (_ result: FLDetailResult?) -> ()) {
+    func callAPIFlashDetail(_ method:APIMethod ,status: FLStatus? = nil, complete: @escaping (_ result: UGCDetailResult?) -> ()) {
         let request = FLRequest()
         request.apiMethod = method
-        request.endPoint = .ugcFlashCardDetail
-        request.arguments = ["\(self.flashId)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+        request.endPoint = UGCPath.materialDetail(code: self.contentCode)
+        request.arguments = ["\(self.materialId)"]
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: UGCDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
             if let detail = result {
                 self?.detail = detail
             }
             complete(result)
         }
-        
-        //TODO: param for submit, calcle
-        print("callAPIDetail\n\(request.url)")
-        /*
-        let fileName = "ugc-flash-card-id"
-        JSON.read(fileName) { (object) in
-            if let json = object as? [String : Any],
-               let detail = FLDetailResult(JSON: json) {
-                self.detail = detail
-            }
-            complete()
-        }
-        */
     }
     
-    func callAPIFlashDetailUpdate(parameter: [String: Any]? , complete: @escaping (_ result: FLDetailResult?) -> ()) {
+    func callAPIFlashDetailUpdate(parameter: [String: Any]? , complete: @escaping (_ result: UGCDetailResult?) -> ()) {
         guard let detail = self.detail else { return }
         let request = FLRequest()
         request.apiMethod = .patch
-        request.endPoint = .ugcFlashCardDetail
+        request.endPoint = UGCPath.materialDetail(code: self.contentCode)
         request.parameter = parameter
         request.arguments = ["\(detail.id)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: UGCDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
             if let detail = result {
                 self?.detail = detail
@@ -139,13 +145,13 @@ class FLFlashCardViewModel: BaseViewModel {
         }
     }
     
-    func callAPIFlashDetailSubmit(complete: @escaping (_ result: FLDetailResult?) -> ()) {
+    func callAPIFlashDetailSubmit(complete: @escaping (_ result: UGCDetailResult?) -> ()) {
         guard let detail = self.detail else { return }
         let request = FLRequest()
         request.apiMethod = .post
-        request.endPoint = .ugcFlashPostSubmit
+        request.endPoint = UGCPath.materialSubmit(code: self.contentCode)
         request.arguments = ["\(detail.id)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: UGCDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
             if let detail = result {
                 self?.detail = detail
@@ -154,13 +160,13 @@ class FLFlashCardViewModel: BaseViewModel {
         }
     }
     
-    func callAPIFlashDetailCancel(complete: @escaping (_ result: FLDetailResult?) -> ()) {
+    func callAPIFlashDetailCancel(complete: @escaping (_ result: UGCDetailResult?) -> ()) {
         guard let detail = self.detail else { return }
         let request = FLRequest()
         request.apiMethod = .post
-        request.endPoint = .ugcFlashPostCancel
+        request.endPoint = UGCPath.materialCancel(code: self.contentCode)
         request.arguments = ["\(detail.id)"]
-        API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLDetailResult?, isCache, error) in
+        API.request(request) { [weak self] (responseBody: ResponseBody?, result: UGCDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
             if let detail = result {
                 self?.detail = detail
@@ -172,7 +178,7 @@ class FLFlashCardViewModel: BaseViewModel {
     func callAPIFlashCard(complete: @escaping (_ result: FLFlashDetailResult?) -> ()) {
         let request = FLRequest()
         request.endPoint = .ugcCardList
-        request.arguments = ["\(self.flashId)"]
+        request.arguments = ["\(self.materialId)"]
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
             self?.checkResponseBody(responseBody)
             if let item = result {
@@ -182,23 +188,13 @@ class FLFlashCardViewModel: BaseViewModel {
                 complete(self?.flashCardDetail)
             }
         }
-
-//        let fileName = "ugc-flash-card-id-card"
-//        JSON.read(fileName) { (object) in
-//            if let json = object as? [String : Any],
-//               let item = FlDetailResult(JSON: json) {
-//                flCard = item
-//                pageList = item.list
-//            }
-//            complete(flCard)
-//        }
     }
     
     func callAPIAddNewCard( param:[String: Any]? = nil, complete: @escaping (_ result: FLCardPageResult?) -> ()) {
         let request = FLRequest()
         request.apiMethod = .post
         request.endPoint = .ugcCardList
-        request.arguments = ["\(self.flashId)"]
+        request.arguments = ["\(self.materialId)"]
         request.parameter = param
         request.apiType = .json
         API.request(request) { [weak self] (responseBody: ResponseBody?, result: FLCardPageResult?, isCache, error) in
@@ -210,7 +206,7 @@ class FLFlashCardViewModel: BaseViewModel {
             }
         }
     }
-    //ugcCardDetailAnswer
+    
     func callAPICardDetail(_ currentCard: FLCardPageResult? ,
                            method: APIMethod = .get ,
                            param:[String: Any]? = nil,
@@ -221,7 +217,7 @@ class FLFlashCardViewModel: BaseViewModel {
         request.apiMethod = method
         request.parameter = param
         request.endPoint = .ugcCardListDetail
-        request.arguments = ["\(self.flashId)", "\(card.id)"]
+        request.arguments = ["\(self.materialId)", "\(card.id)"]
         request.apiType = .json
         
         //JSON format error
@@ -232,51 +228,6 @@ class FLFlashCardViewModel: BaseViewModel {
             }
             complete(result)
         }
-        
-        /*
-        
-        guard let url = URL(string: request.url) else { return }
-        var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
-        urlRequest.httpMethod = method.rawValue
-        if let json = param {
-            let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-            urlRequest.httpBody = jsonData
-        }
-        
-        //header
-        if let headers = request.headers {
-            for (key, value) in headers {
-                urlRequest.addValue(key, forHTTPHeaderField: value)
-            }
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let self = self else { return }
-                guard let data = data, error == nil else { return }
-                DispatchQueue.main.async {
-                    let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-                    print("HTTPURLResponse: \(String(describing: response)))")
-                    if let httpResponse = response as? HTTPURLResponse {
-                            print("statusCode: \(httpResponse.statusCode)")
-                    }
-                    if let responseJSON = responseJSON as? [String: Any] {
-                        print("API responseJSON:\n\(responseJSON)\n======")
-                        self.currentPageDetail = FLCardPageDetailResult(JSON: responseJSON)
-                        complete(self.currentPageDetail)
-                    }
-                }
-            }
-        task.resume()
- 
-        */
-//        let fileName = "ugc-flash-card-id-card-id"
-//        JSON.read(fileName) { (object) in
-//            if let dict = object as? [String : Any] {
-//                let detail = FLCardPageDetailResult(JSON: dict)!
-//                self.currentPageDetail = detail
-//                complete(detail)
-//            }
-//        }
     }
     
     func callAPICardDetailAnswer(_ currentCard: FLCardPageResult? ,
@@ -289,7 +240,7 @@ class FLFlashCardViewModel: BaseViewModel {
         request.apiMethod = method
         request.parameter = param
         request.endPoint = .ugcCardDetailUserAnswer
-        request.arguments = ["\(self.flashId)", "\(card.id)"]
+        request.arguments = ["\(self.materialId)", "\(card.id)"]
         request.apiType = .json
         
         API.request(request) { (responseBody: ResponseBody?, result: FLAnswerResult?, isCache, error) in
@@ -316,12 +267,13 @@ class FLFlashCardViewModel: BaseViewModel {
             request.apiMethod = method
             request.parameter = param
             request.endPoint = .ugcCardDetailUserAnswer
-            request.arguments = ["\(self.flashId)", "\(card.id)"]
+            request.arguments = ["\(self.materialId)", "\(card.id)"]
             request.apiType = .json
             
             API.request(request) { (responseBody: ResponseBody?, pageResult: UserAnswerPageResult?, isCache, error) in
                 self.checkResponseBody(responseBody)
                 if let page = pageResult {
+                    self.answerPageResult = page
                     self.nextPage = page.next
                     if self.isFirstPage {
                         self.answerPageResult?.userAnswerList = page.userAnswerList
@@ -344,9 +296,9 @@ class FLFlashCardViewModel: BaseViewModel {
                             choiceList.append(choice)
                         }
                     }
-                    let userAnswerPage = UserAnswerPageResult(JSON: ["name": ""])!
-                    userAnswerPage.choiceList = choiceList
-                    complete(userAnswerPage)
+                    self.answerPageResult = UserAnswerPageResult(JSON: ["name": ""])!
+                    self.answerPageResult?.choiceList = choiceList
+                    complete(self.answerPageResult!)
                 }
             }
         }
@@ -371,7 +323,7 @@ class FLFlashCardViewModel: BaseViewModel {
         let request = FLRequest()
         request.apiMethod = .post
         request.endPoint = .ugcCardIdDropbox
-        request.arguments = ["\(self.flashId)", "\(card.id)"]
+        request.arguments = ["\(self.materialId)", "\(card.id)"]
         request.apiType = .url
         
         //request.contentType = "multipart/form-data; boundary=----\(boundary)"
@@ -438,6 +390,7 @@ class FLFlashCardViewModel: BaseViewModel {
                             print("JSON: \(json)")
                             if let file = media.file {
                                 //do something after upload video to api
+                                iView.element?.mp4VideoUploade = file
                                 iView.element?.src = file
                             } else {
                                 iView.element?.src = media.image
@@ -463,7 +416,7 @@ class FLFlashCardViewModel: BaseViewModel {
         let request = FLRequest()
         request.apiMethod = .get
         request.endPoint = .ugcCardIdDropbox
-        request.arguments = ["\(self.flashId)", "\(cardId)"]
+        request.arguments = ["\(self.materialId)", "\(cardId)"]
         API.request(request) { (responseBody: ResponseBody?, result: FLDropboxPageResult?, isCache, error) in
             self.checkResponseBody(responseBody)
             if let page = result {
@@ -485,7 +438,7 @@ class FLFlashCardViewModel: BaseViewModel {
         request.endPoint = .ugcCardList
         request.parameter = ["id_list": idList]
         request.apiMethod = apiMethod
-        request.arguments = ["\(self.flashId)"]
+        request.arguments = ["\(self.materialId)"]
         API.request(request) { (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
             self.checkResponseBody(responseBody)
             self.flashCardDetail = result
@@ -508,7 +461,7 @@ class FLFlashCardViewModel: BaseViewModel {
         request.endPoint = .ugcCardListDuplicate
         request.parameter = ["id_list": idList]
         request.apiMethod = apiMethod
-        request.arguments = ["\(self.flashId)"]
+        request.arguments = ["\(self.materialId)"]
         API.request(request) { (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
             self.checkResponseBody(responseBody)
             self.flashCardDetail = result

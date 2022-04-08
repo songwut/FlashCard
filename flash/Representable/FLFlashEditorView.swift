@@ -30,10 +30,10 @@ struct FLEditorViewControllerRep: UIViewControllerRepresentable {
         let controller = storyboard.instantiateViewController(identifier: "FLEditorViewController") as! FLEditorViewController
         
         if let flashId = self.flashId {
-            controller.viewModel.flashId = flashId
+            controller.viewModel.materialId = flashId
             controller.createStatus = .edit
         } else {
-            controller.viewModel.flashId = 0
+            controller.viewModel.materialId = 0
             controller.createStatus = .new
         }
         return controller

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class PopupManager: NSObject {
     class var shared: PopupManager {
@@ -60,5 +61,24 @@ class PopupManager: NSObject {
         }
         
         PopupViewController.showVC(vc!, content: popup, didClose: btnAction)
+    }
+    
+    class func showWarningUI(_ detail: String, confirm: ActionButton? = nil) -> some View {
+        let btnAction = DidAction { (sender) in
+            //do after close popup
+        }
+        
+        let popup: PopupContent
+        let icon = ImageTint(image: UIImage(named: "ic_v2_alert"), color: .error())
+        icon.size = 75
+        if let confirmAction = confirm {
+            popup = PopupContent(atbTitle: nil, title: "warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: nil, closeButtonTitle: "cancel".localized(), confirmAction: confirmAction)
+        } else {
+            popup = PopupContent(title: "Warning".localized(), detail: detail.localized(), icon: icon, otherButtonTitles: nil,  closeButtonTitle: "OK".localized(), isError: true)
+        }
+        popup.closeColor = .info_75()
+        popup.confirmColor = .info_75()
+        
+        return UGCPopupView(content: popup, didClose: btnAction, error: nil)
     }
 }

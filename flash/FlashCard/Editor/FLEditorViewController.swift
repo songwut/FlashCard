@@ -16,7 +16,6 @@ enum FLCreateStatus {
     case edit
 }
 
-
 final class FLEditorViewController: FLBaseViewController {
     @IBOutlet private weak var topView: UIView!
     @IBOutlet private weak var topViewHeight: NSLayoutConstraint!
@@ -64,6 +63,8 @@ final class FLEditorViewController: FLBaseViewController {
         return b
     }()
     
+    var postBtn = UIBarButtonItem()
+    
     lazy var addLeftPageButton: UIButton? = {
         let b = self.createAddButton()
         return b
@@ -82,23 +83,33 @@ final class FLEditorViewController: FLBaseViewController {
         print("stage removed")
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.manageVideoStop(row: self.viewModel.pageIndex)
+        self.saveCurrentCardPage()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         title = ""
-        self.titleLabel.textColor = headerTextColor
-        let postBtn = UIBarButtonItem(title: "post".localized(), style: .plain, target: self, action: #selector(postPressed))
-        postBtn.tintColor = headerTextColor
-        self.navigationController?.navigationBar.topItem?.rightBarButtonItems = [postBtn]
+        self.postBtn = UIBarButtonItem(title: "post".localized(), style: .plain, target: self, action: #selector(postPressed))
+        self.postBtn.tintColor = headerTextColor
+        self.navigationController?.navigationBar.topItem?.rightBarButtonItems = [self.postBtn]
+        self.manageVideoPlay(row: self.viewModel.pageIndex)
     }
     
     @objc func postPressed() {
+        self.manageVideoStop(row: self.viewModel.pageIndex)
+        self.saveCurrentCardPage()
+        
         if self.isTurnBack {//case edit
             self.navigationController?.popViewController(animated: true)
         } else {
             //case create new flashcard
             
             let model = FLFlashCardViewModel()
-            model.flashId = viewModel.flashId
+            model.contentCode = .flashcard
+            model.materialId = viewModel.materialId
             let vc = FLPostViewController.instantiate(viewModel: model)
             vc.createStatus = .edit
             vc.title = viewModel.detail?.nameContent ?? ""
@@ -117,6 +128,7 @@ final class FLEditorViewController: FLBaseViewController {
         IQKeyboardManager.shared.enable = false
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.unregisterAllNotifications()
+        
         self.view.updateLayout()
         self.view.backgroundColor = .background()
         self.topView.backgroundColor = .background()
@@ -129,6 +141,7 @@ final class FLEditorViewController: FLBaseViewController {
         self.titleLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width / 2, height: 40)
         self.titleLabel.font = .font(16, .text)
         self.titleLabel.textColor = headerTextColor
+        self.pageCountLabel.text = ""
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.titleLabel)
         self.navigationItem.leftItemsSupplementBackButton = true
         
@@ -157,12 +170,14 @@ final class FLEditorViewController: FLBaseViewController {
         
         self.sliderView = FLSliderView.instanciateFromNib()
         self.sliderView?.backgroundColor = .clear
+        self.sliderView?.contentStackView.spacing = FlashStyle.stage.cellSpacing
         self.contentPageView.addSubview(self.sliderView!)
         
         self.contentPageView.addSubview(self.deletePageButton!)
-        self.contentPageView.addSubview(self.addLeftPageButton!)
+        //self.contentPageView.addSubview(self.addLeftPageButton!)
         self.contentPageView.addSubview(self.addRightPageButton!)
         self.deletePageButton?.addTarget(self, action: #selector(self.deletePressed(_:)), for: .touchUpInside)
+        self.deletePageButton?.isHidden = true
         
         self.flCreator = FLCreator(isEditor: true)
         
@@ -171,7 +186,7 @@ final class FLEditorViewController: FLBaseViewController {
         self.addButton.addTarget(self, action: #selector(self.addButtonPressed(_:)), for: .touchUpInside)
         self.addLeftPageButton?.addTarget(self, action: #selector(self.appLeftPressed(_:)), for: .touchUpInside)
         self.addRightPageButton?.addTarget(self, action: #selector(self.addRightPressed(_:)), for: .touchUpInside)
-        
+        self.previewButton.addTarget(self, action: #selector(self.previewPressed(_:)) , for: .touchUpInside)
         self.prepareToolVC()
         self.contentPageView.alpha = 0.0
         
@@ -195,6 +210,7 @@ final class FLEditorViewController: FLBaseViewController {
         self.viewModel.callAPIFlashDetail(.get) { (flashDetail) in
             guard let detail = flashDetail else { return }
             self.titleLabel.text = detail.name
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.titleLabel)
         }
         
         self.viewModel.callAPIFlashCard { [weak self]  (cardResult: FLFlashDetailResult?) in
@@ -215,13 +231,15 @@ final class FLEditorViewController: FLBaseViewController {
         }
     }
     
-    func reloadCardPage(method: APIMethod, param:[String: Any]? = nil) {
-        let index = self.viewModel.pageIndex
+    func reloadCardPage(method: APIMethod, param:[String: Any]? = nil, index: Int) {
+        ConsoleLog.show("reloadCardPage \(method.rawValue) : at index:\(index)")
         let stage = self.getStageView(at: index)
         let card = self.viewModel.pageList[index]
         self.viewModel.callAPICardDetail(card, method: method, param: param) { (cardDetail) in
             stage.cardDetail = cardDetail
-            self.checkQuizIn(cardDetail: cardDetail)
+            if method == .get {
+                self.checkQuizIn(cardDetail: cardDetail)
+            }
         }
     }
     
@@ -232,32 +250,59 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     func checkQuizIn(cardDetail: FLCardPageDetailResult?) {
-        guard let cardDetail = cardDetail else { return }
-        let isQuizView = self.isQuizViewInStageView(cardDetail: cardDetail)
+        let quiz = cardDetail?.componentList.first {$0.type == .quiz}
+        if let _ = quiz {
+            self.toolVC?.quizMenu?.setQuizButtonEnable(false)
+        } else {
+            self.toolVC?.quizMenu?.setQuizButtonEnable(true)
+        }
+    }
+    
+    func checkQuizIn(_ stage: FLStageView?) {
+        guard let s = stage else { return }
+        let isQuizView = self.isQuizViewInStageView(stage: s)
         self.toolVC?.quizMenu?.setQuizButtonEnable(!isQuizView)
     }
     
-    private func isQuizViewInStageView(cardDetail: FLCardPageDetailResult) -> Bool {
-        let quizElement = cardDetail.componentList.first { (card) -> Bool in
-            return card.type == .quiz
+    private func isQuizViewInStageView(stage: FLStageView) -> Bool {
+        let quizUI = stage.subviews.first { (view) in
+            return view.className == FLQuizView.className
         }
-        if let _ = quizElement {
+        if let _ = quizUI {
             return true
         } else {
             return false
         }
     }
     
+    @objc func previewPressed(_ sender: UIButton) {
+        self.manageVideoStop(row: self.viewModel.pageIndex)
+        let s = UIStoryboard(name: "FlashUserDisplay", bundle: nil)
+        let vc = s.instantiateViewController(withIdentifier: "FLPlayerViewController") as! FLPlayerViewController
+        vc.isShowInfo = false
+        vc.playerState = .preview
+        vc.viewModel =  self.viewModel
+        
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
     @objc func deletePressed(_ sender: UIButton) {
-        ConsoleLog.show("pageList before: \(self.viewModel.pageList.count)")
         let index = self.viewModel.pageIndex
         let stage = self.getStageView(at: index)
         if let card = stage.card {
-            self.viewModel.callAPICardDetail(card, method: .delete, param: nil) { (cardDetail) in
+            self.viewModel.callApiDeleteList([card.id], apiMethod: .delete) { [weak self] in
+                guard let self = self else { return }
                 stage.card = nil
+                self.stageViewList?.remove(at: index)
                 stage.removeFromSuperview()
-                ConsoleLog.show("pageList after delete: \(self.viewModel.pageList.count)")
-                self.updatePageNumber()
+                self.deletePageButton?.isHidden = self.viewModel.pageList.count == 1
+                if let scrollView = self.sliderView?.scrollView {
+                    self.scrollViewDidEndDragging(scrollView, willDecelerate: true)
+                }
             }
         }
     }
@@ -267,7 +312,12 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     @objc func addRightPressed(_ sender: UIButton) {
+        if self.viewModel.isLimitCard() {
+            PopupManager.showWarning("warning_maximum_card".localized(), at: self)
+            return
+        }
         self.saveCurrentCardPage()
+        self.toolVC?.quizMenu?.setQuizButtonEnable(true)
         
         self.showLoading(nil)
         self.callAPIAddNewCard {  [weak self]  (cardPage:FLCardPageResult?) in
@@ -278,6 +328,7 @@ final class FLEditorViewController: FLBaseViewController {
             card.index = lastItemIndex
             self.createNewCardView(card)
             self.gotoPage(index: lastItemIndex)
+            self.deletePageButton?.isHidden = self.viewModel.pageList.count == 1
         }
     }
     
@@ -296,13 +347,19 @@ final class FLEditorViewController: FLBaseViewController {
     
     func saveCurrentCardPage() {
         let index = self.viewModel.pageIndex
+        self.saveCardPage(index: index)
+    }
+    
+    func saveCardPage(index: Int) {
         let currentStage = self.getStageView(at: index)
-        
-        self.saveCoverPage()
-        guard let cardPageJson = currentStage.createJSON() else { return }
-        ConsoleLog.show("addRightPressed index:\(index)")
-        self.reloadCardPage(method: .patch, param: cardPageJson)
-        ConsoleLog.show("save currentStage")
+        if currentStage.isRequireSave {
+            self.saveCoverPage()
+            guard let cardPageJson = currentStage.createJSON() else { return }
+            ConsoleLog.show("addRightPressed index:\(index)")
+            self.reloadCardPage(method: .patch, param: cardPageJson, index: index)
+            ConsoleLog.show("save currentStage")
+            currentStage.isRequireSave = false
+        }
     }
     
     func createNewCardView(_ card: FLCardPageResult) {
@@ -409,6 +466,7 @@ final class FLEditorViewController: FLBaseViewController {
             if !self.isEditorPageReady {
                 self.manageMultitleStage(pageList: pageList)
                 DispatchQueue.main.async {
+                    self.viewModel.pageIndex = self.indexOfMajorCell()
                     let stage = self.getStageView(at: self.viewModel.pageIndex)
                     self.updateAfterAllStageReady(stage: stage)
                 }
@@ -420,10 +478,12 @@ final class FLEditorViewController: FLBaseViewController {
         self.updatePageNumber()
         self.manageAddLR()
         
+        self.deletePageButton?.isHidden = self.viewModel.pageList.count == 1
+        
         if self.createStatus == .new {
             //case new Load first card page
             self.createStatus = .edit
-            self.reloadCardPage(method: .get)
+            self.reloadCardPage(method: .get, index: self.viewModel.pageIndex)
             self.isEditorPageReady = true
             UIView.animate(withDuration: 0.3) {
                 self.contentPageView.alpha = 1.0
@@ -431,9 +491,10 @@ final class FLEditorViewController: FLBaseViewController {
             
         } else {
             //case edit need prepare element in first card
-            
+            stage.stageRatio = self.stageView?.stageRatio ?? 1.0
             stage.isEditor = true
             stage.isRequireToLoadElement = false
+            stage.isVideoAutoPlay = true
             stage.loadElement(viewModel: self.viewModel) { [ weak self] (anyView) in
                 guard let self = self else { return }
                 // all element in stage ready
@@ -451,8 +512,8 @@ final class FLEditorViewController: FLBaseViewController {
                     //iView.isHiddenEditingTool = true
                 }
                 
-                self.checkQuizIn(cardDetail: stage.cardDetail)
             }
+            self.checkQuizIn(stage)
             
             self.isEditorPageReady = true
             UIView.animate(withDuration: 0.3) {
@@ -472,6 +533,7 @@ final class FLEditorViewController: FLBaseViewController {
     
     private func loadElement(in stage: FLStageView) {
         stage.isEditor = true
+        stage.isVideoAutoPlay = false
         stage.loadElement(viewModel: self.viewModel) { [ weak self] (anyView) in
             guard let self = self else { return }
             // all element in stage ready
@@ -585,17 +647,15 @@ final class FLEditorViewController: FLBaseViewController {
     var cellSize = CGSize.zero
     
     func manageAddLR() {
-        //TODO: remove add left just for test, save manual
         self.addLeftPageButton?.isHidden = false
-        
-        if self.viewModel.pageIndex == 0, self.viewModel.pageList.count == 1 {
+        if self.viewModel.pageIndex == 0, self.viewModel.pageList.count == 1 {//first
             self.addRightPageButton?.isHidden = false
             
-        } else if self.viewModel.pageIndex == (self.viewModel.pageList.count - 1) {
+        } else if self.viewModel.pageIndex == (self.viewModel.pageList.count - 1) {//last
             self.addRightPageButton?.isHidden = false
             
         } else {
-            self.addRightPageButton?.isHidden = true
+            self.addRightPageButton?.isHidden = true//between
         }
     }
     
@@ -605,6 +665,26 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     @objc func listButtonPressed(_ sender: UIButton) {
+        self.selectedViewIsHiddenTool(true)
+        let index = self.viewModel.pageIndex
+        let currentStage = self.getStageView(at: index)
+        if currentStage.isRequireSave {
+            currentStage.isRequireSave = false
+            
+            self.saveCoverPage()
+            guard let cardPageJson = currentStage.createJSON() else { return }
+            let stage = self.getStageView(at: index)
+            let card = self.viewModel.pageList[index]
+            self.viewModel.callAPICardDetail(card, method: .patch, param: cardPageJson) { [weak self] (cardDetail) in
+                stage.cardDetail = cardDetail
+                self?.openListVC()
+            }
+        } else {
+            self.openListVC()
+        }
+    }
+    
+    private func openListVC() {
         let s = UIStoryboard(name: "FlashCard", bundle: nil)
         if let vc = s.instantiateViewController(withIdentifier: "FLListViewController") as? FLListViewController {
             vc.viewModel = self.viewModel
@@ -620,9 +700,12 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     private func indexOfMajorCell() -> Int {
-        let itemWidth = self.cellSize.width
+        //FlashStyle.stage.cellSpacing * 2
+        let itemWidth = self.cellSize.width + FlashStyle.stage.cellSpacing
         guard let sliderView = self.sliderView else { return 0 }
+        
         let proportionalOffset = sliderView.scrollView.contentOffset.x / itemWidth
+        ConsoleLog.show("proportionalOffset: \(proportionalOffset)")
         let index = Int(round(proportionalOffset))
         let safeIndex = max(0, min(self.viewModel.pageList.count - 1, index))
         return safeIndex
@@ -647,6 +730,7 @@ final class FLEditorViewController: FLBaseViewController {
                 guard let flColor = sender as? FLColorResult else { return }
                 let stageView = self.getStageView(at: self.viewModel.pageIndex)
                 stageView.flColor = flColor
+                stageView.isRequireSave = true
             })
             self.toolVC?.didChangeTextColor = Action(handler: { [weak self] (sender) in
                 guard let self = self else { return }
@@ -721,6 +805,7 @@ final class FLEditorViewController: FLBaseViewController {
         self.selectedViewIsHiddenTool(true)
         
         let stageView = self.getStageView(at: row)
+        stageView.isRequireSave = true
         if let quizView = stageView.createElement(element) as? FLQuizView {
             element.sort = stageView.subviews.count + 1
             self.manageQuizView(in: quizView, stageView: stageView)
@@ -739,6 +824,7 @@ final class FLEditorViewController: FLBaseViewController {
         self.selectedViewIsHiddenTool(true)
         
         let stageView = self.getStageView(at: row)
+        stageView.isRequireSave = true
         if let iView = stageView.createElement(element) as? InteractTextView {
             element.sort = stageView.subviews.count + 1
             self.manageTextView(in: iView, stageView: stageView)
@@ -780,6 +866,7 @@ final class FLEditorViewController: FLBaseViewController {
         self.selectedViewIsHiddenTool(true)
         
         let stageView = self.getStageView(at: row)
+        stageView.isRequireSave = true
         if let iView = stageView.createElement(element) as? InteractView {
             element.sort = stageView.subviews.count + 1
             self.manageIView(in: iView, stageView: stageView)
@@ -801,6 +888,7 @@ final class FLEditorViewController: FLBaseViewController {
         self.selectedViewIsHiddenTool(true)
         
         let stageView = self.getStageView(at: row)
+        stageView.isRequireSave = true
         if let iView = stageView.createElement(element) as? InteractView {
             element.sort = stageView.subviews.count + 1
             self.manageIView(in: iView, stageView: stageView)
@@ -824,18 +912,21 @@ final class FLEditorViewController: FLBaseViewController {
         self.selectedViewIsHiddenTool(true)
         
         let stageView = self.getStageView(at: row)
+        stageView.isRequireSave = true
+        stageView.isVideoAutoPlay = true
         if let iView = stageView.createElement(element) as? InteractView {
             element.sort = stageView.subviews.count + 1
             iView.element = element
             self.manageIView(in: iView, stageView: stageView)
             iView.isHiddenEditingTool = false
+            //fix for case createNewVideo playerView nil
+            self.getStageView(at: row).playerView = iView.playerView
         }
     }
     
     func updateTextAlignment(_ alignment: FLTextAlignment) {
         guard let iView = self.selectedView as? InteractTextView else { return}
         iView.element?.flAlignment = alignment
-        
         self.manageTextAtb()
     }
     
@@ -853,7 +944,6 @@ final class FLEditorViewController: FLBaseViewController {
         //update flTextStyle to element
         let styleList = element.flTextStyle
         element.flTextStyle = styleList
-        
         self.manageTextAtb()
     }
     
@@ -864,7 +954,7 @@ final class FLEditorViewController: FLBaseViewController {
         let textColor = textView.textColor ?? .black
         let text = textView.text ?? ""
         
-        let font = element.manageFont()
+        let font = element.manageFontScale()
         let alignment = element.flAlignment.alignment()
         
         let paragraph = NSMutableParagraphStyle()
@@ -884,11 +974,17 @@ final class FLEditorViewController: FLBaseViewController {
             textView.attributedText = atbString
             //textView.textAlignment = element.flAlignment.alignment()
         }
+        
+        let row = self.indexOfMajorCell()
+        let stageView = self.getStageView(at: row)
+        stageView.isRequireSave = true
     }
     
     func getStageView(at row: Int) -> FLStageView {
-        let stageView = self.stageViewList?[row]
-        return stageView ?? FLStageView()
+        guard let stageViewList = self.stageViewList,
+                row < (stageViewList.count) else { return FLStageView() }
+        let stageView = stageViewList[row]
+        return stageView
     }
     
     func manageQuizView(in quizView:FLQuizView, stageView: FLStageView) {
@@ -900,9 +996,13 @@ final class FLEditorViewController: FLBaseViewController {
             } completion: { (done) in
                 quizView.removeFromSuperview()
             }
+            stageView.isRequireSave = true
             self.toolVC?.quizMenu?.setQuizButtonEnable(true)
         })
-        
+        quizView.updateChoice = Action(handler: { (sender) in
+            stageView.isRequireSave = true
+        })
+        self.checkQuizIn(stageView)
         stageView.quizManageSizeAnimate(quizView)
     }
     
@@ -925,6 +1025,7 @@ final class FLEditorViewController: FLBaseViewController {
                     ConsoleLog.show("callAPIDropboxUpload")
                 }
             } else if type == .video {
+                iView.playerView?.playPressed()
                 let page = self.viewModel.currentPageDetail
                 self.viewModel.callAPIDropboxUpload(page, media: iView.element?.media, iView: iView) {
                         ConsoleLog.show("callAPIDropboxUpload")
@@ -948,23 +1049,27 @@ final class FLEditorViewController: FLBaseViewController {
     }
     
     func mp4Convert(deviceVideoUrl: URL,  complete: @escaping (URL) -> Void) {
-        let videoCletertor = VideoConvertor(videoURL: deviceVideoUrl)
-        videoCletertor.encodeVideo { (progress) in
-            DispatchQueue.main.async {
-                print("progress: \(progress)")
-                if progress == 1.0 {
-                    self.hideLoading()
-                } else {
-                    let percent = progress * 100
-                    self.showLoading("Video Progressing: \(percent)%")
+        if deviceVideoUrl.absoluteString.contains(find: ".mp4") {
+            complete(deviceVideoUrl)
+        } else {
+            let videoCletertor = VideoConvertor(videoURL: deviceVideoUrl)
+            videoCletertor.encodeVideo { (progress) in
+                DispatchQueue.main.async {
+                    print("progress: \(progress)")
+                    if progress == 1.0 {
+                        self.hideLoading()
+                    } else {
+                        let percent = progress * 100
+                        self.showLoading("Video Progressing: \(percent)%")
+                    }
                 }
-            }
-        } completion: { (url, error) in
-            if let e = error {
-                print("error: \(e)")
-            } else if let urlMP4 = url {
-                print("encodeVideo:\(urlMP4.absoluteString)")
-                complete(urlMP4)
+            } completion: { (url, error) in
+                if let e = error {
+                    print("error: \(e)")
+                } else if let urlMP4 = url {
+                    print("encodeVideo:\(urlMP4.absoluteString)")
+                    complete(urlMP4)
+                }
             }
         }
     }
@@ -991,29 +1096,33 @@ final class FLEditorViewController: FLBaseViewController {
         guard let textView = iView.textView else { return }
         let iViewCenter = iView.center
         
-        UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear) {
-            let textViewFrame = textView.frameFromContent(fixWidth: iView.contentFixWidth)
-            textView.bounds = textViewFrame
-            let iViewWidth = textViewFrame.width + FlashStyle.text.marginIView
-            let iViewHeight = textViewFrame.height + FlashStyle.text.marginIView
-            iView.bounds = CGRect(x: 0, y: 0, width: iViewWidth, height: iViewHeight)
-            iView.center = iViewCenter
-            iView.updateLayout()
+        let textViewFrame = textView.frameFromContent(fixWidth: iView.contentFixWidth)
+        textView.bounds = textViewFrame
+        let iViewWidth = textViewFrame.width + FlashStyle.text.marginIView
+        let iViewHeight = textViewFrame.height + FlashStyle.text.marginIView
+        iView.bounds = CGRect(x: 0, y: 0, width: iViewWidth, height: iViewHeight)
+        iView.center = iViewCenter
+        iView.updateLayout()
+        
+        iView.setPosition(.topRight, handler: .close)
+        iView.setPosition(.topLeft, handler: .none)
+        iView.setPosition(.bottomLeft, handler: .flip)
+        iView.setPosition(.bottomRight, handler: .rotate)
+        
+        iView.setImage(UIImage(named: "fl_delete"), handler: .close)
+        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .none)
+        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .flip)
+        iView.setImage(UIImage(named: "ic-fl-frame"), handler: .rotate)
+        UIView.animate(withDuration: 0.1) {
+            
         } completion: { (done) in
             
-            UIView.animate(withDuration: 0.1) {
-                iView.setPosition(.topRight, handler: .close)
-                iView.setPosition(.topLeft, handler: .none)
-                iView.setPosition(.bottomLeft, handler: .flip)
-                iView.setPosition(.bottomRight, handler: .rotate)
-                
-                iView.setImage(UIImage(named: "fl_delete"), handler: .close)
-                iView.setImage(UIImage(named: "ic-fl-frame"), handler: .none)
-                iView.setImage(UIImage(named: "ic-fl-frame"), handler: .flip)
-                iView.setImage(UIImage(named: "ic-fl-frame"), handler: .rotate)
-            } completion: { (done) in
-                
-            }
+        }
+        UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear) {
+            
+        } completion: { (done) in
+            
+            
         }
     }
     
@@ -1027,12 +1136,8 @@ final class FLEditorViewController: FLBaseViewController {
         view.transform = view.transform.translatedBy(x: 0, y: translation.y)
         gesture.setTranslation(CGPoint.zero, in: self.stageView)
         
-        if gesture.state == .began {
-            
-        } else if gesture.state == .ended {
-            print("quiz view frame : \(view.frame)")//matgintop 16
-        }
-        
+        let stage = self.getStageView(at: self.viewModel.pageIndex)
+        stage.isRequireSave = true
     }
     
     //Screen Rotation
@@ -1058,7 +1163,7 @@ final class FLEditorViewController: FLBaseViewController {
         picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) ?? []
         picker.mediaTypes = ["public.image", "public.movie"]
         picker.videoQuality = .typeHigh
-        picker.videoExportPreset = AVAssetExportPresetHEVC1920x1080
+        picker.videoExportPreset = AVAssetExportPresetPassthrough
         //picker.allowsEditing = true //image can crop, video can cut
         
         //iOS 15 will usefull Hlaf and full screen
@@ -1107,12 +1212,37 @@ final class FLEditorViewController: FLBaseViewController {
         return iViewImageList.count
     }
     
+    private func isUnsupportedType(_ fileNname: String) -> Bool {
+        let name = fileNname.lowercased()
+        //case only ios mov converted to mp4
+        if name.contains("mov")
+            || name.contains("mp4")
+            || name.contains("jpg")
+            || name.contains("jpeg")
+            || name.contains("png") {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    var isManagingVideo = false
 }
 
 extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
+        
         if let originalImage = info[.originalImage] as? UIImage {
+            let imgUrl = info[.imageURL] as? URL
+            let filename = imgUrl?.lastPathComponent ?? ""
+            if self.isUnsupportedType(filename) {
+                let and = "and".localized()
+                let unsupportedtext = "\(filename) " + "upload_invalid_file_type".localized() + " .mp4, jpg, jpeg \(and) png"
+                PopupManager.showWarning(unsupportedtext, at: self)
+                return
+            }
+            
             let size = originalImage.size
             var newWidth: CGFloat = 1024
             if size.height > size.width {
@@ -1133,12 +1263,10 @@ extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerC
             print("formatted result: \(string)\n \(mb)")
             let countImageElement = self.countImageElement()
             if countImageElement >= 20 {
-                PopupManager.showWarning("You can upload 20 images per page !", at: self)
+                PopupManager.showWarning("warning_upload_card".localized(), at: self)
             } else if mb >= 10.0 {
-                PopupManager.showWarning("Your image is too powerful\n(Maximum size is 10 MB)\nPlease upload again", at: self)
+                PopupManager.showWarning("warning_upload_size".localized(), at: self)
             } else {
-                let imgUrl = info[.imageURL] as? URL
-                let filename = imgUrl?.lastPathComponent ?? ""
                 let uuid = UUID().uuidString
                 let JSON:[String : Any] = ["filename" : filename, "size" : imageSize, "uuid" : uuid]
                 let media = FLMediaResult(JSON: JSON)
@@ -1148,39 +1276,56 @@ extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerC
             
         } else if let movieUrl = info[.mediaURL] as? URL {
             print("movieUrl: \(movieUrl)")
+            let filename = movieUrl.lastPathComponent
+            if self.isUnsupportedType(filename) {
+                let and = "and".localized()
+                let unsupportedtext = "\(filename) " + "upload_invalid_file_type".localized() + " .mp4, jpg, jpeg \(and) png"
+                PopupManager.showWarning(unsupportedtext, at: self)
+                return
+            }
             //TODO: check only 1 video per page
             let deviceAsset = AVURLAsset(url: movieUrl)
             let deviceSeconds = deviceAsset.duration.seconds
             print(deviceSeconds)
             if deviceSeconds > 60 {
-                PopupManager.showWarning("Your video is too powerful\n(Maximum length is 60 seconds)\nPlease upload again", at: self)
+                PopupManager.showWarning("warning_upload_length".localized(), at: self)
             } else {
                 self.mp4Convert(deviceVideoUrl: movieUrl) { [weak self] (mp4Url) in
                     DispatchQueue.main.async {
                         let asset = AVURLAsset(url: mp4Url)
-                        guard let track = asset.tracks(withMediaType: .video).first else { return }
-                        let size = track.naturalSize.applying(track.preferredTransform)
-                        
-                        do {
-                            let fileAttributes = try mp4Url.resourceValues(forKeys:[.nameKey, .fileSizeKey])
-                            let fileSize = fileAttributes.fileSize ?? 0
-                            let filename = movieUrl.lastPathComponent
-                            let JSON:[String : Any] = ["filename" : filename]
-                            let media = FLMediaResult(JSON: JSON)
-                            media?.size = fileSize
-                            media?.mp4VideoUrl = mp4Url
-                            if let fileName = fileAttributes.name {
-                                media?.filename = fileName
-                            }
-                            print("video mp4 size: width \(size.width) height: \(size.height)")
-                            self?.createNewVideo(movieUrl, size: size, media: media)
-                        } catch {
-                            print(error, movieUrl)
+                        let mb = Units(bytes:Int64(asset.fileSize ?? 0)).megabytes
+                        if mb > 50 {
+                            PopupManager.showWarning("warning_upload_length".localized(), at: self)
+                            return
+                        } else {
+                            self?.prepareNewVideo(asset: asset, movieUrl: movieUrl)
                         }
-                        
                     }
                 }
             }
+        }
+    }
+    
+    func prepareNewVideo(asset: AVURLAsset, movieUrl: URL) {
+        guard let track = asset.tracks(withMediaType: .video).first else { return }
+        let sizeTransform = track.naturalSize.applying(track.preferredTransform)
+        let size = CGSize(width: abs(sizeTransform.width), height: abs(sizeTransform.height))
+        
+        do {
+            let fileAttributes = try asset.url.resourceValues(forKeys:[.nameKey, .fileSizeKey])
+            let fileSize = fileAttributes.fileSize ?? 0
+            let filename = movieUrl.lastPathComponent
+            let JSON:[String : Any] = ["filename" : filename]
+            let media = FLMediaResult(JSON: JSON)
+            media?.size = fileSize
+            media?.mp4VideoUrl = asset.url
+            if let fileName = fileAttributes.name {
+                media?.filename = fileName
+            }
+            print("video mp4 size: width \(size.width) height: \(size.height)")
+            self.createNewVideo(movieUrl, size: size, media: media)
+        } catch {
+            print(error, movieUrl)
         }
     }
     
@@ -1188,10 +1333,29 @@ extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerC
         picker.dismiss(animated: true, completion: nil)
     }
     
+    func manageVideoStop(row: Int) {
+        let stageView = self.getStageView(at: row)
+        stageView.playerView?.stop()
+    }
+    
+    func manageVideoPlay(row: Int) {
+        if !self.isManagingVideo,
+            let stageViewList = self.stageViewList,
+            row <= (stageViewList.count - 1) {
+            self.isManagingVideo = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                let stageView = self.getStageView(at: row)
+                stageView.playerView?.stop()
+                stageView.playerView?.playPressed()
+                self.isManagingVideo = false
+            }
+        }
+    }
+    
     func manageScrollCenter(_ index:Int, scrollView: UIScrollView) {
         if !self.isManageScrolling {
             self.isManageScrolling = true
-            print(index)
+            print("manageScrollCenter: \(index)")
             let stageWidth = self.cellSize.width
             guard let sliderView = self.sliderView else { return }
             
@@ -1204,7 +1368,9 @@ extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerC
             let newX = centerOffsetX
             let offSet = CGPoint(x: newX, y: centerOffsetY)
             scrollView.setContentOffset(offSet, animated: true)
+            self.manageVideoPlay(row: index)
             self.isManageScrolling = false
+            
         }
     }
 }
@@ -1212,8 +1378,16 @@ extension FLEditorViewController: UINavigationControllerDelegate, UIImagePickerC
 extension FLEditorViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.viewModel.pageIndex = self.indexOfMajorCell()
-        
+        let index = self.indexOfMajorCell()
+        self.viewModel.pageIndex = index
+        print("scrollViewWillBeginDragging: \(index)")
+        self.saveCardPage(index: index)
+        self.manageVideoStop(row: index)
+    }
+    
+    func scrollViewDidScroll(_ scrollViewDidScroll: UIScrollView) {
+        let index = self.indexOfMajorCell()
+        print("scrollViewDidScroll:\(index)")
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -1223,8 +1397,9 @@ extension FLEditorViewController: UIScrollViewDelegate {
         
         // calculate where scrollView should snap to:
         let indexOfMajorCell = self.indexOfMajorCell()
-        print(indexOfMajorCell)
         
+        
+        //TODO: need improve
         // calculate conditions:
         let swipeVelocityThreshold: CGFloat = 0.5 // after some trail and error
         let hasEnoughVelocityToSlideToTheNextCell = self.viewModel.pageIndex + 1 < self.viewModel.pageList.count && velocity.x > swipeVelocityThreshold
@@ -1236,31 +1411,35 @@ extension FLEditorViewController: UIScrollViewDelegate {
             let lineSpacing = FlashStyle.stage.cellSpacing
             let snapToIndex = self.viewModel.pageIndex + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
             let toValue = (self.cellSize.width + lineSpacing) * CGFloat(snapToIndex)
-            
+            print("snapToIndex:\(snapToIndex)")
             // Damping equal 1 => no oscillations => decay animation:
-            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
-                scrollView.contentOffset = CGPoint(x: toValue, y: 0)
-                scrollView.layoutIfNeeded()
-            }, completion: nil)
+//            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
+//                scrollView.contentOffset = CGPoint(x: toValue, y: 0)
+//                scrollView.layoutIfNeeded()
+//            }, completion: nil)
+            
+            self.manageScrollCenter(indexOfMajorCell, scrollView: scrollView)
             
         } else {
             self.manageScrollCenter(indexOfMajorCell, scrollView: scrollView)
         }
         
-        print("scrollViewWillEndDragging")
+        let stage = self.getStageView(at: indexOfMajorCell)
+        self.checkQuizIn(stage)
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("scrollViewDidEndDragging")
         let index = self.indexOfMajorCell()
+        
+        self.manageScrollCenter(index, scrollView: scrollView)
+        
+        print("scrollViewDidEndDragging: \(index)")
         let currentPage = self.viewModel.pageList[index]
         self.viewModel.pageIndex = index
         self.viewModel.currentPage = currentPage
         self.updatePageNumber()
         self.manageAddLR()
         
-        let stage = self.getStageView(at: index)
-        self.checkQuizIn(cardDetail: stage.cardDetail)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -1307,9 +1486,13 @@ extension FLEditorViewController: UITextViewDelegate {
             
             DispatchQueue.main.async {//special fix for textview jumping
                 if let element = iView.element, element.isCreating, iView.contentFixWidth == nil {
-                    iView.contentFixWidth = iView.frame.width
-                    self.updateTextViewHeight(iView)
-                    iView.updateLayout()
+                    iView.initialBounds = iView.bounds
+                    iView.updateFixWidth(scale: 1.01, originalBounds: iView.bounds)
+                    
+                    //iView.updateLayout()
+                    //iView.contentFixWidth = iView.bounds.width
+                    //self.updateTextViewHeight(iView)
+                    
                 }
             }
         }
@@ -1357,12 +1540,14 @@ extension FLEditorViewController: InteractViewDelegate {
     }
     
     func interacViewDidClose(view: InteractView) {
-        view.removeFromSuperview()
         if self.toolVC?.viewModel.tool != .menu {
             self.toolVC?.closePressed(nil)
         }
         self.controlView?.isHidden = true
-        //self.controlView?.deleteButton.isHidden = true
+        
+        self.manageVideoStop(row: self.viewModel.pageIndex)
+        view.playerView?.player = nil
+        view.removeFromSuperview()
         
     }
 }
@@ -1383,6 +1568,16 @@ extension FLEditorViewController: InteractTextViewDelegate {
     func interacTextViewDidBeginMoving(view: InteractTextView) {
         self.selectedView = view
         view.unSelectTextView()
+        
+        var stageView = view.superview as? FLStageView
+        stageView?.isRequireSave = true
+    }
+    
+    func interacTextViewDidEndMoving(view: InteractTextView) {
+        if view.isOutOfSuperView() {
+            view.removeFromSuperview()
+            ConsoleLog.show("isOutOfSuperView removed")
+        }
     }
     
     func interacTextViewDidClose(view: InteractTextView) {
@@ -1394,15 +1589,19 @@ extension FLEditorViewController: InteractTextViewDelegate {
     
     func interacTextViewDidBeginRotating(view: InteractTextView) {
         self.widthChange = view.bounds.width
+        var stageView = view.superview as? FLStageView
+        stageView?.isRequireSave = true
     }
     
     func interacTextViewDidChangeRotating(view: InteractTextView) {
         guard let element = view.element else { return }
         let degrees = Double(view.angle) * Double((180 / Float.pi))
         view.element?.rotation = NSNumber(value: degrees)
-        view.element?.scale = Float(view.hardScale)
+        view.element?.scale = NSNumber(value: Float(view.hardScale))
         print("stickerView angle: \(view.angle) degrees: \(degrees)")
         print("stickerView scale: \(view.hardScale)")
+        var stageView = view.superview as? FLStageView
+        stageView?.isRequireSave = true
         
         view.unSelectTextView()
         
@@ -1411,9 +1610,21 @@ extension FLEditorViewController: InteractTextViewDelegate {
             //CHTStickerView not scale textview just change bounds
             let widthChange = (view.bounds.width / self.widthChange)
             print("widthChange scale: \(widthChange)")
-            let font = element.manageFont(scale: view.hardScale)
-            view.textView?.font = font
+            
+            //let font = element.manageFont(scale: view.hardScale)
+            view.textView?.font = element.font
         }
+    }
+    
+    func interacTextViewDidChangeTranform(view: InteractTextView) {
+        guard let element = view.element else { return }
+        let degrees = Double(view.angle) * Double((180 / Float.pi))
+        view.element?.rotation = NSNumber(value: degrees)
+        view.element?.scale = NSNumber(value: Float(view.hardScale))
+        print("stickerView angle: \(view.angle) degrees: \(degrees)")
+        print("stickerView view.hardScale: \(view.hardScale)")
+        var stageView = view.superview as? FLStageView
+        stageView?.isRequireSave = true
     }
 }
 
@@ -1444,20 +1655,35 @@ extension FLEditorViewController : CHTStickerViewDelegate {
         self.selectedView = iView
         self.selectedViewIsHiddenTool(false)
         
+        var stageView = stickerView.superview as? FLStageView
+        stageView?.isRequireSave = true
+        
         iView.unSelectTextView()
     }
     
+    func stickerViewDidEndMoving(_ stickerView: CHTStickerView!) {
+        guard let iView = stickerView as? InteractView else { return }
+        if iView.isOutOfSuperView() {
+            iView.removeFromSuperview()
+        }
+    }
+    
     func stickerViewDidClose(_ stickerView: CHTStickerView!) {
-        stickerView.removeFromSuperview()
         if self.toolVC?.viewModel.tool != .menu {
             self.toolVC?.closePressed(nil)
         }
         self.controlView?.isHidden = true
+        
+        let index = self.viewModel.pageIndex
+        self.getStageView(at: index).playerView?.stopAndRemove()
+        stickerView.removeFromSuperview()
     }
     
     
     func stickerViewDidBeginRotating(_ stickerView: CHTStickerView!) {
         self.widthChange = stickerView.bounds.width
+        var stageView = stickerView.superview as? FLStageView
+        stageView?.isRequireSave = true
     }
     
     func stickerViewDidChangeRotating(_ stickerView: CHTStickerView!) {
@@ -1465,7 +1691,7 @@ extension FLEditorViewController : CHTStickerViewDelegate {
         guard let element = iView.element else { return }
         let degrees = Double(stickerView.angle) * Double((180 / Float.pi))
         iView.element?.rotation = NSNumber(value: degrees)
-        iView.element?.scale = Float(iView.hardScale)
+        iView.element?.scale = NSNumber(value: Float(iView.hardScale))
         print("stickerView angle: \(stickerView.angle) degrees: \(degrees)")
         print("stickerView scale: \(iView.hardScale)")
         
@@ -1476,8 +1702,8 @@ extension FLEditorViewController : CHTStickerViewDelegate {
             //CHTStickerView not scale textview just change bounds
             let widthChange = (stickerView.bounds.width / self.widthChange)
             print("widthChange scale: \(widthChange)")
-            let font = element.manageFont(scale: iView.hardScale)
-            iView.textView?.font = font
+            //let font = element.manageFontScale(scale: iView.hardScale)
+            iView.textView?.font = element.font
             // update font size
         }
     }
@@ -1494,5 +1720,8 @@ extension FLEditorViewController : CHTStickerViewDelegate {
             //iView.textView?.updateLayout()
             element.updateNewFontSize()
         }
+        
+        var stageView = stickerView.superview as? FLStageView
+        stageView?.isRequireSave = true
     }
 }

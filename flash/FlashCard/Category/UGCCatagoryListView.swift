@@ -11,16 +11,26 @@ protocol UGCCatagoryListViewDelegate {
     func didSelectCategory(_ category: CategoryResult)
 }
 
+
+
+private class UGCCatagoryListViewModel: ObservableObject {
+    
+    @State private var isLoaded = false
+    @Published var items = [UGCCategory]()
+    @Published var selectedCategory: UGCCategory = MockObject.category
+}
+
 struct UGCCatagoryListView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @ObservedObject fileprivate var viewModel = UGCCatagoryListViewModel()
+    
     @State var items = [UGCCategory]()
     @State var selectedCategory: CategoryResult?
     var delegate: UGCCatagoryListViewDelegate?
     
-    var didSelectCategory: (_ category: CategoryResult) -> ()
-    
     var body: some View {
         VStack(alignment: .center, spacing: nil, content: {
+            
             ScrollView {
                 ListView
             }
@@ -33,8 +43,8 @@ struct UGCCatagoryListView: View {
         .background(UIColor.background().color)
     }
     
-    var ListView: some View {
-        VStack(alignment: .leading, spacing: 8, content: {
+    var TotalView: some View {
+        VStack(alignment: .leading, spacing: 0, content: {
             let countCat = items.count.textNumber(many: "category_unit")
             let total = "total".localized()
             Text("\(total) \(countCat)")
@@ -42,14 +52,18 @@ struct UGCCatagoryListView: View {
                 .padding(.trailing, 16)
                 .foregroundColor(UIColor.text75().color)
                 .font(FontHelper.getFontSystem(.l, font: .text).font)
-            
-            ForEach(0..<items.count) { i in
-                let category = self.items[i]
-                UGCCategoryRow(category: category) { selectedCategory in
-                    print("createPressed:\(selectedCategory.name)")
-                    self.selectedCategory = selectedCategory
-                    return didSelectCategory(selectedCategory)
-                }
+        })
+    }
+    
+    var ListView: some View {
+        VStack(alignment: .leading, spacing: 8, content: {
+            TotalView
+            //ForEach(0..<self.items.count, id: \.self) { category in
+            ForEach(self.items) { category in
+                UGCCategoryRow(category: category,
+                               isFirst: true,
+                               parentId: -1,
+                               selectedCategory: $viewModel.selectedCategory)
             }
         })
         .padding(.top, 16)
@@ -59,9 +73,8 @@ struct UGCCatagoryListView: View {
     var FooterView: some View {
         HStack(alignment: .center, spacing: /*@START_MENU_TOKEN@*/nil/*@END_MENU_TOKEN@*/, content: {
             Button(action: {
-                guard let c = selectedCategory else { return }
+                guard let c = self.viewModel.selectedCategory as? CategoryResult else { return }
                 delegate?.didSelectCategory(c)
-                didSelectCategory(c)
                 presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text("done".localized().uppercased())
@@ -97,9 +110,7 @@ struct UGCCatagoryListView_Previews: PreviewProvider {
             UGCCategory(JSON: ["name" : "1"])!,
             UGCCategory(JSON: ["name" : "2"])!
         ]
-        UGCCatagoryListView(items: list) { category in
-            print("UGCCatagoryListView: select: \(category.name)")
-        }
+        UGCCatagoryListView(items: list)
             .previewDevice("iPhone 8")
     }
 }

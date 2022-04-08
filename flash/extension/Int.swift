@@ -8,6 +8,48 @@
 import Foundation
 
 extension Int {
+    var seconds: Int {
+        return self
+    }
+    
+    var isEvenNumber: Bool {
+        return Double(self % 2) == 0.0
+    }
+    
+    var minutes: Int {
+        return self.seconds * 60
+    }
+    
+    var hours: Int {
+        return self.minutes * 60
+    }
+    
+    var days: Int {
+        return self.hours * 24
+    }
+    
+    var weeks: Int {
+        return self.days * 7
+    }
+    
+    var months: Int {
+        return self.weeks * 4
+    }
+    
+    var years: Int {
+        return self.months * 12
+    }
+    
+    var sec: Int {
+        return Int((self % 3600) % 60)
+    }
+    var dayFromSec: Int {
+        return Int(self / 86400)
+    }
+    
+    var minsFromSec: Int {
+        return (Int(self % 3600) / 60)
+    }
     
     func isValueInside(unit: String) -> Bool {
         return unit.range(of: "%@") != nil
@@ -42,5 +84,23 @@ extension Int {
                 return "\(self) \(unit)" // view_unit = View | Views
             }
         }
+    }
+    
+    var materialMin: String {
+        let sec = self.sec
+        let mins = self.minsFromSec
+        
+        var str = ""
+        var unit = "minute".localized()
+        
+        if mins >= 1 || sec >= 1 {
+            str = str + String(format: "%02d:%02d", mins, sec)
+            unit = mins.unit("minute")
+            
+        } else {
+            str = "00:00"
+            unit = mins.unit("minute")
+        }//PO confirm App unit or not ?
+        return str
     }
 }

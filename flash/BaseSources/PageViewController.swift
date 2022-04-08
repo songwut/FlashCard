@@ -20,7 +20,6 @@ class PageViewController: BaseViewController, UICollectionViewDelegateFlowLayout
     var pageSection: Int { return 0 }
     var nextPage: Int?
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let tableView = self.tableView {
@@ -32,10 +31,10 @@ class PageViewController: BaseViewController, UICollectionViewDelegateFlowLayout
             self.tableView?.dataSource = self
             
         } else {
-            //self.collectionView?.registerSupplementaryNib(LoadingFooterView.self, kind: UICollectionView.elementKindSectionFooter)
-            //self.layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-            //self.collectionView?.delegate = self
-            //self.collectionView?.dataSource = self
+            self.collectionView?.registerSupplementaryNib(LoadingFooterView.self, kind: UICollectionView.elementKindSectionFooter)
+            self.layout = self.collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
+            self.collectionView?.delegate = self
+            self.collectionView?.dataSource = self
         }
     }
 

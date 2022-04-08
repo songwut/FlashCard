@@ -12,7 +12,9 @@ struct FLCreateMaterialView: View {
         let color = UIColor.config_primary().color
         ZStack {
             let sStyle = StrokeStyle(lineWidth: 1, dash: [5])
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(UIColor.config_primary_10().color)
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .stroke(color, style: sStyle)
             VStack {
                 let font:Font = .font(14, .text)
@@ -26,10 +28,7 @@ struct FLCreateMaterialView: View {
                     .font(font)
                     .padding(.top, -8)
             }
-            
         }
-        .background(UIColor.config_primary_10().color)
-        
     }
     
 }

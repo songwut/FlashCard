@@ -22,8 +22,13 @@ struct FLCreator {
         var viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
         var viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
         
-        let font:UIFont = element.manageFont()
-        let scale = (element.scale + Float(stage.stageRatio)) - 1.0
+        var viewUnScaleW = ((FlashStyle.baseStageWidth * CGFloat(truncating: element.width)) / 100)
+        var viewUnScaleH = ((FlashStyle.baseStageHeight * CGFloat(truncating: element.height)) / 100)
+        
+        let stageRatio = stage.frame.width / FlashStyle.baseStageWidth
+        var scale = (Float(element.scale) + Float(stageRatio)) - 1.0
+        element.fontScale = CGFloat(scale) // scale font up to screen ratio
+        let font:UIFont = element.manageFontScale()
         
         let iView = InteractTextView.instanciateFromNib()
         //iView.setContentView(iView.textView)
@@ -39,6 +44,8 @@ struct FLCreator {
         iView.isHiddenEditingTool = !self.isEditor
         iView.isUserInteractionEnabled = self.isEditor
         
+        let plusWidth:CGFloat = FlashStyle.text.plusWidth
+        let textMargin = FlashStyle.text.textMargin
         
         let textView = iView.textView!
         //let textView = FLTextView()
@@ -50,7 +57,12 @@ struct FLCreator {
         textView.font = font
         textView.isEditable = self.isEditor
         textView.isScrollEnabled = false
-        textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        textView.textContainerInset = UIEdgeInsets(
+            top: textMargin + 10,
+            left: textMargin + 6,
+            bottom: 6,
+            right: textMargin + 6
+        )
         
         var atb: [NSAttributedString.Key:Any] = [
             .font: font,
@@ -71,35 +83,56 @@ struct FLCreator {
         
         let margin: CGFloat = FlashStyle.text.marginIView
         let marginXY = margin / 2
-        /* case for need width
+        
+        //let textViewSize = element.text.size(font: font, maxWidth: stage.frame.width, maxHeight: stage.frame.height)
+        var textViewSize:CGRect = .zero
+        if element.isCreating {//case new text
+            textViewSize = textView.frameFromContent()
+        } else if self.isEditor {
+            textViewSize = textView.frameFromContent(fixWidth: viewW)
+        } else {
+            textViewSize = textView.frameFromContent(fixWidth: viewW)
+        }
+        let realSizeCal = textView.textAreaSizePur()
+        ConsoleLog.show("//////")
+        ConsoleLog.show("elementText: \(element.text)")
+        ConsoleLog.show("realSizeCal: \(realSizeCal)")
+        ConsoleLog.show("fontSizeDisplay: \(element.fontSizeDisplay) | \(element.fontScale) || \(font)")
+        
+        // case from web need width
         if element.width == 0, element.width == 0 {//case create new
             //let textViewFrame = textView.frameFromContent()
-            //let fixWidth:CGFloat = 40//plus for digit missing
+            //let fixWidth:CGFloat = 60//plus for digit missing
+            
+            scale = Float(stageRatio)// case 1.0 use stageRation// will remove if new way work
+            
+            textViewSize = textView.frameFromContent()
             //viewW = (FlashStyle.text.textWidthFromFont36 * CGFloat(scale)) + fixWidth
-            viewW = textViewSize.width + margin
-            viewH = textViewSize.height + margin
+            viewW = (textViewSize.width * stageRatio) + margin
+            viewH = (textViewSize.height * stageRatio) + margin
+        }
+        
+        //new web UI support text with frame area
+        //viewW, viewH read direct from element
+        //viewW = viewUnScaleW
+        //viewH = viewUnScaleH
+        
+        //this code below for test with text without area
+        /*        if realSizeCal.width > textViewSize.width {//case no \n
+            viewW = textViewSize.width + plusWidth
+            viewH = textViewSize.height + plusWidth
+        } else {//case one line
+            viewW = realSizeCal.width + plusWidth
+            viewH = realSizeCal.height + plusWidth
         }
         */
-        //let textViewSize = element.text.size(font: font, maxWidth: stage.frame.width, maxHeight: stage.frame.height)
-        if element.isCreating {//case new text
-            let textViewSize = textView.frameFromContent()
-            viewW = textViewSize.width
-            viewH = textViewSize.height
-        } else if self.isEditor {
-            let textViewSize = textView.frameFromContent(fixWidth: viewW)
-            viewW = textViewSize.width
-            viewH = textViewSize.height
-        } else {
-            let textViewSize = textView.frameFromContent(fixWidth: viewW)
-            viewW = textViewSize.width
-            viewH = textViewSize.height
-        }
+        
         //let iView1 = InteractView(contentView: textView)!
         iView.type = .text
         //iView.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: viewW, height: viewW))
         
-        //iView.contentView = textView
-        //textView.frame = CGRect(x: marginXY, y: marginXY, width: viewW - margin, height: viewH - margin)
+        iView.contentView = textView
+        textView.frame = CGRect(x: marginXY, y: marginXY, width: viewW - margin, height: viewH - margin)
         textView.textColor = UIColor(element.textColor)
         if let fill = element.fill {
             textView.backgroundColor = UIColor(fill)
@@ -109,19 +142,23 @@ struct FLCreator {
         
         let center = CGPoint(x: viewX, y: viewY)
         let frame = CGRect(x: 0, y: 0, width: viewW + margin, height: viewH + margin)
-        iView.frame = frame
+        iView.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
         iView.center = center
-        textView.updateLayout()
+        //textView.updateLayout()//this line make frame bug
         iView.type = element.type
         iView.element = element
-        iView.scale = (scale == 1.0) ? 1.0 : scale
-        iView.update(scale: scale)
-        let radians = InteractView.getRadians(degrees: element.rotation?.doubleValue ?? 0)
-        iView.update(rotation: radians)
-        iView.backgroundColor = UIColor.clear
-        stage.addSubview(iView)
-        
+        iView.backgroundColor = .clear
+        textView.backgroundColor = .clear
+        iView.frame = frame
         iView.bounds = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
+        iView.center = center
+        stage.addSubview(iView)
+        iView.scale = (scale == 1.0) ? 1.0 : scale//1.1405
+        //iView.update(scale: scale)
+        let radians = InteractView.getRadians(degrees: element.rotation?.doubleValue ?? 0)
+        iView.rotation = Float(radians)
+        iView.update(rotation: radians)
+        //iView.update(scale: scale, rotation: Float(radians))
         return iView
     }
     
@@ -130,6 +167,7 @@ struct FLCreator {
         let viewY = ((stage.frame.height * CGFloat(truncating: element.y)) / 100)
         var viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
         var viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
+        var scale = (Float(element.scale) + Float(stage.stageRatio)) - 1.0
         
         if let _ = element.graphicType, element.isCreating {
             viewW = stage.frame.width * FlashStyle.graphic.displayRatio
@@ -166,6 +204,10 @@ struct FLCreator {
         
         iView.type = .image
         iView.element = element
+        
+        //image scale in width and height
+        //iView.scale = (scale == 1.0) ? 1.0 : scale
+        //iView.update(scale: scale)
         iView.frame = frame
         iView.center = center
         //iView.contentView = imageview
@@ -211,7 +253,6 @@ struct FLCreator {
         let viewW = ((stage.frame.width * CGFloat(truncating: element.width)) / 100)
         let viewH = ((stage.frame.height * CGFloat(truncating: element.height)) / 100)
         
-        
         var url: URL?
         if let deviceVideoUrl = element.deviceVideoUrl {
             url = deviceVideoUrl
@@ -241,8 +282,8 @@ struct FLCreator {
             iView.playerView = playerView
             iView.frame = frame
             iView.center = center
-            //iView.contentView = playerView
-            iView.update(rotation: element.rotation?.doubleValue)
+            let radians = InteractView.getRadians(degrees: element.rotation?.doubleValue ?? 0)
+            iView.update(rotation: radians)
             stage.addSubview(iView)
             return iView
         }
