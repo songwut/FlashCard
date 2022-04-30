@@ -55,7 +55,7 @@ enum FLGraphicMenu: String {
 }
 
 struct FlashStyle {
-    static let flashItemHeight: CGFloat = 152
+    static let flashItemHeight: CGFloat = 121
     static let cardCornerRadius:CGFloat = 16
     static let imageMaxSize:CGFloat = 2048
     static let imageQuality:CGFloat = 0.8
@@ -126,6 +126,7 @@ struct FlashStyle {
     }
     
     struct quiz {
+        static let quizBaseWidth = 293
         static let maxChoice = 4
         static let choiceMargin:CGFloat = UIDevice.isIpad() ? 28 : 16
         static let choiceMinHeight:CGFloat = UIDevice.isIpad() ? 75 : 36
@@ -137,10 +138,11 @@ struct FlashStyle {
     static let deleteSize: CGFloat = 25
     
     struct post {
+        static let maxChaDesc = 300
         static let maxChaTitle = 30
-        static let descPlaceHolder = "Input message here"
-        static let categoryPlaceHolder = "Select category"
-        static let tagPlaceHolder = "Select tag"
+        static let descPlaceHolder = String(format: "input_xx".localized(), "description".localized().lowercased())
+        static let categoryPlaceHolder = String(format: "select_xx".localized(), "category".localized().lowercased())
+        static let tagPlaceHolder = String(format: "select_xx".localized(), "tag".localized().lowercased())
         
     }
 }

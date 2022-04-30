@@ -28,7 +28,8 @@ enum EndPoint:String {
     case tagSelectList = "tag/type/MATERIAL_TYPE/"
     case learningContentCoverList = "learning-content/content-cover/"
     case subCategory = "sub-category/"
-    case learningMaterialDetail = "%@/%@/%@"//LM/type/id
+    case filterSubCategory = "filter/sub-category/"
+    case learningMaterialDetail = "%@%@%@"//LM/type/id
     
     //create video
     case ugcVideo = "ugc/video/"

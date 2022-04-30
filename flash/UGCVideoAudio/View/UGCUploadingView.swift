@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UGCUploadingView: View {
+    var bgColor: Color = .black.opacity(0.5)
+    var maxWidth: CGFloat? = nil
     @Binding var progress: CGFloat
     
     var body: some View {
@@ -23,8 +25,9 @@ struct UGCUploadingView: View {
                 UGCProgressBar(progress: self.$progress)
                     .padding([.leading, .trailing], 32)
             }
-            .frame(height: 80, alignment: .center)
-            
+            .frame(maxWidth: self.maxWidth ?? .infinity,
+                   maxHeight: 80,
+                   alignment: .center)
         }
     }
 }

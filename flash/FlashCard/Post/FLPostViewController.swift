@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 import GrowingTextView
 import AVFoundation
+import IQKeyboardManagerSwift
 
 final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var scrollView: UIScrollView!
@@ -27,6 +28,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     @IBOutlet private weak var descLabel: UILabel!
     @IBOutlet private weak var descTextView: GrowingTextView!
+    @IBOutlet private weak var descLimitLabel: UILabel!
     
     @IBOutlet private weak var ownerLabel: UILabel!
     @IBOutlet private weak var ownerValueLabel: UILabel!
@@ -42,15 +44,16 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     @IBOutlet private weak var categoryLabel: UILabel!
     @IBOutlet private weak var categoryView: UIView!
-    @IBOutlet private weak var categoryValueLabel: UILabel!
-    @IBOutlet private weak var categoryButton: UIButton!
+    @IBOutlet private weak var categoryTextView: GrowingTextView!
     
+    @IBOutlet private weak var tagStackView: UIStackView!
     @IBOutlet private weak var tagLabel: UILabel!
     @IBOutlet private weak var tagPlaceholderLabel: UILabel!
     @IBOutlet private weak var tagContentView: UIView!
     @IBOutlet private weak var tagButton: UIButton!
     @IBOutlet private weak var tagView: TagListView!
     @IBOutlet private weak var tagHeight: NSLayoutConstraint!
+    @IBOutlet private weak var tagRequireLabel: UILabel!
     
     @IBOutlet private weak var statusLabel: UILabel!
     @IBOutlet private weak var statusPin: UIView!
@@ -66,7 +69,11 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     @IBOutlet private weak var submitButton: UIButton!
     @IBOutlet private weak var gotoBackButton: UIButton!
     
+    private let tagRequireText = String(format: "input_xx".localized(), "tag".localized().lowercased())
+    
     var createStatus:FLCreateStatus = .new
+    var isCustomNavBarBack = false
+    var latestTags: [UGCTagResult]?
     
     var viewModel: FLFlashCardViewModel! {
         didSet {
@@ -84,6 +91,11 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     private var backBtn = UIBarButtonItem()
     private var editBtn = UIBarButtonItem()
     private var previewBtn = UIBarButtonItem()
+    private var tagTextColor: UIColor = .text()
+    private var tagBGTextColor: UIColor = .text()
+    private let requireColor =  UIColor(hex: "ff3e2b")
+    private let fontTitle = UIFont.font(16, .medium)
+    private let fontValue = UIFont.font(16, .text)
     
     lazy var inputToolbar: UIToolbar = {
         var toolbar = UIToolbar()
@@ -117,23 +129,17 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         }
     }
     
-    private func updateTitleLimit(_ count: Int) {
-        let maxLength = FlashStyle.post.maxChaTitle
-        self.titleLimitLabel.text = "\(count)/\(maxLength) Characters Limit"
-    }
-    
     var selectedCategory: CategoryResult? {
         didSet {
             guard let category = self.selectedCategory else { return  }
-            self.categoryValueLabel.text = category.name
-            self.categoryValueLabel.textColor = .text()
+            self.categoryTextView.text = category.name
         }
     }
     
-    var latestTags: [UGCTagResult]?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enableAutoToolbar = true
         self.scrollView.alpha = 0.0
         backBtn = UIBarButtonItem(image: UIImage(named: "ic-arrow-nav-back"), style: .plain, target: self, action: #selector(self.backPressed))
         editBtn = UIBarButtonItem(image: UIImage(named: "ic_v2_edit"), style: .plain, target: self, action: #selector(self.editPressed))
@@ -144,29 +150,38 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         
         self.keyboardManager(false)
         self.footerView.setShadow(radius: 16, opacity: 0.09, color: .black, offset: CGSize(width: 0, height: -2))
-        let fontTitle = UIFont.font(16, .medium)
-        let fontValue = UIFont.font(16, .text)
         self.titleTextField.delegate = self
         self.titleTextField.addTarget(self, action: #selector(self.titleTextFieldChange(_:)), for: .editingChanged)
         self.coverImageView.cornerRadius = 8
-        let title = "title_name_material".localized()
-        let requireColor =  UIColor(hex: "ff3e2b")
-        let atbTitle = Utility.attributedText(with: title, font: self.titleLabel.font, color: .black)
-        let atbRequire = Utility.attributedText(with: " *", font: self.titleLabel.font, color: requireColor)
-        atbTitle.append(atbRequire)
-        self.titleLabel.attributedText = atbTitle
+        self.titleLabel.attributedText = self.fieldAtbText(title: "title_name_material",
+                                                         isRequire: true,
+                                                         font: self.fontTitle)
         self.titleRequireLabel.font = fontValue
         self.titleRequireLabel.text = ""
         self.titleRequireLabel.textColor = .error()
+        self.tagStackView.isHidden = true
+        self.tagRequireLabel.isHidden = true
+        self.tagRequireLabel.text = self.tagRequireText
+        self.tagRequireLabel.font = fontValue
+        self.tagRequireLabel.textColor = .error()
+        self.descLimitLabel.font = .font(12, .text)
+        self.descLimitLabel.textColor = .lightGray
         self.titleLimitLabel.font = .font(12, .text)
         self.titleLimitLabel.textColor = .lightGray
         self.titleTextField.font = fontValue
         self.titleTextField.textColor = .text()
         self.idView.borderWidth = 1
         self.idView.cornerRadius = 9
+        self.idLabel.text = "content_id".localized()
+        self.ownerLabel.text = "created_by".localized()
+        self.updateLabel.text = "update_date".localized()
+        self.timeLabel.text = "estimate_time".localized()
+        self.descLabel.text = "description".localized()
+        self.submitButton.setTitle("submit_to_approve".localized(), for: .normal)
         self.idLabel.font = fontTitle
         self.idValueLabel.font = UIFont.font(14, .text)
         self.descLabel.font = fontTitle
+        self.descTextView.maxLength = FlashStyle.post.maxChaDesc
         self.descTextView.borderWidth = 1
         self.descTextView.borderColor = UIColor("A9A9A9")
         self.descTextView.backgroundColor = .white
@@ -188,9 +203,12 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.timeMinLabel.textColor = .text()
         self.timeValueLabel.font = fontTitle
         self.categoryLabel.font = fontTitle
-        self.categoryValueLabel.text = FlashStyle.post.categoryPlaceHolder
-        self.categoryValueLabel.textColor = .text25()
-        self.categoryValueLabel.font = fontValue
+        self.categoryTextView.borderColor = .clear
+        self.categoryTextView.isUserInteractionEnabled = false
+        self.categoryTextView.font = fontValue
+        self.categoryTextView.textColor = .text()
+        self.categoryTextView.placeholder = FlashStyle.post.categoryPlaceHolder
+        self.categoryTextView.placeholderColor = .text25()
         self.tagLabel.font = fontTitle
         self.tagPlaceholderLabel.font = fontValue
         self.tagPlaceholderLabel.text = FlashStyle.post.tagPlaceHolder
@@ -206,7 +224,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.categoryView.isUserInteractionEnabled = true
         self.tagContentView.isUserInteractionEnabled = true
         
-        let tapCategory = UITapGestureRecognizer(target: self, action: #selector(self.categoryPressed))
+        let tapCategory = UITapGestureRecognizer(target: self, action: #selector(self.categoryPressed(_:)))
         self.categoryView.addGestureRecognizer(tapCategory)
         
         let tapTag = UITapGestureRecognizer(target: self, action: #selector(self.tagViewPressed))
@@ -257,7 +275,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
+        self.tabBarController?.navigationItem.hidesBackButton = true
         self.viewModel.detail?.name = self.titleTextField.text ?? ""
         self.viewModel.detail?.desc = self.descTextView.text ?? ""
         self.callAPIFlashDetailUpdate()
@@ -265,200 +283,16 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .portrait
         
-        if self.createStatus == .edit {
-            if let detail = self.viewModel.detail {
-                self.loadDetail(detail)
-            } else {
-                self.showLoading(nil)
-                self.callAPIFlashDetail()
-            }
-        }
-    }
-    
-    func serDefaultUI() {
-        self.titleTextField.text = ""
-        self.descTextView.text = ""
-        self.updateValueLabel.text = ""
-        self.categoryValueLabel.text = ""
-        self.updateValueLabel.text = ""
-        self.idView.isHidden = true
-    }
-    
-    func loadDetail(_ detail: FLDetailResult?) {
-        self.scrollView.alpha = 1.0
-        self.hideLoading()
-        guard let detail = detail else { return }
-        self.time = detail.estimateTime
-        
-        self.titleTextField.text = detail.nameContent
-        self.updateTitleLimit(detail.nameContent.count)
-        
-        self.descTextView.text = detail.desc
-        
-        if let imageCoverData = self.imageCoverData,
-           let uiimage = UIImage(data: imageCoverData) {
-            self.coverImageView.image = uiimage
-        } else {
-            self.coverImageView.setImage(detail.image, placeholderImage: defaultCoverFlash)
-        }
-        
-        self.ownerValueLabel.text = detail.owner?.name ?? ""
-        
-        self.categoryValueLabel.text = self.getCatagoryName(detail)
-        let dateTime = formatter.with(dateFormat: formatText, dateString: detail.datetimeUpdate)
-        self.updateValueLabel.text = dateTime
-        if self.viewModel.contentCode == .video
-            || self.viewModel.contentCode == .audio {
-            self.imageButton.isHidden = true
-            self.timeScaleView.isHidden = true
-            self.timeMinLabel.text =  detail.duration.materialMin
-        } else {
-            self.imageButton.isHidden = false
-            self.timeScaleView.isHidden = false
-            self.timeValueLabel.text = "\(self.time)"
-            let minStr = self.time.textNumber(many: "minutes")
-            let minUnit = minStr.replace("\(self.time) ", withString: "")
-            self.timeMinLabel.text = minUnit
-        }
-        
-        self.idView.isHidden = detail.code == ""
-        self.idValueLabel.text = detail.code
-        self.idValueLabel.textColor = detail.contentCode.getColor()
-        self.idView.borderColor = detail.contentCode.getColor()
-        self.statusValueLabel.text = detail.displayStatus.title()
-        
-        let requestStatus = detail.requestStatus
-        self.requesValue.backgroundColor = requestStatus.bgColor()
-        self.requesValue.setTitleColor(requestStatus.color(), for: .normal)
-        self.requesValue.setTitle(requestStatus.title(), for: .normal)
-        self.requesDesc.text = requestStatus.descDict().localized()
-        self.statusPin.backgroundColor = detail.displayStatus.color()
-        self.requestStackView.isHidden = detail.contentRequest == nil
-        
-        if self.isNeedChangeBarItems {
-            //protech case goto tag,category
-            //custom BarButton UIKit and SwiftUI
-            self.navigationItem.setHidesBackButton(true, animated:false)
-            
-            let buttonItems = detail.isHiddenEdit() ? [self.previewBtn] : [self.previewBtn, self.editBtn]
-            
-            self.navigationController?.navigationBar.topItem?.rightBarButtonItems = buttonItems
-            self.navigationController?.navigationBar.topItem?.leftBarButtonItem = self.backBtn
-            self.isNeedChangeBarItems = false
-        }
-        
-        if requestStatus == .approved  {
-            self.submitButton.backgroundColor = .disable()
-            self.submitButton.isUserInteractionEnabled = false
-            self.submitButton.isHidden = false
-            self.cancelButton.isHidden = true
-            
-        } else if requestStatus == .requestExpired ||  requestStatus == .rejected  {
-            self.submitButton.backgroundColor = .config_primary()
-            self.submitButton.isUserInteractionEnabled = true
-            self.submitButton.isHidden = false
-            self.cancelButton.isHidden = true
-            
-        } else if requestStatus == .inprogress || requestStatus == .notStart {
-            self.cancelButton.backgroundColor = .config_primary()
-            self.cancelButton.isUserInteractionEnabled = true
-            self.submitButton.isHidden = true
-            self.cancelButton.isHidden = false
-            
-        } else {
-            self.submitButton.isHidden = false
-            self.cancelButton.isHidden = true
-            self.requestStackView.isHidden = true
-        }
-        
-        
-        if detail.requestStatus == .inprogress
-            || requestStatus == .notStart
-            || detail.requestStatus == .approved {
-            self.enableUI(isEnable: false)
-        } else {
-            self.enableUI(isEnable: true)
-        }
-        
-        self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)
-    }
-    
-    private func enableMinusButton(isEnable: Bool) {
-        let disableColor = UIColor.disable()
-        self.minusButton.isUserInteractionEnabled = isEnable
-        self.minusButton.tintColor = isEnable ? .config_primary() : disableColor
-    }
-    
-    private func enableUI(isEnable: Bool) {
-        
-        let isEnableMinusUI = isEnable && self.time >= 1
-        self.enableMinusButton(isEnable: isEnableMinusUI)
-        
-        let disableColor = UIColor.disable()
-        let textColor = UIColor.text()
-        imageButton.isUserInteractionEnabled = isEnable
-        titleTextField.isEnabled = isEnable
-        titleTextField.textColor = isEnable ? textColor : disableColor
-        descTextView.isUserInteractionEnabled = isEnable
-        descTextView.textColor = isEnable ? textColor : disableColor
-        timeValueLabel.textColor = isEnable ? textColor : disableColor
-        plusButton.isUserInteractionEnabled = isEnable
-        plusButton.tintColor = isEnable ? .config_primary() : disableColor
-        categoryValueLabel.textColor = isEnable ? textColor : disableColor
-        categoryButton.isEnabled = isEnable
-        categoryView.isUserInteractionEnabled = isEnable
-        
-        tagButton.isEnabled = isEnable
-        tagContentView.isUserInteractionEnabled = isEnable
-        tagView.isUserInteractionEnabled = isEnable
-        tagView.tagBackgroundColor = isEnable ? tagBgEnableColor : .text(0.1)
-        
-        tagView.textColor = isEnable ? tagTextEnableColor : .text()
-        tagView.borderColor = .clear
-        tagView.borderWidth = 1
-        
-        tagTextColor = isEnable ? tagTextEnableColor : .text()
-        tagBGTextColor = isEnable ? tagBgEnableColor : .text(0.1)
-    }
-    
-    private var tagTextColor: UIColor = .text()
-    private var tagBGTextColor: UIColor = .text()
-    
-    private func getCatagoryName(_ detail: FLDetailResult) -> String {
-        var categoryText: String?
-        
-        if let selectedCategory = self.selectedCategory {
-            categoryText = selectedCategory.name
-            
-        } else if let category = detail.category {
-            categoryText = category.name
-            
-        }
-        return categoryText ?? FlashStyle.post.categoryPlaceHolder
-    }
-    
-    private func isRequireField() -> Bool {
-        var isRequire = false
-        if let text = self.titleTextField.text,
-           !text.trimmingCharacters(in: .whitespaces).isEmpty,
-            text.count >= 1 {
-            self.titleRequireLabel.text = ""
-        } else {
-            let title = "title_name_material".localized()
-            let placeholder = String(format: "input_xx".localized(), title.lowercased())
-            self.titleRequireLabel.text = placeholder
-            self.titleTextField.text = ""
-            isRequire = true
-        }
-        //TODO: next require tag
-        return isRequire
+        self.callAPIFlashDetail()
     }
     
     @IBAction func timePlusPressed(_ sender: UIButton) {
         self.time = self.time + 1
         self.enableMinusButton(isEnable: self.time >= 1)
         self.timeValueLabel.text = "\(self.time)"
+        self.timeMinLabel.text = self.timeMinText(time: self.time)
         self.viewModel.detail?.estimateTime = self.time
         self.isNeedUpdate = true
         ConsoleLog.show("timeNumber: \(self.time)")
@@ -469,6 +303,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.time = self.time - 1
         self.enableMinusButton(isEnable: self.time >= 1)
         self.timeValueLabel.text = "\(self.time)"
+        self.timeMinLabel.text = self.timeMinText(time: self.time)
         self.viewModel.detail?.estimateTime = self.time
         self.isNeedUpdate = true
         ConsoleLog.show("timeNumber: \(self.time)")
@@ -495,17 +330,14 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     }
     
     func backAfterUpdate() {
-        //QA request https://app.clickup.com/t/2771k4y
-        
-        //from CreateMaterialViewController
         guard let detail = self.viewModel.detail else { return }
-        if detail.requestStatus == .approved {
-            //dissmiss to parent VC (home, mylibrary, mymaterial)
-            let UGCCreateVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "CreateMaterialListView") }
-            let dHomeVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "DynamicHomeViewController") }
-            if let _ = UGCCreateVC, let _ = dHomeVC  {
-                //dissmiss to parent VC (home, mylibrary, mymaterial)
-                self.dismiss(animated: true)
+        if detail.requestStatus == .approved
+            || detail.requestStatus == .inprogress
+            || detail.requestStatus == .notStart {
+            
+            if self.viewModel.isFromCreate {
+                //dissmiss to parent VC (home, mylibrary, mymaterial) if come from create
+                self.customDismiss(animated: true)
             } else {
                 self.navigationController?.popViewController(animated: true)
             }
@@ -521,7 +353,7 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.callAPIFlashDetailUpdate()
         
         if self.viewModel.contentCode == .flashcard {
-            if let flEditorVC = self.navigationController?.viewControllers.last as? FLEditorViewController {
+            if let _ = self.navigationController?.viewControllers.last as? FLEditorViewController {
                 //case from new flashcard has flPostVC in last
                 self.navigationController?.popViewController(animated: true)
             } else {
@@ -539,11 +371,13 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             }
         } else if self.viewModel.contentCode == .video
                     ||  self.viewModel.contentCode == .audio {
+            
             guard let detail = self.viewModel.detail else { return }
             let model = UGCCreateMediaViewModel(mId: self.viewModel.materialId,
                                                 contentCode: self.viewModel.contentCode)
-            model.contentCode = self.viewModel.contentCode
             model.detail = detail
+            //this trick to hide postbutton in nav bar
+            model.isComeFromEditPost = true
             
             let createVideoView =  UGCCreateMediaSwiftUIView(isCreated: false)
                 .environmentObject(model)
@@ -580,33 +414,18 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
             
         } else if self.viewModel.contentCode == .video
                     ||  self.viewModel.contentCode == .audio {
-            self.openPlayerNormalFullScreen()
-        }
-    }
-    
-    private func openPlayerNormalFullScreen() {
-        guard let urlStr = self.viewModel.detail?.url,
-        let url = URL(string: urlStr) else { return }
-        
-        guard let detail = self.viewModel.detail else { return }
-        let model = UGCCreateMediaViewModel(mId: self.viewModel.materialId, contentCode: self.viewModel.contentCode)
-        model.detail = detail
-        
-        let playerView = UGCCustomPlayerView(playerVM: UGCPlayerViewModel(), isNeedMargin: false)
-            .environmentObject(model)
-            .edgesIgnoringSafeArea(.all)
-        
-        let vc = UIHostingController(rootView: playerView)
-        vc.modalTransitionStyle = .crossDissolve
-        vc.modalPresentationStyle = .overFullScreen
-        if let nav = self.navigationController {
-            nav.present(vc, animated: true, completion: {
-                //vc.timeSlider.delegate = self
-            })
-        } else {
-            self.present(vc, animated: true, completion: {
-                //vc.timeSlider.delegate = self
-            })
+            
+            guard let detail = self.viewModel.detail,
+                  let mediaUrl = URL(string: detail.url ?? "") else { return }
+            let contentCode = self.viewModel.contentCode
+            let model = UGCPlayerFullScreenViewModel(contentCode: contentCode,
+                                                     isNeedStopWhenClose: true,
+                                                     mediaUrl: mediaUrl,
+                                                     coverImage: detail.image,
+                                                     currentTime: 0.0)
+            OpenVCHelper.openUGCMediaPreview(viewModel: model, mainVC: self)
+            //auto rotation swiftUI : UGCCustomPlayerView can open fullscreen but need custom more
+            //fix rotation uikit : UGCPlayerFullScreenViewController
         }
     }
     
@@ -621,17 +440,21 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         self.present(picker, animated: true, completion: nil)
     }
     
-    @objc func categoryPressed() {
+    @objc func categoryPressed(_ gesture: UITapGestureRecognizer) {
         self.view.endEditing(true)
-        self.viewModel.callAPICategoryList { (categoryPageResult) in
-            guard let categoryPage = categoryPageResult else { return }
-            var categoryView = UGCCatagoryListView(items: categoryPage.list)
+        gesture.view?.isUserInteractionEnabled = false
+        self.showLoading(nil)
+        self.viewModel.callAPICategoryList { [weak self] (listResult) in
+            gesture.view?.isUserInteractionEnabled = true
+            self?.hideLoading()
+            guard let list = listResult else { return }
+            var categoryView = UGCCatagoryListView(items: list)
             categoryView.delegate = self
             let host = UIHostingController(rootView: categoryView)
-            if let nav = self.navigationController {
+            if let nav = self?.navigationController {
                 nav.pushViewController(host, animated: true)
             } else {
-                self.present(host, animated: true, completion: nil)
+                self?.present(host, animated: true, completion: nil)
             }
         }
     }
@@ -740,32 +563,33 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
     func callAPIFlashDetailSubmit() {
         self.viewModel.callAPIFlashDetailSubmit { [weak self] (detail) in
             self?.viewModel.detail?.contentRequest?.status = .approved
-            self?.viewModel.detail?.displayStatus = .unpublish//mock
+            self?.viewModel.detail?.displayStatus = .unpublish
             self?.loadDetail(detail)
             self?.isNeedUpdate = true
-            self?.isNeedChangeBarItems = false
+            self?.isNeedChangeBarItems = true
             self?.callAPIFlashDetail()
         }
     }
     
-    func dismiss(animated: Bool = true) {//Dismiss many case
+    func customDismiss(animated: Bool = true) {//Dismiss many cas
+        let nav = self.navigationController
         
-        let myMaterialListView = self.navigationController?.viewControllers.first { $0.className.contains(find: "MyMaterialListView") }
+        let myMaterialListView = nav?.viewControllers.first { $0.className.contains(find: "MyMaterialListView") }
         if let targetVC = myMaterialListView {
             //case create new in MyMaterialListView
             self.navigationController?.popToViewController(targetVC, animated: animated)
             return
         }
         
-        let myLibraryVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "MyLibraryViewController") }
+        let myLibraryVC = nav?.viewControllers.first { $0.className.contains(find: "MyLibraryViewController") }
         if let targetVC = myLibraryVC {
-            self.navigationController?.popToViewController(targetVC, animated: animated)
+            nav?.popToViewController(targetVC, animated: animated)
             return
         }
         
-        let dHomeVC = self.navigationController?.viewControllers.first { $0.className.contains(find: "DynamicHomeViewController") }
+        let dHomeVC = nav?.viewControllers.first { $0.className.contains(find: "DynamicHomeViewController") }
         if let targetVC = dHomeVC {
-            self.navigationController?.popToViewController(targetVC, animated: animated)
+            nav?.popToViewController(targetVC, animated: animated)
             return
         }
     }
@@ -791,8 +615,9 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
         
         dict["name_content"] = self.titleTextField.text
         dict["desc"] = self.descTextView.text
-        dict["duration"] = self.time
-        //dict["code"] = detail.code
+        if self.viewModel.isUpdateDuration() {
+            dict["duration"] = self.time
+        }
         dict["created_by"] = detail.owner?.id ?? UserManager.shared.profile.id
         
         if let imageBase64 = self.imageBase64 {
@@ -821,11 +646,233 @@ final class FLPostViewController: UIViewController, NibBased, ViewModelBased {
                 self?.hideLoading()
                 self?.isNeedUpdate = false
                 self?.createStatus = .edit//reset to edit
-                self?.dismiss()
+                self?.customDismiss()
             }
         } else {
-            self.dismiss()
+            self.customDismiss()
         }
+    }
+    
+    private func serDefaultUI() {
+        self.titleTextField.text = ""
+        self.descTextView.text = ""
+        self.updateValueLabel.text = ""
+        self.categoryTextView.text = ""
+        self.updateValueLabel.text = ""
+        self.idView.isHidden = true
+    }
+    
+    private func loadDetail(_ detail: FLDetailResult?) {
+        self.scrollView.alpha = 1.0
+        self.hideLoading()
+        guard let detail = detail else { return }
+        self.time = detail.estimateTime
+        
+        self.titleTextField.text = detail.nameContent
+        self.descTextView.text = detail.desc
+        
+        self.updateTitleLimit(detail.nameContent.count)
+        self.updateDescLimit(detail.desc.count)
+        
+        if let imageCoverData = self.imageCoverData,
+           let uiimage = UIImage(data: imageCoverData) {
+            self.coverImageView.image = uiimage
+        } else {
+            self.coverImageView.setImage(detail.image, placeholderImage: defaultCoverFlash)
+        }
+        
+        self.ownerValueLabel.text = detail.owner?.name ?? ""
+        self.categoryTextView.text = self.getCatagoryName(detail)
+        
+        let dateTime = formatter.with(dateFormat: formatText, dateString: detail.datetimeUpdate)
+        self.updateValueLabel.text = dateTime
+        if self.viewModel.contentCode == .video
+            || self.viewModel.contentCode == .audio {
+            self.imageButton.isHidden = true
+            self.timeScaleView.isHidden = true
+            self.timeValueLabel.isHidden = true
+            self.timeMinLabel.text =  detail.duration.materialMin
+            
+        } else {
+            self.imageButton.isHidden = false
+            self.timeScaleView.isHidden = false
+            self.timeValueLabel.isHidden = false
+            self.timeValueLabel.text = "\(self.time)"
+            let minStr = self.time.textNumber(many: "minutes")
+            let minUnit = minStr.replace("\(self.time) ", withString: "")
+            self.timeMinLabel.text = minUnit
+        }
+        
+        self.idView.isHidden = detail.code == ""
+        self.idValueLabel.text = detail.code
+        self.idValueLabel.textColor = detail.contentCode.getColor()
+        self.idView.borderColor = detail.contentCode.getColor()
+        self.statusValueLabel.text = detail.displayStatus.title()
+        
+        let requestStatus = detail.requestStatus
+        self.requesValue.backgroundColor = requestStatus.bgColor()
+        self.requesValue.setTitleColor(requestStatus.color(), for: .normal)
+        self.requesValue.setTitle(requestStatus.title(), for: .normal)
+        self.requesDesc.text = requestStatus.descDict().localized()
+        self.statusPin.backgroundColor = detail.displayStatus.color()
+        self.requestStackView.isHidden = detail.contentRequest == nil
+        self.tagStackView.isHidden = !tagMaterialTypeIsDisplay
+        self.tagLabel.attributedText = self.fieldAtbText(title: "tag".localized(),
+                                                         isRequire: tagMaterialTypeIsRequired,
+                                                         font: self.fontTitle)
+        
+        if self.isNeedChangeBarItems {
+            //protech case goto tag,category
+            //custom BarButton UIKit and SwiftUI
+            self.navigationItem.setHidesBackButton(true, animated:false)
+            
+            let buttonItems = detail.isHiddenEdit() ? [self.previewBtn] : [self.previewBtn, self.editBtn]
+            
+            self.navigationController?.navigationBar.topItem?.rightBarButtonItems = buttonItems
+            self.navigationController?.navigationBar.topItem?.leftBarButtonItem = self.backBtn
+            
+            self.isNeedChangeBarItems = false
+        }
+        
+        if requestStatus == .approved  {
+            self.submitButton.backgroundColor = .disable()
+            self.submitButton.isUserInteractionEnabled = false
+            self.submitButton.isHidden = false
+            self.cancelButton.isHidden = true
+            
+        } else if requestStatus == .requestExpired ||  requestStatus == .rejected  {
+            self.submitButton.backgroundColor = .config_primary()
+            self.submitButton.isUserInteractionEnabled = true
+            self.submitButton.isHidden = false
+            self.cancelButton.isHidden = true
+            
+        } else if requestStatus == .inprogress || requestStatus == .notStart {
+            self.cancelButton.backgroundColor = .config_primary()
+            self.cancelButton.isUserInteractionEnabled = true
+            self.submitButton.isHidden = true
+            self.cancelButton.isHidden = false
+            
+        } else {
+            self.submitButton.isHidden = false
+            self.cancelButton.isHidden = true
+            self.requestStackView.isHidden = true
+        }
+        
+        if detail.requestStatus == .inprogress
+            || requestStatus == .notStart
+            || detail.requestStatus == .approved {
+            self.enableUI(isEnable: false)
+        } else {
+            self.enableUI(isEnable: true)
+        }
+        
+        self.manageTagContentViewWith(tags: latestTags ?? detail.tagList)
+    }
+    
+    private func updateTitleLimit(_ count: Int) {
+        let maxLength = FlashStyle.post.maxChaTitle
+        self.titleLimitLabel.text = "\(count)/\(maxLength) " + "character_limit".localized()
+    }
+    
+    private func updateDescLimit(_ count: Int) {
+        let maxLength = FlashStyle.post.maxChaDesc
+        self.descLimitLabel.text = "\(count)/\(maxLength) " + "character_limit".localized()
+    }
+    
+    private func fieldAtbText(title: String, isRequire: Bool, font: UIFont) -> NSAttributedString {
+        let atbTitle = Utility.attributedText(with: title.localized(), font: font, color: .black)
+        if isRequire {
+            let atbRequire = Utility.attributedText(with: " *", font: font, color: self.requireColor)
+            atbTitle.append(atbRequire)
+        }
+        return atbTitle
+    }
+    
+    private func enableMinusButton(isEnable: Bool) {
+        let disableColor = UIColor.disable()
+        self.minusButton.isUserInteractionEnabled = isEnable
+        self.minusButton.tintColor = isEnable ? .config_primary() : disableColor
+    }
+    
+    private func enableUI(isEnable: Bool) {
+        
+        let isEnableMinusUI = isEnable && self.time >= 1
+        self.enableMinusButton(isEnable: isEnableMinusUI)
+        
+        let disableColor = UIColor.disable()
+        let textColor = UIColor.text()
+        imageButton.isUserInteractionEnabled = isEnable
+        titleTextField.isEnabled = isEnable
+        titleTextField.textColor = isEnable ? textColor : disableColor
+        descTextView.isUserInteractionEnabled = isEnable
+        descTextView.textColor = isEnable ? textColor : disableColor
+        timeValueLabel.textColor = isEnable ? textColor : disableColor
+        plusButton.isUserInteractionEnabled = isEnable
+        plusButton.tintColor = isEnable ? .config_primary() : disableColor
+        categoryTextView.textColor = isEnable ? textColor : disableColor
+        categoryView.isUserInteractionEnabled = isEnable
+        
+        tagButton.isEnabled = isEnable
+        tagContentView.isUserInteractionEnabled = isEnable
+        tagView.isUserInteractionEnabled = isEnable
+        tagView.tagBackgroundColor = isEnable ? tagBgEnableColor : .text(0.1)
+        
+        tagView.textColor = isEnable ? tagTextEnableColor : .text()
+        tagView.borderColor = .clear
+        tagView.borderWidth = 1
+        
+        tagTextColor = isEnable ? tagTextEnableColor : .text()
+        tagBGTextColor = isEnable ? tagBgEnableColor : .text(0.1)
+    }
+    
+    private func getCatagoryName(_ detail: FLDetailResult) -> String? {
+        var categoryText: String?
+        
+        if let selectedCategory = self.selectedCategory {
+            categoryText = selectedCategory.name
+            
+        } else if let category = detail.category {
+            categoryText = category.name
+            
+        }
+        return categoryText
+    }
+    
+    private func isRequireField() -> Bool {
+        
+        if !self.viewModel.isCanEditPost()  {
+            return false
+        }
+        
+        var isRequire = false
+        if let text = self.titleTextField.text,
+           !text.trimmingCharacters(in: .whitespaces).isEmpty,
+            text.count >= 1 {
+            self.titleRequireLabel.text = ""
+        } else {
+            let title = "title_name_material".localized()
+            let placeholder = String(format: "input_xx".localized(), title.lowercased())
+            self.titleRequireLabel.text = placeholder
+            isRequire = true
+        }
+        
+        if tagMaterialTypeIsRequired ,tagMaterialTypeIsDisplay {
+            
+            if let latestTags = self.latestTags, latestTags.count >= 1 {
+                self.tagRequireLabel.isHidden = true
+                
+            } else {//latestTags == nil , or count 0
+                self.tagRequireLabel.isHidden = false
+                isRequire = true
+            }
+        }
+        return isRequire
+    }
+    
+    private func timeMinText(time: Int) -> String {
+        let minStr = time.textNumber(many: "minutes")
+        let minUnit = minStr.replace("\(time) ", withString: "")
+        return minUnit
     }
     
     private func manageTagContentViewWith(tags:[UGCTagResult]) {
@@ -875,6 +922,7 @@ extension FLPostViewController: TagListViewDelegate, TagListSelectViewController
     func tagListSelectViewController(_ tags: [UGCTagResult]) {
         print("select: \(tags.count) tag")
         self.isNeedUpdate = true
+        self.tagRequireLabel.isHidden = !tags.isEmpty
         self.latestTags = tags
         self.manageTagContentViewWith(tags: tags)
     }
@@ -952,12 +1000,17 @@ extension FLPostViewController: UITextFieldDelegate {
 extension FLPostViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.inputAccessoryView = self.inputToolbar
-        self.isNeedUpdate = true
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         guard let text = textView.text else { return }
-        self.viewModel.detail?.desc = text
+        
+        let maxLength = FlashStyle.post.maxChaDesc
+        let newDesc = String(text.prefix(maxLength))
+        self.descTextView.text = newDesc
+        
+        self.viewModel.detail?.desc = newDesc
+        self.updateDescLimit(newDesc.count)
         self.isNeedUpdate = true
     }
 }

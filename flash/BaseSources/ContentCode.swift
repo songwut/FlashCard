@@ -58,6 +58,32 @@ enum ContentCode: String {
     case learningMaterial = "learning_content.learningcontent"
     case flashcard = "flashcard.flashcard"
     
+    func materialIdField() -> String {
+        switch self {
+        case .video:
+            return "video_id"
+        case .audio:
+            return "audio_id"
+        case .pdf:
+            return "document_id"
+        default:
+            return "id"
+        }
+    }
+    
+    func resumableType() -> String {
+        switch self {
+        case .video:
+            return "video/mp4"
+        case .audio:
+            return "audio/mpeg"
+        case .pdf:
+            return "file/pdf"//test for "application/pdf"
+        default:
+            return "id"
+        }
+    }
+    
     func fieldUGCCover() -> String {
         if self == .video {
             return "image_video_id"

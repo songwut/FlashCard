@@ -7,6 +7,10 @@
 
 import UIKit
 
+//UGC improve tag
+var tagMaterialTypeIsDisplay = true
+var tagMaterialTypeIsRequired = false
+
 var isKMSEnabled = true
 let fontConicleText = "DBHeaventRounded"
 let fontConicleMedium = "DBHeaventRounded-Med"
@@ -30,6 +34,7 @@ var domainURL = "https://\(pathDomain)"
 var apiURL = "\(domainURL)api/"
 var isMaintenance = false
 
+var themeColor = UIColor.orange
 var tagBgDisableColor = UIColor("EBEBEB")
 var tagBgEnableColor = UIColor("DFEBF5")
 var tagTextEnableColor = UIColor("2196F3")

@@ -375,7 +375,7 @@ class LMMaterialResult: BaseResult, Identifiable, GridItem {
     var requestStatus: RequestStatus = .none
     var datetimeAgo = ""
     var url: String?
-    
+    var isAllowDownload = true
     var hexBgColor: String?
     
     func isShowPreview() -> Bool {
@@ -406,6 +406,7 @@ class LMMaterialResult: BaseResult, Identifiable, GridItem {
     
     override func mapping(map: Map) {
         super.mapping(map: map)
+        isAllowDownload      <- map["is_allow_download"]
         url                  <- map["url"]
         nameContent          <- map["name_content"]
         code                 <- map["code"]

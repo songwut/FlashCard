@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension Int {
     var seconds: Int {
@@ -102,5 +103,11 @@ extension Int {
             unit = mins.unit("minute")
         }//PO confirm App unit or not ?
         return str
+    }
+    
+    var cgFloat: CGFloat {
+        get {
+            return CGFloat(self)
+        }
     }
 }

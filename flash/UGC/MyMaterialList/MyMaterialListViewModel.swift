@@ -11,16 +11,17 @@ import UIKit
 
 class MyMaterialListViewModel: ObservableObject {
     @Published var myMaterialFlash: LMMaterialPageResult?
-    var previous: Int?
+    
     var next: Int? {
         didSet {
-            isListFull = next == nil
+            self.isListFull = self.next == nil
         }
     }
+    var previous: Int?
     var count = 0
     var currentPage = 0
     var isListFull = false
-    
+    var isLoadNextPage = false
     var items = [LMMaterialResult]()
     
     func totalText() -> String {
@@ -51,7 +52,7 @@ class MyMaterialListViewModel: ObservableObject {
         let profileId = UserManager.shared.profile.id
         var parem = EndPointParam(dict: ["created_by" : profileId])
         parem.dict?["page_size"] = UIDevice.isIpad() ? 50 : 24
-        if let next = self.next {
+        if let next = self.next, self.isLoadNextPage {
             parem.dict?["page"] = next
         }
         viewModel.callAPIMyMaterial(.get, param: parem) { [self] (pageResult) in
@@ -59,10 +60,10 @@ class MyMaterialListViewModel: ObservableObject {
             self.currentPage += 1
             self.myMaterialFlash = page
             self.next = page.next
-            if self.currentPage == 1 {
-                self.items = page.list
-            } else {
+            if self.isLoadNextPage {
                 self.items.append(contentsOf: page.list)
+            } else {
+                self.items = page.list
             }
             print("list:\(self.items.count)")
             print("currentPage:\(self.currentPage)")

@@ -26,7 +26,7 @@ class FLFlashCardViewModel: BaseViewModel {
     func hideLoading() {
         
     }
-    
+    var isFromCreate = false
     var isFirstPage = true
     var isLoadNextPage = false
     var nextPage: Int?
@@ -53,8 +53,26 @@ class FLFlashCardViewModel: BaseViewModel {
     var contentCode: ContentCode = .flashcard
     var slotId:Int?
     
+    func isUpdateDuration() -> Bool {
+        if self.contentCode == .flashcard {
+            return true
+        }
+        return false
+    }
+    
     func isLimitCard() -> Bool {
         return self.pageList.count == FlashStyle.maxCard
+    }
+    
+    func isCanEditPost() -> Bool {
+        guard let detail = self.detail else { return false }
+        let requestStatus = detail.requestStatus
+        if requestStatus == .inprogress
+            || requestStatus == .notStart
+            || requestStatus == .approved {
+            return false
+        }
+        return true
     }
     
     func getQuizContent() -> FlashElement? {
@@ -69,7 +87,7 @@ class FLFlashCardViewModel: BaseViewModel {
         if let nextUrl = nextUrl {
             request.nextUrl = nextUrl
         }
-        request.endPoint = .myContent
+        request.endPoint = .myContent //.myContentV2  remove if change
         request.apiMethod = method
         request.parameter = body
         request.endPointParam = param
@@ -451,15 +469,9 @@ class FLFlashCardViewModel: BaseViewModel {
     }
     
     func callApiDuplicateList(_ selectList:[Int], apiMethod:APIMethod,completion: @escaping () -> ()) {
-        
-        var idList = [String]()
-        for id in selectList {
-            idList.append("\(id)")
-        }
-        print("selected id: \(idList)")
         let request = FLRequest()
         request.endPoint = .ugcCardListDuplicate
-        request.parameter = ["id_list": idList]
+        request.parameter = ["id_list": selectList]
         request.apiMethod = apiMethod
         request.arguments = ["\(self.materialId)"]
         API.request(request) { (responseBody: ResponseBody?, result: FLFlashDetailResult?, isCache, error) in
@@ -484,23 +496,16 @@ class FLFlashCardViewModel: BaseViewModel {
         }
     }
     
-    func callAPICategoryList(complete: @escaping (_ result: UGCCategoryPageResult?) -> ()) {
+    func callAPICategoryList(complete: @escaping (_ result: [UGCCategory]?) -> ()) {
         
         let request = FLRequest()
         request.apiMethod = .get
-        request.endPoint = .subCategory
-        API.request(request) { (response: ResponseBody?, result: UGCCategoryPageResult?, isCache, error) in
+        request.endPoint = .filterSubCategory
+        request.endPointParam = EndPointParam(dict: ["is_display": 1])
+        API.requestForItems(request) { (response: ResponseBody?, list: [UGCCategory]?, isCache, error) in
             self.checkResponseBody(response)
-            complete(result)
+            complete(list)
         }
-        /*
-        JSON.read("ugc-flash-card-category") { (object) in
-            if let dictList = object as? [[String : Any]],
-               let detail = UGCCategoryPageResult(JSON: ["results": dictList]) {
-                complete(detail)
-            }
-        }
-        */
     }
     
     private func removeCardView(idList:[Int]) {

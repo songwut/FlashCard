@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="88" width="428" height="804"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Vb-Qd-kfA">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="990"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="1040"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="H8P-3b-MCT">
                                                 <rect key="frame" x="0.0" y="0.0" width="428" height="208"/>
@@ -126,13 +126,23 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="8qY-gd-So5"/>
                                                 </constraints>
+                                                <state key="normal" title="Edit Article"/>
+                                                <connections>
+                                                    <action selector="openEditArticle:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5pb-e2-ZfC"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wq1-fc-SiB">
+                                                <rect key="frame" x="0.0" y="340" width="428" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="5Oq-wR-qpt"/>
+                                                </constraints>
                                                 <state key="normal" title="Create Video"/>
                                                 <connections>
-                                                    <action selector="createVideoPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Uf5-Ga-STa"/>
+                                                    <action selector="createVideoPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="o1v-Iz-WIO"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bud-55-nwE">
-                                                <rect key="frame" x="0.0" y="340" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="390" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="X8b-Vj-eNT"/>
                                                 </constraints>
@@ -142,7 +152,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VAL-oV-2hn">
-                                                <rect key="frame" x="0.0" y="390" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="440" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="Mxl-UE-Fbb"/>
                                                 </constraints>
@@ -152,14 +162,14 @@
                                                 </connections>
                                             </button>
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gj1-Dh-DKf">
-                                                <rect key="frame" x="0.0" y="440" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="490" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="rZx-5c-XYz"/>
                                                 </constraints>
                                                 <state key="normal" title="Stage UI create new"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ViZ-68-bWh">
-                                                <rect key="frame" x="0.0" y="440" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="490" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="WE3-aH-RIm"/>
                                                 </constraints>
@@ -169,7 +179,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kFo-sL-lEE">
-                                                <rect key="frame" x="0.0" y="490" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="540" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="QW3-mb-O2s"/>
                                                 </constraints>
@@ -179,7 +189,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PdI-EO-BW0">
-                                                <rect key="frame" x="0.0" y="540" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="590" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="wrf-jQ-vwt"/>
                                                 </constraints>
@@ -189,7 +199,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cMQ-Jc-H0m">
-                                                <rect key="frame" x="0.0" y="590" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="640" width="428" height="50"/>
                                                 <color key="backgroundColor" systemColor="systemYellowColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="wep-Pa-Mbm"/>
@@ -202,14 +212,14 @@
                                                 </connections>
                                             </button>
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgr-gq-9Ph">
-                                                <rect key="frame" x="0.0" y="640" width="428" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="690" width="428" height="0.0"/>
                                                 <state key="normal" title="Flash Player SwiftUI"/>
                                                 <connections>
                                                     <action selector="openFlashPlayerSwiftUI:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1ac-AG-xXp"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gdw-U6-VOx">
-                                                <rect key="frame" x="0.0" y="640" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="690" width="428" height="50"/>
                                                 <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="3uE-Uo-XZo"/>
@@ -222,7 +232,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9l-uZ-GAd">
-                                                <rect key="frame" x="0.0" y="690" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="740" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="plM-se-gEN"/>
                                                 </constraints>
@@ -232,7 +242,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Xy-Rz-6f7">
-                                                <rect key="frame" x="0.0" y="740" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="790" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="mAY-n6-dKR"/>
                                                 </constraints>
@@ -242,7 +252,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QOt-1q-7sW">
-                                                <rect key="frame" x="0.0" y="790" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="840" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="Ocn-hX-Ltv"/>
                                                 </constraints>
@@ -252,7 +262,7 @@
                                                 </connections>
                                             </button>
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tb9-kW-HCk">
-                                                <rect key="frame" x="0.0" y="840" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="890" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="Muc-J1-muq"/>
                                                 </constraints>
@@ -262,7 +272,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qdn-nQ-1rx">
-                                                <rect key="frame" x="0.0" y="840" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="890" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="GBb-jW-mKC"/>
                                                 </constraints>
@@ -272,7 +282,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gH6-xe-kb2">
-                                                <rect key="frame" x="0.0" y="890" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="940" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="XCD-AG-Hk7"/>
                                                 </constraints>
@@ -282,7 +292,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9s-hA-vSV">
-                                                <rect key="frame" x="0.0" y="940" width="428" height="50"/>
+                                                <rect key="frame" x="0.0" y="990" width="428" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="kgS-IN-4FC"/>
                                                 </constraints>

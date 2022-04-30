@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension Double {
     func convert(fromRange: (Double, Double), toRange: (Double, Double)) -> Double {
@@ -16,5 +17,11 @@ extension Double {
         value *= toRange.1 - toRange.0
         value += toRange.0
         return value
+    }
+    
+    var cgFloat: CGFloat {
+        get {
+            return CGFloat(self)
+        }
     }
 }

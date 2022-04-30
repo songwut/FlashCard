@@ -9,18 +9,17 @@ import Foundation
 import SwiftUI
 
 class OpenVCHelper {
-    
-    class func openUGCPreviewVideoAudio(viewModel: UGCPlayerFullScreenViewModel, playerVM: UGCPlayerViewModel, mainVC: UIViewController?) {
+    class func openUGCMediaPreview(viewModel: UGCPlayerFullScreenViewModel, mainVC: UIViewController? = nil) {
         let storyboard = UIStoryboard(name: "UGCPlayerFullScreen", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "UGCPlayerFullScreenViewController") as! UGCPlayerFullScreenViewController
-        vc.playerVM = playerVM
         vc.viewModel = viewModel
         vc.modalPresentationStyle = .fullScreen
         vc.modalTransitionStyle = .crossDissolve
+        
         if let nav = mainVC?.navigationController {
-            nav.present(vc, animated: true, completion: nil)
+            nav.present(vc, animated: false, completion: nil)
         } else {
-            mainVC?.present(vc, animated: true, completion: nil)
+            mainVC?.present(vc, animated: false)
         }
     }
     
@@ -44,6 +43,7 @@ class OpenVCHelper {
     class func openUGCCreateDoc(material: LMMaterialResult, mainVC: UIViewController?) {
         let viewModel = UGCCreateMediaViewModel(mId: material.id,
                                             contentCode: material.contentCode)
+        viewModel.detail.url = material.url
         let createDocView = UGCCreateDocSwiftUI(isCreated: true)
             .environmentObject(viewModel)
         let vc = UIHostingController(rootView: createDocView)

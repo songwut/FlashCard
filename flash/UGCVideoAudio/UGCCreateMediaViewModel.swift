@@ -17,10 +17,15 @@ class UGCCreateMediaViewModel: ObservableObject {
     @Published var loadingProgress: CGFloat = -1
     @Published var isShowingPreview = false
     @Published var imagePicked: UIImage?
+    @Published var isAllowDownload = false
+    @Published var isDetailReady = false
+    @Published var filePdfContent:Data?
+    @Published var isShowDocUpload = false
     
     var playerVM = UGCPlayerViewModel()
     var mId = 0
     var contentCode: ContentCode = .video
+    var isCancelUpload: Bool?
     var isComeFromEditPost = false
     var isLoaded = false
     var coverList = [UGCCoverModel]()
@@ -48,9 +53,8 @@ class UGCCreateMediaViewModel: ObservableObject {
             self.isShowingPreview  {
             
             return mediaUrl
-        } else {
-            return nil
         }
+        return nil
     }
     
     func uploadTitle() -> String {
@@ -68,9 +72,8 @@ class UGCCreateMediaViewModel: ObservableObject {
     func isUploadReady() -> Bool {
         if self.detail.uploadStatus == .complete, !self.isShowingPreview, !self.isShowUploading() {
             return true
-        } else {
-            return false
         }
+        return false
     }
     
     func isDisablePost() -> Bool {
@@ -79,10 +82,25 @@ class UGCCreateMediaViewModel: ObservableObject {
     
     func isShowUploading() -> Bool {
         let isUploading = self.loadingProgress >= 0.1 && self.loadingProgress < 100
-        if self.loadingProgress == -1 {//default
+        if let _ = self.isCancelUpload {
+            return false
+        } else if self.loadingProgress == -1 {//default
             return false
         } else if isUploading || self.detail.uploadStatus != .complete {
             return true
+        }
+        return false
+    }
+    
+    func isShowDocPreview() -> Bool {
+        if self.isShowUploading() {
+            return false
+            
+        } else if let _ = self.detail.url {
+            return true
+            
+        } else if self.detail.url == nil {
+            return false
         }
         return false
     }
@@ -112,6 +130,7 @@ class UGCCreateMediaViewModel: ObservableObject {
                 self.coverList = self.createCoverList(detail: detail)
                 self.detail = detail
                 self.mId = detail.id
+                self.isDetailReady = true
             }
         }
     }
@@ -128,12 +147,16 @@ class UGCCreateMediaViewModel: ObservableObject {
                 self.coverCurrentImage = detail.image
                 self.coverList = self.createCoverList(detail: detail)
                 self.detail = detail
+                if self.contentCode == .pdf {
+                    self.readPdfDataFromDetail()
+                }
+                self.isDetailReady = true
+                self.isAllowDownload = detail.isAllowDownload
             }
         }
     }
     
     func callAPIUpdateCover(uiimage: UIImage? = nil, coverId: Int? = nil) {
-        
         var param: EndPointParam?
         let fieldUGCCover = self.contentCode.fieldUGCCover()
         if let coverId = coverId {
@@ -215,7 +238,7 @@ class UGCCreateMediaViewModel: ObservableObject {
         
         let request = FLRequest()
         request.apiMethod = .get
-        request.endPoint = UGCPath.materialDetail(code: self.contentCode)//.ugcVideoDetail
+        request.endPoint = UGCPath.materialDetail(code: self.contentCode)
         request.arguments =  ["\(self.mId)"]
         API.request(request) { (response: ResponseBody?, detail: UGCDetailResult?, isCache, error) in
             if let detail = detail {
@@ -225,37 +248,67 @@ class UGCCreateMediaViewModel: ObservableObject {
                     self.coverCurrentImage = detail.image
                     self.coverList = self.createCoverList(detail: detail)
                     self.detail = detail
-                    
-                } else {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
-                        self.checkUploadStatus()
+                    self.isAllowDownload = detail.isAllowDownload
+                    if self.contentCode == .pdf {
+                        self.readPdfDataFromDetail()
+                        self.isShowDocUpload = true
                     }
+                } else {
+                    ConsoleLog.show("checkUploadStatus")
+                    self.checkUploadStatus()
                 }
             }
         }
+    }
+    
+    func sendAllowDownload(_ isAllow: Bool) {
+        guard isAllow != self.detail.isAllowDownload else { return }
         
+        let request = FLRequest()
+        request.apiMethod = .patch
+        request.endPoint = UGCPath.materialDetail(code: self.contentCode)
+        request.parameter = ["is_allow_download" : isAllow]
+        request.arguments =  ["\(self.mId)"]
+        API.request(request) { [weak self] (response: ResponseBody?, detail: UGCDetailResult?, isCache, error) in
+            guard let self = self, let detail = detail else { return }
+            self.isLoaded = true
+            self.coverCurrentImage = detail.image
+            self.coverList = self.createCoverList(detail: detail)
+            self.detail = detail
+        }
+    }
+    
+    func readPdfDataFromDetail() {
+        guard let urlStr = self.detail.url,
+        let mediaUrl = URL(string: urlStr) else { return }
+        do {
+            self.filePdfContent = try Data(contentsOf: mediaUrl)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     func uploadDoc(mediaUrl: URL) {
         if mediaUrl.absoluteString.contains(find: ".pdf") {
             guard let fileContent = self.preparefileContentData(mediaUrl: mediaUrl) else { return }
             self.chunkFile = self.manageChunkFile(fileContent: fileContent)
-            
             self.loadingProgress = 0.1
             self.sendMaterialUploadResume(chunkFile: self.chunkFile!)
         } else {
             self.mediaUrl = nil
             let filename = mediaUrl.lastPathComponent
-            let unsupportedtext = "\(filename) " + "upload_invalid_file_type".localized() + " .mp3"
+            let unsupportedtext = "\(filename) " + "upload_invalid_file_type".localized() + " .pdf"
             PopupManager.showWarning(unsupportedtext)
         }
     }
     
     func uploadAudio(mediaUrl: URL) {
         if mediaUrl.absoluteString.contains(find: ".mp3") {
-            guard let fileContent = self.preparefileContentData(mediaUrl: mediaUrl) else { return }
+            guard let fileContent = self.preparefileContentData(mediaUrl: mediaUrl) else {
+                PopupManager.showWarning("file_unsupport".localized())
+                return
+            }
             self.chunkFile = self.manageChunkFile(fileContent: fileContent)
-            
             self.loadingProgress = 0.1
             self.sendMaterialUploadResume(chunkFile: self.chunkFile!)
         } else {
@@ -279,33 +332,30 @@ class UGCCreateMediaViewModel: ObservableObject {
                 guard let fileContent = self.preparefileContentData(mediaUrl: mp4Url) else { return }
                 self.chunkFile = self.manageChunkFile(fileContent: fileContent)
                 self.sendMaterialUploadResume(chunkFile: self.chunkFile)
-                //TODO fix rotate
-                //asset.preferredTransform: CGAffineTransform(a: 1.0, b: 0.0, c: 0.0, d: 1.0, tx: 0.0, ty: 0.0)
-                //asset size: (1920.0, 1440.0)
-                
-                //4.12 video unlimit size
-//                if mb > 50 {//TODO: check upload
-//                    PopupManager.showWarning("warning_upload_length".localized())
-//                    return
-//                } else {
-//                    self?.sendVideoResume(mediaUrl: mp4Url)
-//                }
             }
         }
     }
     
+    private func isUseImportFile() -> Bool {
+        switch self.contentCode {
+        case .audio , .pdf :
+            return true
+        default://video import from photos
+            return false
+        }
+    }
+    
     private func preparefileContentData(mediaUrl: URL) -> Data? {
-        guard mediaUrl.startAccessingSecurityScopedResource() else { return nil }
         var fileContent:Data?
         do {
-            if self.contentCode == .audio {//TODO: change to detech from file upload
-                //fileContent = try Data(contentsOf: mediaUrl,  options: .alwaysMapped)
+            if self.isUseImportFile() {
+                //case import files app
+                guard mediaUrl.startAccessingSecurityScopedResource() else { return nil }
                 fileContent = try Data(contentsOf: mediaUrl)
-                // You will have data of the selected file
-                // Make sure you release the security-scoped resource when you finish.
                 do { mediaUrl.stopAccessingSecurityScopedResource() }
                 
-            } else {//video import from photo
+            } else {
+                //case import from photos video import from photos app
                 fileContent = try Data(contentsOf: mediaUrl)
             }
         } catch {
@@ -316,48 +366,41 @@ class UGCCreateMediaViewModel: ObservableObject {
     
     private func manageChunkFile(fileContent: Data) -> UGCUploadChunk? {
         guard let mediaUrl = self.mediaUrl else { return nil }
-        do {
-            let chunkSize = 1024 * 1000
-            let data = fileContent
-            let dataLen = data.count
-            
-            let fullChunks = Int(dataLen / chunkSize)
-            let totalChunks = fullChunks + (dataLen % 1024 != 0 ? 1 : 0)
-            
-            var numbers:[Int] = [Int]()
-            var chunks:[Data] = [Data]()
-            for chunkCounter in 0..<totalChunks {
-                var chunk:Data
-                let chunkBase = chunkCounter * chunkSize
-                var diff = chunkSize
-                if(chunkCounter == totalChunks - 1) {
-                  diff = dataLen - chunkBase
-                }
-                let range:Range<Data.Index> = chunkBase..<(chunkBase + diff)
-                chunk = data.subdata(in: range)
-                let number = chunkCounter + 1
-                print("chunk number \(number) size is \(chunk.count)")
-                print("chunk all done ")
-                numbers.append(number)
-                chunks.append(chunk)
+        let chunkSize = 1024 * 1000
+        let data = fileContent
+        let dataLen = data.count
+        
+        let fullChunks = Int(dataLen / chunkSize)
+        let totalChunks = fullChunks + (dataLen % 1024 != 0 ? 1 : 0)
+        
+        var numbers:[Int] = [Int]()
+        var chunks:[Data] = [Data]()
+        for chunkCounter in 0..<totalChunks {
+            var chunk:Data
+            let chunkBase = chunkCounter * chunkSize
+            var diff = chunkSize
+            if(chunkCounter == totalChunks - 1) {
+              diff = dataLen - chunkBase
             }
-            
-            let upload = UGCUploadChunk(
-                mediaUrl: mediaUrl,
-                fileSize: dataLen,
-                chunkSize: chunkSize,
-                fullChunks: fullChunks,
-                totalChunks: totalChunks,
-                numberList: numbers,
-                chunkList: chunks
-            )
-            return upload
-        } catch {
-            self.mediaUrl = nil
-            self.loadingProgress = -1
-            print(error.localizedDescription)
-            return nil
-       }
+            let range:Range<Data.Index> = chunkBase..<(chunkBase + diff)
+            chunk = data.subdata(in: range)
+            let number = chunkCounter + 1
+            print("chunk number \(number) size is \(chunk.count)")
+            print("chunk all done ")
+            numbers.append(number)
+            chunks.append(chunk)
+        }
+        
+        let upload = UGCUploadChunk(
+            mediaUrl: mediaUrl,
+            fileSize: dataLen,
+            chunkSize: chunkSize,
+            fullChunks: fullChunks,
+            totalChunks: totalChunks,
+            numberList: numbers,
+            chunkList: chunks
+        )
+        return upload
     }
     
     private func sendMaterialUploadResume(chunkFile: UGCUploadChunk?) {
@@ -378,6 +421,14 @@ class UGCCreateMediaViewModel: ObservableObject {
     }
     
     private func loopSendResumeChunk(request: FLRequest) {
+        if let _ = self.isCancelUpload {
+            self.loadingProgress = -1
+            self.chunkFile = nil
+            self.mediaUrl = nil
+            self.isCancelUpload = nil
+            return
+        }
+        
         guard let chunkFile = self.chunkFile else { return }
         
         let chunkIndex = self.sendingChunkNumber - 1
@@ -386,15 +437,12 @@ class UGCCreateMediaViewModel: ObservableObject {
         let fileName = chunkFile.mediaUrl.lastPathComponent.replace("trim.", withString: "")
         let fileSize = chunkFile.fileSize
         let fileNameId = "\(fileSize)-\(fileName)"
-        let materialIdField = self.contentCode == .audio ? "audio_id" : "video_id"
-        let resumableType = self.contentCode == .audio ? "audio/mpeg" : "video/mp4"//"file/mp3"//"vdo/mp4"
+        let materialIdField = self.contentCode.materialIdField()
+        let resumableType = self.contentCode.resumableType()
         
         let chunkNumber = self.sendingChunkNumber
         let currentChunk = chunkFile.chunkList[chunkIndex]
         let currentSize = currentChunk.count
-        //guard let inputStream = InputStream(url: chunkFile.mediaUrl) else { return }
-        //inputStream.read(bytes, maxLength: chunkFile.chunkSize)
-        //InputStream create buffer array
         
         var formData = [String: String]()
         formData[materialIdField] = "\(self.mId)"
@@ -418,40 +466,36 @@ class UGCCreateMediaViewModel: ObservableObject {
             
         }, to: request.url, method: .post, headers: HTTPHeaders(headers!))
         .responseJSON(completionHandler: { response in
-            do {
-                guard let apiResponse = response.response else { return }
-                ConsoleLog.show("response: \(apiResponse.statusCode)")
-                ConsoleLog.show("sendingChunkNumber: \(self.sendingChunkNumber)")
-                ConsoleLog.show("chunkList count: \(chunkFile.chunkList.count)")
-                if apiResponse.statusCode == 200,
-                    self.sendingChunkNumber < chunkFile.chunkList.count {
-                    
-                    //trick for resume upload progress
-                    let progress = CGFloat(CGFloat(self.sendingChunkNumber) / CGFloat(chunkFile.chunkList.count))
-                    let percent = CGFloat(progress * 100)
-                    print("index \(chunkIndex) Uploaded progress: \(progress)")
-                    self.loadingProgress = percent
-                    
-                    self.sendingChunkNumber += 1
-                    self.loopSendResumeChunk(request: request)
-                    
-                } else if let responseData = response.data {
-                    ConsoleLog.show("loadingProgress: \(self.loadingProgress)")
-                    ConsoleLog.show("responseData: \(responseData)")
-                    self.manageResponseData(request: request,
-                                            responseData: responseData)
-                }
+            guard let apiResponse = response.response else { return }
+            ConsoleLog.show("response: \(apiResponse.statusCode)")
+            ConsoleLog.show("sendingChunkNumber: \(self.sendingChunkNumber)")
+            ConsoleLog.show("chunkList count: \(chunkFile.chunkList.count)")
+            if apiResponse.statusCode == 200,
+                self.sendingChunkNumber < chunkFile.chunkList.count {
                 
-            } catch {
-                ConsoleLog.show("Failed to load: \(error.localizedDescription)")
+                //trick for resume upload progress
+                let progress = CGFloat(self.sendingChunkNumber.cgFloat / chunkFile.chunkList.count.cgFloat)
+                let percent = CGFloat(progress * 100)
+                print("index \(chunkIndex) Uploaded progress: \(progress)")
+                self.loadingProgress = percent
+                
+                self.sendingChunkNumber += 1
+                self.loopSendResumeChunk(request: request)
+                
+            } else if let responseData = response.data {
+                ConsoleLog.show("all Chunk sended")
+                ConsoleLog.show("loadingProgress: \(self.loadingProgress)")
+                ConsoleLog.show("responseData: \(responseData)")
+                self.manageResponseData(request: request,
+                                        responseData: responseData)
             }
         })
     }
     
     private func manageResponseData(request: FLRequest, responseData: Data?) {
         guard let data = responseData else { return }
+        ConsoleLog.show("manageResponseData: \(String(decoding: data, as: UTF8.self))")
         do {
-            ConsoleLog.show("data: \(String(decoding: data, as: UTF8.self))")
             if let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments]) as? [String: Any] {
                 guard let uuid = json["uuid"] as? String else { return }
                 guard let chunkFile = self.chunkFile  else { return }
@@ -463,8 +507,7 @@ class UGCCreateMediaViewModel: ObservableObject {
                 }
             }
         } catch {
-            ConsoleLog.show("createResponseBody: \(String(decoding: data, as: UTF8.self))")
-            ConsoleLog.show("\(error)")
+            ConsoleLog.show("manageResponseData error: \(error)")
         }
     }
     

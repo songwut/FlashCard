@@ -40,29 +40,6 @@ class MyMaterialCell: BaseCollectionViewCell {
         }
     }
     
-//    private var item: LMMaterialResult? {
-//        didSet {
-//            self.contentView.updateLayout()
-//            self.materialView?.removeFromSuperview()
-//            guard let item = self.item else { return }
-//            if self.myMaterialView == nil {
-//                self.myMaterialView = MyMaterialView(selectedItem: .constant(nil),
-//                                                     isPreviewItem: .constant(true),
-//                                                     isEditItem: .constant(true),
-//                                                     isEditor: true,
-//                                                     item: item)
-//                let childView = UIHostingController(rootView: self.myMaterialView!)
-//                self.materialView.addConstrained(childView.view)
-//            } else {
-//                self.myMaterialView = MyMaterialView(selectedItem: .constant(nil),
-//                                                     isPreviewItem: .constant(true),
-//                                                     isEditItem: .constant(true),
-//                                                     isEditor: true,
-//                                                     item: item)
-//            }
-//        }
-//    }
-    
     override func setData(_ data: Any?) {
         if let item = data as? LMMaterialResult {
             self.dateLabel.text = "edited".localized() + ": " + item.datetimeAgo
@@ -97,12 +74,11 @@ class MyMaterialCell: BaseCollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        //self.contentView.updateLayout()
         self.previewButton.imageView?.contentMode = .scaleAspectFit
         self.editButton.imageView?.contentMode = .scaleAspectFit
         self.previewButton.setTitle("", for: .normal)
         self.editButton.setTitle("", for: .normal)
-        self.previewButton.imageEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        self.previewButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.editButton.imageEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.editPressed))

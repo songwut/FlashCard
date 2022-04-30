@@ -101,6 +101,22 @@ class ViewController: UIViewController {
         
     }
     
+    @IBAction func openEditArticle(_ sender: UIButton) {
+        let vc = (UIStoryboard(name: "UGCArticle", bundle: nil).instantiateViewController(withIdentifier: "UGCEditArticleViewController") as! UGCEditArticleViewController)
+        vc.navigationController?.isNavigationBarHidden = true
+        //https://sandbox.conicle.co/dashboard/article/69/edit/
+        vc.url = "\(domainURL)/dashboard/article/69/edit/"
+        //vc.url = "\(domainURL)team-dashboard/leaderboard/?is_app_webview=true"
+        vc.title = ""
+        vc.isHiddenCustomButtonView = true
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    
     @IBAction func createVideoPressed(_ sender: UIButton) {
         let createVideoView =  UGCCreateMediaSwiftUIView(isCreated: false)
             .environmentObject(UGCCreateMediaViewModel(mId: nil, contentCode: .video))

@@ -29,10 +29,12 @@ class MyMaterialListViewController: PageViewController {
         self.view.updateLayout()
         self.totalLabel.font = .font(14, .regular)
         self.totalLabel.textColor = .text()
+        self.collectionView.alwaysBounceVertical = true
         self.collectionView.registerCellNib(MyMaterialCell.self)
-        self.createViewHeight.constant = UIDevice.isIpad() ? 132 : 100
+        self.useRefreshControl(self.collectionView)
         
         if isKMSEnabled , UserManager.shared.profile.isCreator {
+            self.createViewHeight.constant = UIDevice.isIpad() ? 132 : 100
             self.createView.addSubViewAndConstraint(self.createMaterialView.view)
             let createTap = UITapGestureRecognizer(target: self, action: #selector(self.createPressed(_:)))
             self.createMaterialView.view.addGestureRecognizer(createTap)
@@ -54,21 +56,25 @@ class MyMaterialListViewController: PageViewController {
         self.layout.estimatedItemSize = self.cellSize
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewModelCallApi() {
         self.showLoading(nil)
         self.viewModel.callAPIMyMaterialList { [weak self] in
-            self?.updateUI()
             self?.hideLoading()
+            self?.updateUI()
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.viewModel.isLoadNextPage = false
+        self.viewModelCallApi()
     }
     
     override func scrollViewDidEndDeceleratingAnimatingFinal() {
         self.isLoading = true
         self.loadingFooterView?.startAnimate()
-        self.viewModel.callAPIMyMaterialList { [weak self] in
-            self?.updateUI()
-        }
+        self.viewModel.isLoadNextPage = true
+        self.viewModelCallApi()
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -118,6 +124,7 @@ class MyMaterialListViewController: PageViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        
         return super.collectionView(collectionView, layout: layout, referenceSizeForFooterInSection: section)
     }
 
@@ -126,6 +133,7 @@ class MyMaterialListViewController: PageViewController {
     }
     
     private func updateUI() {
+        self.nextPage = self.viewModel.next
         self.totalLabel.text = self.viewModel.totalText()
         self.collectionView.reloadData()
         self.isLoading = false
@@ -165,7 +173,7 @@ class MyMaterialListViewController: PageViewController {
                                                             mediaUrl: mediaUrl,
                                                          coverImage: item.image,
                                                          currentTime: 0)
-                OpenVCHelper.openUGCPreviewVideoAudio(viewModel: model, playerVM: UGCPlayerViewModel(), mainVC: self)
+                OpenVCHelper.openUGCMediaPreview(viewModel: model, mainVC: self)
             }
         case .pdf:
             //TODO: preview pdf
